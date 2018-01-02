@@ -55,7 +55,7 @@ char** g_argv;
 // =============================================================================
 // Windows WinMain() wrapper for main()
 // used in Release Builds to suppress the Console
-#if defined(_WIN32)
+#if defined(_WIN32) && 0
 
 #include <winbase.h>
 
@@ -542,8 +542,12 @@ int mainRadiant( int argc, char* argv[] ) {
 #ifdef _WIN32
 	// get path to the editor
 	char* pBuffer = g_strAppPath.GetBufferSetLength( _MAX_PATH + 1 );
-	GetModuleFileName( NULL, pBuffer, _MAX_PATH );
-	pBuffer[g_strAppPath.ReverseFind( '\\' ) + 1] = '\0';
+	//GetModuleFileName( NULL, pBuffer, _MAX_PATH );
+	//pBuffer[g_strAppPath.ReverseFind( '\\' ) + 1] = '\0';
+	GetCurrentDirectoryA(_MAX_PATH, pBuffer);
+	int len = strlen(pBuffer);
+	pBuffer[len] = '/';
+	pBuffer[len+1] = 0;
 	QE_ConvertDOSToUnixName( pBuffer, pBuffer );
 	g_strAppPath.ReleaseBuffer();
 
@@ -965,8 +969,14 @@ int GenerateDump( EXCEPTION_POINTERS* pExceptionPointers ) {
 }
 #endif
 
+#if 0
 int main( int argc, char* argv[] ) {
+#else
 
+extern "C" __declspec(dllexport) int startRadiant() {
+	int argc = 1;
+	char *argv[1] = {{"bla.exe"}};
+#endif
 #if defined( _WIN32 ) && defined( _MSC_VER ) && !defined( _DEBUG )
 	__try {
 		return mainRadiant( argc, argv );
@@ -990,6 +1000,7 @@ int main( int argc, char* argv[] ) {
 	}
 #else
 	return mainRadiant( argc, argv );
+
 #endif
 }
 

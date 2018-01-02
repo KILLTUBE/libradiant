@@ -223,5 +223,5 @@ void Map_Write( CPtrArray *map, IDataStream *out ){
 
 	out->Write( buf, len );
 
-	xmlFree( buf );
+	//xmlFree( buf );
 }

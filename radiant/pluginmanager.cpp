@@ -675,7 +675,7 @@ void CPlugInManager::Init(){
 
 	// modules configured by XML
 	if ( !g_pParentWnd->GetSynapseClient().ConfigXML( &g_pParentWnd->GetSynapseServer(), "core", manager_entries ) ) {
-		Error( "Synapse server initialization failed (see console)\n" );
+		Error( "Synapse server initialization failed (see console)> modules configured by XML\n" );
 	}
 
 	// adding a manager is a special case that ConfigXML doesn't take care of
@@ -701,7 +701,7 @@ void CPlugInManager::Init(){
 	g_pParentWnd->GetSynapseClient().AddManager( &g_ToolbarModuleManager );
 	g_pParentWnd->GetSynapseClient().AddManager( &g_ModelManager );
 	if ( !g_pParentWnd->GetSynapseServer().Resolve( &g_pParentWnd->GetSynapseClient() ) ) {
-		Error( "synapse initialization fail (see console)" );
+		Error( "synapse initialization fail (see console) > if ( !g_pParentWnd->GetSynapseServer().Resolve( &g_pParentWnd->GetSynapseClient() ) ) { " );
 	}
 	g_PluginsManager.PopulateMenu();
 	g_ToolbarModuleManager.ConstructToolbar();

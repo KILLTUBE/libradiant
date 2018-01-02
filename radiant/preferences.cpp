@@ -735,7 +735,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 #else
 		strncpy( full, prop, PATH_MAX );
 #endif
-		xmlFree( prop );
+		//xmlFree( prop );
 		prop = NULL;
 		for ( p = full; *p != '\0'; p++ ) {
 			if ( *p == '\\' ) {
@@ -756,7 +756,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 	else
 	{
 		mGameName = prop;
-		xmlFree( prop );
+		//xmlFree( prop );
 	}
 
 	mGameFile = GameFile;
@@ -767,7 +767,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 		idTech2 = false;
 	} else {
 		idTech2 = true;
-		xmlFree( prop );
+		//xmlFree( prop );
 	}
 
 	// if this is set, the open maps dialoge will open the engine path not the
@@ -778,7 +778,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 		noMapsInHome = false;
 	} else {
 		noMapsInHome = true;
-		xmlFree( prop );
+		//xmlFree( prop );
 	}
 
 	prop = (char*)xmlGetProp( pNode, (xmlChar*)"basegame" );
@@ -787,7 +787,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 		mBaseGame = "baseq3";
 	} else {
 		mBaseGame = prop;
-		xmlFree( prop );
+		//xmlFree( prop );
 	}
 
 	prop = (char*)xmlGetProp( pNode, (const xmlChar*)ENGINE_ATTRIBUTE );
@@ -801,7 +801,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 #endif
 	} else {
 		mEngine = prop;
-		xmlFree( prop );
+		//xmlFree( prop );
 	}
 
 	prop = (char*)xmlGetProp( pNode, (const xmlChar*)MP_ENGINE_ATTRIBUTE );
@@ -815,7 +815,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 #endif
 	} else {
 		mMultiplayerEngine = prop;
-		xmlFree( prop );
+		//xmlFree( prop );
 	}
 
 	{
@@ -828,7 +828,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 		#else
 			strncpy( full, prop, PATH_MAX );
 		#endif
-			xmlFree( prop );
+			//xmlFree( prop );
 			prop = NULL;
 			// process seperators
 			for ( p = full; *p != '\0'; p++ ) {
@@ -861,7 +861,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 	prop = (char*)xmlGetProp( pNode, (const xmlChar *)EXECUTABLES_ATTRIBUTE );
 	if ( prop != NULL ) {
 		mExecutablesPath = prop;
-		xmlFree( prop );
+		//xmlFree( prop );
 		prop = NULL;
 	} else {
 		mExecutablesPath = mEnginePath.GetBuffer();
@@ -871,7 +871,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 	prop = (char*)xmlGetProp( pNode, (const xmlChar *)PREFIX_ATTRIBUTE );
 	if ( prop != NULL ) {
 		mUserPathPrefix = prop;
-		xmlFree( prop );
+		//xmlFree( prop );
 		prop = NULL;
 	}
 
@@ -887,7 +887,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 	xmlChar* default_scale = xmlGetProp( pNode, (const xmlChar *)"default_scale" );
 	if ( default_scale ) {
 		mTextureDefaultScale = atof( (const char *)default_scale );
-		xmlFree( default_scale );
+		//xmlFree( default_scale );
                 default_scale = NULL;
 	}
 	else{
@@ -896,7 +896,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 	xmlChar* eclass_singleload = xmlGetProp( pNode, (const xmlChar*)"eclass_singleload" );
 	if ( eclass_singleload ) {
 		mEClassSingleLoad = true;
-		xmlFree( eclass_singleload );
+		//xmlFree( eclass_singleload );
                 eclass_singleload = NULL;
 	} else {
 		mEClassSingleLoad = false;
@@ -904,7 +904,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 	xmlChar* no_patch = xmlGetProp( pNode, (const xmlChar *)"no_patch" );
 	if ( no_patch ) {
 		mNoPatch = true;
-		xmlFree( no_patch );
+		//xmlFree( no_patch );
                 no_patch = NULL;
 	} else {
 		mNoPatch = false;
@@ -912,7 +912,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 	xmlChar* caulk_shader = xmlGetProp( pNode, (const xmlChar *)"caulk_shader" );
 	if ( caulk_shader ) {
 		mCaulkShader = caulk_shader;
-		xmlFree( caulk_shader );
+		//xmlFree( caulk_shader );
                 caulk_shader = NULL;
 	} else {
 		mCaulkShader = "textures/common/caulk";

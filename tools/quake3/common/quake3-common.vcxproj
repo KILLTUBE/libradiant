@@ -62,6 +62,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\build\$(Configuration)\libs\</OutDir>
     <IntDir>$(SolutionDir)\build\intermediate\$(Configuration)\$(ProjectName)\</IntDir>
+    <LibraryPath>G:\gtkradiant\libxml2-2.9.2\win32\bin.msvc;$(LibraryPath)</LibraryPath>
+    <IncludePath>G:\gtkradiant\jpeg-9;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)\build\$(Configuration)\$(Platform)\libs\</OutDir>
@@ -90,7 +92,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\libs;$(SolutionDir)\..\libxml2-2.9.2\include;$(SolutionDir)\..\jpeg-9;$(SolutionDir)\..\gtk-2.24.10\include\glib-2.0;$(SolutionDir)\..\gtk-2.24.10\include\gdk-pixbuf-2.0;$(SolutionDir)\..\gtk-2.24.10\lib\glib-2.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\libs;$(SolutionDir)\deps\STLport-5.2.1\stlport;C:\msys64\mingw64\include\glib-2.0;C:\msys64\mingw64\include\gdk-pixbuf-2.0;C:\msys64\mingw64\include\gtk-2.0;C:\msys64\mingw64\include\cairo;C:\msys64\mingw64\include\pango-1.0;C:\msys64\mingw64\lib\gtk-2.0\include;C:\msys64\mingw64\include\atk-1.0;C:\msys64\mingw64\include;C:\msys64\mingw64\include\freetype2;C:\msys64\mingw64\include\gtkglext-1.0;C:\msys64\mingw64\lib\gtkglext-1.0\include;$(SolutionDir)\deps\libxml2-2.9.2\include;C:\msys64\mingw64\lib\glib-2.0\include;%(AdditionalIncludeDirectories);$(SolutionDir)\..\jpeg-9</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>

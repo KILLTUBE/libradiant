@@ -936,7 +936,7 @@ void SurfaceDlg::SetTexMods(){
 	char buf[10]; // got into snprintf paranoia after BoundChecker detected a stack overrun
 #ifdef _WIN32
 	// TTimo: THIS IS UGLY
-#define snprintf _snprintf
+//#define snprintf _snprintf
 #endif
 	snprintf( buf, sizeof( buf ), "%g", l_pIncrement->shift[0] );
 	gtk_entry_set_text( GTK_ENTRY( GetDlgWidget( "hshift_inc" ) ), buf );

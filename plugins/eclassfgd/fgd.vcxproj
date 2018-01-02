@@ -62,8 +62,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\install\modules\</OutDir>
     <IntDir>$(SolutionDir)\build\intermediate\$(Configuration)\$(ProjectName)\</IntDir>
+    <LibraryPath>G:\gtkradiant\libxml2-2.9.2\win32\bin.msvc;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LibraryPath>C:\msys64\home\kung\defs;C:\GtkRadiant\deps\libxml2-2.9.2\win32\VC10\x64\Release;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\install\modules\</OutDir>
     <IntDir>$(SolutionDir)\build\intermediate\$(Configuration)\$(ProjectName)\</IntDir>
@@ -95,7 +98,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\libs;$(SolutionDir)\include;$(SolutionDir)\..\STLport-5.2.1\stlport;$(SolutionDir)\..\gtk-2.24.10\include\glib-2.0;$(SolutionDir)\..\gtk-2.24.10\include\gdk-pixbuf-2.0;$(SolutionDir)\..\gtk-2.24.10\lib\glib-2.0\include;$(SolutionDir)\..\libxml2-2.9.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\libs;$(SolutionDir)\deps\STLport-5.2.1\stlport;C:\msys64\mingw64\include\glib-2.0;C:\msys64\mingw64\include\gdk-pixbuf-2.0;C:\msys64\mingw64\include\gtk-2.0;C:\msys64\mingw64\include\cairo;C:\msys64\mingw64\include\pango-1.0;C:\msys64\mingw64\lib\gtk-2.0\include;C:\msys64\mingw64\include\atk-1.0;C:\msys64\mingw64\include;C:\msys64\mingw64\include\freetype2;C:\msys64\mingw64\include\gtkglext-1.0;C:\msys64\mingw64\lib\gtkglext-1.0\include;$(SolutionDir)\deps\libxml2-2.9.2\include;C:\msys64\mingw64\lib\glib-2.0\include;%(AdditionalIncludeDirectories);$(SolutionDir)\..\jpeg-9</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;FGD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -107,7 +110,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/STACK:8388608 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>ws2_32.lib;glib-2.0.lib;libxml2_a.lib;synapse.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;libglib-2.0-0.lib;libgobject-2.0-0.lib;libintl-8.lib;libgtk-win32-2.0-0.lib;libgdk-win32-2.0-0.lib;libgdk_pixbuf-2.0-0.lib;libpango-1.0-0.lib;libpangoft2-1.0-0.lib;libgdkglext-win32-1.0-0.lib;libgtkglext-win32-1.0-0.lib;C:\GtkRadiant\x64\Debug\mathlib.lib;C:\GtkRadiant\x64\Debug\synapse.lib;C:\GtkRadiant\x64\Debug\l_net.lib;C:\GtkRadiant\deps\libxml2-2.9.2\win32\VC10\x64\Debug\libxml2.lib;picomodel.lib;cmdlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\gtk-2.24.10\lib;$(SolutionDir)\..\libxml2-2.9.2/win32/bin.msvc;$(SolutionDir)\build\$(Configuration)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>fgd.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -45,12 +45,15 @@
 #include <string.h>
 #include <glib.h>
 
+#include "image.h"
+
+
 extern "C" {
+#define HAVE_BOOLEAN
 #include <jpeglib.h>
 #include <jerror.h>
 }
 
-#include "image.h"
 
 /* Expanded data source object for stdio input */
 

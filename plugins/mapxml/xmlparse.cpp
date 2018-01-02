@@ -37,10 +37,10 @@ void Patch_XMLParse( patchMesh_t *pPatch, xmlNodePtr surface ){
 		if ( !strcmp( (char *)current->name, "matrix" ) ) {
 			str = (char *)xmlGetProp( current, (xmlChar *)"width" );
 			pPatch->width = atoi( str );
-			xmlFree( str );
+			//xmlFree( str );
 			str = (char *)xmlGetProp( current, (xmlChar *)"height" );
 			pPatch->height = atoi( str );
-			xmlFree( str );
+			//xmlFree( str );
 
 			content = Q_StrDup( (char *)current->children->content );
 
@@ -174,8 +174,8 @@ void Entity_XMLParse( entity_t *pEntity, xmlNodePtr entity ){
 			char *key = (char *)xmlGetProp( current, (xmlChar *)"key" );
 			char *value = (char *)xmlGetProp( current, (xmlChar *)"value" );
 			SetKeyValue( pEntity, key, value );
-			xmlFree( key );
-			xmlFree( value );
+			//xmlFree( key );
+			//xmlFree( value );
 		}
 		else if ( strcmp( (char *)current->name, "brush" ) == 0 ) {
 			pBrush = Brush_Alloc();

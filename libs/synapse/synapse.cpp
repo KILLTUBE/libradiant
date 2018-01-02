@@ -96,7 +96,7 @@ CSynapseServer::CSynapseServer(){
 
 CSynapseServer::~CSynapseServer(){
 	if ( m_api_name ) {
-		xmlFree( m_api_name );
+		//xmlFree( m_api_name );
                 m_api_name = NULL;
 	}
 	if ( m_content ) {
@@ -692,10 +692,10 @@ bool CSynapseServer::SelectClientConfig( const char *client_name ){
 		if ( pNode->type == XML_ELEMENT_NODE ) {
 			xmlChar *prop = xmlGetProp( pNode, (const xmlChar *)"name" );
 			if ( !strcmp( (const char *)prop, client_name ) ) {
-				xmlFree( prop );
+				//xmlFree( prop );
 				break;
 			}
-			xmlFree( prop );
+			//xmlFree( prop );
 		}
 		pNode = pNode->next;
 	}
@@ -713,7 +713,7 @@ bool CSynapseServer::GetNextConfig( char **api_name, char **minor ){
 	{
 		if ( mpFocusedNode->type == XML_ELEMENT_NODE && !strcmp( (const char *)mpFocusedNode->name, "api" ) ) {
 			if ( m_api_name ) {
-				xmlFree( m_api_name );
+				//xmlFree( m_api_name );
                                 m_api_name = NULL;
 			}
 			m_api_name = xmlGetProp( mpFocusedNode, (const xmlChar *)"name" );
@@ -737,7 +737,7 @@ bool CSynapseServer::GetConfigForAPI( const char *api, char **minor ) {
 	while ( pNode && pNode->name ) {
 		if ( pNode->type == XML_ELEMENT_NODE && !strcmp( (const char *)pNode->name, "api" ) ) {
 			if ( m_api_name ) {
-				xmlFree( m_api_name );
+				//xmlFree( m_api_name );
                                 m_api_name = NULL;
 			}
 			m_api_name = xmlGetProp( pNode, (const xmlChar *)"name" );

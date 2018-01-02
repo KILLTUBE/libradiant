@@ -38,6 +38,9 @@
 
 #define VFS_MAJOR "VFS"
 
+
+typedef struct _GSList GSList;
+
 // return the file system supported by the plugin, for example: "quake1" or "quake3"
 //typedef const char* (WINAPI* PFN_VFSGETFORMAT) ();
 // add all files from a directory to the vfs

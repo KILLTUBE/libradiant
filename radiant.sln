@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "radiant", "radiant\radiant.vcxproj", "{65D02375-63EE-4A8A-9F8E-504B1D5A1D02}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "q3map2", "tools\quake3\q3map2\q3map2.vcxproj", "{CD40B764-1D47-4FAE-8C6A-EF036E478D65}"
@@ -84,6 +86,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "q3map2_urt", "tools\urt\too
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "q3data", "tools\quake3\q3data\q3data.vcxproj", "{8DFCF3C0-5EC6-4E28-9D38-23FBE5F214FB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "julia", "julia\julia.vcxproj", "{5183D87A-25B0-446B-8F68-70DF560E4858}"
+	ProjectSection(ProjectDependencies) = postProject
+		{65D02375-63EE-4A8A-9F8E-504B1D5A1D02} = {65D02375-63EE-4A8A-9F8E-504B1D5A1D02}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -310,20 +317,6 @@ Global
 		{F400371F-455F-4B6C-9F13-A2E57110E725}.Release|Win32.Build.0 = Release|Win32
 		{F400371F-455F-4B6C-9F13-A2E57110E725}.Release|x64.ActiveCfg = Release|x64
 		{F400371F-455F-4B6C-9F13-A2E57110E725}.Release|x64.Build.0 = Release|x64
-		{32AB82AA-C781-4E5E-83A0-A164D371306F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{32AB82AA-C781-4E5E-83A0-A164D371306F}.Debug|Win32.Build.0 = Debug|Win32
-		{32AB82AA-C781-4E5E-83A0-A164D371306F}.Debug|x64.ActiveCfg = Debug|x64
-		{32AB82AA-C781-4E5E-83A0-A164D371306F}.Release|Win32.ActiveCfg = Release|Win32
-		{32AB82AA-C781-4E5E-83A0-A164D371306F}.Release|Win32.Build.0 = Release|Win32
-		{32AB82AA-C781-4E5E-83A0-A164D371306F}.Release|x64.ActiveCfg = Release|x64
-		{32AB82AA-C781-4E5E-83A0-A164D371306F}.Release|x64.Build.0 = Release|x64
-		{12932084-E212-45AB-B3BE-A2A5AEEBA581}.Debug|Win32.ActiveCfg = Debug|Win32
-		{12932084-E212-45AB-B3BE-A2A5AEEBA581}.Debug|Win32.Build.0 = Debug|Win32
-		{12932084-E212-45AB-B3BE-A2A5AEEBA581}.Debug|x64.ActiveCfg = Debug|x64
-		{12932084-E212-45AB-B3BE-A2A5AEEBA581}.Release|Win32.ActiveCfg = Release|Win32
-		{12932084-E212-45AB-B3BE-A2A5AEEBA581}.Release|Win32.Build.0 = Release|Win32
-		{12932084-E212-45AB-B3BE-A2A5AEEBA581}.Release|x64.ActiveCfg = Release|x64
-		{12932084-E212-45AB-B3BE-A2A5AEEBA581}.Release|x64.Build.0 = Release|x64
 		{AB6534A8-ED1B-46DC-84EA-8AA080C12F6A}.Debug|Win32.ActiveCfg = Debug|Win32
 		{AB6534A8-ED1B-46DC-84EA-8AA080C12F6A}.Debug|Win32.Build.0 = Debug|Win32
 		{AB6534A8-ED1B-46DC-84EA-8AA080C12F6A}.Debug|x64.ActiveCfg = Debug|x64
@@ -380,6 +373,14 @@ Global
 		{8DFCF3C0-5EC6-4E28-9D38-23FBE5F214FB}.Release|Win32.Build.0 = Release|Win32
 		{8DFCF3C0-5EC6-4E28-9D38-23FBE5F214FB}.Release|x64.ActiveCfg = Release|x64
 		{8DFCF3C0-5EC6-4E28-9D38-23FBE5F214FB}.Release|x64.Build.0 = Release|x64
+		{5183D87A-25B0-446B-8F68-70DF560E4858}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5183D87A-25B0-446B-8F68-70DF560E4858}.Debug|Win32.Build.0 = Debug|Win32
+		{5183D87A-25B0-446B-8F68-70DF560E4858}.Debug|x64.ActiveCfg = Debug|x64
+		{5183D87A-25B0-446B-8F68-70DF560E4858}.Debug|x64.Build.0 = Debug|x64
+		{5183D87A-25B0-446B-8F68-70DF560E4858}.Release|Win32.ActiveCfg = Release|Win32
+		{5183D87A-25B0-446B-8F68-70DF560E4858}.Release|Win32.Build.0 = Release|Win32
+		{5183D87A-25B0-446B-8F68-70DF560E4858}.Release|x64.ActiveCfg = Release|x64
+		{5183D87A-25B0-446B-8F68-70DF560E4858}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

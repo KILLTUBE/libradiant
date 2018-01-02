@@ -520,7 +520,8 @@ int QE_GetTemplateVersionForProject( const char * projectfile ) {
   }
   if ( node == NULL || strcmp( (char*)node->name, "project" ) != 0 ) {
     Sys_FPrintf( SYS_ERR, "ERROR: invalid file type %s\n", projectfile );
-    xmlFree( doc );
+    //xmlFree( doc );
+	
     return 0;
   }
   while ( node->type != XML_ELEMENT_NODE ) {
@@ -535,14 +536,21 @@ int QE_GetTemplateVersionForProject( const char * projectfile ) {
     }
     if ( strcmp( (char*)node->properties->children->content, "template_version" ) == 0 ) {
       ret = atoi( (char*)node->properties->next->children->content );
-      xmlFreeDoc( doc );
+      //xmlFreeDoc( doc );
       return ret;
     }
   }
   Sys_FPrintf( SYS_WRN, "Version key not found in %s\n", projectfile );
-  xmlFreeDoc( doc );
+  //xmlFreeDoc( doc );
+  ///g_dir_open
   return 0;
 }
+
+//extern "C" GDir    *                g_dir_open           (const gchar  *path,
+//					       guint         flags,
+//	GError      **error) {
+//	return NULL;
+//}
 
 /*
    ===========
@@ -683,7 +691,7 @@ bool QE_LoadProject( const char *projectfile ){
 		g_PrefsDlg.m_strLastProject = projectfile;
 		g_PrefsDlg.SavePrefs();
 	}
-
+	g_dir_read_name;
 	return true;
 }
 
