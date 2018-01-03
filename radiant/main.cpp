@@ -910,6 +910,10 @@ int mainRadiant( int argc, char* argv[] ) {
 	//++timo: temporary debug
 	g_pParentWnd->DoWatchBSP();
 
+	return 0;
+
+
+
 	gtk_main();
 
 	// close the log file if any
@@ -919,11 +923,6 @@ int mainRadiant( int argc, char* argv[] ) {
 	g_qeglobals_gui.d_edit = NULL;
 	Sys_LogFile();
 
-	// NOTE TTimo not sure what this _exit(0) call is worth
-	//   restricting it to linux build
-#ifdef __linux__
-	_exit( 0 );
-#endif
 	return 0;
 }
 

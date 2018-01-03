@@ -63,7 +63,9 @@
     <OutDir>$(SolutionDir)\build\$(Configuration)\libs\</OutDir>
     <IntDir>$(SolutionDir)\build\intermediate\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\msys64\mingw64\include\libxml2;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\build\$(Configuration)\libs\</OutDir>
     <IntDir>$(SolutionDir)\build\intermediate\$(Configuration)\$(ProjectName)\</IntDir>
@@ -86,7 +88,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\libs;$(SolutionDir)\deps\STLport-5.2.1\stlport;C:\msys64\mingw64\include\glib-2.0;C:\msys64\mingw64\include\gdk-pixbuf-2.0;C:\msys64\mingw64\include\gtk-2.0;C:\msys64\mingw64\include\cairo;C:\msys64\mingw64\include\pango-1.0;C:\msys64\mingw64\lib\gtk-2.0\include;C:\msys64\mingw64\include\atk-1.0;C:\msys64\mingw64\include;C:\msys64\mingw64\include\freetype2;C:\msys64\mingw64\include\gtkglext-1.0;C:\msys64\mingw64\lib\gtkglext-1.0\include;$(SolutionDir)\deps\libxml2-2.9.2\include;C:\msys64\mingw64\lib\glib-2.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\libs;$(SolutionDir)\deps\STLport-5.2.1\stlport;C:\msys64\mingw64\include\glib-2.0;C:\msys64\mingw64\include\gdk-pixbuf-2.0;C:\msys64\mingw64\include\gtk-2.0;C:\msys64\mingw64\include\cairo;C:\msys64\mingw64\include\pango-1.0;C:\msys64\mingw64\lib\gtk-2.0\include;C:\msys64\mingw64\include\atk-1.0;C:\msys64\mingw64\include;C:\msys64\mingw64\include\freetype2;C:\msys64\mingw64\include\gtkglext-1.0;C:\msys64\mingw64\lib\gtkglext-1.0\include;C:\msys64\mingw64\lib\glib-2.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
