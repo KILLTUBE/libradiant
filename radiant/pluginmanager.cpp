@@ -47,6 +47,8 @@ extern "C" {
 
 #include "version.h"
 
+#include <ccall/ccall.h>
+
 CRadiantImageManager g_ImageManager;
 CRadiantPluginManager g_PluginsManager;
 
@@ -1937,6 +1939,11 @@ GtkWidget* WINAPI QERApp_GetQeGlobalsGLWidget(){
 
 qboolean WINAPI BrushPrimitMode(){
 	return g_qeglobals.m_bBrushPrimitMode;
+}
+
+
+CCALL brush_t *getActiveBrushes() {
+	return &active_brushes;
 }
 
 brush_t* WINAPI QERApp_ActiveBrushes(){

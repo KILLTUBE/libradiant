@@ -1,0 +1,3 @@
+[submodule "ccall"]
+	path = ccall
+	url = https://github.com/kungfooman/ccall
