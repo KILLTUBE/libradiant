@@ -700,7 +700,8 @@ void CPlugInManager::Init(){
 	g_pParentWnd->GetSynapseClient().AddManager( &g_PluginsManager );
 	g_pParentWnd->GetSynapseClient().AddManager( &g_ToolbarModuleManager );
 	g_pParentWnd->GetSynapseClient().AddManager( &g_ModelManager );
-	if ( !g_pParentWnd->GetSynapseServer().Resolve( &g_pParentWnd->GetSynapseClient() ) ) {
+	auto client = &g_pParentWnd->GetSynapseClient();
+	if ( !g_pParentWnd->GetSynapseServer().Resolve( client ) ) {
 		Error( "synapse initialization fail (see console) > if ( !g_pParentWnd->GetSynapseServer().Resolve( &g_pParentWnd->GetSynapseClient() ) ) { " );
 	}
 	g_PluginsManager.PopulateMenu();

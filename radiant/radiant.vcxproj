@@ -115,7 +115,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\x64\Debug;$(SolutionDir)\..\gtk-2.24.10\lib;$(SolutionDir)\..\libxml2-2.9.2/win32/bin.msvc;$(SolutionDir)\..\gtkglext-1.2.0\lib;$(SolutionDir)\build\$(Configuration)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <OutputFile>G:\gtkradiant\GtkRadiant-1.6.4-20131213\GtkRadiant-1.6.4-20131213\libradiant.dll</OutputFile>
+      <OutputFile>C:\msys64\mingw64\bin\libradiant.dll</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -211,6 +211,7 @@
     <ClCompile Include="vertsel.cpp" />
     <ClCompile Include="watchbsp.cpp" />
     <ClCompile Include="winding.cpp" />
+    <ClCompile Include="window_imgui.cpp" />
     <ClCompile Include="xywindow.cpp" />
     <ClCompile Include="z.cpp" />
     <ClCompile Include="zwindow.cpp" />
@@ -238,6 +239,49 @@
       <Project>{e13ccfb0-a366-4ef3-a66f-c374b563e4df}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="brush.h" />
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="camwindow.h" />
+    <ClInclude Include="dialog.h" />
+    <ClInclude Include="eclass_def.h" />
+    <ClInclude Include="feedback.h" />
+    <ClInclude Include="file.h" />
+    <ClInclude Include="filters.h" />
+    <ClInclude Include="findtexturedialog.h" />
+    <ClInclude Include="glwidget.h" />
+    <ClInclude Include="glwindow.h" />
+    <ClInclude Include="groupdialog.h" />
+    <ClInclude Include="gtkmisc.h" />
+    <ClInclude Include="mainframe.h" />
+    <ClInclude Include="map.h" />
+    <ClInclude Include="parse.h" />
+    <ClInclude Include="patchdialog.h" />
+    <ClInclude Include="plugin.h" />
+    <ClInclude Include="pluginmanager.h" />
+    <ClInclude Include="points.h" />
+    <ClInclude Include="preferences.h" />
+    <ClInclude Include="qe3.h" />
+    <ClInclude Include="qedefs.h" />
+    <ClInclude Include="qfiles.h" />
+    <ClInclude Include="qgl.h" />
+    <ClInclude Include="select.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="surfacedialog.h" />
+    <ClInclude Include="surfaceplugin.h" />
+    <ClInclude Include="texmanip.h" />
+    <ClInclude Include="textures.h" />
+    <ClInclude Include="texwindow.h" />
+    <ClInclude Include="ui.h" />
+    <ClInclude Include="undo.h" />
+    <ClInclude Include="watchbsp.h" />
+    <ClInclude Include="winding.h" />
+    <ClInclude Include="window_imgui.h" />
+    <ClInclude Include="xmlstuff.h" />
+    <ClInclude Include="xywindow.h" />
+    <ClInclude Include="z.h" />
+    <ClInclude Include="zwindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -170,6 +170,9 @@
     <ClCompile Include="zwindow.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="window_imgui.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="radiant.ico">
@@ -180,5 +183,130 @@
     <ResourceCompile Include="radiant.rc">
       <Filter>rc</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="zwindow.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="surfacedialog.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="surfaceplugin.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="texmanip.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="textures.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="texwindow.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="ui.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="undo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="watchbsp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="winding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="xmlstuff.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="xywindow.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="z.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="qfiles.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="qgl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="select.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="brush.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="camwindow.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="dialog.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="eclass_def.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="feedback.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="file.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="filters.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="findtexturedialog.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="glwidget.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="glwindow.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="groupdialog.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="gtkmisc.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="mainframe.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="parse.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="patchdialog.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="plugin.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="pluginmanager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="points.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="preferences.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="qe3.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="qedefs.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="window_imgui.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
