@@ -1,3 +1,6 @@
 [submodule "ccall"]
 	path = ccall
 	url = https://github.com/kungfooman/ccall
+[submodule "julia/PointerHackery.jl"]
+	path = julia/PointerHackery.jl
+	url = https://github.com/kungfooman/PointerHackery.jl
