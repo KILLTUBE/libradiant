@@ -3,6 +3,7 @@ const libradiant = "C:\\msys64\\mingw64\\bin\\libradiant.dll";
 juliasources = "C:/GtkRadiant/julia/"
 
 include(juliasources * "PointerHackery.jl/pointerhackery.jl")
+include(juliasources * "MathStuff.jl/all.jl")
 include(juliasources * "brushes.jl")
 include(juliasources * "gtk.jl")
 
