@@ -66,6 +66,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>C:\msys64\home\kung\defs;C:\GtkRadiant\deps\libxml2-2.9.2\win32\VC10\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\msys64\mingw64\include\libxml2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\install\modules\</OutDir>
@@ -110,7 +111,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/STACK:8388608 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>ws2_32.lib;libglib-2.0-0.lib;C:\GtkRadiant\deps\libxml2-2.9.2\win32\VC10\x64\Debug\libxml2.lib;synapse.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;libglib-2.0-0.lib;libxml2-2.lib;synapse.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\gtk-2.24.10\lib;$(SolutionDir)\..\libxml2-2.9.2/win32/bin.msvc;$(SolutionDir)\build\$(Configuration)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>vfspak.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>

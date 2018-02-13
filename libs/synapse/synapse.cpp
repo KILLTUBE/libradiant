@@ -95,14 +95,14 @@ CSynapseServer::CSynapseServer(){
 }
 
 CSynapseServer::~CSynapseServer(){
-	if ( m_api_name ) {
-		//xmlFree( m_api_name );
-                m_api_name = NULL;
-	}
-	if ( m_content ) {
-		g_free( m_content );
-	}
-	Syn_Printf( "TODO: free API managers\n" );
+	//if ( m_api_name ) {
+	//	//xmlFree( m_api_name );
+    //            m_api_name = NULL;
+	//}
+	//if ( m_content ) {
+	//	g_free( m_content );
+	//}
+	//Syn_Printf( "TODO: free API managers\n" );
 }
 
 void CSynapseServer::AddSearchPath( char* path ){
@@ -184,7 +184,9 @@ const char* CSynapseServer::FormatGetLastError(){
 
 void CSynapseServer::EnumerateInterfaces( Str &soname ){
 	CSynapseClientSlot slot;
-	slot.mpDLL = LoadLibrary( soname.GetBuffer() );
+	const char *filename = soname.GetBuffer();
+	//filename = "bkgrnd2d.dll";
+	slot.mpDLL = LoadLibrary( filename );
 	if ( !slot.mpDLL ) {
 		Syn_Printf( "LoadLibrary '%s' failed\n", soname.GetBuffer() );
 		Syn_Printf( "  GetLastError: %s", FormatGetLastError() );

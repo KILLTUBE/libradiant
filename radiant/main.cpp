@@ -905,7 +905,7 @@ int mainRadiant( int argc, char* argv[] ) {
 	g_timeout_add( 1000, try_destroy_splash, NULL );
 #endif
 
-	g_pParentWnd->GetSynapseServer().DumpActiveClients();
+	//g_pParentWnd->GetSynapseServer().DumpActiveClients();
 
 	//++timo: temporary debug
 	g_pParentWnd->DoWatchBSP();

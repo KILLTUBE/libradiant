@@ -66,6 +66,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>C:\msys64\home\kung\defs;C:\GtkRadiant\deps\libxml2-2.9.2\win32\VC10\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\msys64\mingw64\include\libxml2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\install\modules\</OutDir>
@@ -109,7 +110,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/STACK:8388608 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>Ws2_32.lib;libglib-2.0-0.lib;libgobject-2.0-0.lib;libintl-8.lib;libgtk-win32-2.0-0.lib;libgdk-win32-2.0-0.lib;libgdk_pixbuf-2.0-0.lib;libpango-1.0-0.lib;libpangoft2-1.0-0.lib;libgdkglext-win32-1.0-0.lib;libgtkglext-win32-1.0-0.lib;C:\GtkRadiant\x64\Debug\mathlib.lib;C:\GtkRadiant\x64\Debug\synapse.lib;C:\GtkRadiant\x64\Debug\l_net.lib;C:\GtkRadiant\deps\libxml2-2.9.2\win32\VC10\x64\Debug\libxml2.lib;C:\GtkRadiant\x64\Debug\picomodel.lib;C:\GtkRadiant\x64\Debug\cmdlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;libglib-2.0-0.lib;libgobject-2.0-0.lib;libintl-8.lib;libgtk-win32-2.0-0.lib;libgdk-win32-2.0-0.lib;libgdk_pixbuf-2.0-0.lib;libpango-1.0-0.lib;libpangoft2-1.0-0.lib;libgdkglext-win32-1.0-0.lib;libgtkglext-win32-1.0-0.lib;C:\GtkRadiant\x64\Debug\mathlib.lib;C:\GtkRadiant\x64\Debug\synapse.lib;C:\GtkRadiant\x64\Debug\l_net.lib;libxml2-2.lib;C:\GtkRadiant\x64\Debug\picomodel.lib;C:\GtkRadiant\x64\Debug\cmdlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\gtk-2.24.10\lib;$(SolutionDir)\..\libxml2-2.9.2/win32/bin.msvc;$(SolutionDir)\build\$(Configuration)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>bobtoolz.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>

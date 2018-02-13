@@ -703,7 +703,8 @@ void CPlugInManager::Init(){
 	g_pParentWnd->GetSynapseClient().AddManager( &g_ToolbarModuleManager );
 	g_pParentWnd->GetSynapseClient().AddManager( &g_ModelManager );
 	auto client = &g_pParentWnd->GetSynapseClient();
-	if ( !g_pParentWnd->GetSynapseServer().Resolve( client ) ) {
+	auto server = g_pParentWnd->GetSynapseServer();
+	if ( !server.Resolve( client ) ) {
 		Error( "synapse initialization fail (see console) > if ( !g_pParentWnd->GetSynapseServer().Resolve( &g_pParentWnd->GetSynapseClient() ) ) { " );
 	}
 	g_PluginsManager.PopulateMenu();
@@ -712,7 +713,7 @@ void CPlugInManager::Init(){
 }
 
 void CPlugInManager::Shutdown(){
-	g_pParentWnd->GetSynapseServer().Shutdown();
+	//g_pParentWnd->GetSynapseServer().Shutdown();
 }
 
 void CPlugInManager::Cleanup(){

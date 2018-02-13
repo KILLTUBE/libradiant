@@ -64,7 +64,9 @@
     <IntDir>$(SolutionDir)\build\intermediate\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>G:\gtkradiant\libxml2-2.9.2\win32\bin.msvc;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\msys64\mingw64\include\libxml2;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\install\modules\</OutDir>
     <IntDir>$(SolutionDir)\build\intermediate\$(Configuration)\$(ProjectName)\</IntDir>
@@ -108,7 +110,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/STACK:8388608 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>ws2_32.lib;libglib-2.0-0.lib;C:\GtkRadiant\deps\libxml2-2.9.2\win32\VC10\x64\Debug\libxml2.lib;synapse.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;libglib-2.0-0.lib;libxml2-2.lib;synapse.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\gtk-2.24.10\lib;$(SolutionDir)\..\libxml2-2.9.2/win32/bin.msvc;$(SolutionDir)\build\$(Configuration)\libs;C:\msys64\home\kung\defs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>vfswad.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
