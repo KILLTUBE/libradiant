@@ -159,7 +159,7 @@ int main( int argc, char **argv ){
 
 	/* init model library */
 	PicoInit();
-	PicoSetMallocFunc( safe_malloc );
+	PicoSetMallocFunc( malloc );
 	PicoSetFreeFunc( free );
 	PicoSetPrintFunc( PicoPrintFunc );
 	PicoSetLoadFileFunc( PicoLoadFileFunc );

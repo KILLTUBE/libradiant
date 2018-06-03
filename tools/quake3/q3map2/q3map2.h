@@ -34,6 +34,7 @@
 
 
 
+#include "cmdlib.h"
 /* version */
 #define Q3MAP_VERSION   "2.5.17"
 #define Q3MAP_MOTD      "We're still here"

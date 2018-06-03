@@ -36,7 +36,7 @@
 /* dependencies */
 #include "q3map2.h"
 
-
+#define MAX_OS_PATH     4096
 
 /*
    ColorMod()

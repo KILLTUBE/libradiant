@@ -35,13 +35,13 @@
 
 /* dependencies */
 #include "q3map2.h"
-
+#include "cmdlib.h"
 
 
 /* path support */
 #define MAX_BASE_PATHS  10
 #define MAX_GAME_PATHS  10
-
+#define MAX_OS_PATH     4096
 char                    *homePath;
 char installPath[ MAX_OS_PATH ];
 
@@ -242,7 +242,7 @@ void AddBasePath( char *path ){
 	}
 
 	/* add it to the list */
-	basePaths[ numBasePaths ] = safe_malloc( strlen( path ) + 1 );
+	basePaths[ numBasePaths ] = malloc( strlen( path ) + 1 );
 	strcpy( basePaths[ numBasePaths ], path );
 	CleanPath( basePaths[ numBasePaths ] );
 	numBasePaths++;
@@ -297,7 +297,7 @@ void AddGamePath( char *path ){
 	}
 
 	/* add it to the list */
-	gamePaths[ numGamePaths ] = safe_malloc( strlen( path ) + 1 );
+	gamePaths[ numGamePaths ] = malloc( strlen( path ) + 1 );
 	strcpy( gamePaths[ numGamePaths ], path );
 	CleanPath( gamePaths[ numGamePaths ] );
 	numGamePaths++;

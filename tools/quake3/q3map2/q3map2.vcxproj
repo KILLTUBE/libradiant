@@ -66,6 +66,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IntDir>$(SolutionDir)\build\intermediate\$(Configuration)\$(Platform)\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)\install\$(Platform)\</OutDir>
+    <LibraryPath>C:\GtkRadiant\build\Debug\libs;C:\msys64\home\kung\defs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\install\</OutDir>
@@ -100,7 +101,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\tools\quake3\common;$(SolutionDir)\libs;$(SolutionDir)\..\gtk-2.22.1_win64\include\glib-2.0;$(SolutionDir)\..\gtk-2.22.1_win64\lib\glib-2.0\include;$(SolutionDir)\..\libxml2-2.9.2\include;$(SolutionDir)\..\gtk-2.22.1_win64\include\libpng14;$(SolutionDir)\..\gtk-2.22.1_win64\include;$(SolutionDir)\..\jpeg-9;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\libs;$(SolutionDir)\deps\STLport-5.2.1\stlport;C:\msys64\mingw64\include\glib-2.0;C:\msys64\mingw64\include\gdk-pixbuf-2.0;C:\msys64\mingw64\include\gtk-2.0;C:\msys64\mingw64\include\cairo;C:\msys64\mingw64\include\pango-1.0;C:\msys64\mingw64\lib\gtk-2.0\include;C:\msys64\mingw64\include\atk-1.0;C:\msys64\mingw64\include;C:\msys64\mingw64\include\freetype2;C:\msys64\mingw64\include\gtkglext-1.0;C:\msys64\mingw64\lib\gtkglext-1.0\include;C:\msys64\mingw64\lib\glib-2.0\include;C:\msys64\mingw64\include\libxml2;C:\G\gtkradiant\GtkRadiant\tools\quake3\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -112,7 +113,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/STACK:8388608 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>Ws2_32.lib;glib-2.0.lib;libpng.lib;libxml2_a.lib;jpeg.lib;md5lib.lib;mathlib.lib;picomodel.lib;l_net.lib;ddslib.lib;quake3-common.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;md5lib.lib;mathlib.lib;picomodel.lib;l_net.lib;ddslib.lib;quake3-common.lib;libglib-2.0-0.lib;libgobject-2.0-0.lib;libintl-8.lib;libgtk-win32-2.0-0.lib;libgdk-win32-2.0-0.lib;libgdk_pixbuf-2.0-0.lib;libpango-1.0-0.lib;libpangoft2-1.0-0.lib;libgdkglext-win32-1.0-0.lib;libgtkglext-win32-1.0-0.lib;libxml2-2.lib;C:\GtkRadiant\x64\Debug\mathlib.lib;C:\GtkRadiant\x64\Debug\synapse.lib;C:\GtkRadiant\x64\Debug\l_net.lib;C:\GtkRadiant\x64\Debug\cmdlib.lib;libjpeg-8.lib;C:\OpenSciTech\build\x64\Debug\bundled_libpng.lib;C:\OpenSciTech\build\x64\Debug\bundled_zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\gtk-2.22.1_win64\lib;$(SolutionDir)\..\libxml2-2.9.2/win32/bin.msvc/x64;$(SolutionDir)\..\jpeg-9\x64\Release;$(SolutionDir)\build\$(Configuration)\$(Platform)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
