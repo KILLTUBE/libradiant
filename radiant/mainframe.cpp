@@ -38,6 +38,8 @@
 #include "groupdialog.h"
 #include "patchdialog.h"
 #include "filters.h"
+#include "kung/easygtkwidget.h"
+#include "kung/jsconsole.h"
 
 // use this to verbose what happens with the keyboard
 #ifdef _DEBUG
@@ -780,6 +782,10 @@ static void mainframe_destroy( GtkWidget *widget, gpointer data ){
 }
 
 static gint mainframe_keypress( GtkWidget* widget, GdkEventKey* event, gpointer data ){
+
+	if ( ! are_global_hotkeys_activated())
+		return FALSE; // force GTK to send events to our Julia REPL
+
 	unsigned int code = gdk_keyval_to_upper( event->keyval );
 
 	if ( code == GDK_KEY_ISO_Left_Tab ) {
@@ -823,10 +829,14 @@ static gint mainframe_keypress( GtkWidget* widget, GdkEventKey* event, gpointer 
 		}
 	}
 
-	return TRUE;
+	return FALSE; // was TRUE, causing that no other widgets (my julia repl e.g.) could receive key events
 }
 
 static gint mainframe_keyrelease( GtkWidget* widget, GdkEventKey* event, gpointer data ){
+
+	if ( ! are_global_hotkeys_activated())
+		return FALSE; // force GTK to send events to our Julia REPL
+
 	unsigned int code = gdk_keyval_to_upper( event->keyval );
 
 	if ( gtk_accelerator_valid( event->keyval, (GdkModifierType)0 ) ) {
@@ -2763,12 +2773,16 @@ void MainFrame::Create(){
 						}
 
 						// console
-						{
+						EasyGtkWidget *bottomvpane = EASYGTKWIDGET()->makeHorizontalPane();
+						EasyGtkWidget *console = NULL;
+						EasyGtkWidget *jsconsole = get_js_console();
+						if (1) {
 							GtkWidget* scr = gtk_scrolled_window_new( NULL, NULL );
+							console = EASYGTKWIDGET(scr);
 							gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( scr ), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
 							gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW( scr ), GTK_SHADOW_IN );
 							gtk_widget_show( scr );
-							gtk_paned_pack2( GTK_PANED( vsplit ), scr, FALSE, TRUE );
+							//gtk_paned_pack2( GTK_PANED( vsplit ), scr, FALSE, TRUE );
 
 							{
 								GtkWidget* text = gtk_text_view_new();
@@ -2779,7 +2793,24 @@ void MainFrame::Create(){
 								gtk_widget_show( text );
 								g_qeglobals_gui.d_edit = text;
 							}
+							console->setName("Console");
+							//EasyGtkWidget *pane = console->splitIntoHorizontalPane(get_js_console());
+							//js_call("split_rootpane", "si", "vb", get_js_console()->widget);
+							//EasyGtkTabify(console);
 						}
+#if 0
+						EASYGTKWIDGET(vsplit)->addChildA(console);
+						EASYGTKWIDGET(vsplit)->addChildB(jsconsole);
+#else
+						//EASYGTKWIDGET(vsplit)->addChildA(console);
+
+							
+						bottomvpane->addChildA(console);
+						bottomvpane->addChildB(jsconsole);
+
+						EASYGTKWIDGET(vsplit)->addChildB(bottomvpane);
+#endif
+						jsconsole->showAll();
 					}
 				}
 			}
@@ -3840,6 +3871,10 @@ void MainFrame::CreateQEChildren(){
         strcat( buf, g_pGameDescription->mBaseGame.GetBuffer() );
         strcat( buf, "/scripts/" );
         strcat( buf, PROJECT_TEMPLATE_NAME );
+
+		// for some reason libacidtech is always set somewhere... xml aids
+		snprintf(buf, PATH_MAX, "%s", "C:\\OpenSciTech\\build\\Debug\\base\\scripts\\openscitech.proj");
+
         templateVersion = QE_GetTemplateVersionForProject( buf );
 
 		r = g_PrefsDlg.m_strLastProject.GetBuffer();

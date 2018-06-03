@@ -9,6 +9,9 @@
       <UniqueIdentifier>{85d38eb4-f668-43bb-b370-f6775daf4a27}</UniqueIdentifier>
       <Extensions>rc;ico</Extensions>
     </Filter>
+    <Filter Include="src\kung">
+      <UniqueIdentifier>{1687e05b-24eb-4ce8-ba84-2523962cef19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bp_dlg.cpp">
@@ -173,6 +176,12 @@
     <ClCompile Include="window_imgui.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="kung\easygtkwidget.cpp">
+      <Filter>src\kung</Filter>
+    </ClCompile>
+    <ClCompile Include="kung\jsconsole.cpp">
+      <Filter>src\kung</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="radiant.ico">
@@ -307,6 +316,12 @@
     </ClInclude>
     <ClInclude Include="window_imgui.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="kung\jsconsole.h">
+      <Filter>src\kung</Filter>
+    </ClInclude>
+    <ClInclude Include="kung\easygtkwidget.h">
+      <Filter>src\kung</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

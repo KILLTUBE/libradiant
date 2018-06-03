@@ -184,6 +184,8 @@
     <ClCompile Include="groupdialog.cpp" />
     <ClCompile Include="gtkdlgs.cpp" />
     <ClCompile Include="gtkmisc.cpp" />
+    <ClCompile Include="kung\easygtkwidget.cpp" />
+    <ClCompile Include="kung\jsconsole.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainframe.cpp" />
     <ClCompile Include="map.cpp" />
@@ -255,6 +257,8 @@
     <ClInclude Include="glwindow.h" />
     <ClInclude Include="groupdialog.h" />
     <ClInclude Include="gtkmisc.h" />
+    <ClInclude Include="kung\easygtkwidget.h" />
+    <ClInclude Include="kung\jsconsole.h" />
     <ClInclude Include="mainframe.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="parse.h" />
