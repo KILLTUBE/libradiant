@@ -10,23 +10,39 @@ CCALL void set_callback_repl(int (*cb)(int selection_from, int selection_to, cha
 }
 
 
+BOOL gtk_text_view_has_selection(GtkTextView *textview) {
+	GtkTextBuffer *buf = gtk_text_view_get_buffer(textview);
+	GtkTextIter start, end;
+	return gtk_text_buffer_get_selection_bounds(buf, &start, &end);
+}
 
 gboolean on_textview2_keypress(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
 	char *key = gdk_keyval_to_string(event->keyval);
 
-	int func_ret = FALSE; // by default, dont do event.preventDefault(); it will be set from console_key_press return value
+	int func_ret = FALSE; 
 
 	int selection_from = 2;
 	int selection_to = 4;
 	char *text = "println(321)";
+	int ctrl_pressed = GetAsyncKeyState(VK_CONTROL) != 0; // idk any nice portable way
 
-        // cb returns 1 == handled, return...
-        // cb returns 0 == handled, but still do the normal C stuff
-        if (callback_repl && callback_repl(selection_from, selection_to, text)) {
-			//return 0;
-        }
+	EASYGTKWIDGET(widget)->getCursorPos();
+	if (gtk_text_view_has_selection(GTK_TEXT_VIEW(widget)))
+		text = EASYGTKWIDGET(widget)->getSelectedText();
+	else
+		text = EASYGTKWIDGET(widget)->getText();
 
-		Sys_Printf("keypress %s\n", key);
+	if (ctrl_pressed) {
+		if (event->keyval == GDK_Return) {
+			// cb returns 1 == handled, return...
+			// cb returns 0 == handled, but still do the normal C stuff
+			if (callback_repl) {
+				callback_repl(selection_from, selection_to, text);
+				return TRUE; // ignore this enter, so selected text isnt replaced by \n
+			} 
+		}
+	}
+	//Sys_Printf("keypress %s\n", key);
 
 	//js_push_global_by_name(ctx, "console_key_press");
 	//duk_push_int(ctx, (int) widget);
@@ -54,10 +70,13 @@ gboolean on_textview2_keypress(GtkWidget *widget, GdkEventKey *event, gpointer u
 	//}
 	
 	g_free(key);
-	return func_ret;
+	return FALSE; // tell gtk to deal with it
 }
 
 gboolean on_textview2_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
+
+	return FALSE;
+
 	char *key = gdk_keyval_to_string(event->keyval);
 
 	
