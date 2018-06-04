@@ -88,3 +88,44 @@ function prev(brush::Ptr{Brush})
 	return brush[:prev]
 end
 
+
+# iterator implementation for brush lists
+
+type BrushIt
+	current::Ptr{Brush}
+end
+
+function Base.start( brush::Ptr{Brush} )
+	#log(console, "Base.start for ", brush)
+	return BrushIt(next(brush))
+end
+
+function Base.done( brush::Ptr{Brush}, it::BrushIt)
+	#log(console, "done")
+	return brush == it.current
+end
+
+function Base.next(brush::Ptr{Brush},  it::BrushIt)
+	#log(console, "next>", brush)
+	new_i = next( it.current )
+	new_it = BrushIt( new_i )
+	return (new_i, new_it)
+end
+
+if false
+	it = start( getActiveBrushes() )
+	I = getActiveBrushes()
+	next(next(I))
+	 (i, it) = Base.next(it, I)
+	done(I, it)
+	next( getActiveBrushes() )
+
+	for brush in getActiveBrushes()
+		log(console, "loop", typeof(brush), brush)
+	end
+end
+
+#####
+
+
+
