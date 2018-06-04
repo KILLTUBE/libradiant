@@ -2,13 +2,30 @@
 //#include "../duktape/js_stuff.h"
 #include "../radiant/qe3.h"
 #include "easygtkwidget.h"
+#include <ccall/ccall.h>
+
+int (*callback_repl)(int selection_from, int selection_to, char *text) = NULL;
+CCALL void set_callback_repl(int (*cb)(int selection_from, int selection_to, char *text)) {
+        callback_repl = cb;
+}
+
+
 
 gboolean on_textview2_keypress(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
 	char *key = gdk_keyval_to_string(event->keyval);
 
 	int func_ret = FALSE; // by default, dont do event.preventDefault(); it will be set from console_key_press return value
 
-	
+	int selection_from = 2;
+	int selection_to = 4;
+	char *text = "println(321)";
+
+        // cb returns 1 == handled, return...
+        // cb returns 0 == handled, but still do the normal C stuff
+        if (callback_repl && callback_repl(selection_from, selection_to, text)) {
+			//return 0;
+        }
+
 		Sys_Printf("keypress %s\n", key);
 
 	//js_push_global_by_name(ctx, "console_key_press");
