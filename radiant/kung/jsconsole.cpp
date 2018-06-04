@@ -37,6 +37,11 @@ gboolean on_textview2_keypress(GtkWidget *widget, GdkEventKey *event, gpointer u
 		text = EASYGTKWIDGET(widget)->getText();
 
 	if (ctrl_pressed) {
+		
+		if (event->keyval == 'r' || event->keyval == 'R') {
+			Sys_Printf("todo: refresh...");
+			return TRUE;
+		}
 		if (event->keyval == GDK_Return) {
 			// cb returns 1 == handled, return...
 			// cb returns 0 == handled, but still do the normal C stuff
