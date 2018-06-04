@@ -17,7 +17,9 @@ CCALL void set_callback_player_damage(int (*cb)(int *targ, int *inflictor, int *
 
 function callback_repl(selection_from::Int, selection_to::Int, text::String)::Int
         #log(console, "repl $selection_from $selection_to $text")
-        println("repl $selection_from $selection_to $text")
+        #println("repl $selection_from $selection_to $text")
+		# selection_from and selection_to is currently hardcoded to 2 and 4, was just for testing
+		eval_and_prettyprint(text)
         zero(Int)
 end
 

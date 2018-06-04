@@ -4,6 +4,10 @@
 #include "easygtkwidget.h"
 #include <ccall/ccall.h>
 
+CCALL void julia_log(char *str) {
+	Sys_Printf("%s", str);
+}
+
 int (*callback_repl)(int selection_from, int selection_to, char *text) = NULL;
 CCALL void set_callback_repl(int (*cb)(int selection_from, int selection_to, char *text)) {
         callback_repl = cb;
