@@ -1858,12 +1858,16 @@ void TexWnd::OnExpose() {
 		Texture_Draw( m_pWidget->allocation.width, m_pWidget->allocation.height - g_nTextureOffset );
 		QE_CheckOpenGLForErrors();
 
-
 		static int first = 1;
 		if (first) {
 			first = 0;
 			imgui_init();
 		}
+
+		int width = m_pWidget->allocation.width;
+		int height = m_pWidget->allocation.height - g_nTextureOffset;
+		imgui_set_widthheight(width, height);
+
 		imgui_new_frame();
 		imgui_render();
 		imgui_end_frame();

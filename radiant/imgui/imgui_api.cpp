@@ -290,8 +290,8 @@ CCALL void imgui_end_frame() {
 #endif
 	
 	// just to make it work till proper way is implemented
-	imguidata.screen_width = 800;
-	imguidata.screen_height = 600;
+	//imguidata.screen_width = 800;
+	//imguidata.screen_height = 600;
 	imguidata.global_ticks++;
 	qglViewport(0, 0, imguidata.screen_width, imguidata.screen_height);
 	//glClear(GL_COLOR_BUFFER_BIT);
