@@ -12,6 +12,15 @@
     <Filter Include="src\kung">
       <UniqueIdentifier>{1687e05b-24eb-4ce8-ba84-2523962cef19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\imgui">
+      <UniqueIdentifier>{22465f4d-1c38-46d7-b037-41efdcda0ed7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\imgui_docks">
+      <UniqueIdentifier>{ae8a0e41-867f-459e-92ea-af28524142ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\magicfile">
+      <UniqueIdentifier>{302db4d3-8137-49ed-949f-4ec0b137060a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bp_dlg.cpp">
@@ -182,6 +191,60 @@
     <ClCompile Include="kung\jsconsole.cpp">
       <Filter>src\kung</Filter>
     </ClCompile>
+    <ClCompile Include="imgui\ffi.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_api.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_c_utils.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_default_docks.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_dock.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_fixedarea.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_idtech3_gles.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_utils.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_docks\dock.cpp">
+      <Filter>src\imgui_docks</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_docks\dock_console.cpp">
+      <Filter>src\imgui_docks</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_docks\dock_julia.cpp">
+      <Filter>src\imgui_docks</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_docks\dock_node.cpp">
+      <Filter>src\imgui_docks</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_docks\dock_repl.cpp">
+      <Filter>src\imgui_docks</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_docks\dock_skeleton.cpp">
+      <Filter>src\imgui_docks</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicFile\magicfile.cpp">
+      <Filter>src\magicfile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="radiant.ico">
@@ -322,6 +385,72 @@
     </ClInclude>
     <ClInclude Include="kung\easygtkwidget.h">
       <Filter>src\kung</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_api.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_c_utils.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_default_docks.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_dock.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_fixedarea.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_idtech3_gles.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_utils.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\include_imgui.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\include_quakegl.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\stb_rect_pack.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\stb_textedit.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\stb_truetype.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_docks\dock.h">
+      <Filter>src\imgui_docks</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_docks\dock_console.h">
+      <Filter>src\imgui_docks</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_docks\dock_julia.h">
+      <Filter>src\imgui_docks</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_docks\dock_node.h">
+      <Filter>src\imgui_docks</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_docks\dock_repl.h">
+      <Filter>src\imgui_docks</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_docks\dock_skeleton.h">
+      <Filter>src\imgui_docks</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicFile\magicfile.h">
+      <Filter>src\magicfile</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
