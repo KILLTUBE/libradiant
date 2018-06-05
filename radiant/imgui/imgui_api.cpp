@@ -125,7 +125,13 @@ CCALL void imgui_draw_char( int x, int y, int width, int height, char c) {
 // deprecated
 CCALL void imgui_init_3d() {}
 
+bool ImGui_CreateDeviceObjects();
+bool ImGui_Init();
+bool ImGui_NewFrame();
+
 #if 1
+
+// ccall( (:imgui_init, libradiant), Void, ())
 CCALL void imgui_init() {
 #ifndef EMSCRIPTEN
 //#ifndef ES2
@@ -136,8 +142,8 @@ CCALL void imgui_init() {
 	//PHYSFS_setWriteDir("assets");
 	//PHYSFS_addToSearchPath("assets", 1);
 
-	ImGui_ImplSdlGL3_Init();
-	ImGui_ImplSdlGL3_CreateDeviceObjects();
+	ImGui_Init();
+	ImGui_CreateDeviceObjects();
 	/////////////////////////////////////////
 	//// Load docks from imgui_dock.layout //
 	/////////////////////////////////////////
@@ -284,8 +290,8 @@ CCALL void imgui_end_frame() {
 #endif
 	
 	// just to make it work till proper way is implemented
-	//imguidata.screen_width = 800;
-	//imguidata.screen_height = 600;
+	imguidata.screen_width = 800;
+	imguidata.screen_height = 600;
 	imguidata.global_ticks++;
 	qglViewport(0, 0, imguidata.screen_width, imguidata.screen_height);
 	//glClear(GL_COLOR_BUFFER_BIT);
@@ -331,9 +337,9 @@ CCALL void imgui_end_frame() {
 
 
 	
-    qglEnable(GL_CULL_FACE);
-    qglEnable(GL_DEPTH_TEST);
-	qglEnable(GL_SCISSOR_TEST);
+    //qglEnable(GL_CULL_FACE);
+    //qglEnable(GL_DEPTH_TEST);
+	//qglEnable(GL_SCISSOR_TEST);
 
 
     //// Restore modified GL state

@@ -194,6 +194,7 @@
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_fixedarea.cpp" />
     <ClCompile Include="imgui\imgui_impl_idtech3_gles.cpp" />
+    <ClCompile Include="imgui\imgui_impl_legacy.cpp" />
     <ClCompile Include="imgui\imgui_utils.cpp" />
     <ClCompile Include="imgui_docks\dock.cpp" />
     <ClCompile Include="imgui_docks\dock_console.cpp" />

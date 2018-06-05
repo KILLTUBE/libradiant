@@ -1840,6 +1840,12 @@ void TexWnd::OnSize( int cx, int cy ){
 	m_bNeedRange = true;
 }
 
+#include "imgui/imgui_api.h"
+
+bool ImGui_CreateDeviceObjects();
+bool ImGui_Init();
+bool ImGui_NewFrame();
+
 void TexWnd::OnExpose() {
 	int nOld = g_qeglobals.d_texturewin.m_nTotalHeight;
 	if ( !MakeCurrent() ) {
@@ -1851,6 +1857,18 @@ void TexWnd::OnExpose() {
 		QE_CheckOpenGLForErrors();
 		Texture_Draw( m_pWidget->allocation.width, m_pWidget->allocation.height - g_nTextureOffset );
 		QE_CheckOpenGLForErrors();
+
+
+		static int first = 1;
+		if (first) {
+			first = 0;
+			imgui_init();
+		}
+		imgui_new_frame();
+		imgui_render();
+		imgui_end_frame();
+
+
 		SwapBuffers();
 	}
 	if ( g_PrefsDlg.m_bTextureScrollbar && ( m_bNeedRange || g_qeglobals.d_texturewin.m_nTotalHeight != nOld ) ) {
