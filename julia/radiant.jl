@@ -6,7 +6,7 @@ include(juliasources * "console.jl")
 
 function includes()::Void
 	include(juliasources * "PointerHackery.jl/pointerhackery.jl")
-	include(juliasources * "MathStuff.jl/all.jl")
+	include(juliasources * "math.jl")
 	include(juliasources * "brushes.jl")
 	include(juliasources * "gtk.jl")
 	include(juliasources * "eval.jl")

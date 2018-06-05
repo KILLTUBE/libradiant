@@ -4,6 +4,3 @@
 [submodule "julia/PointerHackery.jl"]
 	path = julia/PointerHackery.jl
 	url = https://github.com/kungfooman/PointerHackery.jl
-[submodule "julia/MathStuff.jl"]
-	path = julia/MathStuff.jl
-	url = https://github.com/kungfooman/MathStuff.jl
