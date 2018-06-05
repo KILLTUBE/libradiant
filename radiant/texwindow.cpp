@@ -320,6 +320,38 @@ void ResampleGamma( float fGamma ){
 	}
 }
 
+#include <ccall/ccall.h>
+//#include "plugin.h"
+//#include "mathlib.h"
+//#include "missing.h" //++timo FIXME: this one is intended to go away some day, it's MFC compatibility classes
+//#include "shaders.h"
+
+qtexture_t** WINAPI QERApp_QTextures(); // return &g_qeglobals.d_qtextures;
+GHashTable* WINAPI QERApp_QTexmap(); // return g_qeglobals.d_qtexmap;
+/*
+qtex = ccall( (:ffi_load_texture, libradiant), Ptr{Void}, ())
+next(getSelectedBrushes())[:brush_faces][:d_texture] = qtex
+*/
+CCALL void *ffi_load_texture() {
+	int width = 256;
+	int height = 256;
+	unsigned char *data = (unsigned char *)malloc(width * height * 4);
+	// just some (kinda interesting) garbage atm
+	for (int i=0; i<width; i++)
+		for (int j=0; j<height; j++)
+			data[i*j] = (i ^ j) + 20;
+	qtexture_t *qtex = QERApp_LoadTextureRGBA(data, width, height);
+	strcpy(qtex->name, "textures/concrete/red");
+	// below copy-pasted and fixed from https://github.com/TTimo/GtkRadiant/blob/master/plugins/shaders/shaders.cpp#L800
+	// hook into the main qtexture_t list
+	qtexture_t **d_qtextures = QERApp_QTextures();
+	qtex->next = *d_qtextures;
+	*d_qtextures = qtex;
+	// push it in the map
+	g_hash_table_insert( QERApp_QTexmap(), qtex->name, qtex );
+	return qtex;
+}
+
 /*!
    this function does the actual processing of raw RGBA data into a GL texture
    it will also generate the mipmaps

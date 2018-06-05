@@ -54,6 +54,12 @@ if !isdefined(:Face)
 		
 		face_winding::Ptr{winding_t}
 		
+		d_color::Vec3
+		d_shade::Float32
+		
+		pShader::Ptr{Void}
+		d_texture::Ptr{Void}
+		
 		# ...
 		to::Int
 		be::Int
