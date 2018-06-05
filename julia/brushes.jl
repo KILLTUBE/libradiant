@@ -2,10 +2,57 @@
 # just to fix a julia bug, it cant redine samish types which contain pointers to itself for some reason
 if !isdefined(:Face)
 
+
+	if false
+		brush = next(getSelectedBrushes())
+		face = brush[:brush_faces]
+		unsafe_load(face[:planepoint_c])
+		unsafe_string( face[:texdef][:name] )
+		face[:face_winding][:maxpoints]
+	end
+
+	struct plane_t
+		normal::Vec3
+		dist::Float64
+		type_::Int32
+	end
+
+	struct texdef_t
+		name::Ptr{Cchar}
+		shift_a::Float32
+		shift_b::Float32
+		rotate::Float32
+		scale_a::Float32
+		scale_b::Float32
+		contents::Int32
+		flags::Int32
+		value::Int32
+	end
+	
+	struct winding_t
+		numpoints::Int32
+		maxpoints::Int32
+		points::Ptr{Float32} # float points[8][5];             // variable sized
+	end
+
 	struct Face
 		next::Ptr{Face}
 		prev::Ptr{Face}
 		original::Ptr{Face}
+		
+		# this is possible, but I rather have easy access without indexing
+		#planepts::SVector{3, Vec3}
+		planepoint_a::Vec3
+		planepoint_b::Vec3
+		planepoint_c::Vec3
+		
+		texdef::texdef_t
+		plane::plane_t
+		
+		undoId::Int32
+		redoId::Int32
+		
+		face_winding::Ptr{winding_t}
 		
 		# ...
 		to::Int
