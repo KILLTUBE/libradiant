@@ -789,6 +789,17 @@ void WINAPI QERApp_CreateBrush( vec3_t vMin, vec3_t vMax ){
 	Sys_UpdateWindows( W_ALL );
 }
 
+// ccall( (:ffi_brush_create, libradiant), Void, (Vec3, Vec3), min, max)
+CCALL void ffi_brush_create( vec3_t vMin, vec3_t vMax ){
+
+	brush_t* pBrush = Brush_Create( vMin, vMax, &g_qeglobals.d_texturewin.texdef );
+	Entity_LinkBrush( world_entity, pBrush );
+	Brush_Build( pBrush );
+	Brush_AddToList( pBrush, &active_brushes );
+	Select_Brush( pBrush );
+	Sys_UpdateWindows( W_ALL );
+}
+
 void* CPlugInManager::CreateBrushHandle(){
 	brush_t *pb = Brush_Alloc();
 	pb->numberId = g_nBrushId++;
@@ -1943,9 +1954,9 @@ qboolean WINAPI BrushPrimitMode(){
 }
 
 
-CCALL brush_t *getActiveBrushes() {
-	return &active_brushes;
-}
+CCALL brush_t *getActiveBrushes()   { return &active_brushes;   }
+CCALL brush_t *getSelectedBrushes() { return &selected_brushes; }
+CCALL brush_t *getFilteredBrushes() { return &filtered_brushes; }
 
 brush_t* WINAPI QERApp_ActiveBrushes(){
 	return &active_brushes;

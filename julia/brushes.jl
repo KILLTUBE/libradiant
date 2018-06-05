@@ -79,6 +79,20 @@ if !isdefined(:Face)
 end
 
 getActiveBrushes() = ccall(("getActiveBrushes", libradiant), Ptr{Brush}, ())
+getSelectedBrushes() = ccall(("getSelectedBrushes", libradiant), Ptr{Brush}, ())
+getFilteredBrushes() = ccall(("getFilteredBrushes", libradiant), Ptr{Brush}, ())
+
+brush_create(min::Vec3, max::Vec3)::Void = ccall( (:ffi_brush_create, libradiant), Void, (Vec3, Vec3), min, max)
+
+if false
+	for i in 0:10
+		for j in 0:20
+			min = Vec3(i * 8, j * 8, 0)
+			max = min + Vec3(8,8,8)
+			brush_create(min, max)
+		end
+	end
+end
 
 function next(brush::Ptr{Brush})
 	return brush[:next]
@@ -91,24 +105,24 @@ end
 
 # iterator implementation for brush lists
 
-type BrushIt
+type BrushIterator
 	current::Ptr{Brush}
 end
 
 function Base.start( brush::Ptr{Brush} )
 	#log(console, "Base.start for ", brush)
-	return BrushIt(next(brush))
+	return BrushIterator(next(brush))
 end
 
-function Base.done( brush::Ptr{Brush}, it::BrushIt)
+function Base.done( brush::Ptr{Brush}, it::BrushIterator)
 	#log(console, "done")
 	return brush == it.current
 end
 
-function Base.next(brush::Ptr{Brush},  it::BrushIt)
+function Base.next(brush::Ptr{Brush},  it::BrushIterator)
 	#log(console, "next>", brush)
 	new_i = next( it.current )
-	new_it = BrushIt( new_i )
+	new_it = BrushIterator( new_i )
 	return (new_i, new_it)
 end
 

@@ -12,6 +12,7 @@ function includes()::Void
 	include(juliasources * "eval.jl")
 	include(juliasources * "eval_and_prettyprint.jl")
 	include(juliasources * "callbacks/repl.jl")
+	include(juliasources * "functional.jl")
 	nothing
 end
 
