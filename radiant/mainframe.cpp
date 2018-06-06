@@ -2484,11 +2484,13 @@ GtkWidget* create_texdirlist_widget()
 
 gboolean entry_focus_in( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
 	gtk_window_remove_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
+	set_global_hotkeys(0);
 	return FALSE;
 }
 
 gboolean entry_focus_out( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
 	gtk_window_add_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
+	set_global_hotkeys(1);
 	return FALSE;
 }
 
@@ -2517,6 +2519,11 @@ GtkWidget* create_framed_texwnd( TexWnd* texwnd ){
 	g_signal_connect( G_OBJECT( w ), "focus-out-event", G_CALLBACK( entry_focus_out ), NULL );
 
 	w = texwnd->GetWidget();
+
+	
+	g_signal_connect( G_OBJECT( w ), "focus-in-event", G_CALLBACK( entry_focus_in ), NULL );
+	g_signal_connect( G_OBJECT( w ), "focus-out-event", G_CALLBACK( entry_focus_out ), NULL );
+
 	gtk_box_pack_start( GTK_BOX( texbox ), w, TRUE, TRUE, 0 );
 	gtk_widget_show( w );
 
