@@ -326,6 +326,11 @@ void ResampleGamma( float fGamma ){
 //#include "missing.h" //++timo FIXME: this one is intended to go away some day, it's MFC compatibility classes
 //#include "shaders.h"
 
+
+// ccall( (:ffi_qtextures, libradiant), Ptr{Void}, ())
+CCALL qtexture_t **ffi_qtextures() {
+	return &g_qeglobals.d_qtextures;
+}
 qtexture_t** WINAPI QERApp_QTextures(); // return &g_qeglobals.d_qtextures;
 GHashTable* WINAPI QERApp_QTexmap(); // return g_qeglobals.d_qtexmap;
 /*
@@ -1841,6 +1846,7 @@ void TexWnd::OnSize( int cx, int cy ){
 }
 
 #include "imgui/imgui_api.h"
+#include "imgui/imgui.h"
 
 bool ImGui_CreateDeviceObjects();
 bool ImGui_Init();
@@ -1869,7 +1875,69 @@ void TexWnd::OnExpose() {
 		imgui_set_widthheight(width, height);
 
 		imgui_new_frame();
-		imgui_render();
+		//imgui_render();
+
+		//ImGui::Begin("
+		//ImGui::Button("what");
+		//ImGui::Button("what");
+
+		ImGui::Begin("textures");
+
+
+		
+		float margin = 16;
+
+
+		float width4 = ImGui::GetWindowWidth() / 4;
+		width4 -= 4 * margin; // ensure the images dont overlap each other
+
+
+		for (int i=0; i<nActiveShadersCount; i++) {
+			pCurrentShader = QERApp_ActiveShader_ForIndex( i );
+			current_texture = pCurrentShader->getTexture();
+			
+			int w = current_texture->width;
+			int h = current_texture->height;
+			ImGui::Text("tex %s %d %d", current_texture->name, w, h);
+			
+			
+
+			int pos = i % 4;
+			int whichline = i / 4;
+			float posy = whichline * width4;
+
+			posy += 25; // some offset from top, otherwise its in title bar
+			posy += margin;
+
+
+			if (pos == 0) {
+				
+				ImGui::SetCursorPos(ImVec2(margin, posy));
+				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(width4,width4));
+				ImGui::SameLine();
+			}
+			if (pos == 1) {
+			
+				ImGui::SetCursorPos(ImVec2(1 * (width4+margin), posy));
+				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(width4,width4));
+				ImGui::SameLine();
+			}
+			if (pos == 2) {
+			
+				ImGui::SetCursorPos(ImVec2(2 * (width4+margin), posy));
+				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(width4,width4));
+				ImGui::SameLine();
+			}
+			if (pos == 3) {
+			
+				ImGui::SetCursorPos(ImVec2(3 * (width4+margin), posy));
+				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(width4,width4));
+				
+			}
+		}
+
+		ImGui::End();
+
 		imgui_end_frame();
 
 
@@ -1892,8 +1960,11 @@ void TexWnd::OnExpose() {
 }
 
 void TexWnd::OnLButtonDown( guint32 flags, int pointx, int pointy ){
+	imgui_mouse_set_button(0, true);
+	Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
 	SetCapture();
 	Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
+	RedrawWindow();
 }
 
 void TexWnd::OnRButtonDown( guint32 flags, int pointx, int pointy ){
@@ -1907,8 +1978,12 @@ void TexWnd::OnMButtonDown( guint32 flags, int pointx, int pointy ){
 }
 
 void TexWnd::OnLButtonUp( guint32 flags, int pointx, int pointy ){
+	imgui_mouse_set_button(0, false);
+	Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
+
 	ReleaseCapture();
 	DragDropTexture( flags, pointx, pointy );
+	RedrawWindow();
 }
 
 void TexWnd::OnRButtonUp( guint32 flags, int pointx, int pointy ){
@@ -1920,9 +1995,11 @@ void TexWnd::OnMButtonUp( guint32 flags, int pointx, int pointy ){
 }
 
 void TexWnd::OnMouseMove( guint32 flags, int pointx, int pointy ){
+	imgui_set_mousepos(pointx, pointy);
 	Texture_MouseMoved( pointx, pointy - g_nTextureOffset, flags );
 	// if scrollbar is hidden, we don't seem to get an update
-	if ( !g_PrefsDlg.m_bTextureScrollbar ) {
+	//if ( !g_PrefsDlg.m_bTextureScrollbar )
+	{
 		RedrawWindow();
 	}
 }
