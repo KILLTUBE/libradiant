@@ -1883,13 +1883,17 @@ void TexWnd::OnExpose() {
 
 		ImGui::Begin("textures");
 
-
+		float fullwidth = ImGui::GetWindowWidth();
 		
 		float margin = 16;
+		float marginall = 5 * margin;
+		float spaceleft = fullwidth - marginall;
+		float spaceProImg = spaceleft / 4;
 
-
-		float width4 = ImGui::GetWindowWidth() / 4;
-		width4 -= 4 * margin; // ensure the images dont overlap each other
+		// _ == margin
+		// _IMG_IMG_IMG_IMG_
+		// [   e.g. 800px  ]
+		// 
 
 
 		for (int i=0; i<nActiveShadersCount; i++) {
@@ -1904,34 +1908,34 @@ void TexWnd::OnExpose() {
 
 			int pos = i % 4;
 			int whichline = i / 4;
-			float posy = whichline * width4;
+			float posy = whichline * spaceProImg;
 
 			posy += 25; // some offset from top, otherwise its in title bar
-			posy += margin;
+			posy += margin * whichline; // add margin for every line
 
 
 			if (pos == 0) {
 				
 				ImGui::SetCursorPos(ImVec2(margin, posy));
-				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(width4,width4));
+				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
 				ImGui::SameLine();
 			}
 			if (pos == 1) {
 			
-				ImGui::SetCursorPos(ImVec2(1 * (width4+margin), posy));
-				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(width4,width4));
+				ImGui::SetCursorPos(ImVec2(margin + 1 * (spaceProImg+margin), posy));
+				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
 				ImGui::SameLine();
 			}
 			if (pos == 2) {
 			
-				ImGui::SetCursorPos(ImVec2(2 * (width4+margin), posy));
-				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(width4,width4));
+				ImGui::SetCursorPos(ImVec2(margin + 2 * (spaceProImg+margin), posy));
+				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
 				ImGui::SameLine();
 			}
 			if (pos == 3) {
 			
-				ImGui::SetCursorPos(ImVec2(3 * (width4+margin), posy));
-				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(width4,width4));
+				ImGui::SetCursorPos(ImVec2(margin + 3 * (spaceProImg+margin), posy));
+				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
 				
 			}
 		}
