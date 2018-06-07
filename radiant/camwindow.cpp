@@ -53,6 +53,21 @@ CamWnd::CamWnd ()
 CamWnd::~CamWnd (){
 }
 
+int set_global_hotkeys(int state);
+extern GtkAccelGroup* global_accel;
+
+gboolean cam_entry_focus_in( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
+	//gtk_window_remove_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
+	//set_global_hotkeys(0);
+	return FALSE;
+}
+
+gboolean cam_entry_focus_out( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
+	//gtk_window_add_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
+	//set_global_hotkeys(1);
+	return FALSE;
+}
+
 void CamWnd::OnCreate(){
 	if ( !MakeCurrent() ) {
 		Error( "camwindow: glMakeCurrent failed" );
@@ -102,6 +117,9 @@ void CamWnd::OnCreate(){
 #endif
 
 	g_qeglobals_gui.d_camera = m_pWidget;
+
+	g_signal_connect( G_OBJECT( m_pWidget ), "focus-in-event", G_CALLBACK( cam_entry_focus_in ), NULL );
+	g_signal_connect( G_OBJECT( m_pWidget ), "focus-out-event", G_CALLBACK( cam_entry_focus_out ), NULL );
 }
 
 void CamWnd::Cam_Init(){
@@ -429,6 +447,8 @@ void CamWnd::Cam_MouseControl( float dtime ){
 	}
 }
 
+bool wButtonPressed() { return GetAsyncKeyState('W') & 0x8000; }
+
 void CamWnd::Cam_KeyControl( float dtime ) {
 
 	// Update angles
@@ -440,7 +460,7 @@ void CamWnd::Cam_KeyControl( float dtime ) {
 	}
 
 	// Update position
-	if ( m_Camera.movementflags & MOVE_FORWARD ) {
+	if ( m_Camera.movementflags & MOVE_FORWARD || wButtonPressed()) {
 		VectorMA( m_Camera.origin, dtime * g_PrefsDlg.m_nMoveSpeed, m_Camera.forward, m_Camera.origin );
 	}
 	if ( m_Camera.movementflags & MOVE_BACK ) {

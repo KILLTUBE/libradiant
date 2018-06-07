@@ -1,4 +1,4 @@
-julia_log(text) = ccall( ("julia_log", libradiant), Void, (Cstring,), text)
+julia_log(text) = ccall( ("imgui_log", libradiant), Int, (Cstring,), text)
 
 abstract type AbstractConsole end
 type Console <: AbstractConsole end

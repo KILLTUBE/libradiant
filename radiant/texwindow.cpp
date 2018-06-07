@@ -1593,7 +1593,10 @@ void Texture_Draw( int width, int height ){
 	g_qeglobals.d_texturewin.width = width;
 	g_qeglobals.d_texturewin.height = height;
 
+
 	Texture_StartPos();
+	return;
+
 	for (;; )
 	{
 		// NOTE: return value is == pCurrentShader and pCurrentShader->getTexture == current_texture
