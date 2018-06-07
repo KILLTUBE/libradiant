@@ -1402,13 +1402,62 @@ void ViewShader( const char *pFile, const char *pName ){
 	DoTextEditor( fullName, nOffset );
 }
 
-/*
-   ==============
-   SelectTexture
 
-   By mouse click
-   ==============
- */
+void assign_shader_to_selection(IShader *ishader) {
+	texdef_t tex;
+	brushprimit_texdef_t brushprimit_tex;
+
+	qtexture_t *q = ishader->getTexture();
+
+	bool bFitScale = false; // todo: depend on shift key
+
+	memset( &tex, 0, sizeof( tex ) );
+	memset( &brushprimit_tex, 0, sizeof( brushprimit_tex ) );
+	if ( g_qeglobals.m_bBrushPrimitMode ) {
+		// brushprimit fitted to a 2x2 texture
+		brushprimit_tex.coords[0][0] = 1.0f;
+		brushprimit_tex.coords[1][1] = 1.0f;
+	}
+	else
+	{
+		tex.scale[0] = g_PrefsDlg.m_fDefTextureScale;
+		tex.scale[1] = g_PrefsDlg.m_fDefTextureScale;
+	}
+	tex.flags = pCurrentShader->getFlags();
+	// TTimo - shader code cleanup
+	// texdef.name is the name of the shader, not the name of the actual texture file
+	tex.SetName( pCurrentShader->getName() );
+	// NOTE WARNING: Texture_SetTexture uses Texture_NextPos stuff to move the window position on to the texture
+	// if there's some kind of fuckup in Texture_SetTexture you may end up with different pCurrentShader or even pCurrentShader == NULL
+	// so we just consider pCurrentShader and current_texture are not valid after this point
+	IShader *pAuxShader = pCurrentShader;
+	Texture_SetTexture( &tex, &brushprimit_tex, bFitScale, NULL ); // Nurail
+	CString strTex;
+	CString strName;
+	// if shader, print shader name, otherwise texture name
+	//++timo FIXME: maybe CShader needs some properties between color / default / actual shader
+#ifdef _DEBUG
+	// this one is never supposed to be set as current one
+	if ( pAuxShader->IsColor() ) {
+		Sys_FPrintf( SYS_ERR, "ERROR: unexpected pCurrentShader->IsColor() in SelectTexture\n" );
+	}
+#endif
+	// NOTE: IsColor is false, IsDefault the only remaining property
+	if ( pAuxShader->IsDefault() ) {
+		strName = q->name;
+		// remove the "textures/" if needed
+		if ( strName.Find( "textures/" ) != -1 ) {
+			strName = strName.Mid( 9 );
+		}
+	}
+	else
+	{
+		strName = pAuxShader->getName();
+	}
+	strTex.Format( "%s W: %i H: %i", strName.GetBuffer(), q->width, q->height );
+	g_pParentWnd->SetStatusText( 3, strTex );
+}
+
 void SelectTexture( int mx, int my, bool bShift, bool bFitScale ){
 	int x, y;
 	qtexture_t  *q;
@@ -1441,51 +1490,7 @@ void SelectTexture( int mx, int my, bool bShift, bool bFitScale ){
 			}
 			else
 			{
-				memset( &tex, 0, sizeof( tex ) );
-				memset( &brushprimit_tex, 0, sizeof( brushprimit_tex ) );
-				if ( g_qeglobals.m_bBrushPrimitMode ) {
-					// brushprimit fitted to a 2x2 texture
-					brushprimit_tex.coords[0][0] = 1.0f;
-					brushprimit_tex.coords[1][1] = 1.0f;
-				}
-				else
-				{
-					tex.scale[0] = g_PrefsDlg.m_fDefTextureScale;
-					tex.scale[1] = g_PrefsDlg.m_fDefTextureScale;
-				}
-				tex.flags = pCurrentShader->getFlags();
-				// TTimo - shader code cleanup
-				// texdef.name is the name of the shader, not the name of the actual texture file
-				tex.SetName( pCurrentShader->getName() );
-				// NOTE WARNING: Texture_SetTexture uses Texture_NextPos stuff to move the window position on to the texture
-				// if there's some kind of fuckup in Texture_SetTexture you may end up with different pCurrentShader or even pCurrentShader == NULL
-				// so we just consider pCurrentShader and current_texture are not valid after this point
-				IShader *pAuxShader = pCurrentShader;
-				Texture_SetTexture( &tex, &brushprimit_tex, bFitScale, NULL ); // Nurail
-				CString strTex;
-				CString strName;
-				// if shader, print shader name, otherwise texture name
-				//++timo FIXME: maybe CShader needs some properties between color / default / actual shader
-#ifdef _DEBUG
-				// this one is never supposed to be set as current one
-				if ( pAuxShader->IsColor() ) {
-					Sys_FPrintf( SYS_ERR, "ERROR: unexpected pCurrentShader->IsColor() in SelectTexture\n" );
-				}
-#endif
-				// NOTE: IsColor is false, IsDefault the only remaining property
-				if ( pAuxShader->IsDefault() ) {
-					strName = q->name;
-					// remove the "textures/" if needed
-					if ( strName.Find( "textures/" ) != -1 ) {
-						strName = strName.Mid( 9 );
-					}
-				}
-				else
-				{
-					strName = pAuxShader->getName();
-				}
-				strTex.Format( "%s W: %i H: %i", strName.GetBuffer(), q->width, q->height );
-				g_pParentWnd->SetStatusText( 3, strTex );
+				assign_shader_to_selection(pCurrentShader);
 			}
 			return;
 		}
@@ -1852,6 +1857,9 @@ bool ImGui_CreateDeviceObjects();
 bool ImGui_Init();
 bool ImGui_NewFrame();
 
+
+
+
 void TexWnd::OnExpose() {
 	int nOld = g_qeglobals.d_texturewin.m_nTotalHeight;
 	if ( !MakeCurrent() ) {
@@ -1862,7 +1870,7 @@ void TexWnd::OnExpose() {
 	{
 		QE_CheckOpenGLForErrors();
 		Texture_Draw( m_pWidget->allocation.width, m_pWidget->allocation.height - g_nTextureOffset );
-		QE_CheckOpenGLForErrors();
+		//QE_CheckOpenGLForErrors();
 
 		static int first = 1;
 		if (first) {
@@ -1915,28 +1923,28 @@ void TexWnd::OnExpose() {
 
 
 			if (pos == 0) {
-				
 				ImGui::SetCursorPos(ImVec2(margin, posy));
 				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
-				ImGui::SameLine();
+
 			}
 			if (pos == 1) {
-			
+	
 				ImGui::SetCursorPos(ImVec2(margin + 1 * (spaceProImg+margin), posy));
 				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
-				ImGui::SameLine();
 			}
 			if (pos == 2) {
 			
 				ImGui::SetCursorPos(ImVec2(margin + 2 * (spaceProImg+margin), posy));
 				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
-				ImGui::SameLine();
 			}
 			if (pos == 3) {
 			
 				ImGui::SetCursorPos(ImVec2(margin + 3 * (spaceProImg+margin), posy));
 				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
 				
+			}
+			if (ImGui::IsItemClicked()) {
+				assign_shader_to_selection(pCurrentShader);
 			}
 		}
 
@@ -1947,38 +1955,40 @@ void TexWnd::OnExpose() {
 
 		SwapBuffers();
 	}
-	if ( g_PrefsDlg.m_bTextureScrollbar && ( m_bNeedRange || g_qeglobals.d_texturewin.m_nTotalHeight != nOld ) ) {
-		GtkAdjustment *vadjustment = gtk_range_get_adjustment( GTK_RANGE( g_qeglobals_gui.d_texture_scroll ) );
-
-		gtk_adjustment_set_value( vadjustment, -g_qeglobals.d_texturewin.originy );
-		gtk_adjustment_set_page_size( vadjustment, m_pWidget->allocation.height );
-		gtk_adjustment_set_page_increment( vadjustment, m_pWidget->allocation.height / 2 );
-		gtk_adjustment_set_step_increment( vadjustment, 20 );
-		gtk_adjustment_set_lower( vadjustment, 0 );
-		gtk_adjustment_set_upper( vadjustment, g_qeglobals.d_texturewin.m_nTotalHeight );
-
-		g_signal_emit_by_name( G_OBJECT( vadjustment ), "changed" );
-
-		m_bNeedRange = false;
-	}
+	//if ( g_PrefsDlg.m_bTextureScrollbar && ( m_bNeedRange || g_qeglobals.d_texturewin.m_nTotalHeight != nOld ) ) {
+	//	GtkAdjustment *vadjustment = gtk_range_get_adjustment( GTK_RANGE( g_qeglobals_gui.d_texture_scroll ) );
+	//
+	//	gtk_adjustment_set_value( vadjustment, -g_qeglobals.d_texturewin.originy );
+	//	gtk_adjustment_set_page_size( vadjustment, m_pWidget->allocation.height );
+	//	gtk_adjustment_set_page_increment( vadjustment, m_pWidget->allocation.height / 2 );
+	//	gtk_adjustment_set_step_increment( vadjustment, 20 );
+	//	gtk_adjustment_set_lower( vadjustment, 0 );
+	//	gtk_adjustment_set_upper( vadjustment, g_qeglobals.d_texturewin.m_nTotalHeight );
+	//
+	//	g_signal_emit_by_name( G_OBJECT( vadjustment ), "changed" );
+	//
+	//	m_bNeedRange = false;
+	//}
 }
 
 void TexWnd::OnLButtonDown( guint32 flags, int pointx, int pointy ){
 	imgui_mouse_set_button(0, true);
 	Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
 	SetCapture();
-	Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
+	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
+	UpdateSurfaceDialog();
+	UpdatePatchInspector();
 	RedrawWindow();
 }
 
 void TexWnd::OnRButtonDown( guint32 flags, int pointx, int pointy ){
 	SetCapture();
-	Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
+	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
 }
 
 void TexWnd::OnMButtonDown( guint32 flags, int pointx, int pointy ){
 	SetCapture();
-	Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
+	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
 }
 
 void TexWnd::OnLButtonUp( guint32 flags, int pointx, int pointy ){
@@ -1986,7 +1996,7 @@ void TexWnd::OnLButtonUp( guint32 flags, int pointx, int pointy ){
 	Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
 
 	ReleaseCapture();
-	DragDropTexture( flags, pointx, pointy );
+	//DragDropTexture( flags, pointx, pointy );
 	RedrawWindow();
 }
 
@@ -2000,7 +2010,7 @@ void TexWnd::OnMButtonUp( guint32 flags, int pointx, int pointy ){
 
 void TexWnd::OnMouseMove( guint32 flags, int pointx, int pointy ){
 	imgui_set_mousepos(pointx, pointy);
-	Texture_MouseMoved( pointx, pointy - g_nTextureOffset, flags );
+	//Texture_MouseMoved( pointx, pointy - g_nTextureOffset, flags );
 	// if scrollbar is hidden, we don't seem to get an update
 	//if ( !g_PrefsDlg.m_bTextureScrollbar )
 	{
