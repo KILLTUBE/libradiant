@@ -46,6 +46,107 @@
 //  #define DBG_KBD
 #endif
 
+
+// https://mail.gnome.org/archives/gtk-app-devel-list/2003-June/msg00145.html
+WNDPROC OldWinProc=NULL;
+
+
+
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
+
+#include <ccall/ccall.h>
+
+//#include "imgui/imgui_impl_sdl.h"
+//#include "main_init.h"
+
+
+//#include <SDL.h>
+//#include <SDL_syswm.h>
+
+#include <Windows.h>
+
+int keys[256] = {0};
+
+
+int mouse_pressed_left   = 0;
+int mouse_pressed_middle = 0;
+int mouse_pressed_right  = 0;
+int mouse_left           = 0;
+int mouse_top            = 0;
+int mouse_delta_left     = 0;
+int mouse_delta_top      = 0;
+
+// most stuff related to GTK shouldn't be done in here, because we are outside of the "event loop" (wrong state)
+// to go into the right state, you gotta use tricks like sending a udp packet and catch it via the gtk socket functions
+// but sure, do whatever you want, tho lots of Sys_Printf e.g. will cause a crash
+LONG CALLBACK MyWinProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam) {
+
+	// global keys array
+	switch (msg) {
+		case WM_SYSKEYUP  : { keys[ wParam % 256 ] = 0; /* Sys_Printf("key   up: %c %d\n", wParam, wParam); */ break; }
+		case WM_KEYUP     : { keys[ wParam % 256 ] = 0; /* Sys_Printf("key   up: %c %d\n", wParam, wParam); */ break; }
+		case WM_SYSKEYDOWN: { keys[ wParam % 256 ] = 1; /* Sys_Printf("key down: %c %d\n", wParam, wParam); */ break; }
+		case WM_KEYDOWN   : { keys[ wParam % 256 ] = 1; /* Sys_Printf("key down: %c %d\n", wParam, wParam); */ break; }
+	}
+
+	// global mouse data
+	switch (msg) {
+		case WM_LBUTTONDOWN: mouse_pressed_left   = 1; break;
+		case WM_RBUTTONDOWN: mouse_pressed_right  = 1; break;
+		case WM_MBUTTONDOWN: mouse_pressed_middle = 1; break;
+		case WM_LBUTTONUP:   mouse_pressed_left   = 0; break;
+		case WM_RBUTTONUP:   mouse_pressed_right  = 0; break;
+		case WM_MBUTTONUP:   mouse_pressed_middle = 0; break;
+	}
+	// win32 api redirects because hwnd in hwnd or something
+	if (msg == WM_PARENTNOTIFY) {
+		switch(LOWORD(wParam)) {
+			case WM_LBUTTONDOWN: mouse_pressed_left   = 1; break;
+			case WM_RBUTTONDOWN: mouse_pressed_right  = 1; break;
+			case WM_MBUTTONDOWN: mouse_pressed_middle = 1; break;
+			case WM_LBUTTONUP:   mouse_pressed_left   = 0; break;
+			case WM_RBUTTONUP:   mouse_pressed_right  = 0; break;
+			case WM_MBUTTONUP:   mouse_pressed_middle = 0; break;
+		}
+	}
+
+	
+	//if (current_glwindow) {
+	//	// return 123 -> GTK does handle the message (default)
+	//	// return 0 -> GTK will NOT handle anymore 
+	//	if ( ! current_glwindow->WinProc(hWnd, msg, wParam, lParam))
+	//		return DefWindowProc(hWnd, msg, wParam, lParam);
+	//} else {
+	//	//Sys_Printf("nope\n");
+	//}
+	
+	switch( msg ) {
+		case WM_MOUSEMOVE:
+			//Sys_Printf("Got the move!\n");
+			return CallWindowProc((WNDPROC)OldWinProc,hWnd,msg,wParam,lParam);
+			break;
+		default:
+			return CallWindowProc((WNDPROC)OldWinProc,hWnd,msg,wParam,lParam);
+	}
+	return TRUE; /*by default */
+}
+
+// ccall( (:change_WndProc, libradiant), Void, (Int,), hwnd)
+CCALL void change_WndProc(HWND hWnd)
+{
+   OldWinProc= (WNDPROC) GetWindowLongPtrA(hWnd,/*GWL_WNDPROC*/GWLP_WNDPROC);
+   //SetWindowLongPtrA(hWnd,GWLP_WNDPROC,(LONG)(WNDPROC)MyWinProc);
+   SetWindowLongPtrA(hWnd,GWLP_WNDPROC,(LONG_PTR)&MyWinProc);
+}
+
+
+
+
+GtkWidget* window;
+GtkWidget *toplevelwindow;
+
+
 // globals
 CString g_strAppPath;                   ///< holds the full path of the executable
 CString g_strDTDPath;                   ///< path to the DTD files
@@ -2574,9 +2675,12 @@ static ZWnd *create_floating_zwnd( MainFrame *mainframe ){
 }
 
 static const int gutter = 12;
+HWND hwnd = 0;
 
 void MainFrame::Create(){
 	GtkWidget* window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+	
+	toplevelwindow = window;
 	m_pWidget = window;
 	gtk_widget_set_events( window, GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
 	g_signal_connect( G_OBJECT( window ), "delete-event",
@@ -3168,6 +3272,17 @@ void MainFrame::Create(){
 	m_bDoLoop = true;
 
 	m_nTimer = g_timeout_add( 1000, timer, this );
+
+
+	//EASYGTKWIDGET(m_pSplits[0] )->setExpand(true)->setFill(true);
+	hwnd = (struct HWND__ *) gdk_win32_drawable_get_handle( ( toplevelwindow->window ) );
+	printf("WINDOW HWND: %d\n", hwnd);
+	change_WndProc(hwnd);
+	//mainframe->GetCamWnd()->OnCreate();
+}
+
+CCALL HWND get_hwnd() {
+	return hwnd;
 }
 
 // =============================================================================
