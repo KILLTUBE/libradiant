@@ -202,6 +202,10 @@
     <ClCompile Include="imgui_docks\dock_node.cpp" />
     <ClCompile Include="imgui_docks\dock_repl.cpp" />
     <ClCompile Include="imgui_docks\dock_skeleton.cpp" />
+    <ClCompile Include="imgui_docks_radiant\dock_all.cpp" />
+    <ClCompile Include="imgui_docks_radiant\dock_textures.cpp" />
+    <ClCompile Include="imgui_radiant\gluecode.cpp" />
+    <ClCompile Include="imgui_radiant\imgui_radiant_default_docks.cpp" />
     <ClCompile Include="kung\easygtkwidget.cpp" />
     <ClCompile Include="kung\jsconsole.cpp" />
     <ClCompile Include="MagicFile\magicfile.cpp" />
@@ -297,6 +301,10 @@
     <ClInclude Include="imgui_docks\dock_node.h" />
     <ClInclude Include="imgui_docks\dock_repl.h" />
     <ClInclude Include="imgui_docks\dock_skeleton.h" />
+    <ClInclude Include="imgui_docks_radiant\dock_all.h" />
+    <ClInclude Include="imgui_docks_radiant\dock_textures.h" />
+    <ClInclude Include="imgui_radiant\gluecode.h" />
+    <ClInclude Include="imgui_radiant\imgui_radiant_default_docks.h" />
     <ClInclude Include="kung\easygtkwidget.h" />
     <ClInclude Include="kung\jsconsole.h" />
     <ClInclude Include="MagicFile\magicfile.h" />

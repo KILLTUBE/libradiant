@@ -1864,6 +1864,7 @@ bool ImGui_Init();
 bool ImGui_NewFrame();
 
 
+#include "imgui_radiant/imgui_radiant_default_docks.h"
 
 
 void TexWnd::OnExpose() {
@@ -1890,6 +1891,7 @@ void TexWnd::OnExpose() {
 
 		imgui_new_frame();
 		imgui_render();
+		imgui_radiant_default_docks();
 
 		//ImGui::Begin("
 		//ImGui::Button("what");
@@ -1979,7 +1981,7 @@ void TexWnd::OnExpose() {
 
 void TexWnd::OnLButtonDown( guint32 flags, int pointx, int pointy ){
 	imgui_mouse_set_button(0, true);
-	Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
+	//Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
 	SetCapture();
 	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
 	UpdateSurfaceDialog();

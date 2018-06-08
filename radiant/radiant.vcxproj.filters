@@ -21,6 +21,12 @@
     <Filter Include="src\magicfile">
       <UniqueIdentifier>{302db4d3-8137-49ed-949f-4ec0b137060a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\imgui_docks_radiant">
+      <UniqueIdentifier>{bfb24183-c1d4-4b84-855d-010206984f77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\imgui_radiant">
+      <UniqueIdentifier>{13404e24-a758-4434-8bbd-ec52ae9f1997}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bp_dlg.cpp">
@@ -248,6 +254,18 @@
     <ClCompile Include="imgui\imgui_impl_legacy.cpp">
       <Filter>src\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="imgui_docks_radiant\dock_all.cpp">
+      <Filter>src\imgui_docks_radiant</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_docks_radiant\dock_textures.cpp">
+      <Filter>src\imgui_docks_radiant</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_radiant\gluecode.cpp">
+      <Filter>src\imgui_radiant</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_radiant\imgui_radiant_default_docks.cpp">
+      <Filter>src\imgui_radiant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="radiant.ico">
@@ -454,6 +472,18 @@
     </ClInclude>
     <ClInclude Include="MagicFile\magicfile.h">
       <Filter>src\magicfile</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_docks_radiant\dock_all.h">
+      <Filter>src\imgui_docks_radiant</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_docks_radiant\dock_textures.h">
+      <Filter>src\imgui_docks_radiant</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_radiant\gluecode.h">
+      <Filter>src\imgui_radiant</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_radiant\imgui_radiant_default_docks.h">
+      <Filter>src\imgui_radiant</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
