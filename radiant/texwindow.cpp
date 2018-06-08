@@ -1855,6 +1855,7 @@ void TexWnd::OnSize( int cx, int cy ){
 
 #include "imgui/imgui_api.h"
 #include "imgui/imgui.h"
+#include "imgui_docks/dock_console.h"
 
 bool ImGui_CreateDeviceObjects();
 bool ImGui_Init();
@@ -1886,7 +1887,7 @@ void TexWnd::OnExpose() {
 		imgui_set_widthheight(width, height);
 
 		imgui_new_frame();
-		//imgui_render();
+		imgui_render();
 
 		//ImGui::Begin("
 		//ImGui::Button("what");
@@ -1994,6 +1995,34 @@ void TexWnd::OnMButtonDown( guint32 flags, int pointx, int pointy ){
 	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
 }
 
+
+LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+	switch (msg) {
+		case WM_SYSKEYUP  : {
+			imgui_log("WM_SYSKEYUP  : %c %d\n", wParam, wParam);
+			RedrawWindow();
+			return 1; // stop gtk event processing
+		}
+		case WM_KEYUP     : {
+			imgui_log("WM_KEYUP     : %c %d\n", wParam, wParam);
+			RedrawWindow();
+			return 1; // stop gtk event processing
+		}
+		case WM_SYSKEYDOWN: {
+			imgui_log("WM_SYSKEYDOWN: %c %d\n", wParam, wParam);
+			RedrawWindow();
+			return 1; // stop gtk event processing
+		}
+		case WM_KEYDOWN   : {
+			imgui_log("WM_KEYDOWN   : %c %d\n", wParam, wParam);
+			RedrawWindow();
+			return 1; // stop gtk event processing
+		}
+	}
+
+	return 0; // 0 == keep processing
+}
+
 void TexWnd::OnLButtonUp( guint32 flags, int pointx, int pointy ){
 	imgui_mouse_set_button(0, false);
 	Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
@@ -2012,6 +2041,7 @@ void TexWnd::OnMButtonUp( guint32 flags, int pointx, int pointy ){
 }
 
 void TexWnd::OnMouseMove( guint32 flags, int pointx, int pointy ){
+	current_glwindow = this;
 	imgui_set_mousepos(pointx, pointy);
 	//Texture_MouseMoved( pointx, pointy - g_nTextureOffset, flags );
 	// if scrollbar is hidden, we don't seem to get an update

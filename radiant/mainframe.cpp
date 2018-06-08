@@ -112,14 +112,17 @@ LONG CALLBACK MyWinProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam) {
 	}
 
 	
-	//if (current_glwindow) {
-	//	// return 123 -> GTK does handle the message (default)
-	//	// return 0 -> GTK will NOT handle anymore 
-	//	if ( ! current_glwindow->WinProc(hWnd, msg, wParam, lParam))
-	//		return DefWindowProc(hWnd, msg, wParam, lParam);
-	//} else {
-	//	//Sys_Printf("nope\n");
-	//}
+	if (current_glwindow) {
+		// return 0 -> GTK does handle the message (default)
+		// return 1 or whatever -> GTK will NOT handle anymore, in JavaScript this would be e.preventDefault()
+		if ( current_glwindow->WinProc(hWnd, msg, wParam, lParam) == 0)
+			return CallWindowProc((WNDPROC)OldWinProc,hWnd,msg,wParam,lParam);
+		else
+			return DefWindowProcA(hWnd, msg, wParam, lParam);
+			//return TRUE;
+	} else {
+		//Sys_Printf("nope\n");
+	}
 	
 	switch( msg ) {
 		case WM_MOUSEMOVE:

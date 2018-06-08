@@ -250,3 +250,5 @@ bool GLWindow::MakeCurrent(){
 void GLWindow::SwapBuffers(){
 	gtk_glwidget_swap_buffers( m_pWidget );
 }
+
+GLWindow *current_glwindow = NULL;

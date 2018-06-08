@@ -59,6 +59,7 @@ public:
   virtual void OnTimer() { }
 
   virtual void OnMouseWheel( bool bUp, int pointx, int pointy ) { }
+  virtual LONG WinProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam) { return 0; } /* return 0 = original wndproc will be called (gtk stuff), return 1 = "eat the event" */
 
   void RedrawWindow() {	gtk_widget_queue_draw( m_pWidget ); }
 
@@ -82,5 +83,7 @@ protected:
 private:
   guint m_nTimer;        // only one timer supported
 };
+
+extern GLWindow *current_glwindow;
 
 #endif //_GLWINDOW_H_
