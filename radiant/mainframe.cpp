@@ -98,6 +98,7 @@ LONG CALLBACK MyWinProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam) {
 		case WM_LBUTTONUP:   mouse_pressed_left   = 0; break;
 		case WM_RBUTTONUP:   mouse_pressed_right  = 0; break;
 		case WM_MBUTTONUP:   mouse_pressed_middle = 0; break;
+		case WM_MOUSEHWHEEL: 1+2; break;
 	}
 	// win32 api redirects because hwnd in hwnd or something
 	if (msg == WM_PARENTNOTIFY) {
@@ -116,12 +117,9 @@ LONG CALLBACK MyWinProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam) {
 		// return 0 -> GTK does handle the message (default)
 		// return 1 or whatever -> GTK will NOT handle anymore, in JavaScript this would be e.preventDefault()
 		if ( current_glwindow->WinProc(hWnd, msg, wParam, lParam) == 0)
-			return CallWindowProc((WNDPROC)OldWinProc,hWnd,msg,wParam,lParam);
+			return CallWindowProc((WNDPROC)OldWinProc, hWnd, msg, wParam, lParam);
 		else
 			return DefWindowProcA(hWnd, msg, wParam, lParam);
-			//return TRUE;
-	} else {
-		//Sys_Printf("nope\n");
 	}
 	
 	switch( msg ) {
@@ -142,9 +140,6 @@ CCALL void change_WndProc(HWND hWnd)
    //SetWindowLongPtrA(hWnd,GWLP_WNDPROC,(LONG)(WNDPROC)MyWinProc);
    SetWindowLongPtrA(hWnd,GWLP_WNDPROC,(LONG_PTR)&MyWinProc);
 }
-
-
-
 
 GtkWidget* window;
 GtkWidget *toplevelwindow;
@@ -2595,6 +2590,7 @@ gboolean entry_focus_in( GtkWidget *widget, GdkEventFocus *event, gpointer user_
 gboolean entry_focus_out( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
 	gtk_window_add_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
 	set_global_hotkeys(1);
+	current_glwindow = NULL;
 	return FALSE;
 }
 

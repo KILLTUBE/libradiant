@@ -1995,37 +1995,76 @@ void TexWnd::OnMButtonDown( guint32 flags, int pointx, int pointy ){
 	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
 }
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_api.h"
 
 LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+	ImGuiIO& io = ImGui::GetIO();
+
+    // Read keyboard modifiers inputs
+    io.KeyCtrl = (GetKeyState(VK_CONTROL) & 0x8000) != 0;
+    io.KeyShift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
+    io.KeyAlt = (GetKeyState(VK_MENU) & 0x8000) != 0;
+    io.KeySuper = false;
+
+	//imgui_log("dunno : msg=%d wparam=%d lparam=%d\n", msg, wParam, lParam);
 	switch (msg) {
-		case WM_SYSKEYUP  : {
-			imgui_log("WM_SYSKEYUP  : %c %d\n", wParam, wParam);
-			RedrawWindow();
-			return 1; // stop gtk event processing
-		}
-		case WM_KEYUP     : {
-			imgui_log("WM_KEYUP     : %c %d\n", wParam, wParam);
-			RedrawWindow();
-			return 1; // stop gtk event processing
-		}
-		case WM_SYSKEYDOWN: {
-			imgui_log("WM_SYSKEYDOWN: %c %d\n", wParam, wParam);
-			RedrawWindow();
-			return 1; // stop gtk event processing
-		}
-		case WM_KEYDOWN   : {
-			imgui_log("WM_KEYDOWN   : %c %d\n", wParam, wParam);
-			RedrawWindow();
-			return 1; // stop gtk event processing
-		}
+		case WM_SYSKEYUP:
+			//imgui_log("WM_SYSKEYUP: %c %d\n", wParam, wParam);
+			if (wParam < 256)
+				io.KeysDown[wParam] = 0;
+			goto stop_gtk_event_processing;
+		case WM_KEYUP:
+			//imgui_log("WM_KEYUP: %c %d\n", wParam, wParam);
+			if (wParam < 256)
+				io.KeysDown[wParam] = 0;
+			goto stop_gtk_event_processing;
+		case WM_SYSKEYDOWN:
+			//imgui_log("WM_SYSKEYDOWN: %c %d\n", wParam, wParam);
+			if (wParam < 256)
+				io.KeysDown[wParam] = 1;
+			goto stop_gtk_event_processing;
+		case WM_KEYDOWN:
+			//imgui_log("WM_KEYDOWN: %c %d\n", wParam, wParam);
+			if (wParam < 256)
+				io.KeysDown[wParam] = 1;
+			goto stop_gtk_event_processing;
+		case WM_CHAR:
+			// You can also use ToAscii()+GetKeyboardState() to retrieve characters.
+			if (wParam > 0 && wParam < 0x10000)
+				io.AddInputCharacter((unsigned short)wParam);
+			goto stop_gtk_event_processing;
+		case WM_MOUSEWHEEL:
+
+			// this isnt send atm, its deeper hacked in by gtk
+			// need to remove this then probably in mainframe.cpp:
+			// g_signal_connect( G_OBJECT( m_pWidget ), "scroll-event", G_CALLBACK( scroll_event ), this );
+
+			//io.
+			imgui_mouse_wheel(GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f);
+			//io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
+			goto stop_gtk_event_processing;
+		case WM_MOUSEHWHEEL:
+			imgui_mouse_wheel(GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f);
+			//io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
+			goto stop_gtk_event_processing;
+		case WM_PARENTNOTIFY:
+			int wLow = LOWORD(wParam);
+			int wHigh = HIWORD(wParam);
+			//imgui_log("WM_PARENTNOTIFY: wLow=%d wHigh=%d lParam=%d\n", wLow, wHigh, lParam);
+			goto stop_gtk_event_processing;
 	}
 
 	return 0; // 0 == keep processing
+
+stop_gtk_event_processing:
+	RedrawWindow(); // only when we ran some custom code here atm
+	return 1; // 1 == stop gtk event processing
 }
 
 void TexWnd::OnLButtonUp( guint32 flags, int pointx, int pointy ){
 	imgui_mouse_set_button(0, false);
-	Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
+	//Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
 
 	ReleaseCapture();
 	//DragDropTexture( flags, pointx, pointy );
