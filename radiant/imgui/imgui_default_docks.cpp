@@ -144,11 +144,13 @@ CCALL int imgui_default_docks() {
 		EndDock();
 	}
 
+#if 0
 	static bool closed = true;
 	if (BeginDock("Demo Stuff", &closed)) {
 		ImGui::ShowDemoWindow(&show_demo_window);
 	}
 	EndDock();
+#endif
 
 
 	return 1;

@@ -1825,12 +1825,17 @@ extern "C" void Sys_Printf_VA( const char *text, va_list args ){
 	Sys_FPrintf_VA( SYS_STD, text, args );
 }
 
+#include "imgui_docks/dock_console.h"
+
 extern "C" void Sys_Printf( const char *text, ... ) {
 	va_list args;
-
 	va_start( args, text );
-	Sys_FPrintf_VA( SYS_STD, text, args );
+	char buf[4096];
+	vsnprintf(buf, sizeof(buf), text, args);
+	//Sys_FPrintf_VA( SYS_STD, text, args );
 	va_end( args );
+
+	imgui_log("%s", buf);
 }
 
 extern "C" void Sys_FPrintf( int level, const char *text, ... ){
