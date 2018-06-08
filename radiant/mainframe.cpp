@@ -2855,33 +2855,23 @@ void MainFrame::Create(){
 							}
 						}
 
-						// textures
+
+#if 1
 						m_pTexWnd = new TexWnd();
-						{
-							GtkWidget* frame = create_framed_texwnd( m_pTexWnd );
-							if( g_PrefsDlg.m_bShowTexDirList ) {
-
-								GtkWidget* texDirList = create_texdirlist_widget();
-
-								GtkWidget* texSplit = gtk_hpaned_new();
-								m_pSplits[4] = texSplit;
-
-								gtk_paned_pack2( GTK_PANED( vsplit2 ), texSplit, TRUE, FALSE );
-								gtk_paned_add1( GTK_PANED( texSplit ), texDirList );
-								gtk_paned_add2( GTK_PANED( texSplit ), frame );
-
-								if( g_PrefsDlg.mWindowInfo.nTextureDirectoryListWidth >= 0 ) {
-									gtk_paned_set_position( GTK_PANED( texSplit ), g_PrefsDlg.mWindowInfo.nTextureDirectoryListWidth );
-								}
-
-								gtk_widget_show( texSplit );
-							} else
-							{
-								m_pSplits[4] = NULL;
-								gtk_paned_pack2( GTK_PANED( vsplit2 ), frame, TRUE, TRUE );
-							}
+						GtkWidget* frame = create_framed_texwnd( m_pTexWnd );
+						GtkWidget* texDirList = create_texdirlist_widget();
+						GtkWidget* texSplit = gtk_hpaned_new();
+						m_pSplits[4] = texSplit;
+						//gtk_paned_pack2( GTK_PANED( vsplit2 ), texSplit, TRUE, FALSE );
+						gtk_paned_add1( GTK_PANED( texSplit ), texDirList );
+						gtk_paned_add2( GTK_PANED( texSplit ), frame );
+						if( g_PrefsDlg.mWindowInfo.nTextureDirectoryListWidth >= 0 ) {
+							gtk_paned_set_position( GTK_PANED( texSplit ), g_PrefsDlg.mWindowInfo.nTextureDirectoryListWidth );
 						}
+						gtk_widget_show( texSplit );
+#endif
 
+#if 0
 						// console
 						EasyGtkWidget *bottomvpane = EASYGTKWIDGET()->makeHorizontalPane();
 						EasyGtkWidget *console = NULL;
@@ -2921,6 +2911,10 @@ void MainFrame::Create(){
 						EASYGTKWIDGET(vsplit)->addChildB(bottomvpane);
 #endif
 						jsconsole->showAll();
+
+#endif
+					EASYGTKWIDGET(vsplit)->addChildB(EASYGTKWIDGET(texSplit));
+
 					}
 				}
 			}

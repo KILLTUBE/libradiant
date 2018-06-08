@@ -37,4 +37,4 @@ end
 
 c_callback_repl = cfunction(wrapper_callback_repl, Int, (Int, Int, Cstring))
 
-ccall(("set_callback_repl", libradiant), Void, (Ptr{Int64}, ), c_callback_repl)
+ccall(("set_callback_repl_node", libradiant), Void, (Ptr{Int64}, ), c_callback_repl)
