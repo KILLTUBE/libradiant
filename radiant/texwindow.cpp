@@ -1867,6 +1867,63 @@ bool ImGui_NewFrame();
 #include "imgui_radiant/imgui_radiant_default_docks.h"
 
 
+void texwnd_imgui() {
+	float fullwidth = ImGui::GetWindowWidth();
+		
+	float margin = 16;
+	float marginall = 5 * margin;
+	float spaceleft = fullwidth - marginall;
+	float spaceProImg = spaceleft / 4;
+
+	// _ == margin
+	// _IMG_IMG_IMG_IMG_
+	// [   e.g. 800px  ]
+	// 
+
+
+	for (int i=0; i<nActiveShadersCount; i++) {
+		pCurrentShader = QERApp_ActiveShader_ForIndex( i );
+		current_texture = pCurrentShader->getTexture();
+			
+		int w = current_texture->width;
+		int h = current_texture->height;
+		//ImGui::Text("tex %s %d %d", current_texture->name, w, h);
+			
+		int pos = i % 4;
+		int whichline = i / 4;
+		float posy = whichline * spaceProImg;
+
+		posy += 25; // some offset from top, otherwise its in title bar
+		posy += margin * whichline; // add margin for every line
+
+
+		if (pos == 0) {
+			ImGui::SetCursorPos(ImVec2(margin, posy));
+			ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
+
+		}
+		if (pos == 1) {
+	
+			ImGui::SetCursorPos(ImVec2(margin + 1 * (spaceProImg+margin), posy));
+			ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
+		}
+		if (pos == 2) {
+			
+			ImGui::SetCursorPos(ImVec2(margin + 2 * (spaceProImg+margin), posy));
+			ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
+		}
+		if (pos == 3) {
+			
+			ImGui::SetCursorPos(ImVec2(margin + 3 * (spaceProImg+margin), posy));
+			ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
+				
+		}
+		if (ImGui::IsItemClicked()) {
+			assign_shader_to_selection(pCurrentShader);
+		}
+	}
+}
+
 void TexWnd::OnExpose() {
 	int nOld = g_qeglobals.d_texturewin.m_nTotalHeight;
 	if ( !MakeCurrent() ) {
@@ -1887,79 +1944,12 @@ void TexWnd::OnExpose() {
 
 		int width = m_pWidget->allocation.width;
 		int height = m_pWidget->allocation.height - g_nTextureOffset;
-		imgui_set_widthheight(width, height);
 
+		imgui_set_widthheight(width, height);
 		imgui_new_frame();
 		imgui_render();
 		imgui_radiant_default_docks();
-
-		//ImGui::Begin("
-		//ImGui::Button("what");
-		//ImGui::Button("what");
-
-		ImGui::Begin("textures");
-
-		float fullwidth = ImGui::GetWindowWidth();
-		
-		float margin = 16;
-		float marginall = 5 * margin;
-		float spaceleft = fullwidth - marginall;
-		float spaceProImg = spaceleft / 4;
-
-		// _ == margin
-		// _IMG_IMG_IMG_IMG_
-		// [   e.g. 800px  ]
-		// 
-
-
-		for (int i=0; i<nActiveShadersCount; i++) {
-			pCurrentShader = QERApp_ActiveShader_ForIndex( i );
-			current_texture = pCurrentShader->getTexture();
-			
-			int w = current_texture->width;
-			int h = current_texture->height;
-			ImGui::Text("tex %s %d %d", current_texture->name, w, h);
-			
-			
-
-			int pos = i % 4;
-			int whichline = i / 4;
-			float posy = whichline * spaceProImg;
-
-			posy += 25; // some offset from top, otherwise its in title bar
-			posy += margin * whichline; // add margin for every line
-
-
-			if (pos == 0) {
-				ImGui::SetCursorPos(ImVec2(margin, posy));
-				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
-
-			}
-			if (pos == 1) {
-	
-				ImGui::SetCursorPos(ImVec2(margin + 1 * (spaceProImg+margin), posy));
-				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
-			}
-			if (pos == 2) {
-			
-				ImGui::SetCursorPos(ImVec2(margin + 2 * (spaceProImg+margin), posy));
-				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
-			}
-			if (pos == 3) {
-			
-				ImGui::SetCursorPos(ImVec2(margin + 3 * (spaceProImg+margin), posy));
-				ImGui::Image((ImTextureID)current_texture->texture_number, ImVec2(spaceProImg,spaceProImg));
-				
-			}
-			if (ImGui::IsItemClicked()) {
-				assign_shader_to_selection(pCurrentShader);
-			}
-		}
-
-		ImGui::End();
-
 		imgui_end_frame();
-
 
 		SwapBuffers();
 	}

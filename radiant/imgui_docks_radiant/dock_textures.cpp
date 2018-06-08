@@ -28,9 +28,9 @@ namespace ImGui {
 	}
 }
 
-
+void texwnd_imgui();
 
 void DockTextures::imgui() {
-	ImGui::Button("textures");
+	texwnd_imgui();
 }
 
