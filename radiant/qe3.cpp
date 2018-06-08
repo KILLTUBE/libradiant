@@ -1846,5 +1846,7 @@ extern "C" void Sys_FPrintf( int level, const char *text, ... ){
 	vsnprintf(buf, sizeof(buf), text, args);
 	//Sys_FPrintf_VA( level, text, args );
 	va_end( args );
-	imgui_log("%s", buf);
+
+	// just seeing shitty gtk error messages from here, so > ignore
+	//imgui_log("%s", buf);
 }

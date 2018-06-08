@@ -2522,64 +2522,8 @@ static void textdirlist_activate( GtkTreeView *tree_view )
 	}
 }
 
-static void textdirlist_row_activated( GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column, gpointer user_data )
-{
-	textdirlist_activate( tree_view );
-}
-static void textdirlist_cursor_changed( GtkTreeView *tree_view, gpointer user_data )
-{
-	textdirlist_activate( tree_view );
-}
 
-GtkWidget* create_texdirlist_widget()
-{
-	GtkWidget *scr;
-	GtkWidget* view;
 
-	scr = gtk_scrolled_window_new( (GtkAdjustment*)NULL, (GtkAdjustment*)NULL );
-
-	gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( scr ), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
-	gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW( scr ), GTK_SHADOW_IN );
-
-	{
-		GtkListStore* store = gtk_list_store_new( 1, G_TYPE_STRING );
-
-		view = gtk_tree_view_new_with_model( GTK_TREE_MODEL( store ) );
-		gtk_tree_view_set_headers_visible( GTK_TREE_VIEW( view ), FALSE );
-
-		{
-			GtkCellRenderer* renderer = gtk_cell_renderer_text_new();
-			GtkTreeViewColumn* column = gtk_tree_view_column_new_with_attributes( "Textures", renderer, "text", 0, (char *) NULL );
-			gtk_tree_view_append_column( GTK_TREE_VIEW( view ), column );
-		}
-
-		gtk_container_add( GTK_CONTAINER( scr ), view );
-
-		g_object_set_data( G_OBJECT( g_qeglobals_gui.d_main_window ), "dirlist_treeview" , view );
-
-		GSList *texdirs = NULL;
-		FillTextureList( &texdirs );
-		FillTextureDirListWidget( texdirs );
-		ClearGSList( texdirs );
-
-		g_object_unref( G_OBJECT( store ) );
-
-		gtk_tree_selection_set_mode( gtk_tree_view_get_selection( GTK_TREE_VIEW( view ) ), GTK_SELECTION_SINGLE );
-#if GTK_CHECK_VERSION( 3,12,0 )
-		gtk_tree_view_set_activate_on_single_click( GTK_TREE_VIEW( view ), TRUE );
-#else
-		g_signal_connect( view, "cursor-changed", G_CALLBACK( textdirlist_cursor_changed ), view );
-#endif
-		g_signal_connect( view, "row-activated", G_CALLBACK( textdirlist_row_activated ), view );
-
-		gtk_widget_show( view );
-
-	}
-
-	gtk_widget_show( scr );
-
-	return scr;
-}
 
 gboolean entry_focus_in( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
 	gtk_window_remove_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
@@ -2682,20 +2626,13 @@ void MainFrame::Create(){
 	toplevelwindow = window;
 	m_pWidget = window;
 	gtk_widget_set_events( window, GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
-	g_signal_connect( G_OBJECT( window ), "delete-event",
-						G_CALLBACK( mainframe_delete ), this );
-	g_signal_connect( G_OBJECT( window ), "destroy",
-						G_CALLBACK( mainframe_destroy ), this );
-	g_signal_connect( G_OBJECT( window ), "key-press-event",
-						G_CALLBACK( mainframe_keypress ), this );
-	g_signal_connect( G_OBJECT( window ), "key-release-event",
-						G_CALLBACK( mainframe_keyrelease ), this );
-	g_signal_connect( G_OBJECT( window ), "map-event",
-						G_CALLBACK( mainframe_map ), this );
-	g_signal_connect( G_OBJECT( window ), "unmap-event",
-						G_CALLBACK( mainframe_unmap ), this );
-	g_signal_connect( G_OBJECT( window ), "window-state-event",
-						G_CALLBACK( mainframe_state ), this );
+	g_signal_connect( G_OBJECT( window ), "delete-event"      , G_CALLBACK( mainframe_delete     ), this );
+	g_signal_connect( G_OBJECT( window ), "destroy"           , G_CALLBACK( mainframe_destroy    ), this );
+	g_signal_connect( G_OBJECT( window ), "key-press-event"   , G_CALLBACK( mainframe_keypress   ), this );
+	g_signal_connect( G_OBJECT( window ), "key-release-event" , G_CALLBACK( mainframe_keyrelease ), this );
+	g_signal_connect( G_OBJECT( window ), "map-event"         , G_CALLBACK( mainframe_map        ), this );
+	g_signal_connect( G_OBJECT( window ), "unmap-event"       , G_CALLBACK( mainframe_unmap      ), this );
+	g_signal_connect( G_OBJECT( window ), "window-state-event", G_CALLBACK( mainframe_state      ), this );
 
 	g_qeglobals_gui.d_main_window = window;
 
@@ -2798,7 +2735,8 @@ void MainFrame::Create(){
 	}
 #endif
 
-	if ( CurrentStyle() == eRegular || CurrentStyle() == eRegularLeft ) {
+	{
+
 		{
 			GtkWidget* vsplit = gtk_vpaned_new();
 			m_pSplits[0] = vsplit;
@@ -2859,16 +2797,23 @@ void MainFrame::Create(){
 #if 1
 						m_pTexWnd = new TexWnd();
 						GtkWidget* frame = create_framed_texwnd( m_pTexWnd );
-						GtkWidget* texDirList = create_texdirlist_widget();
-						GtkWidget* texSplit = gtk_hpaned_new();
-						m_pSplits[4] = texSplit;
-						//gtk_paned_pack2( GTK_PANED( vsplit2 ), texSplit, TRUE, FALSE );
-						gtk_paned_add1( GTK_PANED( texSplit ), texDirList );
-						gtk_paned_add2( GTK_PANED( texSplit ), frame );
-						if( g_PrefsDlg.mWindowInfo.nTextureDirectoryListWidth >= 0 ) {
-							gtk_paned_set_position( GTK_PANED( texSplit ), g_PrefsDlg.mWindowInfo.nTextureDirectoryListWidth );
-						}
-						gtk_widget_show( texSplit );
+						/*
+							static void textdirlist_row_activated( GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column, gpointer user_data )
+							{
+							textdirlist_activate( tree_view );
+							}
+							static void textdirlist_cursor_changed( GtkTreeView *tree_view, gpointer user_data )
+							{
+							textdirlist_activate( tree_view );
+							}
+							GSList *texdirs = NULL;
+							FillTextureList( &texdirs );
+							FillTextureDirListWidget( texdirs );
+							ClearGSList( texdirs );						
+						*/
+						
+						m_pSplits[4] = frame;
+						gtk_widget_show( frame );
 #endif
 
 #if 0
@@ -2913,300 +2858,17 @@ void MainFrame::Create(){
 						jsconsole->showAll();
 
 #endif
-					EASYGTKWIDGET(vsplit)->addChildB(EASYGTKWIDGET(texSplit));
+					EASYGTKWIDGET(vsplit)->addChildB(EASYGTKWIDGET(frame));
 
 					}
 				}
 			}
 		}
 
-		gtk_paned_set_position( GTK_PANED( m_pSplits[0] ), g_PrefsDlg.mWindowInfo.nXYHeight );
-
-		if ( CurrentStyle() == eRegular ) {
-			gtk_paned_set_position( GTK_PANED( m_pSplits[2] ), g_PrefsDlg.mWindowInfo.nZWidth );
-			gtk_paned_set_position( GTK_PANED( m_pSplits[3] ), g_PrefsDlg.mWindowInfo.nXYWidth );
-		}
-		else
-		{
-			gtk_paned_set_position( GTK_PANED( m_pSplits[2] ), g_PrefsDlg.mWindowInfo.nCamWidth );
-			gtk_paned_set_position( GTK_PANED( m_pSplits[3] ), g_PrefsDlg.mWindowInfo.nXYWidth );
-		}
-
+		gtk_paned_set_position( GTK_PANED( m_pSplits[0] ), g_PrefsDlg.mWindowInfo.nXYHeight  );
 		gtk_paned_set_position( GTK_PANED( m_pSplits[1] ), g_PrefsDlg.mWindowInfo.nCamHeight );
-	}
-	else if ( CurrentStyle() == eFloating ) {
-		{
-			GtkWidget* wnd = create_floating( this );
-			gtk_window_set_title( GTK_WINDOW( wnd ), _( "Camera" ) );
-
-#ifdef _WIN32
-			if ( g_PrefsDlg.m_bStartOnPrimMon ) {
-				PositionWindowOnPrimaryScreen( g_PrefsDlg.mWindowInfo.posCamWnd );
-			}
-#endif
-			load_window_pos( wnd, g_PrefsDlg.mWindowInfo.posCamWnd );
-
-			gtk_widget_show( wnd );
-
-			m_pCamWnd = new CamWnd();
-
-			{
-				GtkWidget* frame = create_framed_widget( m_pCamWnd->GetWidget() );
-				gtk_container_add( GTK_CONTAINER( wnd ), frame );
-			}
-
-			m_pCamWnd->m_pParent = wnd;
-		}
-
-		if ( g_PrefsDlg.m_bFloatingZ ) {
-			m_pZWnd = create_floating_zwnd( this );
-
-			{
-				GtkWidget* wnd = create_floating( this );
-				gtk_window_set_title( GTK_WINDOW( wnd ), _( "XY View" ) );
-
-#ifdef _WIN32
-				if ( g_PrefsDlg.m_bStartOnPrimMon ) {
-					PositionWindowOnPrimaryScreen( g_PrefsDlg.mWindowInfo.posXYWnd );
-				}
-#endif
-				load_window_pos( wnd, g_PrefsDlg.mWindowInfo.posXYWnd );
-
-				m_pXYWnd = new XYWnd();
-				m_pXYWnd->SetViewType( XY );
-
-				{
-					GtkWidget* frame = create_framed_widget( m_pXYWnd->GetWidget() );
-					gtk_container_add( GTK_CONTAINER( wnd ), frame );
-				}
-
-				m_pXYWnd->m_pParent = wnd;
-
-				gtk_widget_show( wnd );
-			}
-		}
-		else
-		{
-			GtkWidget* wnd = create_floating( this );
-			gtk_window_set_title( GTK_WINDOW( wnd ), _( "XY View" ) );
-
-#ifdef _WIN32
-			if ( g_PrefsDlg.m_bStartOnPrimMon ) {
-				PositionWindowOnPrimaryScreen( g_PrefsDlg.mWindowInfo.posXYWnd );
-			}
-#endif
-			load_window_pos( wnd, g_PrefsDlg.mWindowInfo.posXYWnd );
-
-			m_pZWnd = new ZWnd();
-			m_pZWnd->m_pParent = wnd;
-
-			m_pXYWnd = new XYWnd();
-			m_pXYWnd->SetViewType( XY );
-			m_pXYWnd->m_pParent = wnd;
-
-
-			{
-				GtkWidget* hsplit = gtk_hpaned_new();
-				m_pSplits[0] = hsplit;
-				gtk_container_add( GTK_CONTAINER( wnd ), hsplit );
-				gtk_widget_show( hsplit );
-
-				{
-					GtkWidget* frame = create_framed_widget( m_pZWnd->GetWidget() );
-					gtk_paned_add1( GTK_PANED( hsplit ), frame );
-				}
-				{
-					GtkWidget* frame = create_framed_widget( m_pXYWnd->GetWidget() );
-					gtk_paned_add2( GTK_PANED( hsplit ), frame );
-				}
-			}
-
-			gtk_widget_show( wnd );
-
-			gtk_paned_set_position( GTK_PANED( m_pSplits[0] ), g_PrefsDlg.mWindowInfo.nZFloatWidth );
-		}
-
-		{
-			GtkWidget* wnd = create_floating( this );
-			gtk_window_set_title( GTK_WINDOW( wnd ), _( "XZ View" ) );
-
-#ifdef _WIN32
-			if ( g_PrefsDlg.m_bStartOnPrimMon ) {
-				PositionWindowOnPrimaryScreen( g_PrefsDlg.mWindowInfo.posXZWnd );
-			}
-#endif
-			load_window_pos( wnd, g_PrefsDlg.mWindowInfo.posXZWnd );
-
-			m_pXZWnd = new XYWnd();
-			m_pXZWnd->m_pParent = wnd;
-			m_pXZWnd->SetViewType( XZ );
-
-			{
-				GtkWidget* frame = create_framed_widget( m_pXZWnd->GetWidget() );
-				gtk_container_add( GTK_CONTAINER( wnd ), frame );
-			}
-
-			if ( g_PrefsDlg.m_bXZVis ) {
-				gtk_widget_show( wnd );
-			}
-		}
-
-		{
-			GtkWidget* wnd = create_floating( this );
-			gtk_window_set_title( GTK_WINDOW( wnd ), _( "YZ View" ) );
-
-#ifdef _WIN32
-			if ( g_PrefsDlg.m_bStartOnPrimMon ) {
-				PositionWindowOnPrimaryScreen( g_PrefsDlg.mWindowInfo.posYZWnd );
-			}
-#endif
-			load_window_pos( wnd, g_PrefsDlg.mWindowInfo.posYZWnd );
-
-			m_pYZWnd = new XYWnd();
-			m_pYZWnd->m_pParent = wnd;
-			m_pYZWnd->SetViewType( YZ );
-
-			{
-				GtkWidget* frame = create_framed_widget( m_pYZWnd->GetWidget() );
-				gtk_container_add( GTK_CONTAINER( wnd ), frame );
-			}
-
-			if ( g_PrefsDlg.m_bYZVis ) {
-				gtk_widget_show( wnd );
-			}
-		}
-
-		m_pTexWnd = new TexWnd();
-		{
-			GtkWidget* frame = create_framed_texwnd( m_pTexWnd );
-			m_pTexWnd->m_pParent = g_pGroupDlg->m_pWidget;
-
-			GtkWidget* w = gtk_label_new( _( "Textures" ) );
-			gtk_widget_show( w );
-
-			if( g_PrefsDlg.m_bShowTexDirList )
-			{
-				GtkWidget* texDirList = create_texdirlist_widget();
-
-				GtkWidget* texSplit = gtk_hpaned_new();
-				m_pSplits[4] = texSplit;
-
-				gtk_paned_add1( GTK_PANED( texSplit ), texDirList );
-				gtk_paned_add2( GTK_PANED( texSplit ), frame );
-
-				if( g_PrefsDlg.mWindowInfo.nTextureDirectoryListWidth >= 0 ) {
-					gtk_paned_set_position( GTK_PANED( texSplit ), g_PrefsDlg.mWindowInfo.nTextureDirectoryListWidth );
-				}
-
-				gtk_widget_show( texSplit );
-
-				gtk_notebook_insert_page( GTK_NOTEBOOK( g_pGroupDlg->m_pNotebook ), texSplit, w, 1 );
-			} else
-			{
-				m_pSplits[4] = NULL;
-				gtk_notebook_insert_page( GTK_NOTEBOOK( g_pGroupDlg->m_pNotebook ), frame, w, 1 );
-			}
-		}
-
-		g_pGroupDlg->Show();
-	}
-	else // 4 way
-	{
-		{
-			GtkWidget* hsplit = gtk_hpaned_new();
-			m_pSplits[0] = hsplit;
-			gtk_box_pack_start( GTK_BOX( vbox ), hsplit, TRUE, TRUE, 0 );
-			gtk_widget_show( hsplit );
-
-			{
-				GtkWidget* vsplit1 = gtk_vpaned_new();
-				m_pSplits[1] = vsplit1;
-				gtk_paned_add1( GTK_PANED( hsplit ), vsplit1 );
-				gtk_widget_show( vsplit1 );
-
-				{
-					GtkWidget* vsplit2 = gtk_vpaned_new();
-					m_pSplits[2] = vsplit2;
-					gtk_paned_add2( GTK_PANED( hsplit ), vsplit2 );
-					gtk_widget_show( vsplit2 );
-
-					m_pCamWnd = new CamWnd();
-					{
-						GtkWidget* frame = create_framed_widget( m_pCamWnd->GetWidget() );
-						gtk_paned_add1( GTK_PANED( vsplit1 ), frame );
-					}
-
-					m_pXYWnd = new XYWnd();
-					m_pXYWnd->SetViewType( XY );
-					{
-						GtkWidget* frame = create_framed_widget( m_pXYWnd->GetWidget() );
-						gtk_paned_add1( GTK_PANED( vsplit2 ), frame );
-					}
-
-					m_pYZWnd = new XYWnd();
-					m_pYZWnd->SetViewType( YZ );
-					{
-						GtkWidget* frame = create_framed_widget( m_pYZWnd->GetWidget() );
-						gtk_paned_add2( GTK_PANED( vsplit1 ), frame );
-					}
-
-					m_pXZWnd = new XYWnd();
-					m_pXZWnd->SetViewType( XZ );
-					{
-						GtkWidget* frame = create_framed_widget( m_pXZWnd->GetWidget() );
-						gtk_paned_add2( GTK_PANED( vsplit2 ), frame );
-					}
-				}
-			}
-		}
-
-		{
-			m_pTexWnd = new TexWnd();
-			GtkWidget* frame = create_framed_texwnd( m_pTexWnd );
-
-			GtkWidget* w = gtk_label_new( _( "Textures" ) );
-			gtk_widget_show( w );
-
-			if( g_PrefsDlg.m_bShowTexDirList )
-			{
-				GtkWidget* texDirList = create_texdirlist_widget();
-
-				GtkWidget* texSplit = gtk_hpaned_new();
-				m_pSplits[4] = texSplit;
-
-				gtk_paned_add1( GTK_PANED( texSplit ), texDirList );
-				gtk_paned_add2( GTK_PANED( texSplit ), frame );
-
-				if( g_PrefsDlg.mWindowInfo.nTextureDirectoryListWidth >= 0 ) {
-					gtk_paned_set_position( GTK_PANED( texSplit ), g_PrefsDlg.mWindowInfo.nTextureDirectoryListWidth );
-				}
-
-				gtk_widget_show( texSplit );
-
-				gtk_notebook_insert_page( GTK_NOTEBOOK( g_pGroupDlg->m_pNotebook ), texSplit, w, 1 );
-			} else
-			{
-				m_pSplits[4] = NULL;
-				gtk_notebook_insert_page( GTK_NOTEBOOK( g_pGroupDlg->m_pNotebook ), frame, w, 1 );
-			}
-		}
-
-		m_pTexWnd->m_pParent = g_pGroupDlg->m_pWidget;
-		m_pZWnd = create_floating_zwnd( this );
-
-		while ( gtk_events_pending() )
-			gtk_main_iteration();
-
-		{
-			int x = GTK_PANED( m_pSplits[0] )->max_position / 2 - gutter;
-			gtk_paned_set_position( GTK_PANED( m_pSplits[0] ), x );
-		}
-
-		{
-			int y = GTK_PANED( m_pSplits[1] )->max_position / 2 - gutter;
-			gtk_paned_set_position( GTK_PANED( m_pSplits[1] ), y );
-			gtk_paned_set_position( GTK_PANED( m_pSplits[2] ), y );
-		}
+		gtk_paned_set_position( GTK_PANED( m_pSplits[2] ), g_PrefsDlg.mWindowInfo.nZWidth    );
+		gtk_paned_set_position( GTK_PANED( m_pSplits[3] ), g_PrefsDlg.mWindowInfo.nXYWidth   );
 	}
 
 	if ( g_PrefsDlg.mWindowInfo.nState & GDK_WINDOW_STATE_MAXIMIZED ) {
