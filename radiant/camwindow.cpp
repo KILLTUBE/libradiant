@@ -640,6 +640,9 @@ void CamWnd::Cam_MouseUp( int x, int y, int buttons ){
 }
 
 void CamWnd::Cam_MouseMoved( int x, int y, int buttons ){
+
+	current_glwindow = this;
+
 	m_nCambuttonstate = buttons;
 	if ( !buttons ) {
 		return;

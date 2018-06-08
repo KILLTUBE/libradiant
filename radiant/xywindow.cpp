@@ -1744,6 +1744,9 @@ void XYWnd::NewBrushDrag( int x, int y ){
    ==============
  */
 void XYWnd::XY_MouseMoved( int x, int y, int buttons ){
+	
+	current_glwindow = this;
+
 	vec3_t point;
 
 	if ( !m_nButtonstate ) {
