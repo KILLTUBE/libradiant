@@ -1842,6 +1842,9 @@ extern "C" void Sys_FPrintf( int level, const char *text, ... ){
 	va_list args;
 
 	va_start( args, text );
-	Sys_FPrintf_VA( level, text, args );
+	char buf[4096];
+	vsnprintf(buf, sizeof(buf), text, args);
+	//Sys_FPrintf_VA( level, text, args );
 	va_end( args );
+	imgui_log("%s", buf);
 }
