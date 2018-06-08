@@ -798,6 +798,7 @@ void FillTextureDirListWidget( GSList *texdirs )
 	}
 }
 
+// ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "liquids")
 void Texture_ShowDirectory_by_path( const char* pPath )
 {
 	snprintf( texture_directory, sizeof( texture_directory ), "%s%s", pPath, "/" );
@@ -1056,7 +1057,7 @@ void Texture_ShowAll(){
    NOTE: don't sort the textures, don't update the windows (it's used in several contexts, not always necessary to do either)
    ==============
  */
-void WINAPI Texture_ShowInuse( void ){
+void Texture_ShowInuse() {
 	face_t  *f;
 	brush_t *b;
 	char name[1024];
@@ -1844,7 +1845,8 @@ void TexWnd::UpdateFilter( const char* pFilter ){
 		if ( g_strFilter.GetLength() > 0 ) {
 			g_bFilterEnabled = true;
 		}
-		QERApp_SortActiveShaders();
+		//QERApp_SortActiveShaders();
+		g_ShadersTable.m_pfnSortActiveShaders();
 	}
 	Sys_UpdateWindows( W_TEXTURE );
 }

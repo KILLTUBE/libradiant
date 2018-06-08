@@ -18,6 +18,22 @@ function includes()::Void
 	nothing
 end
 
+function textures()
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "blood")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "common")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "concrete")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "custom")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "env")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "japan")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "kungtile")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "liquids")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "mymap")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "other")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "radiant")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "tools")
+	ccall( (:Texture_ShowDirectory_by_path, libradiant), Void, (Cstring,), "window")
+end
+
 try
 	includes()
 catch ex
