@@ -1623,72 +1623,51 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 
 		create_menu_item_with_mnemonic( menu, _( "Cylinder" ), G_CALLBACK( HandleCommand ), ID_CURVE_PATCHTUBE );
 		menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "More Cylinders" ) );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Dense Cylinder" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_PATCHDENSETUBE );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Very Dense Cylinder" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_PATCHVERYDENSETUBE );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Square Cylinder" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_PATCHSQUARE );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Dense Cylinder"      ), G_CALLBACK( HandleCommand ), ID_CURVE_PATCHDENSETUBE );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Very Dense Cylinder" ), G_CALLBACK( HandleCommand ), ID_CURVE_PATCHVERYDENSETUBE );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Square Cylinder"     ), G_CALLBACK( HandleCommand ), ID_CURVE_PATCHSQUARE );
 		menu_separator( menu );
 		create_menu_item_with_mnemonic( menu, _( "End cap" ), G_CALLBACK( HandleCommand ), ID_CURVE_PATCHENDCAP );
 		create_menu_item_with_mnemonic( menu, _( "Bevel" ), G_CALLBACK( HandleCommand ), ID_CURVE_PATCHBEVEL );
 		menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "More End caps, Bevels" ) );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Square Endcap" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_MOREENDCAPSBEVELS_SQUAREBEVEL );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Square Bevel" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_MOREENDCAPSBEVELS_SQUAREENDCAP );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Square Endcap" ), G_CALLBACK( HandleCommand ), ID_CURVE_MOREENDCAPSBEVELS_SQUAREBEVEL );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Square Bevel"  ), G_CALLBACK( HandleCommand ), ID_CURVE_MOREENDCAPSBEVELS_SQUAREENDCAP );
 		menu_separator( menu );
 		create_menu_item_with_mnemonic( menu, _( "Cone" ), G_CALLBACK( HandleCommand ), ID_CURVE_PATCHCONE );
-		item = create_menu_item_with_mnemonic( menu, _( "Sphere" ),
-											   G_CALLBACK( HandleCommand ), ID_CURVE_PRIMITIVES_SPHERE );
+		item = create_menu_item_with_mnemonic( menu, _( "Sphere" ), G_CALLBACK( HandleCommand ), ID_CURVE_PRIMITIVES_SPHERE );
 		gtk_widget_set_sensitive( item, FALSE );
 		menu_separator( menu );
-		item = create_menu_item_with_mnemonic( menu, _( "Simple Patch Mesh..." ),
-											   G_CALLBACK( HandleCommand ), ID_CURVE_SIMPLEPATCHMESH );
+		item = create_menu_item_with_mnemonic( menu, _( "Simple Patch Mesh..." ), G_CALLBACK( HandleCommand ), ID_CURVE_SIMPLEPATCHMESH );
 		g_object_set_data( G_OBJECT( window ), "menu_simplepatchmesh", item );
 		create_menu_item_with_mnemonic( menu, _( "Patch Inspector..." ), G_CALLBACK( HandleCommand ), ID_PATCH_INSPECTOR );
 		menu_separator( menu );
 		menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Insert" ) );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Insert (2) Columns" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_INSERT_INSERTCOLUMN );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Add (2) Columns" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_INSERT_ADDCOLUMN );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Insert (2) Columns" ), G_CALLBACK( HandleCommand ), ID_CURVE_INSERT_INSERTCOLUMN );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Add (2) Columns"    ), G_CALLBACK( HandleCommand ), ID_CURVE_INSERT_ADDCOLUMN );
 		menu_separator( menu_in_menu );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Insert (2) Rows" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_INSERT_INSERTROW );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Add (2) Rows" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_INSERT_ADDROW );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Insert (2) Rows" ), G_CALLBACK( HandleCommand ), ID_CURVE_INSERT_INSERTROW );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Add (2) Rows"    ), G_CALLBACK( HandleCommand ), ID_CURVE_INSERT_ADDROW );
 		menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Delete" ) );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "First (2) Columns" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_DELETE_FIRSTCOLUMN );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Last (2) Columns" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_DELETE_LASTCOLUMN );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "First (2) Columns" ), G_CALLBACK( HandleCommand ), ID_CURVE_DELETE_FIRSTCOLUMN );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Last (2) Columns"  ), G_CALLBACK( HandleCommand ), ID_CURVE_DELETE_LASTCOLUMN );
 		menu_separator( menu_in_menu );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "First (2) Rows" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_DELETE_FIRSTROW );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Last (2) Rows" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_DELETE_LASTROW );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "First (2) Rows" ), G_CALLBACK( HandleCommand ), ID_CURVE_DELETE_FIRSTROW );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Last (2) Rows"  ), G_CALLBACK( HandleCommand ), ID_CURVE_DELETE_LASTROW );
 		menu_separator( menu );
 		menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Matrix" ) );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Invert" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_NEGATIVE );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Invert" ), G_CALLBACK( HandleCommand ), ID_CURVE_NEGATIVE );
 		menu_3 = create_menu_in_menu_with_mnemonic( menu_in_menu, _( "Re-disperse" ) );
 		create_menu_item_with_mnemonic( menu_3, _( "Rows" ), G_CALLBACK( HandleCommand ), ID_CURVE_REDISPERSE_ROWS );
 		create_menu_item_with_mnemonic( menu_3, _( "Cols (Intermediate)" ), G_CALLBACK( HandleCommand ), ID_CURVE_REDISPERSE_INTERMEDIATE_COLS );
 		create_menu_item_with_mnemonic( menu_3, _( "Rows (Intermediate)" ), G_CALLBACK( HandleCommand ), ID_CURVE_REDISPERSE_INTERMEDIATE_ROWS );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Transpose" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_MATRIX_TRANSPOSE );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Transpose"     ), G_CALLBACK( HandleCommand ), ID_CURVE_MATRIX_TRANSPOSE             );
 		menu_separator( menu );
-		create_menu_item_with_mnemonic( menu, _( "Cap Selection" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_CAP );
-		create_menu_item_with_mnemonic( menu, _( "Cycle Cap Texture" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_CYCLECAP );
+		create_menu_item_with_mnemonic( menu, _( "Cap Selection"     ), G_CALLBACK( HandleCommand ), ID_CURVE_CAP );
+		create_menu_item_with_mnemonic( menu, _( "Cycle Cap Texture" ), G_CALLBACK( HandleCommand ), ID_CURVE_CYCLECAP );
 		menu_separator( menu );
 		menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Overlay" ) );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Set" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_OVERLAY_SET );
-		create_menu_item_with_mnemonic( menu_in_menu, _( "Clear" ),
-										G_CALLBACK( HandleCommand ), ID_CURVE_OVERLAY_CLEAR );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Set"   ), G_CALLBACK( HandleCommand ), ID_CURVE_OVERLAY_SET );
+		create_menu_item_with_mnemonic( menu_in_menu, _( "Clear" ), G_CALLBACK( HandleCommand ), ID_CURVE_OVERLAY_CLEAR );
 		menu_separator( menu );
 		create_menu_item_with_mnemonic( menu, _( "Thicken..." ), G_CALLBACK( HandleCommand ), ID_CURVE_THICKEN );
 	}
@@ -1722,14 +1701,10 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	create_game_help_menu( menu, accel );
 
 	// TTimo: this is in global.xlink now
-	//create_menu_item_with_mnemonic (menu, "Links",
-	//                  G_CALLBACK (HandleCommand), ID_HELP_LINKS);
-	create_menu_item_with_mnemonic( menu, _( "Report a Bug" ),
-									G_CALLBACK( HandleCommand ), ID_HELP_BUGREPORT );
-	create_menu_item_with_mnemonic( menu, _( "View Shortcuts" ),
-									G_CALLBACK( HandleCommand ), ID_HELP_COMMANDLIST );
-	create_menu_item_with_mnemonic( menu, _( "_About GtkRadiant" ),
-									G_CALLBACK( HandleCommand ), ID_HELP_ABOUT );
+	//create_menu_item_with_mnemonic (menu, "Links", G_CALLBACK (HandleCommand), ID_HELP_LINKS);
+	create_menu_item_with_mnemonic( menu, _( "Report a Bug"      ), G_CALLBACK( HandleCommand ), ID_HELP_BUGREPORT   );
+	create_menu_item_with_mnemonic( menu, _( "View Shortcuts"    ), G_CALLBACK( HandleCommand ), ID_HELP_COMMANDLIST );
+	create_menu_item_with_mnemonic( menu, _( "_About GtkRadiant" ), G_CALLBACK( HandleCommand ), ID_HELP_ABOUT       );
 
 
 	// leo: Hidden menu to make the accelerators work,
@@ -1743,62 +1718,62 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 
 	gtk_widget_hide( gtk_menu_get_attach_widget( GTK_MENU( menu ) ) );
 
-	create_menu_item_with_mnemonic( menu, "BendMode", G_CALLBACK( HandleCommand ), ID_PATCH_BEND );
-	create_menu_item_with_mnemonic( menu, "FitTexture", G_CALLBACK( HandleCommand ), IDC_BTN_FACEFIT );
-	create_menu_item_with_mnemonic( menu, "ViewTextures", G_CALLBACK( HandleCommand ), ID_VIEW_TEXTURE );
-	create_menu_item_with_mnemonic( menu, "InvertCurveTextureX", G_CALLBACK( HandleCommand ), ID_CURVE_NEGATIVETEXTUREY );
-	create_menu_item_with_mnemonic( menu, "InvertCurveTextureY", G_CALLBACK( HandleCommand ), ID_CURVE_NEGATIVETEXTUREX );
-	create_menu_item_with_mnemonic( menu, "IncPatchColumn", G_CALLBACK( HandleCommand ), ID_CURVE_INSERTCOLUMN );
-	create_menu_item_with_mnemonic( menu, "IncPatchRow", G_CALLBACK( HandleCommand ), ID_CURVE_INSERTROW );
-	create_menu_item_with_mnemonic( menu, "DecPatchColumn", G_CALLBACK( HandleCommand ), ID_CURVE_DELETECOLUMN );
-	create_menu_item_with_mnemonic( menu, "DecPatchRow", G_CALLBACK( HandleCommand ), ID_CURVE_DELETEROW );
-	create_menu_item_with_mnemonic( menu, "Patch TAB", G_CALLBACK( HandleCommand ), ID_PATCH_TAB );
-	create_menu_item_with_mnemonic( menu, "Patch TAB", G_CALLBACK( HandleCommand ), ID_PATCH_TAB );
-	create_menu_item_with_mnemonic( menu, "SelectNudgeDown", G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGEDOWN );
-	create_menu_item_with_mnemonic( menu, "CameraForward", G_CALLBACK( HandleCommand ), ID_CAMERA_FORWARD );
-	create_menu_item_with_mnemonic( menu, "CameraBack", G_CALLBACK( HandleCommand ), ID_CAMERA_BACK );
-	create_menu_item_with_mnemonic( menu, "CameraLeft", G_CALLBACK( HandleCommand ), ID_CAMERA_LEFT );
-	create_menu_item_with_mnemonic( menu, "CameraRight", G_CALLBACK( HandleCommand ), ID_CAMERA_RIGHT );
-	create_menu_item_with_mnemonic( menu, "CameraUp", G_CALLBACK( HandleCommand ), ID_CAMERA_UP );
-	create_menu_item_with_mnemonic( menu, "CameraDown", G_CALLBACK( HandleCommand ), ID_CAMERA_DOWN );
-	create_menu_item_with_mnemonic( menu, "CameraAngleUp", G_CALLBACK( HandleCommand ), ID_CAMERA_ANGLEUP );
-	create_menu_item_with_mnemonic( menu, "CameraAngleDown", G_CALLBACK( HandleCommand ), ID_CAMERA_ANGLEDOWN );
-	create_menu_item_with_mnemonic( menu, "CameraStrafeRight", G_CALLBACK( HandleCommand ), ID_CAMERA_STRAFERIGHT );
-	create_menu_item_with_mnemonic( menu, "CameraStrafeLeft", G_CALLBACK( HandleCommand ), ID_CAMERA_STRAFELEFT );
-	create_menu_item_with_mnemonic( menu, "ToggleGrid", G_CALLBACK( HandleCommand ), ID_GRID_TOGGLE );
-	create_menu_item_with_mnemonic( menu, "ToggleCrosshairs", G_CALLBACK( HandleCommand ), ID_VIEW_CROSSHAIR );
-	create_menu_item_with_mnemonic( menu, "ToggleRealtime", G_CALLBACK( HandleCommand ), ID_VIEW_CAMERAUPDATE );
-	create_menu_item_with_mnemonic( menu, "MouseRotate", G_CALLBACK( HandleCommand ), ID_SELECT_MOUSEROTATE );
-	create_menu_item_with_mnemonic( menu, "TexRotateClock", G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_ROTATECLOCK );
-	create_menu_item_with_mnemonic( menu, "TexRotateCounter", G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_ROTATECOUNTER );
-	create_menu_item_with_mnemonic( menu, "TexScaleUp", G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SCALEUP );
-	create_menu_item_with_mnemonic( menu, "TexScaleDown", G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SCALEDOWN );
-	create_menu_item_with_mnemonic( menu, "TexShiftLeft", G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SHIFTLEFT );
-	create_menu_item_with_mnemonic( menu, "TexShiftRight", G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SHIFTRIGHT );
-	create_menu_item_with_mnemonic( menu, "TexShiftUp", G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SHIFTUP );
-	create_menu_item_with_mnemonic( menu, "TexShiftDown", G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SHIFTDOWN );
-	create_menu_item_with_mnemonic( menu, "GridDown", G_CALLBACK( HandleCommand ), ID_GRID_PREV );
-	create_menu_item_with_mnemonic( menu, "GridUp", G_CALLBACK( HandleCommand ), ID_GRID_NEXT );
-	create_menu_item_with_mnemonic( menu, "TexScaleLeft", G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SCALELEFT );
-	create_menu_item_with_mnemonic( menu, "TexScaleRight", G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SCALERIGHT );
-	create_menu_item_with_mnemonic( menu, "MoveSelectionDOWN", G_CALLBACK( HandleCommand ), ID_SELECTION_MOVEDOWN );
-	create_menu_item_with_mnemonic( menu, "MoveSelectionUP", G_CALLBACK( HandleCommand ), ID_SELECTION_MOVEUP );
-	create_menu_item_with_mnemonic( menu, "DumpSelectedBrush", G_CALLBACK( HandleCommand ), ID_SELECTION_PRINT );
-	create_menu_item_with_mnemonic( menu, "ToggleSizePaint", G_CALLBACK( HandleCommand ), ID_SELECTION_TOGGLESIZEPAINT );
-	create_menu_item_with_mnemonic( menu, "SelectNudgeLeft", G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGELEFT );
-	create_menu_item_with_mnemonic( menu, "SelectNudgeRight", G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGERIGHT );
-	create_menu_item_with_mnemonic( menu, "SelectNudgeUp", G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGEUP );
-	create_menu_item_with_mnemonic( menu, "NaturalizePatch", G_CALLBACK( HandleCommand ), ID_PATCH_NATURALIZE );
-	create_menu_item_with_mnemonic( menu, "SnapPatchToGrid", G_CALLBACK( HandleCommand ), ID_SELECT_SNAPTOGRID );
-	create_menu_item_with_mnemonic( menu, "SelectAllOfType", G_CALLBACK( HandleCommand ), ID_SELECT_ALL );
-	create_menu_item_with_mnemonic( menu, "CycleOutlineStyle", G_CALLBACK( HandleCommand ), ID_SELECTION_OUTLINESTYLE );
-	create_menu_item_with_mnemonic( menu, "TextureWindowScaleup", G_CALLBACK( HandleCommand ), ID_TEXTUREWINDOW_SCALEUP );
+	create_menu_item_with_mnemonic( menu, "BendMode"              , G_CALLBACK( HandleCommand ), ID_PATCH_BEND );
+	create_menu_item_with_mnemonic( menu, "FitTexture"            , G_CALLBACK( HandleCommand ), IDC_BTN_FACEFIT );
+	create_menu_item_with_mnemonic( menu, "ViewTextures"          , G_CALLBACK( HandleCommand ), ID_VIEW_TEXTURE );
+	create_menu_item_with_mnemonic( menu, "InvertCurveTextureX"   , G_CALLBACK( HandleCommand ), ID_CURVE_NEGATIVETEXTUREY );
+	create_menu_item_with_mnemonic( menu, "InvertCurveTextureY"   , G_CALLBACK( HandleCommand ), ID_CURVE_NEGATIVETEXTUREX );
+	create_menu_item_with_mnemonic( menu, "IncPatchColumn"        , G_CALLBACK( HandleCommand ), ID_CURVE_INSERTCOLUMN );
+	create_menu_item_with_mnemonic( menu, "IncPatchRow"           , G_CALLBACK( HandleCommand ), ID_CURVE_INSERTROW );
+	create_menu_item_with_mnemonic( menu, "DecPatchColumn"        , G_CALLBACK( HandleCommand ), ID_CURVE_DELETECOLUMN );
+	create_menu_item_with_mnemonic( menu, "DecPatchRow"           , G_CALLBACK( HandleCommand ), ID_CURVE_DELETEROW );
+	create_menu_item_with_mnemonic( menu, "Patch TAB"             , G_CALLBACK( HandleCommand ), ID_PATCH_TAB );
+	create_menu_item_with_mnemonic( menu, "Patch TAB"             , G_CALLBACK( HandleCommand ), ID_PATCH_TAB );
+	create_menu_item_with_mnemonic( menu, "SelectNudgeDown"       , G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGEDOWN );
+	create_menu_item_with_mnemonic( menu, "CameraForward"         , G_CALLBACK( HandleCommand ), ID_CAMERA_FORWARD );
+	create_menu_item_with_mnemonic( menu, "CameraBack"            , G_CALLBACK( HandleCommand ), ID_CAMERA_BACK );
+	create_menu_item_with_mnemonic( menu, "CameraLeft"            , G_CALLBACK( HandleCommand ), ID_CAMERA_LEFT );
+	create_menu_item_with_mnemonic( menu, "CameraRight"           , G_CALLBACK( HandleCommand ), ID_CAMERA_RIGHT );
+	create_menu_item_with_mnemonic( menu, "CameraUp"              , G_CALLBACK( HandleCommand ), ID_CAMERA_UP );
+	create_menu_item_with_mnemonic( menu, "CameraDown"            , G_CALLBACK( HandleCommand ), ID_CAMERA_DOWN );
+	create_menu_item_with_mnemonic( menu, "CameraAngleUp"         , G_CALLBACK( HandleCommand ), ID_CAMERA_ANGLEUP );
+	create_menu_item_with_mnemonic( menu, "CameraAngleDown"       , G_CALLBACK( HandleCommand ), ID_CAMERA_ANGLEDOWN );
+	create_menu_item_with_mnemonic( menu, "CameraStrafeRight"     , G_CALLBACK( HandleCommand ), ID_CAMERA_STRAFERIGHT );
+	create_menu_item_with_mnemonic( menu, "CameraStrafeLeft"      , G_CALLBACK( HandleCommand ), ID_CAMERA_STRAFELEFT );
+	create_menu_item_with_mnemonic( menu, "ToggleGrid"            , G_CALLBACK( HandleCommand ), ID_GRID_TOGGLE );
+	create_menu_item_with_mnemonic( menu, "ToggleCrosshairs"      , G_CALLBACK( HandleCommand ), ID_VIEW_CROSSHAIR );
+	create_menu_item_with_mnemonic( menu, "ToggleRealtime"        , G_CALLBACK( HandleCommand ), ID_VIEW_CAMERAUPDATE );
+	create_menu_item_with_mnemonic( menu, "MouseRotate"           , G_CALLBACK( HandleCommand ), ID_SELECT_MOUSEROTATE );
+	create_menu_item_with_mnemonic( menu, "TexRotateClock"        , G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_ROTATECLOCK );
+	create_menu_item_with_mnemonic( menu, "TexRotateCounter"      , G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_ROTATECOUNTER );
+	create_menu_item_with_mnemonic( menu, "TexScaleUp"            , G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SCALEUP );
+	create_menu_item_with_mnemonic( menu, "TexScaleDown"          , G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SCALEDOWN );
+	create_menu_item_with_mnemonic( menu, "TexShiftLeft"          , G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SHIFTLEFT );
+	create_menu_item_with_mnemonic( menu, "TexShiftRight"         , G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SHIFTRIGHT );
+	create_menu_item_with_mnemonic( menu, "TexShiftUp"            , G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SHIFTUP );
+	create_menu_item_with_mnemonic( menu, "TexShiftDown"          , G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SHIFTDOWN );
+	create_menu_item_with_mnemonic( menu, "GridDown"              , G_CALLBACK( HandleCommand ), ID_GRID_PREV );
+	create_menu_item_with_mnemonic( menu, "GridUp"                , G_CALLBACK( HandleCommand ), ID_GRID_NEXT );
+	create_menu_item_with_mnemonic( menu, "TexScaleLeft"          , G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SCALELEFT );
+	create_menu_item_with_mnemonic( menu, "TexScaleRight"         , G_CALLBACK( HandleCommand ), ID_SELECTION_TEXTURE_SCALERIGHT );
+	create_menu_item_with_mnemonic( menu, "MoveSelectionDOWN"     , G_CALLBACK( HandleCommand ), ID_SELECTION_MOVEDOWN );
+	create_menu_item_with_mnemonic( menu, "MoveSelectionUP"       , G_CALLBACK( HandleCommand ), ID_SELECTION_MOVEUP );
+	create_menu_item_with_mnemonic( menu, "DumpSelectedBrush"     , G_CALLBACK( HandleCommand ), ID_SELECTION_PRINT );
+	create_menu_item_with_mnemonic( menu, "ToggleSizePaint"       , G_CALLBACK( HandleCommand ), ID_SELECTION_TOGGLESIZEPAINT );
+	create_menu_item_with_mnemonic( menu, "SelectNudgeLeft"       , G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGELEFT );
+	create_menu_item_with_mnemonic( menu, "SelectNudgeRight"      , G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGERIGHT );
+	create_menu_item_with_mnemonic( menu, "SelectNudgeUp"         , G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGEUP );
+	create_menu_item_with_mnemonic( menu, "NaturalizePatch"       , G_CALLBACK( HandleCommand ), ID_PATCH_NATURALIZE );
+	create_menu_item_with_mnemonic( menu, "SnapPatchToGrid"       , G_CALLBACK( HandleCommand ), ID_SELECT_SNAPTOGRID );
+	create_menu_item_with_mnemonic( menu, "SelectAllOfType"       , G_CALLBACK( HandleCommand ), ID_SELECT_ALL );
+	create_menu_item_with_mnemonic( menu, "CycleOutlineStyle"     , G_CALLBACK( HandleCommand ), ID_SELECTION_OUTLINESTYLE );
+	create_menu_item_with_mnemonic( menu, "TextureWindowScaleup"  , G_CALLBACK( HandleCommand ), ID_TEXTUREWINDOW_SCALEUP );
 	create_menu_item_with_mnemonic( menu, "TextureWindowScaledown", G_CALLBACK( HandleCommand ), ID_TEXTUREWINDOW_SCALEDOWN );
 
 	g_bIgnoreCommands--;
 }
 
-static GtkWidget * toolbar_append_item( GtkToolbar *toolbar, const gchar *text, const gchar *tooltip_text, const gchar *private_text, GtkWidget *icon, int id )
+void toolbar_append_item( GtkToolbar *toolbar, const gchar *text, const gchar *tooltip_text, const gchar *private_text, GtkWidget *icon, int id, GtkWidget *window, const char *keyInWindow )
 {
 	GtkToolItem *item;
 	
@@ -1808,7 +1783,8 @@ static GtkWidget * toolbar_append_item( GtkToolbar *toolbar, const gchar *text, 
 	gtk_toolbar_insert( GTK_TOOLBAR( toolbar ), item, -1 ); //-1 append
 	gtk_widget_show( GTK_WIDGET( item ) );
 
-	return GTK_WIDGET( item );
+	GtkWidget *w = GTK_WIDGET( item );
+	g_object_set_data( G_OBJECT( window ), keyInWindow, w );
 }
 static GtkWidget * toolbar_append_space( GtkToolbar *toolbar )
 {
@@ -1820,7 +1796,7 @@ static GtkWidget * toolbar_append_space( GtkToolbar *toolbar )
 
 	return GTK_WIDGET( sep_item );
 }
-static GtkWidget * toolbar_append_element( GtkToolbar *toolbar, short childtype, const gchar *text, const gchar *tooltip_text, const gchar *private_text, GtkWidget *icon, int id)
+void toolbar_append_element( GtkToolbar *toolbar, short childtype, const gchar *text, const gchar *tooltip_text, const gchar *private_text, GtkWidget *icon, int id, GtkWidget *window, const char *keyInWindow)
 {
 	GtkToolItem *item;
 	
@@ -1832,180 +1808,126 @@ static GtkWidget * toolbar_append_element( GtkToolbar *toolbar, short childtype,
 	gtk_toolbar_insert( GTK_TOOLBAR( toolbar ), item, -1 ); //-1 append
 	gtk_widget_show( GTK_WIDGET( item ) );
 
-	return GTK_WIDGET( item );
-
+	GtkWidget *w = GTK_WIDGET( item );
+	g_object_set_data( G_OBJECT( window ), keyInWindow, w );
 }
 
 void MainFrame::create_main_toolbar( GtkWidget *window, GtkWidget *vbox ){
-	GtkWidget *toolbar, *w;
+	GtkToolbar *toolbar;
+	GtkWidget *w;
 	const short TOOLBAR_CHILD_TOGGLEBUTTON = 1;
 
-	toolbar = gtk_toolbar_new();
+	toolbar = GTK_TOOLBAR(gtk_toolbar_new());
 	gtk_orientable_set_orientation( GTK_ORIENTABLE( toolbar ), GTK_ORIENTATION_HORIZONTAL );
 	gtk_toolbar_set_style( GTK_TOOLBAR( toolbar ), GTK_TOOLBAR_ICONS );
 	//  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), user_rc.toolbar_style);
-	gtk_box_pack_start( GTK_BOX( vbox ), toolbar, FALSE, FALSE, 0 );
+	gtk_box_pack_start( GTK_BOX( vbox ), (GtkWidget*)toolbar, FALSE, FALSE, 0 );
 
 
 	
 
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), _( "Open" ), _( "Open an existing map" ), "", new_image_icon("file_open.png"), ID_FILE_OPEN );
-	g_object_set_data( G_OBJECT( window ), "tb_file_open", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), _( "Save" ), _( "Save the active map" ), "", new_image_icon("file_save.png"), ID_FILE_SAVE );
-	g_object_set_data( G_OBJECT( window ), "tb_file_save", w );
-	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "x-axis Flip" ), "", new_image_icon("brush_flipx.png"), ID_BRUSH_FLIPX );
-	g_object_set_data( G_OBJECT( window ), "tb_brush_flipx", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "x-axis Rotate" ), "", new_image_icon("brush_rotatex.png"), ID_BRUSH_ROTATEX );
-	g_object_set_data( G_OBJECT( window ), "tb_brush_rotatex", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "y-axis Flip" ), "", new_image_icon("brush_flipy.png"), ID_BRUSH_FLIPY );
-	g_object_set_data( G_OBJECT( window ), "tb_brush_flipy", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "y-axis Rotate" ), "", new_image_icon("brush_rotatey.png"), ID_BRUSH_ROTATEY  );
-	g_object_set_data( G_OBJECT( window ), "tb_brush_rotatey", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "z-axis Flip" ), "", new_image_icon("brush_flipz.png"), ID_BRUSH_FLIPZ );
-	g_object_set_data( G_OBJECT( window ), "tb_brush_flipz", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "z-axis Rotate" ), "", new_image_icon("brush_rotatez.png"), ID_BRUSH_ROTATEZ );
-	g_object_set_data( G_OBJECT( window ), "tb_brush_rotatez", w );
+	toolbar_append_item( toolbar, _( "Open" ), _( "Open an existing map" ), "", new_image_icon("file_open.png"), ID_FILE_OPEN, window, "tb_file_open");
+	toolbar_append_item( toolbar, _( "Save" ), _( "Save the active map"  ), "", new_image_icon("file_save.png"), ID_FILE_SAVE, window, "tb_file_save");
+	toolbar_append_space( toolbar );
+	toolbar_append_item( toolbar, "", _( "x-axis Flip"   ), "", new_image_icon("brush_flipx.png"  ), ID_BRUSH_FLIPX  , window, "tb_brush_flipx"  );
+	toolbar_append_item( toolbar, "", _( "x-axis Rotate" ), "", new_image_icon("brush_rotatex.png"), ID_BRUSH_ROTATEX, window, "tb_brush_rotatex");
+	toolbar_append_item( toolbar, "", _( "y-axis Flip"   ), "", new_image_icon("brush_flipy.png"  ), ID_BRUSH_FLIPY  , window, "tb_brush_flipy"  );
+	toolbar_append_item( toolbar, "", _( "y-axis Rotate" ), "", new_image_icon("brush_rotatey.png"), ID_BRUSH_ROTATEY, window, "tb_brush_rotatey");
+	toolbar_append_item( toolbar, "", _( "z-axis Flip"   ), "", new_image_icon("brush_flipz.png"  ), ID_BRUSH_FLIPZ  , window, "tb_brush_flipz"  );
+	toolbar_append_item( toolbar, "", _( "z-axis Rotate" ), "", new_image_icon("brush_rotatez.png"), ID_BRUSH_ROTATEZ, window, "tb_brush_rotatez");
 	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Complete Tall" ), "", new_image_icon("selection_selectcompletetall.png"), ID_SELECTION_SELECTCOMPLETETALL );
-		g_object_set_data( G_OBJECT( window ), "tb_selection_selectcompletetall", w );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Select Touching" ), "", new_image_icon("selection_selecttouching.png"), ID_SELECTION_SELECTTOUCHING );
-		g_object_set_data( G_OBJECT( window ), "tb_selection_selecttouching", w );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Select Partial Tall" ), "", new_image_icon("selection_selectpartialtall.png"), ID_SELECTION_SELECTPARTIALTALL );
-		g_object_set_data( G_OBJECT( window ), "tb_selection_selectpartialtall", w );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Select Inside" ), "", new_image_icon("selection_selectinside.png"), ID_SELECTION_SELECTINSIDE );
-		g_object_set_data( G_OBJECT( window ), "tb_selection_selectinside", w );
+		toolbar_append_item( toolbar, "", _( "Complete Tall"       ), "", new_image_icon("selection_selectcompletetall.png"), ID_SELECTION_SELECTCOMPLETETALL, window, "tb_selection_selectcompletetall");
+		toolbar_append_item( toolbar, "", _( "Select Touching"     ), "", new_image_icon("selection_selecttouching.png"    ), ID_SELECTION_SELECTTOUCHING    , window, "tb_selection_selecttouching"    );
+		toolbar_append_item( toolbar, "", _( "Select Partial Tall" ), "", new_image_icon("selection_selectpartialtall.png" ), ID_SELECTION_SELECTPARTIALTALL , window, "tb_selection_selectpartialtall" );
+		toolbar_append_item( toolbar, "", _( "Select Inside"       ), "", new_image_icon("selection_selectinside.png"      ), ID_SELECTION_SELECTINSIDE      , window, "tb_selection_selectinside"      );
 	}
 	else
 	{
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Selection" ), "", new_image_icon("popup_selection.png"), ID_POPUP_SELECTION );
-		g_object_set_data( G_OBJECT( window ), "tb_popup_selection", w );
+		toolbar_append_item( toolbar, "", _( "Selection" ), "", new_image_icon("popup_selection.png"), ID_POPUP_SELECTION, window, "tb_popup_selection");
 	}
-	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
+	toolbar_append_space( toolbar );
 
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "CSG Subtract" ), "", new_image_icon("selection_csgsubtract.png"), ID_SELECTION_CSGSUBTRACT );
-	g_object_set_data( G_OBJECT( window ), "tb_selection_csgsubtract", w );
+	toolbar_append_item( toolbar, "", _( "CSG Subtract" ), "", new_image_icon("selection_csgsubtract.png"), ID_SELECTION_CSGSUBTRACT, window, "tb_selection_csgsubtract");
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "CSG Merge" ), "", new_image_icon("selection_csgmerge.png"),ID_SELECTION_CSGMERGE );
-		g_object_set_data( G_OBJECT( window ), "tb_selection_csgmerge", w );
+		toolbar_append_item( toolbar, "", _( "CSG Merge" ), "", new_image_icon("selection_csgmerge.png"),ID_SELECTION_CSGMERGE, window, "tb_selection_csgmerge");
 	}
 
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Hollow Overlap" ), "", new_image_icon("selection_makehollow.png"), ID_SELECTION_MAKEHOLLOW );
-	g_object_set_data( G_OBJECT( window ), "tb_selection_makehollow", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Hollow Touch" ), "", new_image_icon("selection_makehollowtouch.png"), ID_SELECTION_MAKEHOLLOW_TOUCH );
-	g_object_set_data( G_OBJECT( window ), "tb_selection_makehollow_touch", w );
+	toolbar_append_item( toolbar, "", _( "Hollow Overlap" ), "", new_image_icon("selection_makehollow.png"     ), ID_SELECTION_MAKEHOLLOW      , window, "tb_selection_makehollow"      );
+	toolbar_append_item( toolbar, "", _( "Hollow Touch"   ), "", new_image_icon("selection_makehollowtouch.png"), ID_SELECTION_MAKEHOLLOW_TOUCH, window, "tb_selection_makehollow_touch");
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Clipper" ), "", new_image_icon("view_clipper.png"), ID_VIEW_CLIPPER);
-		g_object_set_data( G_OBJECT( window ), "ttb_view_clipper", w );
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Clipper" ), "", new_image_icon("view_clipper.png"), ID_VIEW_CLIPPER, window, "ttb_view_clipper" );
 	}
 
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Make Detail Brushes" ), "", new_image_icon("toggle_struct.png"), ID_TOGGLE_DETAIL );
-		g_object_set_data( G_OBJECT( window ), "ttb_toggle_detail", w );
+	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Make Detail Brushes" ), "", new_image_icon("toggle_struct.png"), ID_TOGGLE_DETAIL, window, "ttb_toggle_detail" );
 
-	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
+	toolbar_append_space( toolbar );
 
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Change views" ), "", new_image_icon("view_change.png"), ID_VIEW_CHANGE );
-	g_object_set_data( G_OBJECT( window ), "tb_view_change", w );
+	toolbar_append_item( toolbar, "", _( "Change views" ), "", new_image_icon("view_change.png"), ID_VIEW_CHANGE, window, "tb_view_change" );
 
 	if ( !g_PrefsDlg.m_bWideToolbar ) {
-		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
+		toolbar_append_space( toolbar );
 	}
 
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Texture view mode" ), "", new_image_icon("textures_popup.png"), ID_TEXTURES_POPUP );
-	g_object_set_data( G_OBJECT( window ), "tb_textures_popup", w );
+	toolbar_append_item( toolbar, "", _( "Texture view mode" ), "", new_image_icon("textures_popup.png"), ID_TEXTURES_POPUP, window, "tb_textures_popup" );
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Cubic clip the camera view" ), "", new_image_icon("view_cubicclipping.png"), ID_VIEW_CUBICCLIPPING );
-		g_object_set_data( G_OBJECT( window ), "ttb_view_cubicclipping", w );
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Cubic clip the camera view" ), "", new_image_icon("view_cubicclipping.png"), ID_VIEW_CUBICCLIPPING, window, "ttb_view_cubicclipping"  );
 	}
 
-	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
+	toolbar_append_space( toolbar );
 
 	if ( !g_PrefsDlg.m_bWideToolbar ) {
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Camera preview" ), "", new_image_icon("view_cameratoggle.png"), ID_VIEW_CAMERATOGGLE );
-		g_object_set_data( G_OBJECT( window ), "ttb_view_cameratoggle", w );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Update Camera" ), "", new_image_icon("view_cameraupdate.png"), ID_VIEW_CAMERAUPDATE );
-		g_object_set_data( G_OBJECT( window ), "tb_view_cameraupdate", w );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Cubic clip the camera view" ), "", new_image_icon("view_cubicclipping.png"), ID_VIEW_CUBICCLIPPING );
-		g_object_set_data( G_OBJECT( window ), "ttb_view_cubicclipping", w );
-		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Entity inspector" ), "", new_image_icon("view_entity.png"), ID_VIEW_ENTITY);
-		g_object_set_data( G_OBJECT( window ), "ttb_view_entity", w );
-		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Clipper" ), "", new_image_icon("view_clipper.png"), ID_VIEW_CLIPPER);
-		g_object_set_data( G_OBJECT( window ), "ttb_view_clipper", w );
-		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Camera preview" ),             "", new_image_icon("view_cameratoggle.png" ), ID_VIEW_CAMERATOGGLE , window, "ttb_view_cameratoggle"  );
+		toolbar_append_item(    toolbar, "", _( "Update Camera" ),                                          "", new_image_icon("view_cameraupdate.png" ), ID_VIEW_CAMERAUPDATE , window, "tb_view_cameraupdate"   );
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Cubic clip the camera view" ), "", new_image_icon("view_cubicclipping.png"), ID_VIEW_CUBICCLIPPING, window, "ttb_view_cubicclipping" );
+		toolbar_append_space( toolbar );
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Entity inspector" ), "", new_image_icon("view_entity.png"), ID_VIEW_ENTITY, window, "ttb_view_entity" );
+		toolbar_append_space(       toolbar );
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Clipper" ), "", new_image_icon("view_clipper.png"), ID_VIEW_CLIPPER, window, "ttb_view_clipper" );
+		toolbar_append_space      ( toolbar );
 	}
 
 
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Free Rotation" ), "", new_image_icon("select_mouserotate.png"), ID_SELECT_MOUSEROTATE );
-	g_object_set_data( G_OBJECT( window ), "ttb_select_mouserotate", w );
-	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Free Scaling" ), "", new_image_icon("select_mousescale.png"), ID_SELECT_MOUSESCALE );
-	g_object_set_data( G_OBJECT( window ), "ttb_select_mousescale", w );
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along X" ), "", new_image_icon("scalelockx.png"), ID_SCALELOCKX );
-	g_object_set_data( G_OBJECT( window ), "ttb_scalelockx", w );
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along Y" ), "", new_image_icon("scalelocky.png"), ID_SCALELOCKY );
-	g_object_set_data( G_OBJECT( window ), "ttb_scalelocky", w );
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along Z" ), "", new_image_icon("scalelockz.png"), ID_SCALELOCKZ );
-	g_object_set_data( G_OBJECT( window ), "ttb_scalelockz", w );
+	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Free Rotation" ), "", new_image_icon("select_mouserotate.png"), ID_SELECT_MOUSEROTATE, window, "ttb_select_mouserotate");
+	toolbar_append_space( toolbar );
+	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Free Scaling" )           , "", new_image_icon("select_mousescale.png"), ID_SELECT_MOUSESCALE, window, "ttb_select_mousescale");
+	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along X" ), "", new_image_icon("scalelockx.png"       ), ID_SCALELOCKX       , window, "ttb_scalelockx"       );
+	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along Y" ), "", new_image_icon("scalelocky.png"       ), ID_SCALELOCKY       , window, "ttb_scalelocky"       );
+	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along Z" ), "", new_image_icon("scalelockz.png"       ), ID_SCALELOCKZ       , window, "ttb_scalelockz"       );
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
-		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Don't select model brushes" ), "", new_image_icon("dontselectmodel.png"), ID_DONTSELECTMODEL );
-		g_object_set_data( G_OBJECT( window ), "ttb_dontselectmodel", w );
-		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
+		toolbar_append_space( toolbar );
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Don't select model brushes" ), "", new_image_icon("dontselectmodel.png"), ID_DONTSELECTMODEL , window , "ttb_dontselectmodel" );
+		toolbar_append_space( toolbar );
 
 		if ( !g_pGameDescription->mNoPatch ) {
-			w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Don't select curved brushes" ), "", new_image_icon("dontselectcurve.png"), ID_DONTSELECTCURVE );
-			g_object_set_data( G_OBJECT( window ), "ttb_dontselectcurve", w );
+			toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Don't select curved brushes" ), "", new_image_icon("dontselectcurve.png"), ID_DONTSELECTCURVE, window, "ttb_dontselectcurve" );
 		}
 	}
 
 	// bug #292, patch toolbar option
 	if ( g_PrefsDlg.m_bPatchToolbar ) {
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Show patch bounding box" ), "", new_image_icon("patch_showboundingbox.png"), ID_PATCH_SHOWBOUNDINGBOX );
-		g_object_set_data( G_OBJECT( window ), "ttb_patch_showboundingbox", w );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Show patches as wireframes" ), "", new_image_icon("patch_wireframe.png"), ID_PATCH_WIREFRAME );
-		g_object_set_data( G_OBJECT( window ), "ttb_patch_wireframe", w );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Patch Bend mode" ), "", new_image_icon("patch_bend.png"), ID_PATCH_BEND );
-		g_object_set_data( G_OBJECT( window ), "ttb_patch_bend", w );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Put caps on the current patch" ), "", new_image_icon("curve_cap.png"), ID_CURVE_CAP );
-		g_object_set_data( G_OBJECT( window ), "tb_curve_cap", w );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Welds equal patch points during moves" ), "", new_image_icon("patch_weld.png"), ID_PATCH_WELD );
-		g_object_set_data( G_OBJECT( window ), "ttb_patch_weld", w );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Selects drill down rows and columns" ), "", new_image_icon("patch_drilldown.png"), ID_PATCH_DRILLDOWN );
-		g_object_set_data( G_OBJECT( window ), "ttb_patch_drilldown", w );
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Show patch bounding box"                  ), "",   new_image_icon("patch_showboundingbox.png"), ID_PATCH_SHOWBOUNDINGBOX, window, "ttb_patch_showboundingbox");
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Show patches as wireframes"               ), "",   new_image_icon("patch_wireframe.png"      ), ID_PATCH_WIREFRAME      , window, "ttb_patch_wireframe"      );
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Patch Bend mode" ), "",                            new_image_icon("patch_bend.png"           ), ID_PATCH_BEND           , window, "ttb_patch_bend"           );
+		toolbar_append_item   ( toolbar, "", _( "Put caps on the current patch" ), "",                                          new_image_icon("curve_cap.png"            ), ID_CURVE_CAP            , window, "tb_curve_cap"             );
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Welds equal patch points during moves"     ), "",  new_image_icon("patch_weld.png"           ), ID_PATCH_WELD           , window, "ttb_patch_weld"           );
+		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Selects drill down rows and columns"        ), "", new_image_icon("patch_drilldown.png"      ), ID_PATCH_DRILLDOWN      , window, "ttb_patch_drilldown"      );
 	}
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
-		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Show Entities as" ), "", new_image_icon("show_entities.png"), ID_SHOW_ENTITIES);
-		g_object_set_data( G_OBJECT( window ), "tb_show_entities", w );
+		toolbar_append_space( toolbar );
+		toolbar_append_item( toolbar, "", _( "Show Entities as" ), "", new_image_icon("show_entities.png"), ID_SHOW_ENTITIES, window, "tb_show_entities" );
 	}
-
-	/*
-	   uh? that is OLD
-	   #ifndef QUAKE3
-	   w = g_object_get_data (G_OBJECT (window), "tb_dontselectcurve");
-	   gtk_widget_hide (w);
-	   w = g_object_get_data (G_OBJECT (window), "tb_patch_showboundingbox");
-	   gtk_widget_hide (w);
-	   w = g_object_get_data (G_OBJECT (window), "tb_patch_weld");
-	   gtk_widget_hide (w);
-	   w = g_object_get_data (G_OBJECT (window), "tb_patch_wireframe");
-	   gtk_widget_hide (w);
-	   #endif
-	 */
 
 	m_bCamPreview = true;
 	g_nScaleHow = ( SCALE_X | SCALE_Y | SCALE_Z );
 
-	gtk_widget_show( toolbar );
+	gtk_widget_show( (GtkWidget *)toolbar );
 }
 
 void MainFrame::create_plugin_toolbar( GtkWidget *window, GtkWidget *vbox ){
