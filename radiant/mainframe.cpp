@@ -1798,13 +1798,13 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	g_bIgnoreCommands--;
 }
 
-static GtkWidget * toolbar_append_item( GtkToolbar *toolbar, const gchar *text, const gchar *tooltip_text, const gchar *private_text, GtkWidget *icon, GCallback callback, gpointer data )
+static GtkWidget * toolbar_append_item( GtkToolbar *toolbar, const gchar *text, const gchar *tooltip_text, const gchar *private_text, GtkWidget *icon, int id )
 {
 	GtkToolItem *item;
 	
 	item = gtk_tool_button_new( icon, text );
 	gtk_widget_set_tooltip_text( GTK_WIDGET( item ), tooltip_text );
-	g_signal_connect( item, "clicked", callback, data );
+	g_signal_connect( item, "clicked", G_CALLBACK( HandleCommand ), GINT_TO_POINTER(id) );
 	gtk_toolbar_insert( GTK_TOOLBAR( toolbar ), item, -1 ); //-1 append
 	gtk_widget_show( GTK_WIDGET( item ) );
 
@@ -1820,7 +1820,7 @@ static GtkWidget * toolbar_append_space( GtkToolbar *toolbar )
 
 	return GTK_WIDGET( sep_item );
 }
-static GtkWidget * toolbar_append_element( GtkToolbar *toolbar, short childtype, const char* unused, const gchar *text, const gchar *tooltip_text, const gchar *private_text, GtkWidget *icon, GCallback callback, gpointer data )
+static GtkWidget * toolbar_append_element( GtkToolbar *toolbar, short childtype, const gchar *text, const gchar *tooltip_text, const gchar *private_text, GtkWidget *icon, int id)
 {
 	GtkToolItem *item;
 	
@@ -1828,7 +1828,7 @@ static GtkWidget * toolbar_append_element( GtkToolbar *toolbar, short childtype,
 	gtk_tool_button_set_icon_widget( GTK_TOOL_BUTTON( item ), icon );
 	gtk_tool_button_set_label( GTK_TOOL_BUTTON( item ), text );
 	gtk_widget_set_tooltip_text( GTK_WIDGET( item ), tooltip_text );
-	g_signal_connect( item, "clicked", callback, data );
+	g_signal_connect( item, "clicked", G_CALLBACK( HandleCommand ), GINT_TO_POINTER(id) );
 	gtk_toolbar_insert( GTK_TOOLBAR( toolbar ), item, -1 ); //-1 append
 	gtk_widget_show( GTK_WIDGET( item ) );
 
@@ -1847,232 +1847,144 @@ void MainFrame::create_main_toolbar( GtkWidget *window, GtkWidget *vbox ){
 	gtk_box_pack_start( GTK_BOX( vbox ), toolbar, FALSE, FALSE, 0 );
 
 
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), _( "Open" ), _( "Open an existing map" ), "",
-								 new_image_icon("file_open.png"), G_CALLBACK( HandleCommand ),
-								 GINT_TO_POINTER( ID_FILE_OPEN ) );
+	
+
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), _( "Open" ), _( "Open an existing map" ), "", new_image_icon("file_open.png"), ID_FILE_OPEN );
 	g_object_set_data( G_OBJECT( window ), "tb_file_open", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), _( "Save" ), _( "Save the active map" ), "",
-								 new_image_icon("file_save.png"), G_CALLBACK( HandleCommand ),
-								 GINT_TO_POINTER( ID_FILE_SAVE ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), _( "Save" ), _( "Save the active map" ), "", new_image_icon("file_save.png"), ID_FILE_SAVE );
 	g_object_set_data( G_OBJECT( window ), "tb_file_save", w );
 	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "x-axis Flip" ), "",
-								 new_image_icon("brush_flipx.png"), G_CALLBACK( HandleCommand ),
-								 GINT_TO_POINTER( ID_BRUSH_FLIPX ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "x-axis Flip" ), "", new_image_icon("brush_flipx.png"), ID_BRUSH_FLIPX );
 	g_object_set_data( G_OBJECT( window ), "tb_brush_flipx", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "x-axis Rotate" ), "",
-								 new_image_icon("brush_rotatex.png"), G_CALLBACK( HandleCommand ),
-								 GINT_TO_POINTER( ID_BRUSH_ROTATEX ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "x-axis Rotate" ), "", new_image_icon("brush_rotatex.png"), ID_BRUSH_ROTATEX );
 	g_object_set_data( G_OBJECT( window ), "tb_brush_rotatex", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "y-axis Flip" ), "",
-								 new_image_icon("brush_flipy.png"), G_CALLBACK( HandleCommand ),
-								 GINT_TO_POINTER( ID_BRUSH_FLIPY ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "y-axis Flip" ), "", new_image_icon("brush_flipy.png"), ID_BRUSH_FLIPY );
 	g_object_set_data( G_OBJECT( window ), "tb_brush_flipy", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "y-axis Rotate" ), "",
-								 new_image_icon("brush_rotatey.png"), G_CALLBACK( HandleCommand ),
-								 GINT_TO_POINTER( ID_BRUSH_ROTATEY ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "y-axis Rotate" ), "", new_image_icon("brush_rotatey.png"), ID_BRUSH_ROTATEY  );
 	g_object_set_data( G_OBJECT( window ), "tb_brush_rotatey", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "z-axis Flip" ), "",
-								 new_image_icon("brush_flipz.png"), G_CALLBACK( HandleCommand ),
-								 GINT_TO_POINTER( ID_BRUSH_FLIPZ ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "z-axis Flip" ), "", new_image_icon("brush_flipz.png"), ID_BRUSH_FLIPZ );
 	g_object_set_data( G_OBJECT( window ), "tb_brush_flipz", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "z-axis Rotate" ), "",
-								 new_image_icon("brush_rotatez.png"), G_CALLBACK( HandleCommand ),
-								 GINT_TO_POINTER( ID_BRUSH_ROTATEZ ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "z-axis Rotate" ), "", new_image_icon("brush_rotatez.png"), ID_BRUSH_ROTATEZ );
 	g_object_set_data( G_OBJECT( window ), "tb_brush_rotatez", w );
 	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Complete Tall" ), "",
-									 new_image_icon("selection_selectcompletetall.png"), G_CALLBACK( HandleCommand ),
-									 GINT_TO_POINTER( ID_SELECTION_SELECTCOMPLETETALL ) );
+		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Complete Tall" ), "", new_image_icon("selection_selectcompletetall.png"), ID_SELECTION_SELECTCOMPLETETALL );
 		g_object_set_data( G_OBJECT( window ), "tb_selection_selectcompletetall", w );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Select Touching" ), "",
-									 new_image_icon("selection_selecttouching.png"), G_CALLBACK( HandleCommand ),
-									 GINT_TO_POINTER( ID_SELECTION_SELECTTOUCHING ) );
+		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Select Touching" ), "", new_image_icon("selection_selecttouching.png"), ID_SELECTION_SELECTTOUCHING );
 		g_object_set_data( G_OBJECT( window ), "tb_selection_selecttouching", w );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Select Partial Tall" ), "",
-									 new_image_icon("selection_selectpartialtall.png"), G_CALLBACK( HandleCommand ),
-									 GINT_TO_POINTER( ID_SELECTION_SELECTPARTIALTALL ) );
+		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Select Partial Tall" ), "", new_image_icon("selection_selectpartialtall.png"), ID_SELECTION_SELECTPARTIALTALL );
 		g_object_set_data( G_OBJECT( window ), "tb_selection_selectpartialtall", w );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Select Inside" ), "",
-									 new_image_icon("selection_selectinside.png"), G_CALLBACK( HandleCommand ),
-									 GINT_TO_POINTER( ID_SELECTION_SELECTINSIDE ) );
+		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Select Inside" ), "", new_image_icon("selection_selectinside.png"), ID_SELECTION_SELECTINSIDE );
 		g_object_set_data( G_OBJECT( window ), "tb_selection_selectinside", w );
 	}
 	else
 	{
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Selection" ), "",
-									 new_image_icon("popup_selection.png"), G_CALLBACK( HandleCommand ),
-									 GINT_TO_POINTER( ID_POPUP_SELECTION ) );
+		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Selection" ), "", new_image_icon("popup_selection.png"), ID_POPUP_SELECTION );
 		g_object_set_data( G_OBJECT( window ), "tb_popup_selection", w );
 	}
 	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
 
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "CSG Subtract" ), "",
-								 new_image_icon("selection_csgsubtract.png"),
-								 G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_SELECTION_CSGSUBTRACT ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "CSG Subtract" ), "", new_image_icon("selection_csgsubtract.png"), ID_SELECTION_CSGSUBTRACT );
 	g_object_set_data( G_OBJECT( window ), "tb_selection_csgsubtract", w );
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "CSG Merge" ), "",
-									 new_image_icon("selection_csgmerge.png"),
-									 G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_SELECTION_CSGMERGE ) );
+		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "CSG Merge" ), "", new_image_icon("selection_csgmerge.png"),ID_SELECTION_CSGMERGE );
 		g_object_set_data( G_OBJECT( window ), "tb_selection_csgmerge", w );
 	}
 
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Hollow Overlap" ), "",
-								 new_image_icon("selection_makehollow.png"),
-								 G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_SELECTION_MAKEHOLLOW ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Hollow Overlap" ), "", new_image_icon("selection_makehollow.png"), ID_SELECTION_MAKEHOLLOW );
 	g_object_set_data( G_OBJECT( window ), "tb_selection_makehollow", w );
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Hollow Touch" ), "",
-								 new_image_icon("selection_makehollowtouch.png"),
-								 G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_SELECTION_MAKEHOLLOW_TOUCH ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Hollow Touch" ), "", new_image_icon("selection_makehollowtouch.png"), ID_SELECTION_MAKEHOLLOW_TOUCH );
 	g_object_set_data( G_OBJECT( window ), "tb_selection_makehollow_touch", w );
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Clipper" ), "", new_image_icon("view_clipper.png"),
-										G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_VIEW_CLIPPER ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Clipper" ), "", new_image_icon("view_clipper.png"), ID_VIEW_CLIPPER);
 		g_object_set_data( G_OBJECT( window ), "ttb_view_clipper", w );
 	}
 
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Make Detail Brushes" ), "", new_image_icon("toggle_struct.png"),
-										G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_TOGGLE_DETAIL ) );
+	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Make Detail Brushes" ), "", new_image_icon("toggle_struct.png"), ID_TOGGLE_DETAIL );
 		g_object_set_data( G_OBJECT( window ), "ttb_toggle_detail", w );
 
 	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
 
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Change views" ), "",
-								 new_image_icon("view_change.png"), G_CALLBACK( HandleCommand ),
-								 GINT_TO_POINTER( ID_VIEW_CHANGE ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Change views" ), "", new_image_icon("view_change.png"), ID_VIEW_CHANGE );
 	g_object_set_data( G_OBJECT( window ), "tb_view_change", w );
 
 	if ( !g_PrefsDlg.m_bWideToolbar ) {
 		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
 	}
 
-	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Texture view mode" ), "",
-								 new_image_icon("textures_popup.png"), G_CALLBACK( HandleCommand ),
-								 GINT_TO_POINTER( ID_TEXTURES_POPUP ) );
+	w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Texture view mode" ), "", new_image_icon("textures_popup.png"), ID_TEXTURES_POPUP );
 	g_object_set_data( G_OBJECT( window ), "tb_textures_popup", w );
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Cubic clip the camera view" ), "",
-										new_image_icon("view_cubicclipping.png"),
-										G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_VIEW_CUBICCLIPPING ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Cubic clip the camera view" ), "", new_image_icon("view_cubicclipping.png"), ID_VIEW_CUBICCLIPPING );
 		g_object_set_data( G_OBJECT( window ), "ttb_view_cubicclipping", w );
 	}
 
 	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
 
 	if ( !g_PrefsDlg.m_bWideToolbar ) {
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Camera preview" ), "", new_image_icon("view_cameratoggle.png"),
-										G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_VIEW_CAMERATOGGLE ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Camera preview" ), "", new_image_icon("view_cameratoggle.png"), ID_VIEW_CAMERATOGGLE );
 		g_object_set_data( G_OBJECT( window ), "ttb_view_cameratoggle", w );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Update Camera" ), "",
-									 new_image_icon("view_cameraupdate.png"), G_CALLBACK( HandleCommand ),
-									 GINT_TO_POINTER( ID_VIEW_CAMERAUPDATE ) );
+		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Update Camera" ), "", new_image_icon("view_cameraupdate.png"), ID_VIEW_CAMERAUPDATE );
 		g_object_set_data( G_OBJECT( window ), "tb_view_cameraupdate", w );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Cubic clip the camera view" ), "",
-										new_image_icon("view_cubicclipping.png"),
-										G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_VIEW_CUBICCLIPPING ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Cubic clip the camera view" ), "", new_image_icon("view_cubicclipping.png"), ID_VIEW_CUBICCLIPPING );
 		g_object_set_data( G_OBJECT( window ), "ttb_view_cubicclipping", w );
 		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Entity inspector" ), "", new_image_icon("view_entity.png"),
-										G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_VIEW_ENTITY ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Entity inspector" ), "", new_image_icon("view_entity.png"), ID_VIEW_ENTITY);
 		g_object_set_data( G_OBJECT( window ), "ttb_view_entity", w );
 		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Clipper" ), "", new_image_icon("view_clipper.png"),
-										G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_VIEW_CLIPPER ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Clipper" ), "", new_image_icon("view_clipper.png"), ID_VIEW_CLIPPER);
 		g_object_set_data( G_OBJECT( window ), "ttb_view_clipper", w );
 		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
 	}
 
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-									"", _( "Free Rotation" ), "", new_image_icon("select_mouserotate.png"),
-									G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_SELECT_MOUSEROTATE ) );
+
+	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Free Rotation" ), "", new_image_icon("select_mouserotate.png"), ID_SELECT_MOUSEROTATE );
 	g_object_set_data( G_OBJECT( window ), "ttb_select_mouserotate", w );
 	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-									"", _( "Free Scaling" ), "", new_image_icon("select_mousescale.png"),
-									G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_SELECT_MOUSESCALE ) );
+	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Free Scaling" ), "", new_image_icon("select_mousescale.png"), ID_SELECT_MOUSESCALE );
 	g_object_set_data( G_OBJECT( window ), "ttb_select_mousescale", w );
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-									"", _( "Disable Scaling Along X" ), "", new_image_icon("scalelockx.png"),
-									G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_SCALELOCKX ) );
+	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along X" ), "", new_image_icon("scalelockx.png"), ID_SCALELOCKX );
 	g_object_set_data( G_OBJECT( window ), "ttb_scalelockx", w );
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-									"", _( "Disable Scaling Along Y" ), "", new_image_icon("scalelocky.png"),
-									G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_SCALELOCKY ) );
+	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along Y" ), "", new_image_icon("scalelocky.png"), ID_SCALELOCKY );
 	g_object_set_data( G_OBJECT( window ), "ttb_scalelocky", w );
-	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-									"", _( "Disable Scaling Along Z" ), "", new_image_icon("scalelockz.png"),
-									G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_SCALELOCKZ ) );
+	w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along Z" ), "", new_image_icon("scalelockz.png"), ID_SCALELOCKZ );
 	g_object_set_data( G_OBJECT( window ), "ttb_scalelockz", w );
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
 		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Don't select model brushes" ), "",
-										new_image_icon("dontselectmodel.png"), G_CALLBACK( HandleCommand ),
-										GINT_TO_POINTER( ID_DONTSELECTMODEL ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Don't select model brushes" ), "", new_image_icon("dontselectmodel.png"), ID_DONTSELECTMODEL );
 		g_object_set_data( G_OBJECT( window ), "ttb_dontselectmodel", w );
 		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
 
 		if ( !g_pGameDescription->mNoPatch ) {
-			w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-											"", _( "Don't select curved brushes" ), "",
-											new_image_icon("dontselectcurve.png"), G_CALLBACK( HandleCommand ),
-											GINT_TO_POINTER( ID_DONTSELECTCURVE ) );
+			w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Don't select curved brushes" ), "", new_image_icon("dontselectcurve.png"), ID_DONTSELECTCURVE );
 			g_object_set_data( G_OBJECT( window ), "ttb_dontselectcurve", w );
 		}
 	}
 
 	// bug #292, patch toolbar option
 	if ( g_PrefsDlg.m_bPatchToolbar ) {
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Show patch bounding box" ), "",
-										new_image_icon("patch_showboundingbox.png"),
-										G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_PATCH_SHOWBOUNDINGBOX ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Show patch bounding box" ), "", new_image_icon("patch_showboundingbox.png"), ID_PATCH_SHOWBOUNDINGBOX );
 		g_object_set_data( G_OBJECT( window ), "ttb_patch_showboundingbox", w );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Show patches as wireframes" ), "",
-										new_image_icon("patch_wireframe.png"),
-										G_CALLBACK( HandleCommand ), GINT_TO_POINTER( ID_PATCH_WIREFRAME ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Show patches as wireframes" ), "", new_image_icon("patch_wireframe.png"), ID_PATCH_WIREFRAME );
 		g_object_set_data( G_OBJECT( window ), "ttb_patch_wireframe", w );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Patch Bend mode" ), "",
-										new_image_icon("patch_bend.png"), G_CALLBACK( HandleCommand ),
-										GINT_TO_POINTER( ID_PATCH_BEND ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Patch Bend mode" ), "", new_image_icon("patch_bend.png"), ID_PATCH_BEND );
 		g_object_set_data( G_OBJECT( window ), "ttb_patch_bend", w );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Put caps on the current patch" ), "",
-									 new_image_icon("curve_cap.png"), G_CALLBACK( HandleCommand ),
-									 GINT_TO_POINTER( ID_CURVE_CAP ) );
+		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Put caps on the current patch" ), "", new_image_icon("curve_cap.png"), ID_CURVE_CAP );
 		g_object_set_data( G_OBJECT( window ), "tb_curve_cap", w );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Welds equal patch points during moves" ), "",
-										new_image_icon("patch_weld.png"), G_CALLBACK( HandleCommand ),
-										GINT_TO_POINTER( ID_PATCH_WELD ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Welds equal patch points during moves" ), "", new_image_icon("patch_weld.png"), ID_PATCH_WELD );
 		g_object_set_data( G_OBJECT( window ), "ttb_patch_weld", w );
-		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, NULL,
-										"", _( "Selects drill down rows and columns" ), "",
-										new_image_icon("patch_drilldown.png"), G_CALLBACK( HandleCommand ),
-										GINT_TO_POINTER( ID_PATCH_DRILLDOWN ) );
+		w = toolbar_append_element( GTK_TOOLBAR( toolbar ), TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Selects drill down rows and columns" ), "", new_image_icon("patch_drilldown.png"), ID_PATCH_DRILLDOWN );
 		g_object_set_data( G_OBJECT( window ), "ttb_patch_drilldown", w );
 	}
 
 	if ( g_PrefsDlg.m_bWideToolbar ) {
 		toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Show Entities as" ), "",
-									 new_image_icon("show_entities.png"), G_CALLBACK( HandleCommand ),
-									 GINT_TO_POINTER( ID_SHOW_ENTITIES ) );
+		w = toolbar_append_item( GTK_TOOLBAR( toolbar ), "", _( "Show Entities as" ), "", new_image_icon("show_entities.png"), ID_SHOW_ENTITIES);
 		g_object_set_data( G_OBJECT( window ), "tb_show_entities", w );
 	}
 
@@ -2221,14 +2133,11 @@ static GtkWidget* create_floating( MainFrame* mainframe ){
 	if (mainframe->CurrentStyle() != MainFrame::eFloating)
 		gtk_window_set_transient_for( GTK_WINDOW( wnd ), GTK_WINDOW( mainframe->m_pWidget ) );
 	gtk_widget_set_events( wnd, GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
-	g_signal_connect( G_OBJECT( wnd ), "delete-event", G_CALLBACK( widget_delete_hide ), NULL );
-	g_signal_connect( G_OBJECT( wnd ), "destroy", G_CALLBACK( gtk_widget_destroy ), NULL );
-	g_signal_connect( G_OBJECT( wnd ), "key-press-event",
-						G_CALLBACK( mainframe_keypress ), mainframe );
-	g_signal_connect( G_OBJECT( wnd ), "key-release-event",
-						G_CALLBACK( mainframe_keyrelease ), mainframe );
-	g_signal_connect( G_OBJECT( wnd ), "map-event",
-						G_CALLBACK( mainframe_map ), mainframe );
+	g_signal_connect( G_OBJECT( wnd ), "delete-event"       , G_CALLBACK( widget_delete_hide ), NULL );
+	g_signal_connect( G_OBJECT( wnd ), "destroy"            , G_CALLBACK( gtk_widget_destroy ), NULL );
+	g_signal_connect( G_OBJECT( wnd ), "key-press-event"    , G_CALLBACK( mainframe_keypress ), mainframe );
+	g_signal_connect( G_OBJECT( wnd ), "key-release-event"  , G_CALLBACK( mainframe_keyrelease ), mainframe );
+	g_signal_connect( G_OBJECT( wnd ), "map-event"          , G_CALLBACK( mainframe_map ), mainframe );
 
 	gtk_window_set_default_size( GTK_WINDOW( wnd ), 100, 100 );
 
@@ -2525,53 +2434,26 @@ static void textdirlist_activate( GtkTreeView *tree_view )
 
 
 
-gboolean entry_focus_in( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
-	gtk_window_remove_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
-	set_global_hotkeys(0);
-	return FALSE;
-}
-
-gboolean entry_focus_out( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
-	gtk_window_add_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
-	set_global_hotkeys(1);
-	current_glwindow = NULL;
-	return FALSE;
-}
+//gboolean entry_focus_in( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
+//	gtk_window_remove_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
+//	set_global_hotkeys(0);
+//	return FALSE;
+//}
+//
+//gboolean entry_focus_out( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
+//	gtk_window_add_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
+//	set_global_hotkeys(1);
+//	current_glwindow = NULL;
+//	return FALSE;
+//}
 
 GtkWidget* create_framed_texwnd( TexWnd* texwnd ){
-	GtkWidget* frame = gtk_frame_new( (char*)NULL );
-	gtk_widget_show( frame );
-	gtk_frame_set_shadow_type( GTK_FRAME( frame ), GTK_SHADOW_IN );
-
-	GtkWidget* hbox = gtk_hbox_new( FALSE, 0 );
-	gtk_widget_show( hbox );
-	gtk_container_add( GTK_CONTAINER( frame ), hbox );
-
-	GtkWidget* w = gtk_vscrollbar_new( GTK_ADJUSTMENT( gtk_adjustment_new( 0,0,0,1,1,1 ) ) );
+	GtkWidget* w = texwnd->GetWidget();
+	//g_signal_connect( G_OBJECT( w ), "focus-in-event", G_CALLBACK( entry_focus_in ), NULL );
+	//g_signal_connect( G_OBJECT( w ), "focus-out-event", G_CALLBACK( entry_focus_out ), NULL );
+	//gtk_box_pack_start( GTK_BOX( texbox ), w, TRUE, TRUE, 0 );
 	gtk_widget_show( w );
-	gtk_box_pack_end( GTK_BOX( hbox ), w, FALSE, TRUE, 0 );
-	g_qeglobals_gui.d_texture_scroll = w;
-
-	GtkWidget* texbox = gtk_vbox_new( FALSE, 0 );
-	gtk_widget_show( texbox );
-	gtk_box_pack_start( GTK_BOX( hbox ), texbox, TRUE, TRUE, 0 );
-
-	w = gtk_entry_new();
-	gtk_box_pack_start( GTK_BOX( texbox ), w, FALSE, FALSE, 0 );
-	texwnd->m_pFilter = w;
-	g_signal_connect( G_OBJECT( w ), "focus-in-event", G_CALLBACK( entry_focus_in ), NULL );
-	g_signal_connect( G_OBJECT( w ), "focus-out-event", G_CALLBACK( entry_focus_out ), NULL );
-
-	w = texwnd->GetWidget();
-
-	
-	g_signal_connect( G_OBJECT( w ), "focus-in-event", G_CALLBACK( entry_focus_in ), NULL );
-	g_signal_connect( G_OBJECT( w ), "focus-out-event", G_CALLBACK( entry_focus_out ), NULL );
-
-	gtk_box_pack_start( GTK_BOX( texbox ), w, TRUE, TRUE, 0 );
-	gtk_widget_show( w );
-
-	return frame;
+	return w;
 }
 
 static ZWnd *create_floating_zwnd( MainFrame *mainframe ){
@@ -2796,7 +2678,7 @@ void MainFrame::Create(){
 
 #if 1
 						m_pTexWnd = new TexWnd();
-						GtkWidget* frame = create_framed_texwnd( m_pTexWnd );
+						GtkWidget* frame = m_pTexWnd->GetWidget();
 						/*
 							static void textdirlist_row_activated( GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column, gpointer user_data )
 							{
