@@ -2322,62 +2322,6 @@ void PositionWindowOnPrimaryScreen( window_position_t& position ){
 }
 #endif
 
-GtkWidget* create_framed_widget( GtkWidget* widget ){
-	GtkWidget* frame = gtk_frame_new( (char*)NULL );
-	gtk_frame_set_shadow_type( GTK_FRAME( frame ), GTK_SHADOW_IN );
-	gtk_container_add( GTK_CONTAINER( frame ), widget );
-	gtk_widget_show( widget );
-	gtk_widget_show( frame );
-	return frame;
-}
-
-static void textdirlist_activate( GtkTreeView *tree_view )
-{
-	GtkTreeSelection* selection;
-
-	GtkTreeModel* model;
-	GtkTreeIter iter;
-
-	selection = gtk_tree_view_get_selection( GTK_TREE_VIEW( tree_view ) );
-
-	if ( gtk_tree_selection_get_selected( selection, &model, &iter ) ) {
-		GtkTreePath* path = gtk_tree_model_get_path( model, &iter );
-		if ( gtk_tree_path_get_depth( path ) == 1 ) {
-			char* p;
-			gtk_tree_model_get( model, &iter, 0, &p, -1 );
-			
-			Texture_ShowDirectory_by_path( p );
-			g_free( p );
-		}
-		gtk_tree_path_free( path );
-	}
-}
-
-
-
-
-//gboolean entry_focus_in( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
-//	gtk_window_remove_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
-//	set_global_hotkeys(0);
-//	return FALSE;
-//}
-//
-//gboolean entry_focus_out( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
-//	gtk_window_add_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
-//	set_global_hotkeys(1);
-//	current_glwindow = NULL;
-//	return FALSE;
-//}
-
-GtkWidget* create_framed_texwnd( TexWnd* texwnd ){
-	GtkWidget* w = texwnd->GetWidget();
-	//g_signal_connect( G_OBJECT( w ), "focus-in-event", G_CALLBACK( entry_focus_in ), NULL );
-	//g_signal_connect( G_OBJECT( w ), "focus-out-event", G_CALLBACK( entry_focus_out ), NULL );
-	//gtk_box_pack_start( GTK_BOX( texbox ), w, TRUE, TRUE, 0 );
-	gtk_widget_show( w );
-	return w;
-}
-
 static ZWnd *create_floating_zwnd( MainFrame *mainframe ){
 	ZWnd *pZWnd = new ZWnd();
 	GtkWidget* wnd = create_floating( mainframe );
@@ -2387,7 +2331,8 @@ static ZWnd *create_floating_zwnd( MainFrame *mainframe ){
 	pZWnd->m_pParent = wnd;
 
 	{
-		GtkWidget* frame = create_framed_widget( pZWnd->GetWidget() );
+		GtkWidget* frame = pZWnd->GetWidget();
+		gtk_widget_show(frame);
 		gtk_container_add( GTK_CONTAINER( wnd ), frame );
 	}
 
@@ -2562,18 +2507,14 @@ void MainFrame::Create(){
 					{
 						GtkWidget* vsplit2 = gtk_vpaned_new();
 						m_pSplits[1] = vsplit2;
-						if ( CurrentStyle() == eRegular ) {
-							gtk_paned_add2( GTK_PANED( hsplit2 ), vsplit2 );
-						}
-						else{
-							gtk_paned_add1( GTK_PANED( hsplit ), vsplit2 );
-						}
+						gtk_paned_add2( GTK_PANED( hsplit2 ), vsplit2 );
 						gtk_widget_show( vsplit2 );
 
 						// camera
 						m_pCamWnd = new CamWnd();
 						{
-							GtkWidget* frame = create_framed_widget( m_pCamWnd->GetWidget() );
+							GtkWidget* frame = m_pCamWnd->GetWidget();
+							gtk_widget_show(frame);
 							gtk_paned_add1( GTK_PANED( vsplit2 ), frame );
 						}
 
@@ -2581,14 +2522,16 @@ void MainFrame::Create(){
 						m_pXYWnd = new XYWnd();
 						m_pXYWnd->SetViewType( XY );
 						{
-							GtkWidget* frame = create_framed_widget( m_pXYWnd->GetWidget() );
+							GtkWidget* frame = m_pXYWnd->GetWidget();
+							gtk_widget_show(frame);
 							gtk_paned_add1( GTK_PANED( hsplit2 ), frame );
 						}
 
 						// z
 						m_pZWnd = new ZWnd();
 						{
-							GtkWidget* frame = create_framed_widget( m_pZWnd->GetWidget() );
+							GtkWidget* frame = m_pZWnd->GetWidget();
+							gtk_widget_show(frame);
 							if ( CurrentStyle() == eRegular ) {
 								gtk_paned_add1( GTK_PANED( hsplit ), frame );
 							}
@@ -2598,71 +2541,18 @@ void MainFrame::Create(){
 						}
 
 
-#if 1
 						m_pTexWnd = new TexWnd();
 						GtkWidget* frame = m_pTexWnd->GetWidget();
+						gtk_widget_show( frame );
 						/*
-							static void textdirlist_row_activated( GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column, gpointer user_data )
-							{
-							textdirlist_activate( tree_view );
-							}
-							static void textdirlist_cursor_changed( GtkTreeView *tree_view, gpointer user_data )
-							{
-							textdirlist_activate( tree_view );
-							}
 							GSList *texdirs = NULL;
 							FillTextureList( &texdirs );
 							FillTextureDirListWidget( texdirs );
 							ClearGSList( texdirs );						
 						*/
-						
 						m_pSplits[4] = frame;
-						gtk_widget_show( frame );
-#endif
-
-#if 0
-						// console
-						EasyGtkWidget *bottomvpane = EASYGTKWIDGET()->makeHorizontalPane();
-						EasyGtkWidget *console = NULL;
-						EasyGtkWidget *jsconsole = get_js_console();
-						if (1) {
-							GtkWidget* scr = gtk_scrolled_window_new( NULL, NULL );
-							console = EASYGTKWIDGET(scr);
-							gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( scr ), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
-							gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW( scr ), GTK_SHADOW_IN );
-							gtk_widget_show( scr );
-							//gtk_paned_pack2( GTK_PANED( vsplit ), scr, FALSE, TRUE );
-
-							{
-								GtkWidget* text = gtk_text_view_new();
-								gtk_widget_set_size_request( text, 0, -1 ); // allow shrinking
-								gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( text ), GTK_WRAP_WORD );
-								gtk_text_view_set_editable( GTK_TEXT_VIEW( text ), FALSE );
-								gtk_container_add( GTK_CONTAINER( scr ), text );
-								gtk_widget_show( text );
-								g_qeglobals_gui.d_edit = text;
-							}
-							console->setName("Console");
-							//EasyGtkWidget *pane = console->splitIntoHorizontalPane(get_js_console());
-							//js_call("split_rootpane", "si", "vb", get_js_console()->widget);
-							//EasyGtkTabify(console);
-						}
-#if 0
-						EASYGTKWIDGET(vsplit)->addChildA(console);
-						EASYGTKWIDGET(vsplit)->addChildB(jsconsole);
-#else
-						//EASYGTKWIDGET(vsplit)->addChildA(console);
-
-							
-						bottomvpane->addChildA(console);
-						bottomvpane->addChildB(jsconsole);
-
-						EASYGTKWIDGET(vsplit)->addChildB(bottomvpane);
-#endif
-						jsconsole->showAll();
-
-#endif
-					EASYGTKWIDGET(vsplit)->addChildB(EASYGTKWIDGET(frame));
+						
+						EASYGTKWIDGET(vsplit)->addChildB(EASYGTKWIDGET(frame));
 
 					}
 				}
