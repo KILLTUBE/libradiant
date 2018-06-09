@@ -6,8 +6,25 @@ DockAll::DockAll() {}
 const char *DockAll::label() {
 	return "All";
 }
+/*
+findDock(name) = ccall( (:findDock, libradiant), Ptr{Int}, (Cstring,), name)
+dockTop(from, to) = ccall( (:dockTop, libradiant), Bool, (Ptr{Int}, Ptr{Int}), from, to)
+dockTab(from, to) = ccall( (:dockTab, libradiant), Bool, (Ptr{Int}, Ptr{Int}), from, to)
+dockRight(from, to) = ccall( (:dockRight, libradiant), Bool, (Ptr{Int}, Ptr{Int}), from, to)
 
-CDock *findDock(char *name) {
+
+all = findDock("All")
+tex = findDock("Textures")
+con = findDock("Console")
+node = findDock("Node")
+
+dockTop(all, C_NULL)
+
+dockTab(con, all)
+dockRight(node, all)
+dockTab(tex, node)
+*/
+CCALL CDock *findDock(char *name) {
 	for (CDock *dock : g_dock.m_docks) {
 		if (strcmp(dock->label, name) == 0)
 			return dock;
@@ -36,7 +53,7 @@ bool dockLeft(CDock *from, CDock *to) {
 	from->status = Status_Docked;
 	return true;
 }
-bool dockTop(CDock *from, CDock *to) {
+CCALL bool dockTop(CDock *from, CDock *to) {
 	//if (from == NULL || to == NULL)
 	//	return false;
 	g_dock.doUndock(*from);
@@ -54,7 +71,7 @@ bool dockBottom(CDock *from, CDock *to) {
 	from->status = Status_Docked;
 	return true;
 }
-bool dockRight(CDock *from, CDock *to) {
+CCALL bool dockRight(CDock *from, CDock *to) {
 	if (from == NULL || to == NULL)
 		return false;
 	g_dock.doUndock(*from);
@@ -63,7 +80,7 @@ bool dockRight(CDock *from, CDock *to) {
 	from->status = Status_Docked;
 	return true;
 }
-bool dockTab(CDock *from, CDock *to) {
+CCALL bool dockTab(CDock *from, CDock *to) {
 	if (from == NULL || to == NULL)
 		return false;
 	if (to->status != Status_::Status_Docked)

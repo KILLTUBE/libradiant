@@ -20,8 +20,8 @@ CCALL int add_dock(Dock *dock) {
 }
 
 CCALL void *imgui_get_current_dock();
-bool dockRight(CDock *from, CDock *to);
-CDock *findDock(char *name);
+CCALL bool dockRight(CDock *from, CDock *to);
+CCALL CDock *findDock(char *name);
 
 CCALL int imgui_radiant_default_docks() {
 	if (imgui_quake_docks.size() == 0) {

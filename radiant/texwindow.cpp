@@ -1924,6 +1924,13 @@ void texwnd_imgui() {
 	}
 }
 
+int (*callback_oninit)() = NULL;
+CCALL void set_callback_oninit(int (*cb)()) {
+	callback_oninit = cb;
+}
+
+
+
 void TexWnd::OnExpose() {
 	int nOld = g_qeglobals.d_texturewin.m_nTotalHeight;
 	if ( !MakeCurrent() ) {
@@ -1950,6 +1957,16 @@ void TexWnd::OnExpose() {
 		imgui_render();
 		imgui_radiant_default_docks();
 		imgui_end_frame();
+
+
+		// to be called here because the docks need to be initialized
+		static int nextFirst = 1;
+		if (nextFirst == 1)
+		{
+			nextFirst = 0;
+			if (callback_oninit)
+				callback_oninit();
+		}
 
 		SwapBuffers();
 	}
