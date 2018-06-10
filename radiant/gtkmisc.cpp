@@ -740,7 +740,7 @@ GtkWidget* create_sub_menu_with_mnemonic( GtkWidget *bar, const gchar *mnemonic 
 
 extern void AddMenuItem( GtkWidget* menu, unsigned int id );
 
-GtkWidget* create_menu_item_with_mnemonic( GtkWidget *menu, const gchar *mnemonic, GCallback func, int id ){
+GtkWidget* create_menu_item_with_mnemonic( GtkWidget *menu, const gchar *mnemonic, int id ){
 	GtkWidget *item;
 
 	item = gtk_menu_item_new_with_mnemonic( mnemonic );
@@ -748,7 +748,7 @@ GtkWidget* create_menu_item_with_mnemonic( GtkWidget *menu, const gchar *mnemoni
 	gtk_widget_show( item );
 	gtk_menu_shell_append( GTK_MENU_SHELL( menu ), item );
 //	gtk_container_add( GTK_CONTAINER( menu ), item );
-	g_signal_connect( G_OBJECT( item ), "activate", G_CALLBACK( func ), GINT_TO_POINTER( id ) );
+	g_signal_connect( G_OBJECT( item ), "activate", G_CALLBACK( HandleCommand ), GINT_TO_POINTER( id ) );
 
 	AddMenuItem( item, id );
 	return item;

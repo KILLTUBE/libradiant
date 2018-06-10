@@ -1527,45 +1527,29 @@ void XYWnd::HandleDrop(){
 		menu = m_mnuDrop = gtk_menu_new();
 
 		menu_in_menu = create_menu_in_menu_with_mnemonic( menu, "Select" );
-		create_menu_item_with_mnemonic( menu_in_menu, "Select Complete Tall",
-										G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTCOMPLETETALL );
-		create_menu_item_with_mnemonic( menu_in_menu, "Select Touching",
-										G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTTOUCHING );
-		create_menu_item_with_mnemonic( menu_in_menu, "Select Partial Tall",
-										G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTPARTIALTALL );
-		create_menu_item_with_mnemonic( menu_in_menu, "Select Inside",
-										G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTINSIDE );
+		create_menu_item_with_mnemonic( menu_in_menu, "Select Complete Tall", ID_SELECTION_SELECTCOMPLETETALL );
+		create_menu_item_with_mnemonic( menu_in_menu, "Select Touching"     , ID_SELECTION_SELECTTOUCHING     );
+		create_menu_item_with_mnemonic( menu_in_menu, "Select Partial Tall" , ID_SELECTION_SELECTPARTIALTALL  );
+		create_menu_item_with_mnemonic( menu_in_menu, "Select Inside"       , ID_SELECTION_SELECTINSIDE       );
 		menu_separator( menu ); nID++;
 		// NOTE: temporary commented out until we put it back in for good (that is with actual features)
 		/*
 		menu_in_menu = create_menu_in_menu_with_mnemonic (menu, "Group",);
-		create_menu_item_with_mnemonic (menu_in_menu, "Add to...",
-			G_CALLBACK (HandleCommand), ID_DROP_GROUP_ADDTO);
-		create_menu_item_with_mnemonic (menu_in_menu, "Remove",
-			G_CALLBACK (HandleCommand), ID_DROP_GROUP_REMOVE);
-		create_menu_item_with_mnemonic (menu_in_menu, "Name...",
-			G_CALLBACK (HandleCommand), ID_DROP_GROUP_NAME);
+		create_menu_item_with_mnemonic (menu_in_menu, "Add to..."   , ID_DROP_GROUP_ADDTO    );
+		create_menu_item_with_mnemonic (menu_in_menu, "Remove"      , ID_DROP_GROUP_REMOVE   );
+		create_menu_item_with_mnemonic (menu_in_menu, "Name..."     , ID_DROP_GROUP_NAME     );
 		menu_separator (menu_in_menu); nID++;
-		create_menu_item_with_mnemonic (menu_in_menu, "New Group...",
-			G_CALLBACK (HandleCommand), ID_DROP_GROUP_NEWGROUP);
+		create_menu_item_with_mnemonic (menu_in_menu, "New Group...", ID_DROP_GROUP_NEWGROUP );
 		 */
-		create_menu_item_with_mnemonic( menu, "Ungroup Entity",
-										G_CALLBACK( HandleCommand ), ID_SELECTION_UNGROUPENTITY );
-
-		create_menu_item_with_mnemonic( menu, "Move into entity",
-										G_CALLBACK( HandleCommand ), ID_SELECTION_MERGE );
-		create_menu_item_with_mnemonic( menu, "Move into worldspawn",
-										G_CALLBACK( HandleCommand ), ID_SELECTION_SEPERATE );
-
-		create_menu_item_with_mnemonic( menu, "Make Detail",
-										G_CALLBACK( HandleCommand ), ID_SELECTION_MAKE_DETAIL );
-		create_menu_item_with_mnemonic( menu, "Make Structural",
-										G_CALLBACK( HandleCommand ), ID_SELECTION_MAKE_STRUCTURAL );
+		create_menu_item_with_mnemonic( menu, "Ungroup Entity"      , ID_SELECTION_UNGROUPENTITY   );
+		create_menu_item_with_mnemonic( menu, "Move into entity"    , ID_SELECTION_MERGE           );
+		create_menu_item_with_mnemonic( menu, "Move into worldspawn", ID_SELECTION_SEPERATE        );
+		create_menu_item_with_mnemonic( menu, "Make Detail"         , ID_SELECTION_MAKE_DETAIL     );
+		create_menu_item_with_mnemonic( menu, "Make Structural"     , ID_SELECTION_MAKE_STRUCTURAL );
 		menu_separator( menu ); nID++;
 
 		menu_in_menu = create_menu_in_menu_with_mnemonic( menu, "Smart Entities" );
-		create_menu_item_with_mnemonic( menu_in_menu, "Smart__Train",
-										G_CALLBACK( HandleCommand ), nID++ );
+		create_menu_item_with_mnemonic( menu_in_menu, "Smart__Train", nID++ );
 		menu_separator( menu ); nID++;
 
 		submenu = NULL;
