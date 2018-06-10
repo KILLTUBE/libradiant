@@ -309,107 +309,17 @@ void CXMLPropertyBag::GetPref( const char *name, window_position_t* pV, window_p
 }
 
 void CXMLPropertyBag::UpdatePrefTree(){
-	// read the assignments and update the tree
-	list<CPrefAssignment>::iterator iPref;
-	for ( iPref = mPrefAssignments.begin(); iPref != mPrefAssignments.end(); iPref++ )
-	{
-		CPrefAssignment *pPref = &( *iPref );
-		// look for the node
-		xmlNodePtr pNode;
-		char s[64];
 
-		pNode = EpairForName( pPref->mName.GetBuffer() );
-		// we never expect that the node could not be found, because this is supposed to happen
-		// after the tree was built with GetPref calls, never on a blank tree
-		if ( !pNode ) {
-			Sys_FPrintf( SYS_ERR, "Unexpected EpairForName '%s' not found in UpdatePrefTree\n", pPref->mName.GetBuffer() );
-			return;
-		}
-		switch ( ( *iPref ).mType )
-		{
-		case PREF_STR:
-			xmlNodeSetContent( pNode, (const xmlChar *)( (Str *)pPref->mVal )->GetBuffer() );
-			break;
-		case PREF_INT:
-			sprintf( s, "%d", *(int *)pPref->mVal );
-			xmlNodeSetContent( pNode, (xmlChar *)s );
-			break;
-		case PREF_FLOAT:
-			sprintf( s, "%f", *(float *)pPref->mVal );
-			xmlNodeSetContent( pNode, (xmlChar *)s );
-			break;
-		case PREF_BOOL:
-			*(bool *)pPref->mVal ? strcpy( s, "true" ) : strcpy( s, "false" );
-			xmlNodeSetContent( pNode, (xmlChar *)s );
-			break;
-		case PREF_VEC3:
-		{
-			float* v = (float*)pPref->mVal;
-			sprintf( s, "%f %f %f", v[0], v[1], v[2] );
-			xmlNodeSetContent( pNode, (xmlChar *)s );
-		}
-		break;
-		case PREF_WNDPOS:
-		{
-			CString str;
-			WindowPosition_Write( *(window_position_t*)pPref->mVal, str );
-			xmlNodeSetContent( pNode, (xmlChar*)str.GetBuffer() );
-		}
-		break;
-		}
-	}
 }
 
 void CXMLPropertyBag::Clear(){
-	if ( !InUse() ) {
-		return;
-	}
 
-	xmlFreeDoc( mpDoc );
-	mpDoc = NULL;
-	mpDocNode = NULL;
-	mbEmpty = false;
 }
 
 void CXMLPropertyBag::ReadXMLFile( const char* pFilename ){
-	mpDoc = xmlParseFile( pFilename );
-
-	// basic checks
-	if ( mpDoc ) {
-		mpDocNode = mpDoc->children;
-		xmlAttrPtr tmp_attr_ptr = xmlHasProp( mpDocNode, (xmlChar *)"version" );
-		if ( strcmp( (char *)mpDocNode->name, "qpref" ) ) {
-			Sys_FPrintf( SYS_ERR, "Unrecognized node '%s' in '%s'\n", mpDocNode->name, mpDoc->URL );
-			xmlFreeDoc( mpDoc );
-			mpDoc = NULL;
-		}
-		else if ( tmp_attr_ptr != NULL && strcmp( (char*)tmp_attr_ptr->children->content, "1" ) ) {
-			Sys_FPrintf( SYS_ERR, "Wrong version '%s' in <qpref> node for '%s'\n", (char*)tmp_attr_ptr->children->content, mpDoc->URL );
-			xmlFreeDoc( mpDoc );
-			mpDoc = NULL;
-		}
-		Sys_Printf( "Opened XML property file: '%s'\n", pFilename );
-	}
-
-	if ( !mpDoc ) {
-		mbEmpty = true;
-		// no document, create one
-		mpDoc = xmlNewDoc( (xmlChar *)"1.0" );
-		mpDocNode = xmlNewDocNode( mpDoc, NULL, (xmlChar *)"qpref", NULL );
-		xmlDocSetRootElement( mpDoc, mpDocNode );
-		xmlSetProp( mpDocNode, (xmlChar *)"version", (xmlChar *)"1" );
-		Sys_Printf( "XML property file '%s' invalid/not found, creating blank properties tree\n", pFilename );
-	}
 }
 
 qboolean CXMLPropertyBag::WriteXMLFile( const char* pFilename ){
-	int res = xmlSaveFormatFile( pFilename, mpDoc, 1 );
-
-	if ( res == -1 ) {
-		return false;
-	}
-
-	Sys_Printf( "Wrote XML property file '%s'\n", pFilename );
 	return true;
 }
 
@@ -875,9 +785,7 @@ void CGameDialog::LoadPrefs(){
 	// load global .pref file
 	CString strGlobalPref = g_PrefsDlg.m_global_rc_path->str;
 	strGlobalPref += "global.pref";
-
-	mGlobalPrefs.ReadXMLFile( strGlobalPref.GetBuffer() );
-
+	
 	mGlobalPrefs.GetPref( "gamefile", &m_sGameFile, "" ); // NOTE: there's no default, user HAS to select something
 	mGlobalPrefs.GetPref( "autoload", &m_bAutoLoadGame, false );
 	mGlobalPrefs.GetPref( "log console", &m_bLogConsole, false );
@@ -902,15 +810,7 @@ void CGameDialog::LoadPrefs(){
 }
 
 void CGameDialog::SavePrefs(){
-	// update the tree and save it
-	mGlobalPrefs.UpdatePrefTree();
 
-	CString strGlobalPref = g_PrefsDlg.m_global_rc_path->str;
-	strGlobalPref += "global.pref";
-
-	if ( !mGlobalPrefs.WriteXMLFile( strGlobalPref.GetBuffer() ) ) {
-		Sys_FPrintf( SYS_ERR, "Error occured while saving global prefs file '%s'\n", strGlobalPref.GetBuffer() );
-	}
 }
 
 void CGameDialog::DoGameInstall() {
@@ -924,60 +824,8 @@ void CGameDialog::DoGameDialog() {
 	return;
 }
 
-GtkWidget* CGameDialog::GetGlobalFrame(){
-	GtkWidget *vbox, *text, *combo, *check;
-
-	if ( mFrame != NULL ) {
-		return mFrame;
-	}
-
-	mFrame = gtk_frame_new( _( "Select a game" ) );
-	gtk_container_set_border_width( GTK_CONTAINER( mFrame ), 5 );
-	gtk_widget_show( mFrame );
-
-	vbox = gtk_vbox_new( FALSE, 5 );
-	gtk_container_add( GTK_CONTAINER( mFrame ), vbox );
-	gtk_container_set_border_width( GTK_CONTAINER( vbox ), 5 );
-	gtk_widget_show( vbox );
-
-	/*text = gtk_label_new( _( "Select the game:" ) );
-	gtk_widget_show( text );
-	gtk_box_pack_start( GTK_BOX( vbox ), text, FALSE, FALSE, 0 );*/
-
-	combo = gtk_combo_box_text_new();
-	gtk_box_pack_start( GTK_BOX( vbox ), combo, FALSE, FALSE, 0 );
-	gtk_widget_show( combo );
-	AddDialogData( combo, &m_nComboSelect, DLG_COMBO_BOX_INT );
-	mGameCombo = GTK_COMBO_BOX_TEXT( combo );
-
-	UpdateGameCombo();
-
-	check = gtk_check_button_new_with_label( _( "Auto load selected game on startup" ) );
-	gtk_box_pack_start( GTK_BOX( vbox ), check, FALSE, FALSE, 0 );
-	gtk_widget_show( check );
-	AddDialogData( check, &m_bAutoLoadGame, DLG_CHECK_BOOL );
-
-	text = gtk_label_new( _( "(use preferences to undo this)" ) );
-	gtk_box_pack_start( GTK_BOX( vbox ), text, FALSE, FALSE, 0 );
-	gtk_misc_set_alignment( GTK_MISC( text ), 0.0, 0.5 );
-	gtk_widget_show( text );
-
-#ifdef _WIN32
-	check = gtk_check_button_new_with_label( _( "Networked install - per-user settings" ) );
-	gtk_box_pack_start( GTK_BOX( vbox ), check, FALSE, FALSE, 0 );
-	gtk_widget_show( check );
-	AddDialogData( check, &m_bNetRun, DLG_CHECK_BOOL );
-#endif
-
-	check = gtk_check_button_new_with_label( _( "Log the console to radiant.log" ) );
-	gtk_box_pack_start( GTK_BOX( vbox ), check, FALSE, FALSE, 0 );
-	gtk_widget_show( check );
-	AddDialogData( check, &m_bLogConsole, DLG_CHECK_BOOL );
-
-	// incref it so we can pass it around
-	g_object_ref( GTK_WIDGET( mFrame ) );
-
-	return mFrame;
+GtkWidget* CGameDialog::GetGlobalFrame() {
+	return NULL;
 }
 
 void CGameDialog::UpdateData( bool retrieve ) {
@@ -1014,68 +862,18 @@ void CGameDialog::UpdateData( bool retrieve ) {
 }
 
 void CGameDialog::SInstallCallback( GtkWidget *widget, gpointer data ) {
-	CGameDialog *d = static_cast< CGameDialog* >( data );
-	d->m_bDoGameInstall = true;
-	d->EndModal( 0 );
+
 }
 
 void CGameDialog::BuildDialog() {
-	GtkWidget *dlg, *vbox1, *button, *setup_button;
 
-	dlg = m_pWidget;
-	gtk_window_set_title( GTK_WINDOW( dlg ), _( "Select a game" ) );
-
-	vbox1 = gtk_vbox_new( FALSE, 0 );
-	gtk_container_set_border_width( GTK_CONTAINER( vbox1 ), 5 );
-	gtk_container_add( GTK_CONTAINER( dlg ), vbox1 );
-	gtk_widget_show( vbox1 );
-
-	gtk_container_add( GTK_CONTAINER( vbox1 ), GetGlobalFrame() );
-	mTopBox = vbox1;
-
-	button = gtk_button_new_with_label( _( "Start editor on selected game" ) );
-	gtk_box_pack_start( GTK_BOX( vbox1 ), button, FALSE, FALSE, 0 );
-	gtk_widget_show( button );
-	AddModalButton( button, IDOK );
-
-	setup_button = gtk_button_new_with_label( _( "Configure editor for another game" ) );
-	gtk_box_pack_start( GTK_BOX( vbox1 ), setup_button, FALSE, FALSE, 0 );
-	gtk_widget_show( setup_button );
-	g_signal_connect( G_OBJECT( setup_button ), "clicked",
-		G_CALLBACK( SInstallCallback ), this );
-
-	button = gtk_button_new_with_label( _( "Exit" ) );
-	gtk_box_pack_start( GTK_BOX( vbox1 ), button, TRUE, TRUE, 0 );
-	gtk_widget_show( button );
-	AddModalButton( button, IDCANCEL );
-
-	gtk_widget_set_size_request( dlg, 320, -1 );
 }
 
 void CGameDialog::UpdateGameCombo() {
-	// fill in with the game descriptions
-	list<CGameDescription *>::iterator iGame;
-	GtkListStore *store;
-
-	if ( mGameCombo == NULL ) {
-		Sys_Printf( "mGameCombo == NULL\n" );
-		return;
-	}
-
-	//clear combo box
-#if GTK_CHECK_VERSION( 3, 0, 0 )
-	gtk_combo_box_text_remove_all( GTK_COMBO_BOX_TEXT( mGameCombo ) );
-#else
-	store = GTK_LIST_STORE( gtk_combo_box_get_model( GTK_COMBO_BOX( mGameCombo ) ) );
-	gtk_list_store_clear( store );
-#endif
-	for ( iGame = mGames.begin(); iGame != mGames.end(); iGame++ ) {
-		gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( mGameCombo ), ( *iGame )->mGameName.GetBuffer() );
-	}
-	gtk_combo_box_set_active( GTK_COMBO_BOX( mGameCombo ), 0 );
 }
 
 void CGameDialog::ScanForGames(){
+
 	CString strPath;
 	char *dirlist;
 	GDir *dir;
@@ -1140,8 +938,6 @@ void CGameDialog::ScanForGames(){
 		g_dir_close( dir );
 	}
 
-	// entries in the combo need to be updated
-	UpdateGameCombo();
 }
 
 CGameDescription* CGameDialog::GameDescriptionForComboItem(){
@@ -1175,13 +971,13 @@ void CGameDialog::Reset(){
 void CGameDialog::Init(){
 	InitGlobalPrefPath();
 	ScanForGames();
-	if ( mGames.empty() ) {
-		DoGameInstall();
-		ScanForGames();
-		if ( mGames.empty() ) {
-			Error( "No games setup, aborting\n" );
-		}
-	}
+	//if ( mGames.empty() ) {
+	//	DoGameInstall();
+	//	ScanForGames();
+	//	if ( mGames.empty() ) {
+	//		Error( "No games setup, aborting\n" );
+	//	}
+	//}
 	LoadPrefs();
 	m_bAutoLoadGame = true;
 	if ( m_bAutoLoadGame ) {
@@ -1369,312 +1165,24 @@ static void OnX64Toggle( GtkWidget *widget, gpointer data ) {
 #endif
 
 void PrefsDlg::BuildDialog(){
-	// Main Preferences dialog
-	GtkWidget *dialog, *mainvbox, *hbox, *sc_win, *preflabel;
 
-	GtkWidget *ftw_label, *fth_label;
-	// Widgets on notebook pages
-	GtkWidget *check, *label, *scale, *hbox2, *combo,
-	*table, *spin,  *entry, *pixmap,
-	*radio, *button, *pageframe, *vbox;
-	GtkSizeGroup *size_group;
-	GList *combo_list = (GList*)NULL;
-	GList *lst;
-	GtkAdjustment *adj;
 
-	dialog = m_pWidget;
-	gtk_window_set_title( GTK_WINDOW( dialog ), _( "GtkRadiant Preferences" ) );
-	gtk_window_set_transient_for( GTK_WINDOW( dialog ), GTK_WINDOW( g_pParentWnd->m_pWidget ) );
-	gtk_window_set_position( GTK_WINDOW( dialog ), GTK_WIN_POS_CENTER_ON_PARENT );
-	gtk_widget_realize( dialog );
 
-	mainvbox = gtk_vbox_new( FALSE, 5 );
-	gtk_container_add( GTK_CONTAINER( dialog ), mainvbox );
-	gtk_container_set_border_width( GTK_CONTAINER( mainvbox ), 5 );
-	gtk_widget_show( mainvbox );
+#if 0
 
-	hbox = gtk_hbox_new( FALSE, 5 );
-	gtk_box_pack_end( GTK_BOX( mainvbox ), hbox, FALSE, TRUE, 0 );
-	gtk_widget_show( hbox );
-
-	button = gtk_button_new_with_label( _( "Cancel" ) );
-	gtk_box_pack_end( GTK_BOX( hbox ), button, FALSE, FALSE, 0 );
-	gtk_widget_set_size_request( button, 60, -1 );
-	gtk_widget_show( button );
-	AddModalButton( button, IDCANCEL );
-
-	button = gtk_button_new_with_label( _( "OK" ) );
-	gtk_box_pack_end( GTK_BOX( hbox ), button, FALSE, FALSE, 0 );
-	gtk_widget_set_size_request( button, 60, -1 );
-	gtk_widget_show( button );
-	AddModalButton( button, IDOK );
-
-	button = gtk_button_new_with_label( _( "Clean" ) );
-	g_signal_connect( G_OBJECT( button ), "clicked", G_CALLBACK( OnButtonClean ), this );
-	gtk_box_pack_start( GTK_BOX( hbox ), button, FALSE, FALSE, 0 );
-	gtk_widget_set_size_request( button, 60, -1 );
-	gtk_widget_show( button );
-
-	hbox = gtk_hbox_new( FALSE, 5 );
-	gtk_box_pack_start( GTK_BOX( mainvbox ), hbox, TRUE, TRUE, 0 );
-	gtk_widget_show( hbox );
-
-	sc_win = gtk_scrolled_window_new( NULL, NULL );
-	gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( sc_win ), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC );
-	gtk_box_pack_start( GTK_BOX( hbox ), sc_win, FALSE, FALSE, 0 );
-	gtk_widget_show( sc_win );
-
-	// prefs pages notebook
-	notebook = gtk_notebook_new();
-	// hide the notebook tabs since its not supposed to look like a notebook
-	gtk_notebook_set_show_tabs( GTK_NOTEBOOK( notebook ), FALSE );
-	gtk_box_pack_start( GTK_BOX( hbox ), notebook, TRUE, TRUE, 0 );
-	gtk_widget_show( notebook );
-
-	gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW( sc_win ), GTK_SHADOW_IN );
-
-	{
-		GtkTreeStore* store = gtk_tree_store_new( 2, G_TYPE_STRING, G_TYPE_POINTER );
-
-		GtkWidget* view = gtk_tree_view_new_with_model( GTK_TREE_MODEL( store ) );
-		gtk_tree_view_set_headers_visible( GTK_TREE_VIEW( view ), FALSE );
-
-		{
-			GtkCellRenderer* renderer = gtk_cell_renderer_text_new();
-			GtkTreeViewColumn* column = gtk_tree_view_column_new_with_attributes( _( "Preferences" ), renderer, "text", 0, (char *) NULL );
-			gtk_tree_view_append_column( GTK_TREE_VIEW( view ), column );
-		}
-
-		{
-			GtkTreeSelection* selection = gtk_tree_view_get_selection( GTK_TREE_VIEW( view ) );
-			g_signal_connect( G_OBJECT( selection ), "changed", G_CALLBACK( treeSelection ), this );
-		}
-
-		gtk_widget_show( view );
-
-		gtk_container_add( GTK_CONTAINER( sc_win ), view );
-
-		{
-			/********************************************************************/
-			/* Add preference tree options                                      */
-			/********************************************************************/
-			{
-				GtkTreeIter group;
-				gtk_tree_store_append( store, &group, NULL );
-				gtk_tree_store_set( store, &group, 0, _( "Globals" ), 1, PTAB_GAME_SETTINGS, -1 );
-				{
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "Game settings" ), 1, (gpointer)PTAB_GAME_SETTINGS, -1 );
-				}
-			}
-
-			{
-				GtkTreeIter group;
-				gtk_tree_store_append( store, &group, NULL );
-				gtk_tree_store_set( store, &group, 0, _( "Display" ), 1, PTAB_2D, -1 );
-				{
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "2D Display/Rendering" ), 1, (gpointer)PTAB_2D, -1 );
-				}
-				{
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "3D View" ), 1, (gpointer)PTAB_CAMERA, -1 );
-				}
-				{
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "Texture Settings" ), 1, (gpointer)PTAB_TEXTURE, -1 );
-				}
-			}
-
-			{
-				GtkTreeIter group;
-				gtk_tree_store_append( store, &group, NULL );
-				gtk_tree_store_set( store, &group, 0, _( "Interface" ), 1, PTAB_LAYOUT, -1 );
-				{
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "Layout" ), 1, (gpointer)PTAB_LAYOUT, -1 );
-				}
-				{
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "Mouse" ), 1, (gpointer)PTAB_MOUSE, -1 );
-				}
-				{
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "Editing" ), 1, (gpointer)PTAB_EDITING, -1 );
-				}
-			}
-
-			{
-				GtkTreeIter group;
-				gtk_tree_store_append( store, &group, NULL );
-				gtk_tree_store_set( store, &group, 0, _( "Other" ), 1, PTAB_STARTUP, -1 );
-				{
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "Startup/Auto save" ), 1, (gpointer)PTAB_STARTUP, -1 );
-				}
-				{
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "Paths" ), 1, (gpointer)PTAB_PATHS, -1 );
-				}
-				{
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "Brush" ), 1, (gpointer)PTAB_BRUSH, -1 );
-				}
-				{
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "Misc" ), 1, (gpointer)PTAB_MISC, -1 );
-				}
-				if ( !g_qeglobals.bBSPFrontendPlugin ) {
-					GtkTreeIter tab;
-					gtk_tree_store_append( store, &tab, &group );
-					gtk_tree_store_set( store, &tab, 0, _( "BSP Monitoring" ), 1, (gpointer)PTAB_BSPMONITOR, -1 );
-				}
-			}
-		}
-
-		gtk_tree_view_expand_all( GTK_TREE_VIEW( view ) );
-
-		g_object_unref( G_OBJECT( store ) );
-	}
-
-	/**********************************************************************/
-	/* build the prefs pages                                              */
-	/**********************************************************************/
-
-	// Front page...
-	// todo : add something interesting here
-	// NOTE TTimo: tip of the day? or a logo?
-	preflabel = gtk_label_new( _( "Front Page" ) );
-	gtk_widget_show( preflabel );
-	pageframe = gtk_frame_new( NULL );
-	gtk_container_set_border_width( GTK_CONTAINER( pageframe ), 5 );
-	gtk_widget_show( pageframe );
-	vbox = gtk_vbox_new( FALSE, 5 );
-	gtk_container_set_border_width( GTK_CONTAINER( vbox ), 5 );
-	gtk_container_add( GTK_CONTAINER( pageframe ), vbox );
-	gtk_widget_set_size_request( GTK_WIDGET( vbox ), 350, -1 );
-	gtk_widget_show( vbox );
-
-	gint page_index;
-	page_index = gtk_notebook_append_page( GTK_NOTEBOOK( notebook ), pageframe, preflabel );
-	assert( page_index == PTAB_FRONT );
-
-	/******** global preferences group ****************************/
-	preflabel = gtk_label_new( _( "Globals" ) );
-	gtk_widget_show( preflabel );
-
-	pageframe = mGamesDialog.GetGlobalFrame();
-	page_index = gtk_notebook_append_page( GTK_NOTEBOOK( notebook ), pageframe, preflabel );
-	assert( page_index == PTAB_GAME_SETTINGS );
-
-	/******** 2D prefs group (xy views/rendering options) *********/
-	preflabel = gtk_label_new( _( "2D Display" ) );
-	gtk_widget_show( preflabel );
-	pageframe = gtk_frame_new( _( "2D Display" ) );
-	gtk_container_set_border_width( GTK_CONTAINER( pageframe ), 5 );
-	gtk_widget_show( pageframe );
-	vbox = gtk_vbox_new( FALSE, 5 );
-	gtk_container_set_border_width( GTK_CONTAINER( vbox ), 5 );
-	gtk_container_add( GTK_CONTAINER( pageframe ), vbox );
-	gtk_widget_show( vbox );
-
-	// OpenGL Display Lists
-	check = gtk_check_button_new_with_label( _( "OpenGL Display Lists" ) );
-	gtk_box_pack_start( GTK_BOX( vbox ), check, FALSE, FALSE, 0 );
-	gtk_widget_show( check );
-	AddDialogData( check, &m_bDisplayLists, DLG_CHECK_BOOL );
-
-	// Antialiased points & lines
-	// Fishman - Add antialiazed points and lines support. 09/03/00
-	check = gtk_check_button_new_with_label( _( "OpenGL antialiased points and lines" ) );
-	gtk_box_pack_start( GTK_BOX( vbox ), check, FALSE, FALSE, 0 );
-	gtk_widget_show( check );
-	AddDialogData( check, &m_bAntialiasedPointsAndLines, DLG_CHECK_BOOL );
-
-	// Solid selection boxes
-	check = gtk_check_button_new_with_label( _( "Solid selection boxes" ) );
-	gtk_box_pack_start( GTK_BOX( vbox ), check, FALSE, FALSE, 0 );
-	gtk_widget_show( check );
-	AddDialogData( check, &m_bNoStipple, DLG_CHECK_BOOL );
-
-	// Display size info
-	check = gtk_check_button_new_with_label( _( "Display size info" ) );
-	gtk_box_pack_start( GTK_BOX( vbox ), check, FALSE, FALSE, 0 );
-	gtk_widget_show( check );
-	AddDialogData( check, &m_bSizePaint, DLG_CHECK_BOOL );
+	AddDialogData( check, &m_bDisplayLists, DLG_CHECK_BOOL ); "OpenGL Display Lists"
+	AddDialogData( check, &m_bAntialiasedPointsAndLines, DLG_CHECK_BOOL ); "OpenGL antialiased points and lines"
+	AddDialogData( check, &m_bNoStipple, DLG_CHECK_BOOL ); "Solid selection boxes"
+	AddDialogData( check, &m_bSizePaint, DLG_CHECK_BOOL ); "Display size info"
 
 #ifdef ATIHACK_812
-	// ATI bugs
-	check = gtk_check_button_new_with_label( _( "ATI and Intel cards w/ buggy drivers (disappearing polygons)" ) );
-	gtk_box_pack_start( GTK_BOX( vbox ), check, FALSE, FALSE, 0 );
-	gtk_widget_show( check );
-	AddDialogData( check, &m_bGlATIHack, DLG_CHECK_BOOL );
-#endif
+	AddDialogData( check, &m_bGlATIHack, DLG_CHECK_BOOL ); "ATI and Intel cards w/ buggy drivers (disappearing polygons)"
+#endif 
 
-	// Add the page to the notebook
-	page_index = gtk_notebook_append_page( GTK_NOTEBOOK( notebook ), pageframe, preflabel );
-	assert( page_index == PTAB_2D );
+	AddDialogData( G_OBJECT( adj ), &m_nMoveSpeed, DLG_ADJ_INT ); "Movement Velocity"
 
-	/******** 3D Camera view group *********/
-	preflabel = gtk_label_new( _( "3D View" ) );
-	gtk_widget_show( preflabel );
-	pageframe = gtk_frame_new( _( "3D View" ) );
-	gtk_container_set_border_width( GTK_CONTAINER( pageframe ), 5 );
-	gtk_widget_show( pageframe );
-	vbox = gtk_vbox_new( FALSE, 5 );
-	gtk_container_set_border_width( GTK_CONTAINER( vbox ), 5 );
-	gtk_container_add( GTK_CONTAINER( pageframe ), vbox );
-	gtk_widget_show( vbox );
-
-	// Directional velocity (Movement Velocity)
-	// label container
-	hbox2 = gtk_hbox_new( FALSE, 0 );
-	gtk_box_pack_start( GTK_BOX( vbox ), hbox2, FALSE, FALSE, 0 );
-	gtk_widget_show( hbox2 );
-
-	// label
-	label = gtk_label_new( _( "Movement Velocity" ) );
-	gtk_box_pack_start( GTK_BOX( hbox2 ), label, FALSE, FALSE, 0 );
-	gtk_misc_set_alignment( GTK_MISC( label ), 0.0, 0.5 );
-	gtk_widget_show( label );
-
-	// adjustment
-	adj = GTK_ADJUSTMENT( gtk_adjustment_new( 100, 1, 300, 1, 10, 10 ) );
-	AddDialogData( G_OBJECT( adj ), &m_nMoveSpeed, DLG_ADJ_INT );
-
-	// scale
-	scale = gtk_hscale_new( GTK_ADJUSTMENT( adj ) );
-	gtk_box_pack_start( GTK_BOX( vbox ), scale, FALSE, TRUE, 2 );
-	gtk_widget_show( scale );
-
-	gtk_scale_set_draw_value( GTK_SCALE( scale ), TRUE );
-
-	// Angular velocity (Rotational Velocity)
-	// label container
-	hbox2 = gtk_hbox_new( FALSE, 0 );
-	gtk_box_pack_start( GTK_BOX( vbox ), hbox2, FALSE, FALSE, 0 );
-	gtk_widget_show( hbox2 );
-
-	// label
-	label = gtk_label_new( _( "Rotational Velocity" ) );
-	gtk_box_pack_start( GTK_BOX( hbox2 ), label, FALSE, FALSE, 0 );
-	gtk_misc_set_alignment( GTK_MISC( label ), 0.0, 0.5 );
-	gtk_widget_show( label );
-
-	// adjustment
 	adj = GTK_ADJUSTMENT( gtk_adjustment_new( 3, 1, 180, 1, 10, 10 ) ); // value, low, high, step, page_step, page_size
-	AddDialogData( G_OBJECT( adj ), &m_nAngleSpeed, DLG_ADJ_INT );
+	AddDialogData( G_OBJECT( adj ), &m_nAngleSpeed, DLG_ADJ_INT ); "Angular/Rotational Velocity"
 
 	// scale
 	scale = gtk_hscale_new( GTK_ADJUSTMENT( adj ) );
@@ -1682,23 +1190,7 @@ void PrefsDlg::BuildDialog(){
 	gtk_scale_set_draw_value( GTK_SCALE( scale ), TRUE );
 	gtk_widget_show( scale );
 
-	// Text under the velocity sliders
-	// container
-	hbox2 = gtk_hbox_new( FALSE, 0 );
-	gtk_box_pack_start( GTK_BOX( vbox ), hbox2, FALSE, FALSE, 0 );
-	gtk_widget_show( hbox2 );
-
-	// label
-	label = gtk_label_new( _( "slow" ) );
-	gtk_box_pack_start( GTK_BOX( hbox2 ), label, FALSE, FALSE, 0 );
-	gtk_misc_set_alignment( GTK_MISC( label ), 0.0, 0.5 );
-	gtk_widget_show( label );
-
-	// label
-	label = gtk_label_new( _( "fast" ) );
-	gtk_box_pack_end( GTK_BOX( hbox2 ), label, FALSE, FALSE, 0 );
-	gtk_misc_set_alignment( GTK_MISC( label ), 1.0, 0.5 );
-	gtk_widget_show( label );
+	
 
 	// Allow drag to select multiple faces/brushes
 	// container
@@ -2651,6 +2143,9 @@ void PrefsDlg::BuildDialog(){
 	assert( page_index == PTAB_BSPMONITOR );
 
 	gtk_notebook_set_current_page( GTK_NOTEBOOK( notebook ), PTAB_FRONT );
+
+
+#endif
 }
 
 // end new prefs dialog
@@ -3116,44 +2611,6 @@ void PrefsDlg::DoEditorSensitivity(){
 }
 
 void PrefsDlg::DoSensitivity(){
-#if 0
-	// first, look at the project file version ... will monitoring work?
-	// project files now XML, guaranteed to be at least version 2
-	if ( 0 ) { //IntForKey( g_qeglobals.d_project_entity, "version" ) < 2)
-		if ( m_bWarn ) {
-			Str Msg;
-			Msg = "The current project file (";
-			Msg += g_PrefsDlg.m_strLastProject;
-			Msg += ") is not at least version 2.\nI need version 2 or above to setup BSP monitoring correctly.";
-			gtk_MessageBox( m_pWidget, Msg.GetBuffer(), MB_OK );
-
-			m_bWarn = false;
-		}
-
-		// go ahead, disable everybuddy
-		gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_leakstop" ) ), FALSE );
-		gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_monitorbsp" ) ), FALSE );
-		gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_runengine" ) ), FALSE );
-		gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_sleep" ) ), FALSE );
-	}
-	else
-	{
-#endif
-//    m_bWarn = true;
-
-	gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_leakstop" ) ), TRUE );
-	gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_monitorbsp" ) ), TRUE );
-	gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_runengine" ) ), TRUE );
-	gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_sleep" ) ), TRUE );
-
-	if ( !gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( g_object_get_data( G_OBJECT( m_pWidget ), "check_monitorbsp" ) ) ) ) {
-		gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_leakstop" ) ), FALSE );
-		gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_runengine" ) ), FALSE );
-		gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_sleep" ) ), FALSE );
-	}
-	else if ( !gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( g_object_get_data( G_OBJECT( m_pWidget ), "check_runengine" ) ) ) ) {
-		gtk_widget_set_sensitive( GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "check_sleep" ) ), FALSE );
-	}
 }
 
 /*
