@@ -68,7 +68,7 @@ GtkWidget* menu_tearoff( GtkWidget *menu );
 GtkWidget* create_sub_menu_with_mnemonic( GtkWidget *bar, const gchar *mnemonic );
 GtkWidget* create_menu_item_with_mnemonic( GtkWidget *menu, const gchar *mnemonic, GCallback func, int id );
 GtkWidget* create_check_menu_item_with_mnemonic( GtkWidget *menu, const gchar *mnemonic, GCallback func, int id, gboolean active );
-GtkWidget* create_radio_menu_item_with_mnemonic( GtkWidget *menu, GtkWidget *last, const gchar *mnemonic, GCallback func, int id, gboolean state );
+GtkWidget* create_radio_menu_item_with_mnemonic( GtkWidget *menu, GtkWidget *last, const gchar *mnemonic, int id, gboolean state );
 GtkWidget* create_menu_in_menu_with_mnemonic( GtkWidget *menu, const gchar *mnemonic );
 
 

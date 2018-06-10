@@ -769,7 +769,7 @@ GtkWidget* create_check_menu_item_with_mnemonic( GtkWidget *menu, const gchar *m
 	return item;
 }
 
-GtkWidget* create_radio_menu_item_with_mnemonic( GtkWidget *menu, GtkWidget *last, const gchar *mnemonic, GCallback func, int id, gboolean state ){
+GtkWidget* create_radio_menu_item_with_mnemonic( GtkWidget *menu, GtkWidget *last, const gchar *mnemonic, int id, gboolean state ){
 	GtkWidget *item;
 	GSList *group = (GSList*)NULL;
 
@@ -782,7 +782,7 @@ GtkWidget* create_radio_menu_item_with_mnemonic( GtkWidget *menu, GtkWidget *las
 	gtk_widget_show( item );
 	gtk_menu_shell_append( GTK_MENU_SHELL( menu ), item );
 //	gtk_container_add( GTK_CONTAINER( menu ), item );
-	g_signal_connect( G_OBJECT( item ), "activate", func, GINT_TO_POINTER( id ) );
+	g_signal_connect( G_OBJECT( item ), "activate", G_CALLBACK( HandleCommand ), GINT_TO_POINTER( id ) );
 
 	AddMenuItem( item, id );
 	return item;
