@@ -70,11 +70,7 @@ virtual CPrefAssignment& operator =( const CPrefAssignment& ass );
 class CXMLPropertyBag
 {
 private:
-/*!
-   local prefs file
- */
-xmlDocPtr mpDoc;
-xmlNodePtr mpDocNode;
+
 
 /*!
    prefs assignments (what pref name, what type, what variable)
@@ -94,7 +90,7 @@ void PushAssignment( const char *name, PrefTypes_t type, void *pV );
 /*!
    find the xmlnode relating to the epair name
  */
-xmlNodePtr EpairForName( const char *name );
+
 
 public:
 CXMLPropertyBag();
@@ -123,21 +119,17 @@ void GetPref( const char *name, window_position_t* pV, window_position_t V );
 /*!
    returns whether or not the property bag is already open
  */
-qboolean InUse() { return ( mpDoc != NULL ); };
+qboolean InUse() { return TRUE; };
 
-/*!
-   unload the xml doc, and free the tree
- */
 void Clear();
 
 /*|
-   read data from our XML file
+   
  */
 void ReadXMLFile( const char* pFilename );
 
 /*|
-   write out the property bag to an XML data file
-   return is success/fail
+   
  */
 qboolean WriteXMLFile( const char* pFilename );
 
@@ -167,7 +159,6 @@ qboolean mbEmpty;
 class CGameDescription
 {
 public:
-xmlDocPtr mpDoc;   ///< the game description xml tree
 Str mGameToolsPath;   ///< the explicit path to the game-dependent modules
 Str mGameName;   ///< name of the game used in dialogs
 Str mGameFile;   ///< the .game file that describes this game
@@ -186,14 +177,14 @@ Str mCaulkShader;   ///< the shader to use for caulking
 bool noMapsInHome;   ///< set this if you want to open the engine path/base dir/maps dir for map open/save dialoges */
 bool idTech2;  // set this to true for idTech2 games
 
-CGameDescription() { mpDoc = NULL; }
+CGameDescription() {  }
 /*!
    \todo parse basic info from the node
    user-friendly name of the game
    essential parameters (such as the start dir)
  */
-CGameDescription( xmlDocPtr pDoc, const Str &GameFile );
-virtual ~CGameDescription() { xmlFreeDoc( mpDoc ); }
+CGameDescription( const Str &GameFile );
+virtual ~CGameDescription() {}
 
 void Dump();
 };

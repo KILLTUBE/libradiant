@@ -239,7 +239,6 @@ void WindowPosition_Write( const window_position_t& m_value, CString& value ){
 
 CXMLPropertyBag::CXMLPropertyBag() {
 	mStrFilename = "";
-	mpDoc = NULL;
 	mbEmpty = false;
 }
 
@@ -261,9 +260,6 @@ void CXMLPropertyBag::PushAssignment( const char *name, PrefTypes_t type, void *
 	mPrefAssignments.push_front( CPrefAssignment( name, type, pV ) );
 }
 
-xmlNodePtr CXMLPropertyBag::EpairForName( const char *name ){
-	return NULL;
-}
 
 void CXMLPropertyBag::GetPref( const char *name, Str *pV, const char *V ){
 	// means the pref exists, and that the value is ""
@@ -534,9 +530,8 @@ PrefsDlg::PrefsDlg (){
 #error "unsupported platform"
 #endif
 
-CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
+CGameDescription::CGameDescription( const Str &GameFile ){
 	char *p, *prop;
-	mpDoc = pDoc;
 
 
 	
@@ -801,15 +796,7 @@ void CGameDialog::ScanForGames(){
 			strPath.Format( "%s/%s", path, dirlist );
 			Sys_Printf( "%s\n", strPath.GetBuffer() );
 			// got one, load it
-			xmlDocPtr pDoc = xmlParseFile( strPath.GetBuffer() );
-			if ( pDoc ) {
-				mGames.push_front( new CGameDescription( pDoc, dirlist ) );
-			}
-			else
-			{
-				Sys_FPrintf( SYS_ERR, "XML parser failed on '%s'\n", strPath.GetBuffer() );
-			}
-
+			mGames.push_front( new CGameDescription( dirlist ) );
 			g_free( dirlist );
 		}
 		g_dir_close( dir );
@@ -2146,9 +2133,6 @@ void PrefsDlg::LoadPrefs(){
 		mLocalPrefs.Clear();
 	}
 
-	// load local.pref file
-	//mLocalPrefs.ReadXMLFile( m_inipath->str );
-
 	mLocalPrefs.GetPref( PATCHSHOWBOUNDS_KEY,  &g_bPatchShowBounds,  FALSE );
 	mLocalPrefs.GetPref( MOUSE_KEY,            &m_nMouse,            MOUSE_DEF );
 	m_nMouseButtons = m_nMouse ? 3 : 2;
@@ -2442,9 +2426,7 @@ void PrefsDlg::SavePrefs(){
 
 	// update the tree and save it
 	mLocalPrefs.UpdatePrefTree();
-	if ( !mLocalPrefs.WriteXMLFile( m_inipath->str ) ) {
-		Sys_FPrintf( SYS_ERR, "Error occured while saving local prefs file '%s'\n", m_inipath->str );
-	}
+	
 
 	if ( m_nMouse == 0 ) {
 		m_nMouseButtons = 2;
