@@ -1198,32 +1198,22 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XY Zoom _Out" ), G_CALLBACK( HandleCommand ), ID_VIEW_ZOOMOUT );
 	menu_separator( menu_in_menu );
 	create_menu_item_with_mnemonic( menu_in_menu, _( "_Z 100%" ), G_CALLBACK( HandleCommand ), ID_VIEW_Z100 );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z Zoo_m In" ), G_CALLBACK( HandleCommand ), ID_VIEW_ZZOOMIN );
-	g_object_set_data( G_OBJECT( window ), "menu_view_zzoomin", item );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z Zoom O_ut" ), G_CALLBACK( HandleCommand ), ID_VIEW_ZZOOMOUT );
-	g_object_set_data( G_OBJECT( window ), "menu_view_zzoomout", item );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z Zoo_m In"  ), G_CALLBACK( HandleCommand ), ID_VIEW_ZZOOMIN  ); g_object_set_data( G_OBJECT( window ), "menu_view_zzoomin" , item );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z Zoom O_ut" ), G_CALLBACK( HandleCommand ), ID_VIEW_ZZOOMOUT ); g_object_set_data( G_OBJECT( window ), "menu_view_zzoomout", item );
 	menu_separator( menu_in_menu );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Cubic Clip Zoom In" ), G_CALLBACK( HandleCommand ), ID_VIEW_CUBEIN );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Cubic Clip Zoom In"  ), G_CALLBACK( HandleCommand ), ID_VIEW_CUBEIN );
 	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Cubic Clip Zoom Out" ), G_CALLBACK( HandleCommand ), ID_VIEW_CUBEOUT );
 	menu_separator( menu );
 
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Show" ) );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show _Angles" ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWANGLES, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_showangles", item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show _Names" ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWNAMES, TRUE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_shownames", item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Blocks" ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWBLOCKS, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_showblocks", item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show C_oordinates" ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWCOORDINATES, TRUE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_showcoordinates", item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Window Outline" ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWOUTLINE, TRUE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_showoutline", item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show ZBuffered Outline" ), G_CALLBACK( HandleCommand ), ID_SELECTION_NOOUTLINE, TRUE );
-	g_object_set_data( G_OBJECT( window ), "menu_selection_nooutline", item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Axes" ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWAXES, TRUE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_showaxes", item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Workzone" ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWWORKZONE, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_showworkzone", item );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show _Angles"           ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWANGLES      , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_showangles"     , item );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show _Names"            ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWNAMES       , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_view_shownames"      , item );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Blocks"            ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWBLOCKS      , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_showblocks"     , item );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show C_oordinates"      ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWCOORDINATES , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_view_showcoordinates", item );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Window Outline"    ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWOUTLINE     , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_view_showoutline"    , item );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show ZBuffered Outline" ), G_CALLBACK( HandleCommand ), ID_SELECTION_NOOUTLINE  , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_selection_nooutline" , item );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Axes"              ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWAXES        , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_view_showaxes"       , item );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Workzone"          ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWWORKZONE    , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_showworkzone"   , item );
 
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Filter" ) );
 	create_check_menu_item_with_mnemonic( menu_in_menu, _( "World" ), G_CALLBACK( HandleCommand ), ID_FILTER_WORLD, FALSE );
@@ -1255,32 +1245,16 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	menu_separator( menu );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Entities as" ) );
 	g_object_set_data( G_OBJECT( window ), "view_entitiesas_menu", menu_in_menu );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, NULL, _( "Bounding box" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_BOUNDINGBOX,FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_boundingbox", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Wireframe" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_WIREFRAME,FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_wireframe", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Selected Wireframe" ),
-												 G_CALLBACK( HandleCommand ),ID_VIEW_ENTITIESAS_SELECTEDWIREFRAME,FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_selectedwireframe", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Selected Skinned" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_SELECTEDSKINNED,FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_selectedskinned", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Skinned" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_SKINNED,FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_skinned", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Skinned and Boxed" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_SKINNEDANDBOXED,FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_skinnedandboxed", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, NULL, _( "Bounding box"       ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_BOUNDINGBOX      , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_boundingbox"      , item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Wireframe"          ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_WIREFRAME        , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_wireframe"        , item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Selected Wireframe" ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_SELECTEDWIREFRAME, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_selectedwireframe", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Selected Skinned"   ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_SELECTEDSKINNED  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_selectedskinned"  , item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Skinned"            ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_SKINNED          , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_skinned"          , item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Skinned and Boxed"  ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_SKINNEDANDBOXED  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_skinnedandboxed"  , item );
 	menu_separator( menu );
-	item = create_check_menu_item_with_mnemonic( menu, _( "Cubic Clipping" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_CUBICCLIPPING, TRUE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_cubicclipping", item );
+	item = create_check_menu_item_with_mnemonic( menu, _( "Cubic Clipping" ), G_CALLBACK( HandleCommand ), ID_VIEW_CUBICCLIPPING, TRUE ); g_object_set_data( G_OBJECT( window ), "menu_view_cubicclipping", item );
 	menu_separator( menu );
-	item = create_check_menu_item_with_mnemonic( menu, _( "OpenGL Lighting" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_OPENGLLIGHTING, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_opengllighting", item );
+	item = create_check_menu_item_with_mnemonic( menu, _( "OpenGL Lighting" ), G_CALLBACK( HandleCommand ), ID_VIEW_OPENGLLIGHTING, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_opengllighting", item );
 
 	// Selection menu
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Selection" ) );
@@ -1289,91 +1263,58 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	}
 
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Drag" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Drag _Edges" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_DRAGEDGES );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Drag _Vertices" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_DRAGVERTECIES );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Drag _Edges" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DRAGEDGES );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Drag _Vertices" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DRAGVERTECIES );
 	menu_separator( menu );
-	create_menu_item_with_mnemonic( menu, _( "_Clone" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_CLONE );
-	item = create_menu_item_with_mnemonic( menu, _( "Deselect" ),
-										   G_CALLBACK( HandleCommand ), ID_SELECTION_DESELECT );
-	item = create_menu_item_with_mnemonic( menu, _( "Invert" ),
-										   G_CALLBACK( HandleCommand ), ID_SELECTION_INVERT );
+	create_menu_item_with_mnemonic( menu, _( "_Clone" ), G_CALLBACK( HandleCommand ), ID_SELECTION_CLONE );
+	item = create_menu_item_with_mnemonic( menu, _( "Deselect" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DESELECT );
+	item = create_menu_item_with_mnemonic( menu, _( "Invert" ), G_CALLBACK( HandleCommand ), ID_SELECTION_INVERT );
 #ifndef QUAKE3
-	create_menu_item_with_mnemonic( menu, _( "_Delete" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_DELETE );
+	create_menu_item_with_mnemonic( menu, _( "_Delete" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DELETE );
 #endif
 	menu_separator( menu );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Flip" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Flip _X" ),
-									G_CALLBACK( HandleCommand ), ID_BRUSH_FLIPX );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Flip _Y" ),
-									G_CALLBACK( HandleCommand ), ID_BRUSH_FLIPY );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Flip _Z" ),
-									G_CALLBACK( HandleCommand ), ID_BRUSH_FLIPZ );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Flip _X" ), G_CALLBACK( HandleCommand ), ID_BRUSH_FLIPX );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Flip _Y" ), G_CALLBACK( HandleCommand ), ID_BRUSH_FLIPY );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Flip _Z" ), G_CALLBACK( HandleCommand ), ID_BRUSH_FLIPZ );
 	menu_separator( menu );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Rotate" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Rotate X" ),
-									G_CALLBACK( HandleCommand ), ID_BRUSH_ROTATEX );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Rotate Y" ),
-									G_CALLBACK( HandleCommand ), ID_BRUSH_ROTATEY );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Rotate Z" ),
-									G_CALLBACK( HandleCommand ), ID_BRUSH_ROTATEZ );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Arbitrary rotation..." ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_ARBITRARYROTATION );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Rotate X"              ), G_CALLBACK( HandleCommand ), ID_BRUSH_ROTATEX );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Rotate Y"              ), G_CALLBACK( HandleCommand ), ID_BRUSH_ROTATEY );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Rotate Z"              ), G_CALLBACK( HandleCommand ), ID_BRUSH_ROTATEZ );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Arbitrary rotation..." ), G_CALLBACK( HandleCommand ), ID_SELECTION_ARBITRARYROTATION );
 	menu_separator( menu );
 	create_menu_item_with_mnemonic( menu, _( "Scale..." ), G_CALLBACK( HandleCommand ), ID_SELECT_SCALE );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "CSG" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Make _Hollow Overlap" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_MAKEHOLLOW );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Make _Hollow Touch" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_MAKEHOLLOW_TOUCH );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "CSG _Subtract" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_CSGSUBTRACT );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "CSG _Merge" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_CSGMERGE );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Make _Hollow Overlap" ), G_CALLBACK( HandleCommand ), ID_SELECTION_MAKEHOLLOW       );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Make _Hollow Touch"   ), G_CALLBACK( HandleCommand ), ID_SELECTION_MAKEHOLLOW_TOUCH );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "CSG _Subtract"        ), G_CALLBACK( HandleCommand ), ID_SELECTION_CSGSUBTRACT      );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "CSG _Merge"           ), G_CALLBACK( HandleCommand ), ID_SELECTION_CSGMERGE         );
 	menu_separator( menu );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Select" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Select Complete _Tall" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTCOMPLETETALL );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Select T_ouching" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTTOUCHING );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Select _Partial Tall" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTPARTIALTALL );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Select _Inside" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTINSIDE );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Select Complete _Tall" ), G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTCOMPLETETALL );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Select T_ouching" ), G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTTOUCHING );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Select _Partial Tall" ), G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTPARTIALTALL );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Select _Inside" ), G_CALLBACK( HandleCommand ), ID_SELECTION_SELECTINSIDE );
 	create_menu_item_with_mnemonic( menu_in_menu, "Select Func _Group", G_CALLBACK( HandleCommand ), ID_SELECT_FUNC_GROUP );
 #ifndef QUAKE3
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Left" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGELEFT );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Right" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGERIGHT );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Up" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGEUP );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Down" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGEDOWN );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Left"  ), G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGELEFT  );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Right" ), G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGERIGHT );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Up"    ), G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGEUP    );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Down"  ), G_CALLBACK( HandleCommand ), ID_SELECTION_SELECT_NUDGEDOWN  );
 #endif
 	menu_separator( menu );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Clipper" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Toggle Clipper" ),
-									G_CALLBACK( HandleCommand ), ID_VIEW_CLIPPER );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Toggle Clipper" ), G_CALLBACK( HandleCommand ), ID_VIEW_CLIPPER );
 	menu_separator( menu_in_menu );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Clip selection" ),
-									G_CALLBACK( HandleCommand ), ID_CLIP_SELECTED );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Split selection" ),
-									G_CALLBACK( HandleCommand ), ID_SPLIT_SELECTED );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Flip Clip orientation" ),
-									G_CALLBACK( HandleCommand ), ID_FLIP_CLIP );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Clip selection" ), G_CALLBACK( HandleCommand ), ID_CLIP_SELECTED );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Split selection" ), G_CALLBACK( HandleCommand ), ID_SPLIT_SELECTED );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Flip Clip orientation" ), G_CALLBACK( HandleCommand ), ID_FLIP_CLIP );
 	menu_separator( menu );
-	create_menu_item_with_mnemonic( menu, _( "Connect entities" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_CONNECT );
-	create_menu_item_with_mnemonic( menu, _( "Ungroup entity" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_UNGROUPENTITY );
-	create_menu_item_with_mnemonic( menu, _( "Make detail" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_MAKE_DETAIL );
-	create_menu_item_with_mnemonic( menu, _( "Make structural" ),
-									G_CALLBACK( HandleCommand ), ID_SELECTION_MAKE_STRUCTURAL );
+	create_menu_item_with_mnemonic( menu, _( "Connect entities" ), G_CALLBACK( HandleCommand ), ID_SELECTION_CONNECT );
+	create_menu_item_with_mnemonic( menu, _( "Ungroup entity"   ), G_CALLBACK( HandleCommand ), ID_SELECTION_UNGROUPENTITY );
+	create_menu_item_with_mnemonic( menu, _( "Make detail"      ), G_CALLBACK( HandleCommand ), ID_SELECTION_MAKE_DETAIL );
+	create_menu_item_with_mnemonic( menu, _( "Make structural"  ), G_CALLBACK( HandleCommand ), ID_SELECTION_MAKE_STRUCTURAL );
 
 	// BSP menu
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Bsp" ) );
@@ -1387,43 +1328,19 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 		menu_tearoff( menu );
 	}
 
-	item = create_radio_menu_item_with_mnemonic( menu, NULL, _( "Grid0.25" ),
-												 G_CALLBACK( HandleCommand ), ID_GRID_025, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_grid_025", item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid0.5" ),
-												 G_CALLBACK( HandleCommand ), ID_GRID_05, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_grid_05", item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid1" ),
-												 G_CALLBACK( HandleCommand ), ID_GRID_1, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_grid_1", item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid2" ),
-												 G_CALLBACK( HandleCommand ), ID_GRID_2, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_grid_2", item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid4" ),
-												 G_CALLBACK( HandleCommand ), ID_GRID_4, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_grid_4", item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid8" ),
-												 G_CALLBACK( HandleCommand ), ID_GRID_8, TRUE );
-	g_object_set_data( G_OBJECT( window ), "menu_grid_8", item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid16" ),
-												 G_CALLBACK( HandleCommand ), ID_GRID_16, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_grid_16", item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid32" ),
-												 G_CALLBACK( HandleCommand ), ID_GRID_32, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_grid_32", item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid64" ),
-												 G_CALLBACK( HandleCommand ), ID_GRID_64, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_grid_64", item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid128" ),
-												 G_CALLBACK( HandleCommand ), ID_GRID_128, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_grid_128", item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid256" ),
-												 G_CALLBACK( HandleCommand ), ID_GRID_256, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_grid_256", item );
+	item = create_radio_menu_item_with_mnemonic( menu, NULL, _( "Grid0.25" ), G_CALLBACK( HandleCommand ), ID_GRID_025  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_025"  , item );
+	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid0.5"  ), G_CALLBACK( HandleCommand ), ID_GRID_05   , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_05"   , item );
+	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid1"    ), G_CALLBACK( HandleCommand ), ID_GRID_1    , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_1"    , item );
+	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid2"    ), G_CALLBACK( HandleCommand ), ID_GRID_2    , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_2"    , item );
+	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid4"    ), G_CALLBACK( HandleCommand ), ID_GRID_4    , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_4"    , item );
+	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid8"    ), G_CALLBACK( HandleCommand ), ID_GRID_8    , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_grid_8"    , item );
+	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid16"   ), G_CALLBACK( HandleCommand ), ID_GRID_16   , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_16"   , item );
+	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid32"   ), G_CALLBACK( HandleCommand ), ID_GRID_32   , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_32"   , item );
+	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid64"   ), G_CALLBACK( HandleCommand ), ID_GRID_64   , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_64"   , item );
+	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid128"  ), G_CALLBACK( HandleCommand ), ID_GRID_128  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_128"  , item );
+	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid256"  ), G_CALLBACK( HandleCommand ), ID_GRID_256  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_256"  , item );
 	menu_separator( menu );
-	item = create_check_menu_item_with_mnemonic( menu, _( "Snap to grid" ),
-												 G_CALLBACK( HandleCommand ), ID_SNAPTOGRID, TRUE );
-	g_object_set_data( G_OBJECT( window ), "menu_snaptogrid", item );
+	item = create_check_menu_item_with_mnemonic( menu, _( "Snap to grid"   ), G_CALLBACK( HandleCommand ), ID_SNAPTOGRID, TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_snaptogrid", item );
 
 	// Textures menu
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Textures" ) );
@@ -1431,85 +1348,42 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 		menu_tearoff( menu );
 	}
 
-	item = create_check_menu_item_with_mnemonic( menu, _( "Show In _Use" ),
-												 G_CALLBACK( HandleCommand ), ID_TEXTURES_SHOWINUSE, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_showinuse", item );
-	item = create_check_menu_item_with_mnemonic( menu, _( "Show _All" ),
-												 G_CALLBACK( HandleCommand ), ID_TEXTURES_SHOWALL, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_showall", item );
+	item = create_check_menu_item_with_mnemonic( menu, _( "Show In _Use" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHOWINUSE, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_showinuse", item );
+	item = create_check_menu_item_with_mnemonic( menu, _( "Show _All" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHOWALL, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_showall", item );
 	menu_separator( menu );
-	item = create_check_menu_item_with_mnemonic( menu, _( "Show shaders" ),
-												 G_CALLBACK( HandleCommand ), ID_TEXTURES_SHADERS_SHOW, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_shaders_show", item );
-	item = create_menu_item_with_mnemonic( menu, _( "Flush & Reload Shaders" ),
-										   G_CALLBACK( HandleCommand ), ID_TEXTURES_RELOADSHADERS );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_reloadshaders", item );
-	item = create_menu_item_with_mnemonic( menu, _( "Load directory..." ),
-										   G_CALLBACK( HandleCommand ), ID_TEXTURES_LOAD );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_load", item );
-	item = create_menu_item_with_mnemonic( menu, _( "Directory list..." ),
-										   G_CALLBACK( HandleCommand ), ID_TEXTURES_LOADLIST );
+	item = create_check_menu_item_with_mnemonic( menu, _( "Show shaders" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHADERS_SHOW, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_shaders_show", item );
+	item = create_menu_item_with_mnemonic( menu, _( "Flush & Reload Shaders" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_RELOADSHADERS ); g_object_set_data( G_OBJECT( window ), "menu_textures_reloadshaders", item );
+	item = create_menu_item_with_mnemonic( menu, _( "Load directory..." ), G_CALLBACK( HandleCommand ), ID_TEXTURES_LOAD ); g_object_set_data( G_OBJECT( window ), "menu_textures_load", item );
+	item = create_menu_item_with_mnemonic( menu, _( "Directory list..." ), G_CALLBACK( HandleCommand ), ID_TEXTURES_LOADLIST );
 	menu_separator( menu );
 
-	item = create_menu_item_with_mnemonic( menu, _( "_Surface Inspector" ),
-										   G_CALLBACK( HandleCommand ), ID_TEXTURES_INSPECTOR );
+	item = create_menu_item_with_mnemonic( menu, _( "_Surface Inspector" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_INSPECTOR );
 	menu_separator( menu );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Render Quality" ) );
 	g_object_set_data( G_OBJECT( window ), "render_quality_menu", menu_in_menu );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, NULL, _( "_Wireframe" ),
-												 G_CALLBACK( HandleCommand ), ID_TEXTURES_WIREFRAME, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_wireframe", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Flat shade" ),
-												 G_CALLBACK( HandleCommand ), ID_TEXTURES_FLATSHADE, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_flatshade", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Nearest" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_NEAREST, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_nearest", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Nearest _Mipmap" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_NEARESTMIPMAP, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_nearestmipmap", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Linear" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_LINEAR, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_linear", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Bilinear" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_BILINEAR, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_bilinear", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "B_ilinear Mipmap" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_BILINEARMIPMAP, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_bilinearmipmap", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "T_rilinear" ),
-												 G_CALLBACK( HandleCommand ), ID_VIEW_TRILINEAR, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_view_trilinear", item );
-	create_menu_item_with_mnemonic( menu, _( "Find / Replace..." ),
-									G_CALLBACK( HandleCommand ), ID_TEXTURE_REPLACEALL );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, NULL, _( "_Wireframe"       ), G_CALLBACK( HandleCommand ), ID_TEXTURES_WIREFRAME , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_wireframe", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Flat shade"      ), G_CALLBACK( HandleCommand ), ID_TEXTURES_FLATSHADE , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_flatshade", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Nearest"         ), G_CALLBACK( HandleCommand ), ID_VIEW_NEAREST       , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_nearest", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Nearest _Mipmap"  ), G_CALLBACK( HandleCommand ), ID_VIEW_NEARESTMIPMAP , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_nearestmipmap", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Linear"          ), G_CALLBACK( HandleCommand ), ID_VIEW_LINEAR        , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_linear", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Bilinear"        ), G_CALLBACK( HandleCommand ), ID_VIEW_BILINEAR      , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_bilinear", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "B_ilinear Mipmap" ), G_CALLBACK( HandleCommand ), ID_VIEW_BILINEARMIPMAP, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_bilinearmipmap", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "T_rilinear"       ), G_CALLBACK( HandleCommand ), ID_VIEW_TRILINEAR     , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_trilinear", item );
+	create_menu_item_with_mnemonic( menu, _( "Find / Replace..." ), G_CALLBACK( HandleCommand ), ID_TEXTURE_REPLACEALL );
 
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Texture Lock" ) );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Moves" ),
-												 G_CALLBACK( HandleCommand ), ID_TOGGLE_LOCK, TRUE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Moves" ), G_CALLBACK( HandleCommand ), ID_TOGGLE_LOCK, TRUE );
 	g_object_set_data( G_OBJECT( window ), "menu_toggle_lock", item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Rotations" ),
-												 G_CALLBACK( HandleCommand ), ID_TOGGLE_ROTATELOCK, TRUE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Rotations" ), G_CALLBACK( HandleCommand ), ID_TOGGLE_ROTATELOCK, TRUE );
 	g_object_set_data( G_OBJECT( window ), "menu_toggle_rotatelock", item );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Texture Window Scale" ) );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, NULL, _( "200%" ),
-												 G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_200, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_200", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "100%" ),
-												 G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_100, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_100", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "50%" ),
-												 G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_50, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_50", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "25%" ),
-												 G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_25, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_25", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "10%" ),
-												 G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_10, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_10", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, NULL, _( "200%" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_200, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_200", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "100%" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_100, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_100", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "50%"  ), G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_50 , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_50", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "25%"  ), G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_25 , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_25", item );
+	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "10%"  ), G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_10 , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_10", item );
 	item = menu_separator( menu );
-	item = create_check_menu_item_with_mnemonic( menu, _( "shaderlist.txt only" ),
-												 G_CALLBACK( HandleCommand ), ID_TEXTURES_SHADERLISTONLY, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_textures_shaderlistonly", item );
+	item = create_check_menu_item_with_mnemonic( menu, _( "shaderlist.txt only" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHADERLISTONLY, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_shaderlistonly", item );
 	item = menu_separator( menu );
 
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Texture Directories" ) );
@@ -1524,54 +1398,34 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	create_menu_item_with_mnemonic( menu, _( "_Benchmark" ), G_CALLBACK( HandleCommand ), ID_MISC_BENCHMARK );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Colors" ) );
 	menu_3 = create_menu_in_menu_with_mnemonic( menu_in_menu, _( "Themes" ) );
-	create_menu_item_with_mnemonic( menu_3, _( "QE4 Original" ), G_CALLBACK( HandleCommand ), ID_COLOR_SETORIGINAL );
-	create_menu_item_with_mnemonic( menu_3, _( "Q3Radiant Original" ), G_CALLBACK( HandleCommand ), ID_COLOR_SETQER );
-	create_menu_item_with_mnemonic( menu_3, _( "Black and Green" ), G_CALLBACK( HandleCommand ), ID_COLOR_SETBLACK );
-	create_menu_item_with_mnemonic( menu_3, _( "Maya/Max/Lightwave Emulation" ), G_CALLBACK( HandleCommand ), ID_COLOR_SETYDNAR );
+	create_menu_item_with_mnemonic( menu_3, _( "QE4 Original"                 ), G_CALLBACK( HandleCommand ), ID_COLOR_SETORIGINAL );
+	create_menu_item_with_mnemonic( menu_3, _( "Q3Radiant Original"           ), G_CALLBACK( HandleCommand ), ID_COLOR_SETQER      );
+	create_menu_item_with_mnemonic( menu_3, _( "Black and Green"              ), G_CALLBACK( HandleCommand ), ID_COLOR_SETBLACK    );
+	create_menu_item_with_mnemonic( menu_3, _( "Maya/Max/Lightwave Emulation" ), G_CALLBACK( HandleCommand ), ID_COLOR_SETYDNAR    );
 
 	menu_separator( menu_in_menu );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "_Texture Background..." ),
-									G_CALLBACK( HandleCommand ), ID_TEXTUREBK );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Background..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_XYBK );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Major..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_MAJOR );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Minor..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_MINOR );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Major Small..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_MAJOR_ALT );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Minor Small..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_MINOR_ALT );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Text..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_GRIDTEXT );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Block..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_GRIDBLOCK );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Default Brush..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_BRUSH );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Camera Background..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_CAMERABACK );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Selected Brush..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_SELECTEDBRUSH );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Selected Brush (Camera)..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_SELECTEDBRUSH3D );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Clipper..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_CLIPPER );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Active View name..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_VIEWNAME );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Detail Brush..." ),
-									G_CALLBACK( HandleCommand ), ID_COLORS_DETAIL );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "_Texture Background..." ), G_CALLBACK( HandleCommand ), ID_TEXTUREBK );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Background..." ), G_CALLBACK( HandleCommand ), ID_COLORS_XYBK );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Major..." ), G_CALLBACK( HandleCommand ), ID_COLORS_MAJOR );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Minor..." ), G_CALLBACK( HandleCommand ), ID_COLORS_MINOR );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Major Small..." ), G_CALLBACK( HandleCommand ), ID_COLORS_MAJOR_ALT );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Minor Small..." ), G_CALLBACK( HandleCommand ), ID_COLORS_MINOR_ALT );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Text..." ), G_CALLBACK( HandleCommand ), ID_COLORS_GRIDTEXT );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Block..." ), G_CALLBACK( HandleCommand ), ID_COLORS_GRIDBLOCK );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Default Brush..." ), G_CALLBACK( HandleCommand ), ID_COLORS_BRUSH );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Camera Background..." ), G_CALLBACK( HandleCommand ), ID_COLORS_CAMERABACK );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Selected Brush..." ), G_CALLBACK( HandleCommand ), ID_COLORS_SELECTEDBRUSH );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Selected Brush (Camera)..." ), G_CALLBACK( HandleCommand ), ID_COLORS_SELECTEDBRUSH3D );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Clipper..." ), G_CALLBACK( HandleCommand ), ID_COLORS_CLIPPER );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Active View name..." ), G_CALLBACK( HandleCommand ), ID_COLORS_VIEWNAME );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Detail Brush..." ), G_CALLBACK( HandleCommand ), ID_COLORS_DETAIL );
 
-	create_menu_item_with_mnemonic( menu, _( "_Gamma..." ),
-									G_CALLBACK( HandleCommand ), ID_MISC_GAMMA );
-	create_menu_item_with_mnemonic( menu, _( "Find brush..." ),
-									G_CALLBACK( HandleCommand ), ID_MISC_FINDBRUSH );
-	item = create_menu_item_with_mnemonic( menu, _( "Next leak spot" ),
-										   G_CALLBACK( HandleCommand ), ID_MISC_NEXTLEAKSPOT );
-	item = create_menu_item_with_mnemonic( menu, _( "Previous leak spot" ),
-										   G_CALLBACK( HandleCommand ), ID_MISC_PREVIOUSLEAKSPOT );
-	create_menu_item_with_mnemonic( menu, _( "_Print XY View" ), G_CALLBACK( HandleCommand ), ID_MISC_PRINTXY );
-	item = create_menu_item_with_mnemonic( menu, _( "_Select Entity Color..." ),
-										   G_CALLBACK( HandleCommand ), ID_MISC_SELECTENTITYCOLOR );
+	create_menu_item_with_mnemonic(        menu, _( "_Gamma..."                ), G_CALLBACK( HandleCommand ), ID_MISC_GAMMA             );
+	create_menu_item_with_mnemonic(        menu, _( "Find brush..."            ), G_CALLBACK( HandleCommand ), ID_MISC_FINDBRUSH         );
+	item = create_menu_item_with_mnemonic( menu, _( "Next leak spot"           ), G_CALLBACK( HandleCommand ), ID_MISC_NEXTLEAKSPOT      );
+	item = create_menu_item_with_mnemonic( menu, _( "Previous leak spot"       ), G_CALLBACK( HandleCommand ), ID_MISC_PREVIOUSLEAKSPOT  );
+	create_menu_item_with_mnemonic(        menu, _( "_Print XY View"           ), G_CALLBACK( HandleCommand ), ID_MISC_PRINTXY           );
+	item = create_menu_item_with_mnemonic( menu, _( "_Select Entity Color..."  ), G_CALLBACK( HandleCommand ), ID_MISC_SELECTENTITYCOLOR );
 	g_object_set_data( G_OBJECT( window ), "menu_misc_selectentitycolor", item );
 
 	// Region menu
@@ -1580,16 +1434,11 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 		menu_tearoff( menu );
 	}
 
-	create_menu_item_with_mnemonic( menu, _( "_Off" ),
-									G_CALLBACK( HandleCommand ), ID_REGION_OFF );
-	create_menu_item_with_mnemonic( menu, _( "_Set XY" ),
-									G_CALLBACK( HandleCommand ), ID_REGION_SETXY );
-	create_menu_item_with_mnemonic( menu, _( "Set _Tall Brush" ),
-									G_CALLBACK( HandleCommand ), ID_REGION_SETTALLBRUSH );
-	create_menu_item_with_mnemonic( menu, _( "Set _Brush" ),
-									G_CALLBACK( HandleCommand ), ID_REGION_SETBRUSH );
-	create_menu_item_with_mnemonic( menu, _( "Set Se_lected Brushes" ),
-									G_CALLBACK( HandleCommand ), ID_REGION_SETSELECTION );
+	create_menu_item_with_mnemonic( menu, _( "_Off"                  ), G_CALLBACK( HandleCommand ), ID_REGION_OFF          );
+	create_menu_item_with_mnemonic( menu, _( "_Set XY"               ), G_CALLBACK( HandleCommand ), ID_REGION_SETXY        );
+	create_menu_item_with_mnemonic( menu, _( "Set _Tall Brush"       ), G_CALLBACK( HandleCommand ), ID_REGION_SETTALLBRUSH );
+	create_menu_item_with_mnemonic( menu, _( "Set _Brush"            ), G_CALLBACK( HandleCommand ), ID_REGION_SETBRUSH     );
+	create_menu_item_with_mnemonic( menu, _( "Set Se_lected Brushes" ), G_CALLBACK( HandleCommand ), ID_REGION_SETSELECTION );
 
 	// Brush menu
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Brush" ) );
@@ -1605,14 +1454,11 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	item = create_menu_item_with_mnemonic( menu, _( "8 sided" ), G_CALLBACK( HandleCommand ), ID_BRUSH_8SIDED );
 	item = create_menu_item_with_mnemonic( menu, _( "9 sided" ), G_CALLBACK( HandleCommand ), ID_BRUSH_9SIDED );
 	menu_separator( menu );
-	create_menu_item_with_mnemonic( menu, _( "Arbitrary sided..." ),
-									G_CALLBACK( HandleCommand ), ID_BRUSH_ARBITRARYSIDED );
+	create_menu_item_with_mnemonic( menu, _( "Arbitrary sided..." ), G_CALLBACK( HandleCommand ), ID_BRUSH_ARBITRARYSIDED );
 	menu_separator( menu );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Primitives" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Cone..." ),
-									G_CALLBACK( HandleCommand ), ID_BRUSH_MAKECONE );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Sphere..." ),
-									G_CALLBACK( HandleCommand ), ID_BRUSH_PRIMITIVES_SPHERE );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Cone..."   ), G_CALLBACK( HandleCommand ), ID_BRUSH_MAKECONE          );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Sphere..." ), G_CALLBACK( HandleCommand ), ID_BRUSH_PRIMITIVES_SPHERE );
 
 	// Curve menu
 	if ( !g_pGameDescription->mNoPatch ) {
@@ -3425,132 +3271,61 @@ void MainFrame::SetStatusText( int nPane, const char* pText ){
 		UpdateStatusText();
 	}
 }
+
+
+
 void MainFrame::SetButtonMenuStates(){
 	GtkWidget *item;
 	g_bIgnoreCommands++;
 
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_view_showangles" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), g_qeglobals.d_savedinfo.show_angles );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_view_shownames" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), g_qeglobals.d_savedinfo.show_names );
-	item  = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_view_showcoordinates" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), g_qeglobals.d_savedinfo.show_coordinates );
-	item  = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_view_showoutline" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), g_qeglobals.d_savedinfo.show_outline );
-	item  = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_selection_nooutline" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), ( g_qeglobals.d_savedinfo.iSelectedOutlinesStyle & OUTLINE_ZBUF ) );
-	item  = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_view_showaxes" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), g_qeglobals.d_savedinfo.show_axis );
-	//item  = GTK_WIDGET (g_object_get_data (G_OBJECT (m_pWidget), "menu_view_showpath"));
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_PATHS ) ? FALSE : TRUE );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_clusterportals" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_CLUSTERPORTALS ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_lightgrid" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_LIGHTGRID ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_world" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_WORLD ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_entities" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_ENT ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_areaportals" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_AREAPORTALS ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_translucent" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_TRANSLUCENT ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_liquids" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_LIQUIDS ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_caulk" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_CAULK ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_clips" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_CLIP ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_botclips" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_BOTCLIP ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_structural" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_STRUCTURAL ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_paths" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_PATHS ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_clusterportals" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_CLUSTERPORTALS ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_lightgrid" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_LIGHTGRID ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_lights" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_LIGHTS ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_patches" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_CURVES ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_details" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_DETAILS ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_hintsskips" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_HINTSSKIPS ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_models" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_MODELS ) != 0 );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_filter_triggers" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ),
-									( g_qeglobals.d_savedinfo.exclude & EXCLUDE_TRIGGERS ) != 0 );
-	item  = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_toggle_lock" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), ( g_PrefsDlg.m_bTextureLock ) ? TRUE : FALSE );
-	item  = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_toggle_rotatelock" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), ( g_PrefsDlg.m_bRotateLock ) ? TRUE : FALSE );
-	item  = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_view_cubicclipping" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), ( g_PrefsDlg.m_bCubicClipping ) ? TRUE : FALSE );
-	item  = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_view_opengllighting" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), ( g_PrefsDlg.m_bGLLighting ) ? TRUE : FALSE );
-	item  = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_snaptogrid" ) );
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), ( g_PrefsDlg.m_bSnap ) ? TRUE : FALSE );
 
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "ttb_view_cubicclipping" ) );
-	gtk_toggle_tool_button_set_active( GTK_TOGGLE_TOOL_BUTTON( item ), ( g_PrefsDlg.m_bCubicClipping ) ? TRUE : FALSE );
-	item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "ttb_dontselectmodel" ) );
-	gtk_toggle_tool_button_set_active( GTK_TOGGLE_TOOL_BUTTON( item ), ( g_PrefsDlg.m_bSelectModels ) ? FALSE : TRUE );
+#define getitem(name) (GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), name )))
+#define check_menu_item_set_active(   name, expr) getitem(name); (gtk_check_menu_item_set_active(    GTK_CHECK_MENU_ITEM(    item ), (expr)))
+#define toggle_tool_button_set_active(name, expr) getitem(name); (gtk_toggle_tool_button_set_active( GTK_TOGGLE_TOOL_BUTTON( item ), (expr)))
 
-	if ( !g_pGameDescription->mNoPatch ) {
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "ttb_dontselectcurve" ) );
-		gtk_toggle_tool_button_set_active( GTK_TOGGLE_TOOL_BUTTON( item ), ( g_PrefsDlg.m_bSelectCurves ) ? FALSE : TRUE );
+	item = check_menu_item_set_active   ( "menu_view_showangles"       ,   g_qeglobals.d_savedinfo.show_angles                                       );
+	item = check_menu_item_set_active   ( "menu_view_shownames"        ,   g_qeglobals.d_savedinfo.show_names                                        );
+	item = check_menu_item_set_active   ( "menu_view_showcoordinates"  ,   g_qeglobals.d_savedinfo.show_coordinates                                  );
+	item = check_menu_item_set_active   ( "menu_view_showoutline"      ,   g_qeglobals.d_savedinfo.show_outline                                      );
+	item = check_menu_item_set_active   ( "menu_selection_nooutline"   ,   g_qeglobals.d_savedinfo.iSelectedOutlinesStyle & OUTLINE_ZBUF             );
+	item = check_menu_item_set_active   ( "menu_view_showaxes"         ,   g_qeglobals.d_savedinfo.show_axis                                         );
+	item = check_menu_item_set_active   ( "menu_view_showpath"         , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_PATHS          ) ? FALSE : TRUE );
+	item = check_menu_item_set_active   ( "menu_filter_clusterportals" , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_CLUSTERPORTALS ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_lightgrid"      , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_LIGHTGRID      ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_world"          , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_WORLD          ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_entities"       , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_ENT            ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_areaportals"    , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_AREAPORTALS    ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_translucent"    , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_TRANSLUCENT    ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_liquids"        , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_LIQUIDS        ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_caulk"          , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_CAULK          ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_clips"          , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_CLIP           ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_botclips"       , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_BOTCLIP        ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_structural"     , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_STRUCTURAL     ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_paths"          , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_PATHS          ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_clusterportals" , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_CLUSTERPORTALS ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_lightgrid"      , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_LIGHTGRID      ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_lights"         , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_LIGHTS         ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_patches"        , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_CURVES         ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_details"        , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_DETAILS        ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_hintsskips"     , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_HINTSSKIPS     ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_models"         , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_MODELS         ) != 0           );
+	item = check_menu_item_set_active   ( "menu_filter_triggers"       , ( g_qeglobals.d_savedinfo.exclude & EXCLUDE_TRIGGERS       ) != 0           );
+	item = check_menu_item_set_active   ( "menu_toggle_lock"           ,   g_PrefsDlg.m_bTextureLock     ? TRUE : FALSE                              );
+	item = check_menu_item_set_active   ( "menu_toggle_rotatelock"     ,   g_PrefsDlg.m_bRotateLock      ? TRUE : FALSE                              );
+	item = check_menu_item_set_active   ( "menu_view_cubicclipping"    ,   g_PrefsDlg.m_bCubicClipping   ? TRUE : FALSE                              );
+	item = check_menu_item_set_active   ( "menu_view_opengllighting"   ,   g_PrefsDlg.m_bGLLighting      ? TRUE : FALSE                              );
+	item = check_menu_item_set_active   ( "menu_snaptogrid"            ,   g_PrefsDlg.m_bSnap            ? TRUE : FALSE                              );
+	item = toggle_tool_button_set_active( "ttb_view_cubicclipping"     ,   g_PrefsDlg.m_bCubicClipping   ? TRUE : FALSE                              );
+	item = toggle_tool_button_set_active( "ttb_dontselectmodel"        ,   g_PrefsDlg.m_bSelectModels    ? FALSE : TRUE                              );
+	item = toggle_tool_button_set_active( "ttb_dontselectcurve"        ,   g_PrefsDlg.m_bSelectCurves    ? FALSE : TRUE                              );
+	item = toggle_tool_button_set_active( "ttb_patch_showboundingbox"  ,   g_bPatchShowBounds            ? TRUE : FALSE                              );
+	item = toggle_tool_button_set_active( "ttb_patch_weld"             ,   g_bPatchWeld                  ? TRUE : FALSE                              );
+	item = toggle_tool_button_set_active( "ttb_patch_drilldown"        ,   g_bPatchDrillDown             ? TRUE : FALSE                              );
+	
+#undef getitem
+#undef check_menu_item_set_active
+#undef toggle_tool_button_set_active
 
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "ttb_patch_showboundingbox" ) );
-		gtk_toggle_tool_button_set_active( GTK_TOGGLE_TOOL_BUTTON( item ), ( g_bPatchShowBounds ) ? TRUE : FALSE );
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "ttb_patch_weld" ) );
-		gtk_toggle_tool_button_set_active( GTK_TOGGLE_TOOL_BUTTON( item ), ( g_bPatchWeld ) ? TRUE : FALSE );
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "ttb_patch_drilldown" ) );
-		gtk_toggle_tool_button_set_active( GTK_TOGGLE_TOOL_BUTTON( item ), ( g_bPatchDrillDown ) ? TRUE : FALSE );
-	}
-
-	int id, n = g_PrefsDlg.m_nTextureScale;
-	switch ( n )
-	{
-	case 10: id = ID_TEXTURES_TEXTUREWINDOWSCALE_10; break;
-	case 25: id = ID_TEXTURES_TEXTUREWINDOWSCALE_25; break;
-	case 50: id = ID_TEXTURES_TEXTUREWINDOWSCALE_50; break;
-	case 200: id = ID_TEXTURES_TEXTUREWINDOWSCALE_200; break;
-	default: id = ID_TEXTURES_TEXTUREWINDOWSCALE_100; break;
-	}
-	SetTextureScale( id );
-
-	// FIXME TTimo cleaned up .. the right place to do this in QE_LoadProject?
-/*
-   if (g_qeglobals.d_project_entity)
-   {
-    FillTextureMenu();      // redundant but i'll clean it up later.. yeah right..
-    FillBSPMenu();
-   }
- */
 	g_bIgnoreCommands--;
 }
 
@@ -5500,39 +5275,9 @@ void MainFrame::SetTextureScale( int id ){
 }
 
 void MainFrame::OnTexturewindowScaleup(){
-	switch ( g_PrefsDlg.m_nTextureScale ) {
-	// 200, all the way in, don't do anything
-	case 100:
-		SetTextureScale( ID_TEXTURES_TEXTUREWINDOWSCALE_200 );
-		break;
-	case 50:
-		SetTextureScale( ID_TEXTURES_TEXTUREWINDOWSCALE_100 );
-		break;
-	case 25:
-		SetTextureScale( ID_TEXTURES_TEXTUREWINDOWSCALE_50 );
-		break;
-	case 10:
-		SetTextureScale( ID_TEXTURES_TEXTUREWINDOWSCALE_25 );
-		break;
-	}
 }
 
 void MainFrame::OnTexturewindowScaledown(){
-	switch ( g_PrefsDlg.m_nTextureScale ) {
-	case 200:
-		SetTextureScale( ID_TEXTURES_TEXTUREWINDOWSCALE_100 );
-		break;
-	case 100:
-		SetTextureScale( ID_TEXTURES_TEXTUREWINDOWSCALE_50 );
-		break;
-	case 50:
-		SetTextureScale( ID_TEXTURES_TEXTUREWINDOWSCALE_25 );
-		break;
-	case 25:
-		SetTextureScale( ID_TEXTURES_TEXTUREWINDOWSCALE_10 );
-		break;
-		// 10, all the way out, don't do anything
-	}
 }
 
 void MainFrame::OnTexturesLoadlist(){
