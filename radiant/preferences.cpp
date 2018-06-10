@@ -237,14 +237,14 @@ void WindowPosition_Write( const window_position_t& m_value, CString& value ){
 }
 
 
-CXMLPropertyBag::CXMLPropertyBag() {
+CPropertyBag::CPropertyBag() {
 	mStrFilename = "";
 	mbEmpty = false;
 }
 
 // generic preference functions
 
-void CXMLPropertyBag::PushAssignment( const char *name, PrefTypes_t type, void *pV ){
+void CPropertyBag::PushAssignment( const char *name, PrefTypes_t type, void *pV ){
 	list<CPrefAssignment>::iterator iAssign;
 	for ( iAssign = mPrefAssignments.begin(); iAssign != mPrefAssignments.end(); iAssign++ )
 	{
@@ -261,34 +261,34 @@ void CXMLPropertyBag::PushAssignment( const char *name, PrefTypes_t type, void *
 }
 
 
-void CXMLPropertyBag::GetPref( const char *name, Str *pV, const char *V ){
+void CPropertyBag::GetPref( const char *name, Str *pV, const char *V ){
 	// means the pref exists, and that the value is ""
 	*pV = "";
 	PushAssignment( name, PREF_STR, pV ); // push the pref assignment if needed
 }
 
-void CXMLPropertyBag::GetPref( const char *name, int *pV, int V ){
+void CPropertyBag::GetPref( const char *name, int *pV, int V ){
 	char s[10];
 	sprintf( s, "%d", V );
 	*pV = V;
 	PushAssignment( name, PREF_INT, pV ); // push the pref assignment if needed
 }
 
-void CXMLPropertyBag::GetPref( const char *name, bool *pV, bool V ){
+void CPropertyBag::GetPref( const char *name, bool *pV, bool V ){
 	char s[10];
 	V ? strcpy( s, "true" ) : strcpy( s, "false" );
 	*pV = V;
 	PushAssignment( name, PREF_BOOL, pV ); // push the pref assignment
 }
 
-void CXMLPropertyBag::GetPref( const char *name, float *pV, float V ){
+void CPropertyBag::GetPref( const char *name, float *pV, float V ){
 	char s[10];
 	sprintf( s, "%f", V );
 	*pV = V;
 	PushAssignment( name, PREF_FLOAT, pV ); // push the pref assignment if needed
 }
 
-void CXMLPropertyBag::GetPref( const char *name, float* pV, float* V ){
+void CPropertyBag::GetPref( const char *name, float* pV, float* V ){
 	char s[128];
 	sprintf( s, "%f %f %f", V[0], V[1], V[2] );
 	pV[0] = V[0];
@@ -297,25 +297,25 @@ void CXMLPropertyBag::GetPref( const char *name, float* pV, float* V ){
 	PushAssignment( name, PREF_VEC3, pV ); // push the pref assignment if needed
 }
 
-void CXMLPropertyBag::GetPref( const char *name, window_position_t* pV, window_position_t V ){
+void CPropertyBag::GetPref( const char *name, window_position_t* pV, window_position_t V ){
 	CString str;
 	WindowPosition_Write( V, str );
 	*pV = V;
 	PushAssignment( name, PREF_WNDPOS, pV ); // push the pref assignment if needed
 }
 
-void CXMLPropertyBag::UpdatePrefTree(){
+void CPropertyBag::UpdatePrefTree(){
 
 }
 
-void CXMLPropertyBag::Clear(){
+void CPropertyBag::Clear(){
 
 }
 
-void CXMLPropertyBag::ReadXMLFile( const char* pFilename ){
+void CPropertyBag::ReadXMLFile( const char* pFilename ){
 }
 
-qboolean CXMLPropertyBag::WriteXMLFile( const char* pFilename ){
+qboolean CPropertyBag::WriteXMLFile( const char* pFilename ){
 	return true;
 }
 

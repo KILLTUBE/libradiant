@@ -67,7 +67,7 @@ virtual CPrefAssignment& operator =( const CPrefAssignment& ass );
 /*!
    generic preferences storage class, using xml files
  */
-class CXMLPropertyBag
+class CPropertyBag
 {
 private:
 
@@ -93,8 +93,8 @@ void PushAssignment( const char *name, PrefTypes_t type, void *pV );
 
 
 public:
-CXMLPropertyBag();
-virtual ~CXMLPropertyBag(){
+CPropertyBag();
+virtual ~CPropertyBag(){
 	if ( InUse() ) {
 		Clear();
 	}
@@ -281,7 +281,7 @@ GtkComboBoxText   *mGameCombo;      // combo box holds the selection of availabl
 /*!
    global prefs storage
  */
-CXMLPropertyBag mGlobalPrefs;
+CPropertyBag mGlobalPrefs;
 
 #ifdef _WIN32
 /*!
@@ -471,7 +471,7 @@ public:
 /*!
    local prefs file
  */
-CXMLPropertyBag mLocalPrefs;
+CPropertyBag mLocalPrefs;
 
 // will enable/disable stuff according to the situation
 void DoSensitivity();
