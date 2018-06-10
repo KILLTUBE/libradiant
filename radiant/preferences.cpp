@@ -537,19 +537,11 @@ PrefsDlg::PrefsDlg (){
 CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 	char *p, *prop;
 	mpDoc = pDoc;
-	// read the user-friendly game name
-	xmlNodePtr pNode = mpDoc->children;
 
-	while ( strcmp( (const char*)pNode->name, "game" ) && pNode != NULL ) pNode = pNode->next;
-	if ( !pNode ) {
-		///< \todo add the file name (this node and gametools should all be part of CGameDescription anyway)
-		Error( "Didn't find 'game' node in the game description file '%s'\n", pDoc->URL );
-	}
+
+	
 	// on win32, game tools path can now be specified relative to the exe's cwd
-	prop = (char*)xmlGetProp( pNode, (xmlChar*)TOOLS_ATTRIBUTE );
-	if ( prop == NULL ) {
-		Error( "Didn't find '" TOOLS_ATTRIBUTE "' node in the game description file '%s'\n", pDoc->URL );
-	}
+	prop = (char*)"C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/installs/Q3Pack/game";
 	{
 		char full[PATH_MAX];
 #ifdef _WIN32
@@ -557,7 +549,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 #else
 		strncpy( full, prop, PATH_MAX );
 #endif
-		//xmlFree( prop );
+
 		prop = NULL;
 		for ( p = full; *p != '\0'; p++ ) {
 			if ( *p == '\\' ) {
@@ -570,79 +562,17 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 		}
 	}
 
-	prop = (char*)xmlGetProp( pNode, (xmlChar*)"name" );
-	if ( prop == NULL ) {
-		Sys_FPrintf( SYS_WRN, "Warning, 'name' attribute not found in '%s'\n", pDoc->URL );
-		mGameName = pDoc->URL;
-	}
-	else
-	{
-		mGameName = prop;
-		//xmlFree( prop );
-	}
-
+	mGameName = "whatevergame";
 	mGameFile = GameFile;
-
-	prop = (char*)xmlGetProp( pNode, (xmlChar*)"idtech2" );
-	if ( prop == NULL ) {
-		// default
-		idTech2 = false;
-	} else {
-		idTech2 = true;
-		//xmlFree( prop );
-	}
-
-	// if this is set, the open maps dialoge will open the engine path not the
-	// home dir for map loading and saving
-	prop = (char*)xmlGetProp( pNode, (xmlChar*)"no_maps_in_home" );
-	if ( prop == NULL ) {
-		// default
-		noMapsInHome = false;
-	} else {
-		noMapsInHome = true;
-		//xmlFree( prop );
-	}
-
-	prop = (char*)xmlGetProp( pNode, (xmlChar*)"basegame" );
-	if ( prop == NULL ) {
-		// default
-		mBaseGame = "baseq3";
-	} else {
-		mBaseGame = prop;
-		//xmlFree( prop );
-	}
-
-	prop = (char*)xmlGetProp( pNode, (const xmlChar*)ENGINE_ATTRIBUTE );
-	if ( prop == NULL ) {
-#ifdef _WIN32
-		mEngine = "quake3.exe";
-#elif __linux__
-		mEngine = "quake3";
-#elif __APPLE__
-		mEngine = "Quake3.app";
-#endif
-	} else {
-		mEngine = prop;
-		//xmlFree( prop );
-	}
-
-	prop = (char*)xmlGetProp( pNode, (const xmlChar*)MP_ENGINE_ATTRIBUTE );
-	if ( prop == NULL ) {
-#ifdef _WIN32
-		mMultiplayerEngine = "quake3.exe";
-#elif __linux__
-		mMultiplayerEngine = "quake3";
-#elif __APPLE__
-		mMultiplayerEngine = "Quake3.app";
-#endif
-	} else {
-		mMultiplayerEngine = prop;
-		//xmlFree( prop );
-	}
+	idTech2 = false;
+	noMapsInHome = false;
+	mBaseGame = "baseq3";
+	mEngine = "whatever.exe";
+	mMultiplayerEngine = "whatever_mp.exe";
 
 	{
 		// on win32, engine path can now be specified relative to the exe's cwd
-		prop = (char*)xmlGetProp( pNode, (const xmlChar *)ENGINEPATH_ATTRIBUTE );
+		prop = (char*)"C:\\OpenSciTech\\build\\Debug";
 		if ( prop != NULL ) {
 			char full[PATH_MAX];
 		#ifdef _WIN32
@@ -650,7 +580,7 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 		#else
 			strncpy( full, prop, PATH_MAX );
 		#endif
-			//xmlFree( prop );
+			
 			prop = NULL;
 			// process seperators
 			for ( p = full; *p != '\0'; p++ ) {
@@ -678,67 +608,14 @@ CGameDescription::CGameDescription( xmlDocPtr pDoc, const Str &GameFile ){
 		}
 	}
 
-	// Resolve the executables path for games which provide their binaries
-	// or map compiling tools in external locations.
-	prop = (char*)xmlGetProp( pNode, (const xmlChar *)EXECUTABLES_ATTRIBUTE );
-	if ( prop != NULL ) {
-		mExecutablesPath = prop;
-		//xmlFree( prop );
-		prop = NULL;
-	} else {
-		mExecutablesPath = mEnginePath.GetBuffer();
-	}
-
-	// Resolve the per-user directory.
-	prop = (char*)xmlGetProp( pNode, (const xmlChar *)PREFIX_ATTRIBUTE );
-	if ( prop != NULL ) {
-		mUserPathPrefix = prop;
-		//xmlFree( prop );
-		prop = NULL;
-	}
-
-	mShaderPath = xmlGetProp( pNode, (const xmlChar *)"shaderpath" );
-	if ( !mShaderPath.GetLength() ) {
-		mShaderPath = "scripts/";
-		mShaderlist = "scripts/shaderlist.txt";
-	} else {
-		AddSlash( mShaderPath );
-		mShaderlist = mShaderPath;
-		mShaderlist += "shaderlist.txt";
-	}
-	xmlChar* default_scale = xmlGetProp( pNode, (const xmlChar *)"default_scale" );
-	if ( default_scale ) {
-		mTextureDefaultScale = atof( (const char *)default_scale );
-		//xmlFree( default_scale );
-                default_scale = NULL;
-	}
-	else{
-		mTextureDefaultScale = 0.5f;
-	}
-	xmlChar* eclass_singleload = xmlGetProp( pNode, (const xmlChar*)"eclass_singleload" );
-	if ( eclass_singleload ) {
-		mEClassSingleLoad = true;
-		//xmlFree( eclass_singleload );
-                eclass_singleload = NULL;
-	} else {
-		mEClassSingleLoad = false;
-	}
-	xmlChar* no_patch = xmlGetProp( pNode, (const xmlChar *)"no_patch" );
-	if ( no_patch ) {
-		mNoPatch = true;
-		//xmlFree( no_patch );
-                no_patch = NULL;
-	} else {
-		mNoPatch = false;
-	}
-	xmlChar* caulk_shader = xmlGetProp( pNode, (const xmlChar *)"caulk_shader" );
-	if ( caulk_shader ) {
-		mCaulkShader = caulk_shader;
-		//xmlFree( caulk_shader );
-                caulk_shader = NULL;
-	} else {
-		mCaulkShader = "textures/common/caulk";
-	}
+	mExecutablesPath = mEnginePath.GetBuffer();
+	AddSlash( mShaderPath );
+	mShaderlist = mShaderPath;
+	mShaderlist += "shaderlist.txt";
+	mTextureDefaultScale = 0.5f;
+	mEClassSingleLoad = false;
+	mNoPatch = false;
+	mCaulkShader = "textures/common/caulk";
 }
 
 void CGameDescription::Dump(){
