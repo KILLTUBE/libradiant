@@ -921,31 +921,7 @@ void CGameDialog::DoGameInstall() {
 }
 
 void CGameDialog::DoGameDialog() {
-	// allow looping the game selection dialog with calls to the game configure dialog in between
-	// NOTE: This is *very early* in the process lifetime, we can't call Error() for instance
-	while ( m_bDoGameInstall ) {
-
-		m_bDoGameInstall = false;
-
-		if ( DoModal() == IDCANCEL ) {
-			gtk_MessageBox( NULL, _( "Run again once you have decided which game you are interested in :-)" ), _( "Message" ), MB_OK );
-			exit( 0 );
-			return;
-		}
-
-		if ( m_bDoGameInstall ) {
-			DoGameInstall();
-			ScanForGames();
-			// and we will loop to do another DoModal dialog
-		}
-	}
-
-	// unhook so we can use in other places
-	// we manually incref'ed it when creating, it won't be freed (destructor)
-	gtk_container_remove( GTK_CONTAINER( mTopBox ), GetGlobalFrame() );
-
-	// we save the prefs file
-	SavePrefs();
+	return;
 }
 
 GtkWidget* CGameDialog::GetGlobalFrame(){
@@ -1207,6 +1183,7 @@ void CGameDialog::Init(){
 		}
 	}
 	LoadPrefs();
+	m_bAutoLoadGame = true;
 	if ( m_bAutoLoadGame ) {
 		// search by .game name
 		list<CGameDescription *>::iterator iGame;
@@ -1266,34 +1243,6 @@ CGameDialog::~CGameDialog(){
 }
 
 void CGameDialog::AddPacksURL( Str &URL ){
-	// add the URLs for the list of game packs installed
-	// FIXME: this is kinda hardcoded for now..
-	list<CGameDescription *>::iterator iGame;
-	for ( iGame = mGames.begin(); iGame != mGames.end(); iGame++ )
-	{
-		if ( ( *iGame )->mGameFile == "q3.game" ) {
-			URL += "&Games_dlup%5B%5D=1";
-		}
-		else if ( ( *iGame )->mGameFile == "wolf.game" ) {
-			URL += "&Games_dlup%5B%5D=2";
-		}
-		// FIXME: double entry
-		else if ( ( *iGame )->mGameFile == "wolf.game" ) {
-			URL += "&Games_dlup%5B%5D=3";
-		}
-		else if ( ( *iGame )->mGameFile == "jk2.game" ) {
-			URL += "&Games_dlup%5B%5D=4";
-		}
-		else if ( ( *iGame )->mGameFile == "stvef.game" ) {
-			URL += "&Games_dlup%5B%5D=5";
-		}
-		else if ( ( *iGame )->mGameFile == "sof2.game" ) {
-			URL += "&Games_dlup%5B%5D=6";
-		}
-		else if ( ( *iGame )->mGameFile == "ja.game" ) {
-			URL += "&Games_dlup%5B%5D=7";
-		}
-	}
 }
 
 #ifdef _WIN32
@@ -1303,49 +1252,7 @@ void CGameDialog::AddPacksURL( Str &URL ){
 bool CGameDialog::m_bNetRun;
 
 void CGameDialog::UpdateNetrun( bool retrieve ){
-	FILE *f_netrun;
-	CString strNetrun;
-	strNetrun = g_strAppPath; strNetrun += NETRUN_FILENAME;
-	if ( !retrieve ) {
-		// now check if we are running from a network installation
-		// use a dummy file as the flag
-		f_netrun = fopen( strNetrun.GetBuffer(), "r" );
-		if ( f_netrun ) {
-			fclose( f_netrun );
-			m_bNetRun = true;
-		}
-		else{
-			m_bNetRun = false;
-		}
-	}
-	else
-	{
-		if ( m_bNetRun ) {
-			f_netrun = fopen( strNetrun.GetBuffer(), "w" );
-			if ( !f_netrun ) {
-				Sys_FPrintf( SYS_ERR, "ERROR: Failed to create netrun file '%s'\n", strNetrun.GetBuffer() );
-				m_bNetRun = false;
-			}
-			else
-			{
-				fclose( f_netrun );
-				Sys_Printf( "Created/Checked '%s'\n", strNetrun.GetBuffer() );
-			}
-		}
-		else
-		{
-			if ( remove( strNetrun.GetBuffer() ) == -1 ) {
-				if ( errno != ENOENT ) {
-					Sys_FPrintf( SYS_ERR, "Failed to remove netrun file '%s'\n", strNetrun.GetBuffer() );
-				}
-				m_bNetRun = true;
-			}
-			else
-			{
-				Sys_Printf( "Netrun mode is disabled\n" );
-			}
-		}
-	}
+
 }
 
 bool CGameDialog::GetNetrun(){
@@ -2912,7 +2819,7 @@ void PrefsDlg::LoadPrefs(){
 	mLocalPrefs.GetPref( CAMINVERSEMOUSE_KEY,    &m_bCamInverseMouse,    FALSE );
 	mLocalPrefs.GetPref( CAMDISCRETE_KEY,        &m_bCamDiscrete,        TRUE );
 	mLocalPrefs.GetPref( LIGHTDRAW_KEY,          &m_bNewLightDraw,       TRUE );
-	mLocalPrefs.GetPref( CUBICCLIP_KEY,          &m_bCubicClipping,      TRUE );
+	mLocalPrefs.GetPref( CUBICCLIP_KEY,          &m_bCubicClipping,      FALSE );
 	mLocalPrefs.GetPref( CUBICSCALE_KEY,         &m_nCubicScale,         13 );
 	mLocalPrefs.GetPref( ALTEDGE_KEY,            &m_bALTEdge,            FALSE );
 	mLocalPrefs.GetPref( FACECOLORS_KEY,         &m_bFaceColors,         FALSE );
@@ -3290,307 +3197,30 @@ void CGameInstall::OnBtnBrowseExecutables( GtkWidget *widget, gpointer data ) {
 }
 
 void CGameInstall::OnGameSelectChanged( GtkWidget *widget, gpointer data ) {
-	Sys_Printf( "OnGameSelectChanged\n" );
 
-	CGameInstall* i = static_cast<CGameInstall*>( data );
-	i->UpdateData( TRUE );
-	gchar * str = gtk_combo_box_text_get_active_text( GTK_COMBO_BOX_TEXT( widget ) );
-	i->m_strName = str;
-	g_free( str );
-	i->UpdateData( FALSE );
-
-	GtkWidget *label = GTK_WIDGET( g_object_get_data( G_OBJECT( i->m_pWidget ), "executable_label" ) );
-	GtkWidget *entry = GTK_WIDGET( g_object_get_data( G_OBJECT( i->m_pWidget ), "executable_entry" ) );
-	GtkWidget *button = GTK_WIDGET( g_object_get_data( G_OBJECT( i->m_pWidget ), "executable_button" ) );
-
-	int game_id = i->m_availGames[ i->m_nComboSelect ];
-	if ( game_id == GAME_Q2 || game_id == GAME_QUETOO ) {
-		gtk_widget_show( label );
-		gtk_widget_show( entry );
-		gtk_widget_show( button );
-	} else {
-		gtk_widget_hide( label );
-		gtk_widget_hide( entry );
-		gtk_widget_hide( button );
-	}
 }
 
 void CGameInstall::BuildDialog() {
-	GtkWidget *dlg, *vbox1, *frame, *table, *button, *text, *game_select_combo, *entry, *hbox;
-
-	dlg = m_pWidget;
-	gtk_window_set_title( GTK_WINDOW( dlg ), _( "Configure games" ) );
-
-	vbox1 = gtk_vbox_new( FALSE, 5 );
-	gtk_container_set_border_width( GTK_CONTAINER( vbox1 ), 5 );
-	gtk_container_add( GTK_CONTAINER( dlg ), vbox1 );
-	gtk_widget_show( vbox1 );
-
-	frame = gtk_frame_new( _( "Configure a game" ) );
-	gtk_box_pack_start( GTK_BOX( vbox1 ), frame, TRUE, TRUE, 0 );
-	gtk_widget_show( frame );
-
-	table = gtk_table_new( 5, 2, FALSE );
-	gtk_table_set_row_spacings( GTK_TABLE( table ), 5 );
-	gtk_table_set_col_spacings( GTK_TABLE( table ), 5 );
-	gtk_container_set_border_width( GTK_CONTAINER( table ), 5 );
-	gtk_container_add( GTK_CONTAINER( frame ), table );
-	gtk_widget_show( table );
-
-	game_select_combo = gtk_combo_box_text_new();
-	gtk_table_attach( GTK_TABLE( table ), game_select_combo, 1, 2, 0, 1,
-					  (GtkAttachOptions) ( GTK_FILL ),
-					  (GtkAttachOptions) ( 0 ), 0, 0 );
-	gtk_widget_show( game_select_combo );
-
-	int iGame = 0;
-	while ( m_availGames[ iGame ] != GAME_NONE ) {
-		switch ( m_availGames[ iGame ] ) {
-		case GAME_Q1:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Quake" ) );
-			break;
-		case GAME_Q2:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Quake II" ) );
-			break;
-		case GAME_Q3:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Quake III Arena and mods" ) );
-			break;
-		case GAME_URT:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Urban Terror (standalone)" ) );
-			break;
-		case GAME_UFOAI:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "UFO: Alien Invasion" ) );
-			break;
-		case GAME_QUETOO:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Quetoo" ) );
-			break;
-		case GAME_WARSOW:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Warsow" ) );
-			break;
-		case GAME_NEXUIZ:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Nexuiz" ) );
-			break;
-		case GAME_TREMULOUS:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Tremulous" ) );
-			break;
-		case GAME_JA:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Jedi Academy and mods" ) );
-			break;
-		case GAME_REACTION:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Reaction Quake 3" ) );
-			break;
-		case GAME_ET:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Wolfenstein: Enemy Territory" ) );
-			break;
-		case GAME_QL:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Quake Live" ) );
-			break;
-		case GAME_STVEF:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Star Trek - Voyager: Elite Force" ) );
-			break;
-		case GAME_WOLF:
-			gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Return To Castle Wolfenstein" ) );
-			break;
-		}
-		iGame++;
-	}
-	AddDialogData( game_select_combo, &m_nComboSelect, DLG_COMBO_BOX_INT );
-	g_signal_connect( G_OBJECT( game_select_combo ), "changed", G_CALLBACK( OnGameSelectChanged ), this );
-
-	text = gtk_label_new( _( "Name:" ) );
-	gtk_misc_set_alignment( GTK_MISC( text ), 0.0, 0.5 );
-	gtk_table_attach( GTK_TABLE( table ), text, 0, 1, 1, 2,
-					  (GtkAttachOptions) ( GTK_FILL ),
-					  (GtkAttachOptions) ( 0 ), 0, 0 );
-	gtk_widget_show( text );
-
-	entry = gtk_entry_new();
-	gtk_table_attach( GTK_TABLE( table ), entry, 1, 2, 1, 2,
-					  (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
-					  (GtkAttachOptions) ( 0 ), 0, 0 );
-	gtk_widget_show( entry );
-	AddDialogData( entry, &m_strName, DLG_ENTRY_TEXT );
-
-	text = gtk_label_new( _( "Game directory:" ) );
-	gtk_misc_set_alignment( GTK_MISC( text ), 0.0, 0.5 );
-	gtk_table_attach( GTK_TABLE( table ), text, 0, 1, 2, 3,
-					  (GtkAttachOptions) ( GTK_FILL ),
-					  (GtkAttachOptions) ( 0 ), 0, 0 );
-	gtk_widget_show( text );
-
-	hbox = gtk_hbox_new( FALSE, 5 );
-	gtk_table_attach( GTK_TABLE( table ), hbox, 1, 2, 2, 3,
-					  (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
-					  (GtkAttachOptions) ( 0 ), 0, 0 );
-	gtk_widget_show( hbox );
-
-	entry = gtk_entry_new();
-	gtk_box_pack_start( GTK_BOX( hbox ), entry, TRUE, TRUE, 0 );
-	gtk_widget_show( entry );
-	AddDialogData( entry, &m_strEngine, DLG_ENTRY_TEXT );
-
-	button = gtk_button_new_with_label( _( "..." ) );
-	g_signal_connect( G_OBJECT( button ), "clicked", G_CALLBACK( OnBtnBrowseEngine ), this );
-	gtk_box_pack_start( GTK_BOX( hbox ), button, FALSE, FALSE, 0 );
-	gtk_widget_show( button );
-
-	text = gtk_label_new( _( "Engine binaries directory:" ) );
-	gtk_misc_set_alignment( GTK_MISC( text ), 0.0, 0.5 );
-	gtk_table_attach( GTK_TABLE( table ), text, 0, 1, 3, 4,
-					  (GtkAttachOptions) ( GTK_FILL ),
-					  (GtkAttachOptions) ( 0 ), 0, 0 );
-	gtk_widget_show( text );
-	g_object_set_data( G_OBJECT( dlg ), "executable_label", text );
-
-	hbox = gtk_hbox_new( FALSE, 5 );
-	gtk_table_attach( GTK_TABLE( table ), hbox, 1, 2, 3, 4,
-					  (GtkAttachOptions) ( GTK_EXPAND | GTK_FILL ),
-					  (GtkAttachOptions) ( 0 ), 0, 0 );
-	gtk_widget_show( hbox );
-
-	entry = gtk_entry_new();
-	gtk_box_pack_start( GTK_BOX( hbox ), entry, TRUE, TRUE, 0 );
-	gtk_widget_show( entry );
-	AddDialogData( entry, &m_strExecutables, DLG_ENTRY_TEXT );
-	g_object_set_data( G_OBJECT( dlg ), "executable_entry", entry );
-
-	button = gtk_button_new_with_label( _( "..." ) );
-	g_signal_connect( G_OBJECT( button ), "clicked", G_CALLBACK( OnBtnBrowseExecutables ), this );
-	gtk_box_pack_start( GTK_BOX( hbox ), button, FALSE, FALSE, 0 );
-	gtk_widget_show( button );
-	g_object_set_data( G_OBJECT( dlg ), "executable_button", button );
-
-	hbox = gtk_hbox_new( FALSE, 0 );
-	gtk_box_pack_start( GTK_BOX( vbox1 ), hbox, FALSE, FALSE, 0 );
-	gtk_widget_show( hbox );
-
-	button = gtk_button_new_with_label( _( "OK" ) );
-	gtk_box_pack_start( GTK_BOX( hbox ), button, TRUE, TRUE, 0 );
-	gtk_widget_show( button );
-	AddModalButton( button, IDOK );
-
-	button = gtk_button_new_with_label( _( "Cancel" ) );
-	gtk_box_pack_start( GTK_BOX( hbox ), button, TRUE, TRUE, 0 );
-	gtk_widget_show( button );
-	AddModalButton( button, IDCANCEL );
-
-	// triggers the callback - sets the game name, shows/hide extra settings depending on project
-	gtk_combo_box_set_active( GTK_COMBO_BOX( game_select_combo ), 0 );
+	// GAME_Q1: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Quake" ) );
+	// GAME_Q2: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Quake II" ) );
+	// GAME_Q3: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Quake III Arena and mods" ) );
+	// GAME_URT: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Urban Terror (standalone)" ) );
+	// GAME_UFOAI: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "UFO: Alien Invasion" ) );
+	// GAME_QUETOO: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Quetoo" ) );
+	// GAME_WARSOW: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Warsow" ) );
+	// GAME_NEXUIZ: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Nexuiz" ) );
+	// GAME_TREMULOUS: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Tremulous" ) );
+	// GAME_JA: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Jedi Academy and mods" ) );
+	// GAME_REACTION: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Reaction Quake 3" ) );
+	// GAME_ET: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Wolfenstein: Enemy Territory" ) );
+	// GAME_QL: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Quake Live" ) );
+	// GAME_STVEF: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Star Trek - Voyager: Elite Force" ) );
+	// GAME_WOLF: gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( game_select_combo ), _( "Return To Castle Wolfenstein" ) );
 }
 
 void CGameInstall::Run() {
-	ScanGames();
-	if ( m_availGames[0] == GAME_NONE ) {
-		return;
-	}
-	if ( DoModal() == IDCANCEL ) {
-		Sys_Printf( "game dialog cancelled\n" );
-		return;
-	}
-	Sys_Printf( "combo: %d name: %s engine: %s mod: %s\n", m_nComboSelect, m_strName.GetBuffer(), m_strEngine.GetBuffer(), m_strMod.GetBuffer() );
 
-	// Resolve the game pack and .game file
-	Str gamePack, gameFilePath = g_strAppPath.GetBuffer();
-	gameFilePath += "games/";
-	if ( CheckFile( gameFilePath ) != PATH_DIRECTORY ) {
-		radCreateDirectory( gameFilePath );
-	}
-
-	switch ( m_availGames[ m_nComboSelect ] ) {
-	case GAME_Q1:
-		gamePack = Q1_PACK;
-		gameFilePath += Q1_GAME;
-		break;
-	case GAME_Q2:
-		gamePack = Q2_PACK;
-		gameFilePath += Q2_GAME;
-		break;
-	case GAME_Q3:
-		gamePack = Q3_PACK;
-		gameFilePath += Q3_GAME;
-		break;
-	case GAME_URT:
-		gamePack = URT_PACK;
-		gameFilePath += URT_GAME;
-		break;
-	case GAME_UFOAI:
-		gamePack = UFOAI_PACK;
-		gameFilePath += UFOAI_GAME;
-		break;
-	case GAME_QUETOO:
-		gamePack = QUETOO_PACK;
-		gameFilePath += QUETOO_GAME;
-		break;
-	case GAME_WARSOW:
-		gameFilePath += WARSOW_GAME;
-		gamePack = WARSOW_PACK;
-		break;
-	case GAME_NEXUIZ:
-		gamePack = NEXUIZ_PACK;
-		gameFilePath += NEXUIZ_GAME;
-		break;
-	case GAME_TREMULOUS:
-		gamePack = TREMULOUS_PACK;
-		gameFilePath += TREMULOUS_GAME;
-		break;
-	case GAME_JA:
-		gamePack = JA_PACK;
-		gameFilePath += JA_GAME;
-		break;
-	case GAME_REACTION:
-		gamePack = REACTION_PACK;
-		gameFilePath += REACTION_GAME;
-		break;
-	case GAME_ET:
-		gamePack = ET_PACK;
-		gameFilePath += ET_GAME;
-		break;
-	case GAME_QL:
-		gamePack = QL_PACK;
-		gameFilePath += QL_GAME;
-		break;
-	case GAME_STVEF:
-		gamePack = STVEF_PACK;
-		gameFilePath += STVEF_GAME;
-		break;
-	case GAME_WOLF:
-		gamePack = WOLF_PACK;
-		gameFilePath += WOLF_GAME;
-		break;
-	default:
-		Error( "Invalid game selected: %d", m_availGames[ m_nComboSelect ] );
-	}
-
-	Str gameInstallPath = g_strAppPath.GetBuffer();
-	gameInstallPath += "installs/";
-	gameInstallPath += gamePack;
-	gameInstallPath += "/install/";
-	Sys_Printf( "Installing game pack from: %s\n", gameInstallPath.GetBuffer() );
-
-	// First copy the install directory into the game engine. We do this
-	// for all games, even if they don't provide an "install" folder.
-	radCopyTree( gameInstallPath.GetBuffer(), m_strEngine.GetBuffer() );
-
-	Sys_Printf( "Writing game file: %s\n", gameFilePath.GetBuffer() );
-
-	FILE * fg = fopen( gameFilePath.GetBuffer(), "w" );
-	if ( fg == NULL ) {
-		Error( "Failed to open %s for writing\n", gameFilePath.GetBuffer() );
-	}
-
-	// Running Windows, crashing here?
-	// Make sure that libintl.h is not redefining fprintf to some broken BS!
-	// - TTimo
-	fprintf( fg, "<?xml version=\"1.0\" encoding=\"iso-8859-1\" standalone=\"yes\"?>\n<game\n" );
-	fprintf( fg, "  name=\"%s\"\n", m_strName.GetBuffer() );
-	fprintf( fg, "  " ENGINEPATH_ATTRIBUTE "=\"%s\"\n", m_strEngine.GetBuffer() );
-	fprintf( fg, "  " TOOLS_ATTRIBUTE "=\"%sinstalls/%s/game\"\n", g_strAppPath.GetBuffer(), gamePack.GetBuffer() );
-
-	if ( m_strExecutables.GetLength() > 0 ) {
-		fprintf( fg, "  " EXECUTABLES_ATTRIBUTE "=\"%s\"\n", m_strExecutables.GetBuffer() );
-	}
-
-	switch ( m_availGames[ m_nComboSelect ] ) {
+#if 0
 	case GAME_Q1: {
 		fprintf( fg, "  idtech2=\"true\"\n" );
 		fprintf( fg, "  prefix=\".quake1\"\n" );
@@ -3744,9 +3374,7 @@ void CGameInstall::Run() {
 		}
 		break;
 	}
-	}
-	fprintf( fg, "/>\n" );
-	fclose( fg );
+#endif
 }
 
 /*

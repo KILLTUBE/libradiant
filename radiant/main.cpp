@@ -556,64 +556,9 @@ int mainRadiant( int argc, char* argv[] ) {
 
 	CGameDialog::UpdateNetrun( false ); // read the netrun configuration
 
-	if ( CGameDialog::GetNetrun() ) {
-		// we have to find a per-user g_strTempPath
-		// this behaves the same as on Linux
-		g_strTempPath = getenv( "USERPROFILE" );
-		if ( !g_strTempPath.GetLength() ) {
-			CString msg;
-			msg = _( "Radiant is configured to run from a network installation.\n" );
-			msg += _( "I couldn't find the environement variable USERPROFILE\n" );
-			msg += _( "I'm going to use C:\\RadiantSettings. Please set USERPROFILE\n" );
-			gtk_MessageBox( NULL, msg, _( "Radiant - Network mode" ), MB_OK );
-			g_strTempPath = "C:\\";
-		}
-		g_strTempPath += "\\RadiantSettings\\";
-		Q_mkdir( g_strTempPath.GetBuffer(), 0755 );
-		g_strTempPath += RADIANT_VERSION;
-		g_strTempPath += "\\";
-		Q_mkdir( g_strTempPath.GetBuffer(), 0755 );
-	}
-	else
-	{
+
 		// use the core path as temp (to save commandlist.txt, and do the .pid files)
 		g_strTempPath = g_strAppPath;
-	}
-
-#endif
-
-#if defined ( __linux__ ) || defined ( __APPLE__ )
-	Str home;
-	home = g_get_home_dir();
-	AddSlash( home );
-	home += ".radiant/";
-	Q_mkdir( home.GetBuffer(), 0775 );
-	home += RADIANT_VERSION;
-	Q_mkdir( home.GetBuffer(), 0775 );
-	g_strTempPath = home.GetBuffer();
-	AddSlash( g_strTempPath );
-
-	loki_initpaths( argv[0] );
-
-	// NOTE: we build g_strAppPath with a '/' (or '\' on WIN32)
-	// it's a general convention in Radiant to have the slash at the end of directories
-	char real[PATH_MAX];
-	realpath( loki_getdatapath(), real );
-	if ( real[strlen( real ) - 1] != '/' ) {
-		strcat( real, "/" );
-	}
-
-	g_strAppPath = real;
-
-	// radiant is installed in the parent dir of "tools/"
-	// NOTE: this is not very easy for debugging
-	// maybe add options to lookup in several places?
-	// (for now I had to create symlinks)
-	g_strBitmapsPath = g_strAppPath;
-	g_strBitmapsPath += "bitmaps/";
-
-	// we will set this right after the game selection is done
-	g_strGameToolsPath = g_strAppPath;
 
 #endif
 
@@ -627,42 +572,9 @@ int mainRadiant( int argc, char* argv[] ) {
 	   and to turn on console logging for lookup of the problem
 	   this is the first part of the two step .pid system
 	 */
-	g_pidFile = g_strTempPath.GetBuffer();
-	g_pidFile += "radiant.pid";
 
-	FILE *pid;
-	pid = fopen( g_pidFile.GetBuffer(), "r" );
-	if ( pid != NULL ) {
-		fclose( pid );
-		CString msg;
+	{
 
-		if ( remove( g_pidFile.GetBuffer() ) == -1 ) {
-			msg = _( "WARNING: Could not delete " ); msg += g_pidFile;
-			gtk_MessageBox( NULL, msg, _( "Radiant" ), MB_OK | MB_ICONERROR );
-		}
-
-		// in debug, never prompt to clean registry, turn console logging auto after a failed start
-#if !defined( _DEBUG )
-		msg = _( "Found the file " );
-		msg += g_pidFile;
-		msg += _( ".\nThis indicates that Radiant failed during the game selection startup last time it was run.\n"
-			   "Choose YES to clean Radiant's registry settings and shut down Radiant.\n"
-			   "WARNING: the global prefs will be lost if you choose YES." );
-
-		if ( gtk_MessageBox( NULL, msg, _( "Radiant - Reset global startup?" ), MB_YESNO | MB_ICONQUESTION ) == IDYES ) {
-			// remove global prefs and shutdown
-			g_PrefsDlg.mGamesDialog.Reset();
-			// remove the prefs file (like a full reset of the registry)
-			//remove (g_PrefsDlg.m_inipath->str);
-			gtk_MessageBox( NULL, _( "Removed global settings, choose OK to close Radiant." ), _( "Radiant" ), MB_OK );
-			_exit( -1 );
-		}
-		msg = _( "Logging console output to " );
-		msg += g_strTempPath;
-		msg += _( "radiant.log\nRefer to the log if Radiant fails to start again." );
-
-		gtk_MessageBox( NULL, msg, _( "Radiant - Console Log" ), MB_OK );
-#endif
 
 		// set without saving, the class is not in a coherent state yet
 		// just do the value change and call to start logging, CGamesDialog will pickup when relevant
@@ -671,192 +583,11 @@ int mainRadiant( int argc, char* argv[] ) {
 		Sys_LogFile();
 	}
 
-	// create a primary .pid for global init run
-	pid = fopen( g_pidFile.GetBuffer(), "w" );
-	if ( pid ) {
-		fclose( pid );
-	}
-
-	// a safe check to avoid people running broken installations
-	// (otherwise, they run it, crash it, and blame us for not forcing them hard enough to pay attention while installing)
-	// make something idiot proof and someone will make better idiots, this may be overkill
-	// let's leave it disabled in debug mode in any case
-#ifndef _DEBUG
-	//#define CHECK_VERSION
-#endif
-#ifdef CHECK_VERSION
-	// locate and open RADIANT_MAJOR and RADIANT_MINOR
-	qboolean bVerIsGood = true;
-	Str ver_file_name;
-	ver_file_name = g_strAppPath;
-	ver_file_name += "RADIANT_MAJOR";
-	FILE *ver_file = fopen( ver_file_name.GetBuffer(), "r" );
-	if ( ver_file ) {
-		char buf[10];
-		int chomp;
-		fread( buf, 1, 10, ver_file );
-		// chomp it (the hard way)
-		chomp = 0;
-		while ( buf[chomp] >= '0' && buf[chomp] <= '9' )
-			chomp++;
-		buf[chomp] = '\0';
-		if ( strcmp( buf, RADIANT_MAJOR_VERSION ) ) {
-			Sys_FPrintf( SYS_ERR, "ERROR: file RADIANT_MAJOR doesn't match ('%s')\n", buf );
-			bVerIsGood = false;
-		}
-	}
-	else
-	{
-		Sys_FPrintf( SYS_ERR, "ERROR: can't find RADIANT_MAJOR in '%s'\n", ver_file_name.GetBuffer() );
-		bVerIsGood = false;
-	}
-	ver_file_name = g_strAppPath;
-	ver_file_name += "RADIANT_MINOR";
-	ver_file = fopen( ver_file_name.GetBuffer(), "r" );
-	if ( ver_file ) {
-		char buf[10];
-		int chomp;
-		fread( buf, 1, 10, ver_file );
-		// chomp it (the hard way)
-		chomp = 0;
-		while ( buf[chomp] >= '0' && buf[chomp] <= '9' )
-			chomp++;
-		buf[chomp] = '\0';
-		if ( strcmp( buf, RADIANT_MINOR_VERSION ) ) {
-			Sys_FPrintf( SYS_ERR, "ERROR: file RADIANT_MINOR doesn't match ('%s')\n", buf );
-			bVerIsGood = false;
-		}
-	}
-	else
-	{
-		Sys_FPrintf( SYS_ERR, "ERROR: can't find RADIANT_MINOR in '%s'\n", ver_file_name.GetBuffer() );
-		bVerIsGood = false;
-	}
-	if ( !bVerIsGood ) {
-		CString msg;
-		msg = "This editor binary (" RADIANT_VERSION ") doesn't match what the latest setup has configured in this directory\n";
-		msg += "Make sure you run the right/latest editor binary you installed\n";
-		msg += g_strAppPath; msg += "\n";
-		msg += "Check http://www.qeradiant.com/faq/index.cgi?file=219 for more information";
-		gtk_MessageBox( NULL, msg.GetBuffer(), _( "Radiant" ), MB_OK, "http://www.qeradiant.com/faq/index.cgi?file=219" );
-		_exit( -1 );
-	}
-#endif
-
 	g_qeglobals.disable_ini = false;
 	g_PrefsDlg.Init();
-
-	// close the primary
-	if ( remove( g_pidFile.GetBuffer() ) == -1 ) {
-		CString msg;
-		msg = _( "WARNING: Could not delete " ); msg += g_pidGameFile;
-		gtk_MessageBox( NULL, msg, _( "Radiant" ), MB_OK | MB_ICONERROR );
-	}
-
-	/*!
-	   now the secondary game dependant .pid file
-	 */
-	g_pidGameFile = g_PrefsDlg.m_rc_path->str;
-	g_pidGameFile += "radiant-game.pid";
-
-	pid = fopen( g_pidGameFile.GetBuffer(), "r" );
-	if ( pid != NULL ) {
-		fclose( pid );
-		CString msg;
-		if ( remove( g_pidGameFile.GetBuffer() ) == -1 ) {
-			msg = _( "WARNING: Could not delete " ); msg += g_pidGameFile;
-			gtk_MessageBox( NULL, msg, _( "Radiant" ), MB_OK | MB_ICONERROR );
-		}
-
-		msg = _( "Found the file " );
-		msg += g_pidGameFile;
-		msg += _( ".\nThis indicates that Radiant failed to load the last time it was run.\n"
-			   "Choose YES to clean Radiant's registry settings and shut down Radiant.\n"
-			   "WARNING: preferences will be lost if you choose YES." );
-
-		// in debug, never prompt to clean registry, turn console logging auto after a failed start
-#if !defined( _DEBUG )
-		//bleh
-		if ( gtk_MessageBox( NULL, msg, _( "Radiant - Clean Registry?" ), MB_YESNO | MB_ICONQUESTION ) == IDYES ) {
-			// remove the game prefs files
-			remove( g_PrefsDlg.m_inipath->str );
-			char buf[PATH_MAX];
-			sprintf( buf, "%sSavedInfo.bin", g_PrefsDlg.m_rc_path->str );
-			remove( buf );
-			// remove the global pref too
-			g_PrefsDlg.mGamesDialog.Reset();
-			gtk_MessageBox( NULL, _( "Cleaned registry settings, choose OK to close Radiant.\nThe next time Radiant runs it will use default settings." ), _( "Radiant" ), MB_OK );
-			_exit( -1 );
-		}
-		msg = _( "Logging console output to " );
-		msg += g_strTempPath;
-		msg += _( "radiant.log\nRefer to the log if Radiant fails to start again." );
-
-		gtk_MessageBox( NULL, msg, _( "Radiant - Console Log" ), MB_OK );
-#endif
-
-		// force console logging on! (will go in prefs too)
-		g_PrefsDlg.mGamesDialog.m_bLogConsole = true;
-		g_PrefsDlg.mGamesDialog.SavePrefs();
-		Sys_LogFile();
-
-		g_PrefsDlg.LoadPrefs();
-
-	}
-	else
-	{
-		// create one, will remove right after entering message loop
-		pid = fopen( g_pidGameFile.GetBuffer(), "w" );
-		if ( pid ) {
-			fclose( pid );
-		}
-
-		g_PrefsDlg.LoadPrefs();
-
-#ifndef _DEBUG // I can't be arsed about that prompt in debug mode
-		// if console logging is on in the prefs, warn about performance hit
-		if ( g_PrefsDlg.mGamesDialog.m_bLogConsole ) {
-			if ( gtk_MessageBox( NULL, _( "Preferences indicate that console logging is on. This affects performance.\n"
-									   "Turn it off?" ), _( "Radiant" ), MB_YESNO | MB_ICONQUESTION ) == IDYES ) {
-				g_PrefsDlg.mGamesDialog.m_bLogConsole = false;
-				g_PrefsDlg.mGamesDialog.SavePrefs();
-			}
-		}
-#endif
-		// toggle console logging if necessary
-		Sys_LogFile();
-	}
-
-	// we should search in g_strTempPath, then move over to look at g_strAppPath?
-#ifdef _WIN32
-	// fine tune the look of the app using a gtk rc file
-	// we try to load an RC file placed in the application directory
-	// build the full path
-	Str sRCFile;
-	sRCFile = g_strAppPath;
-	sRCFile += "radiantgtkrc";
-	// we load that file with g_new in gtk_rc_parse_file (gtkrc.c), change the '/' into '\\'
-	pBuffer = (char *)sRCFile.GetBuffer();
-	for ( i = 0; i < sRCFile.GetLength(); i++ )
-	{
-		if ( pBuffer[i] == '/' ) {
-			pBuffer[i] = '\\';
-		}
-	}
-	// check the file exists
-	if ( access( sRCFile.GetBuffer(), R_OK ) != 0 ) {
-		Sys_Printf( "RC file %s not found\n", sRCFile.GetBuffer() );
-	}
-	else
-	{
-		Sys_Printf( "Attemping to load RC file %s\n", sRCFile.GetBuffer() );
-		gtk_rc_parse( sRCFile.GetBuffer() );
-	}
-#endif
-
-#ifndef SKIP_SPLASH
-	create_splash();
-#endif
+	g_PrefsDlg.LoadPrefs();
+	Sys_LogFile(); // toggle console logging if necessary
+	
 
 	if ( !QGL_Init( libgl, "" ) ) {
 		Sys_FPrintf( SYS_ERR, "Failed to load OpenGL libraries\n" );
@@ -873,10 +604,8 @@ int mainRadiant( int argc, char* argv[] ) {
 #endif
 
 	// redirect Gtk warnings to the console
-	g_log_set_handler( "Gdk", (GLogLevelFlags)( G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING |
-												G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG ), error_redirect, NULL );
-	g_log_set_handler( "Gtk", (GLogLevelFlags)( G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING |
-												G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG ), error_redirect, NULL );
+	g_log_set_handler( "Gdk", (GLogLevelFlags)( G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG ), error_redirect, NULL );
+	g_log_set_handler( "Gtk", (GLogLevelFlags)( G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG ), error_redirect, NULL );
 
 	// spog - creates new filters list for the first time
 	g_qeglobals.d_savedinfo.filters = NULL;
@@ -895,33 +624,10 @@ int mainRadiant( int argc, char* argv[] ) {
 		Map_New();
 	}
 
-	// load up shaders now that we have the map loaded
-	// eviltypeguy
-	Texture_ShowStartupShaders();
-
-#ifndef SKIP_SPLASH
-	gdk_window_raise( gtk_widget_get_window( splash_screen ) );
-	gtk_window_set_transient_for( GTK_WINDOW( splash_screen ), GTK_WINDOW( g_pParentWnd->m_pWidget ) );
-	g_timeout_add( 1000, try_destroy_splash, NULL );
-#endif
-
-	//g_pParentWnd->GetSynapseServer().DumpActiveClients();
-
-	//++timo: temporary debug
-	g_pParentWnd->DoWatchBSP();
-
-	return 0;
-
-
-
-	gtk_main();
-
-	// close the log file if any
-	// NOTE: don't save prefs past this point!
-	g_PrefsDlg.mGamesDialog.m_bLogConsole = false;
-	// set the console window to NULL to avoid Sys_Printf crashing
-	g_qeglobals_gui.d_edit = NULL;
-	Sys_LogFile();
+	
+	
+	Texture_ShowStartupShaders(); // load up shaders now that we have the map loaded - eviltypeguy
+	g_pParentWnd->DoWatchBSP(); //++timo: temporary debug
 
 	return 0;
 }
