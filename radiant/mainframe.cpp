@@ -972,66 +972,8 @@ void HandleHelpCommand( GtkWidget *widget, gpointer data ){
 	g_pParentWnd->handle_help_command( id );
 }
 
-void MainFrame::process_xlink( Str &FileName, const char *menu_name, const char *base_url, GtkWidget *menu, GtkAccelGroup *accel ){
-	xmlDocPtr pDoc;
-	pDoc = xmlParseFile( FileName.GetBuffer() );
-	if ( pDoc ) {
-		Sys_Printf( "Processing .xlink file '%s'\n", FileName.GetBuffer() );
-		// create sub menu
-		GtkWidget* menu_in_menu = create_menu_in_menu_with_mnemonic( menu, menu_name );
-		// start walking the nodes, find the 'links' one
-		xmlNodePtr pNode = pDoc->children;
-		while ( pNode && strcmp( (const char*)pNode->name, "links" ) )
-			pNode = pNode->next;
-		if ( pNode ) {
-			pNode = pNode->children;
-			while ( pNode )
-			{
-				if ( !strcmp( (const char*)pNode->name, "item" ) ) {
-					// process the URL
-					Str *url;
-					if ( strstr( (char *)xmlGetProp( pNode, (xmlChar *)"url" ), "http://" ) ) {
-						// complete URL
-						url = new Str;
-						*url = (char *)xmlGetProp( pNode, (xmlChar *)"url" );
-					}
-					else
-					{
-						// relative URL
-						url = new Str;
-						*url = base_url;
-						*url += (char *)xmlGetProp( pNode, (xmlChar *)"url" );
-					}
-					mHelpURLs.push_back( url );
-					create_menu_item_with_mnemonic( menu_in_menu, (char *)xmlGetProp( pNode, (xmlChar *)"name" ), G_CALLBACK( HandleHelpCommand ), mHelpURLs.size() - 1 );
-				}
-				pNode = pNode->next;
-			}
-		}
-		xmlFreeDoc( pDoc );
-	}
-	else
-	{
-		Sys_Printf( "'%s' not found / parse failed\n", FileName.GetBuffer() );
-	}
-}
-
-void MainFrame::create_game_help_menu( GtkWidget *menu, GtkAccelGroup *accel ){
-	Str FileName;
-	list<CGameDescription *>::iterator iGame;
-
-	// start in the global dir
-	FileName = g_strAppPath;
-	FileName += "global.xlink";
-	process_xlink( FileName, "General", g_strAppPath.GetBuffer(), menu, accel );
-
-	for ( iGame = g_PrefsDlg.mGamesDialog.mGames.begin(); iGame != g_PrefsDlg.mGamesDialog.mGames.end(); iGame++ )
-	{
-		FileName = ( *iGame )->mGameToolsPath;
-		FileName += "game.xlink";
-		process_xlink( FileName, ( *iGame )->mGameName, ( *iGame )->mGameToolsPath.GetBuffer(), menu, accel );
-	}
-}
+void MainFrame::process_xlink( Str &FileName, const char *menu_name, const char *base_url, GtkWidget *menu, GtkAccelGroup *accel ) {}
+void MainFrame::create_game_help_menu( GtkWidget *menu, GtkAccelGroup *accel ) {}
 
 void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	GtkWidget *menu_bar, *menu, *menu_in_menu, *menu_3, *item;
@@ -1063,48 +1005,28 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	menu_separator( menu );
 	// end experimental
 
-	item = create_menu_item_with_mnemonic( menu, _( "_Open..." ),
-										   G_CALLBACK( HandleCommand ), ID_FILE_OPEN );
-	g_object_set_data( G_OBJECT( window ), "menu_file_open", item );
-	create_menu_item_with_mnemonic( menu, _( "_Import..." ), // Hydra: give it it's proper name
-									G_CALLBACK( HandleCommand ), ID_FILE_IMPORTMAP );
-	item = create_menu_item_with_mnemonic( menu, _( "_Save" ),
-										   G_CALLBACK( HandleCommand ), ID_FILE_SAVE );
-	g_object_set_data( G_OBJECT( window ), "menu_file_save", item );
-	create_menu_item_with_mnemonic( menu, _( "Save _as..." ),
-									G_CALLBACK( HandleCommand ), ID_FILE_SAVEAS );
-	create_menu_item_with_mnemonic( menu, _( "Save s_elected..." ),
-									G_CALLBACK( HandleCommand ), ID_FILE_EXPORTMAP );
-	menu_separator( menu );
-	item = create_menu_item_with_mnemonic( menu, _( "Save re_gion..." ),
-										   G_CALLBACK( HandleCommand ), ID_FILE_SAVEREGION );
-	g_object_set_data( G_OBJECT( window ), "menu_file_saveregion", item );
-	menu_separator( menu );
-	create_menu_item_with_mnemonic( menu, _( "New p_roject..." ),
-									G_CALLBACK( HandleCommand ), ID_FILE_NEWPROJECT );
-	create_menu_item_with_mnemonic( menu, _( "Load _project..." ),
-									G_CALLBACK( HandleCommand ), ID_FILE_LOADPROJECT );
-	create_menu_item_with_mnemonic( menu, _( "Pro_ject settings..." ),
-									G_CALLBACK( HandleCommand ), ID_FILE_PROJECTSETTINGS );
-	menu_separator( menu );
-	create_menu_item_with_mnemonic( menu, _( "_Pointfile..." ),
-									G_CALLBACK( HandleCommand ), ID_FILE_POINTFILE );
-	menu_separator( menu );
-	item = create_menu_item_with_mnemonic( menu, _( "Recent Files" ),
-										   G_CALLBACK( HandleCommand ), ID_FILE_RECENT1 );
+	item = create_menu_item_with_mnemonic( menu, _( "_Open..."          ), G_CALLBACK( HandleCommand ), ID_FILE_OPEN       ); g_object_set_data( G_OBJECT( window ), "menu_file_open"      , item );
+	item = create_menu_item_with_mnemonic( menu, _( "_Import..."        ), G_CALLBACK( HandleCommand ), ID_FILE_IMPORTMAP  );
+	item = create_menu_item_with_mnemonic( menu, _( "_Save"             ), G_CALLBACK( HandleCommand ), ID_FILE_SAVE       ); g_object_set_data( G_OBJECT( window ), "menu_file_save"      , item );
+	item = create_menu_item_with_mnemonic( menu, _( "Save _as..."       ), G_CALLBACK( HandleCommand ), ID_FILE_SAVEAS     );
+	item = create_menu_item_with_mnemonic( menu, _( "Save s_elected..." ), G_CALLBACK( HandleCommand ), ID_FILE_EXPORTMAP  );
+	item = create_menu_item_with_mnemonic( menu, _( "Save re_gion..."   ), G_CALLBACK( HandleCommand ), ID_FILE_SAVEREGION ); g_object_set_data( G_OBJECT( window ), "menu_file_saveregion", item );
+
+	item = create_menu_item_with_mnemonic( menu, _( "New p_roject..."      ), G_CALLBACK( HandleCommand ), ID_FILE_NEWPROJECT      );
+	item = create_menu_item_with_mnemonic( menu, _( "Load _project..."     ), G_CALLBACK( HandleCommand ), ID_FILE_LOADPROJECT     );
+	item = create_menu_item_with_mnemonic( menu, _( "Pro_ject settings..." ), G_CALLBACK( HandleCommand ), ID_FILE_PROJECTSETTINGS );
+	item = create_menu_item_with_mnemonic( menu, _( "_Pointfile..."        ), G_CALLBACK( HandleCommand ), ID_FILE_POINTFILE       );
+	item = create_menu_item_with_mnemonic( menu, _( "Recent Files"         ), G_CALLBACK( HandleCommand ), ID_FILE_RECENT1         );
 	g_object_set_data( G_OBJECT( item ), "accel", accel );
 	gtk_widget_set_sensitive( item, FALSE );
 	MRU_AddWidget( item, 0 );
-	item = create_menu_item_with_mnemonic( menu, "2",
-										   G_CALLBACK( HandleCommand ), ID_FILE_RECENT2 );
+	item = create_menu_item_with_mnemonic( menu, "2", G_CALLBACK( HandleCommand ), ID_FILE_RECENT2 );
 	gtk_widget_hide( item );
 	MRU_AddWidget( item, 1 );
-	item = create_menu_item_with_mnemonic( menu, "3",
-										   G_CALLBACK( HandleCommand ), ID_FILE_RECENT3 );
+	item = create_menu_item_with_mnemonic( menu, "3", G_CALLBACK( HandleCommand ), ID_FILE_RECENT3 );
 	gtk_widget_hide( item );
 	MRU_AddWidget( item, 2 );
-	item = create_menu_item_with_mnemonic( menu, "4",
-										   G_CALLBACK( HandleCommand ), ID_FILE_RECENT4 );
+	item = create_menu_item_with_mnemonic( menu, "4", G_CALLBACK( HandleCommand ), ID_FILE_RECENT4 );
 	gtk_widget_hide( item );
 	MRU_AddWidget( item, 3 );
 	menu_separator( menu );
@@ -1113,76 +1035,54 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	// disable, the functionality is no longer available
 	gtk_widget_set_sensitive( item, FALSE );
 
-	create_menu_item_with_mnemonic( menu, _( "E_xit" ),
-									G_CALLBACK( HandleCommand ), ID_FILE_EXIT );
+	create_menu_item_with_mnemonic( menu, _( "E_xit" ), G_CALLBACK( HandleCommand ), ID_FILE_EXIT );
 
-	// Edit menu
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Edit" ) );
-	if ( g_PrefsDlg.m_bDetachableMenus ) {
-		menu_tearoff( menu );
-	}
-	item = create_menu_item_with_mnemonic( menu, _( "_Undo" ),
-										   G_CALLBACK( HandleCommand ), ID_EDIT_UNDO );
-	g_object_set_data( G_OBJECT( window ), "menu_edit_undo", item );
-	item = create_menu_item_with_mnemonic( menu, _( "_Redo" ),
-										   G_CALLBACK( HandleCommand ), ID_EDIT_REDO );
-	g_object_set_data( G_OBJECT( window ), "menu_edit_redo", item );
-	menu_separator( menu );
-	item = create_menu_item_with_mnemonic( menu, _( "_Copy" ), G_CALLBACK( HandleCommand ), ID_EDIT_COPYBRUSH );
-	item = create_menu_item_with_mnemonic( menu, _( "_Paste" ), G_CALLBACK( HandleCommand ), ID_EDIT_PASTEBRUSH );
-	item = create_menu_item_with_mnemonic( menu, _( "P_aste To Camera" ), G_CALLBACK( HandleCommand ), ID_EDIT_PASTEBRUSHTOCAMERA );
-	item = create_menu_item_with_mnemonic( menu, _( "_Delete" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DELETE );
-	g_object_set_data( G_OBJECT( window ), "menu_selection_delete", item );
-	menu_separator( menu );
-	create_menu_item_with_mnemonic( menu, _( "Map Info..." ), G_CALLBACK( HandleCommand ), ID_EDIT_MAPINFO );
-	create_menu_item_with_mnemonic( menu, _( "Entity Info..." ), G_CALLBACK( HandleCommand ), ID_EDIT_ENTITYINFO );
-	menu_separator( menu );
-	create_menu_item_with_mnemonic( menu, _( "Brush Scripts..." ), G_CALLBACK( HandleCommand ), ID_BRUSH_SCRIPTS );
-	menu_separator( menu );
-	create_menu_item_with_mnemonic( menu, _( "Load Pre_fab..." ), G_CALLBACK( HandleCommand ), ID_EDIT_LOADPREFAB );
-	create_menu_item_with_mnemonic( menu, _( "Save Selection as Prefab..." ), G_CALLBACK( HandleCommand ), ID_EDIT_SAVEPREFAB );
-	menu_separator( menu );
-	create_menu_item_with_mnemonic( menu, _( "Preferences..." ), G_CALLBACK( HandleCommand ), ID_PREFS );
 
-	// View menu
+	item = create_menu_item_with_mnemonic( menu, _( "_Undo"                ), G_CALLBACK( HandleCommand ), ID_EDIT_UNDO               ); g_object_set_data( G_OBJECT( window ), "menu_edit_undo", item );
+	item = create_menu_item_with_mnemonic( menu, _( "_Redo"                ), G_CALLBACK( HandleCommand ), ID_EDIT_REDO               ); g_object_set_data( G_OBJECT( window ), "menu_edit_redo", item );
+	item = create_menu_item_with_mnemonic( menu, _( "_Copy"                ), G_CALLBACK( HandleCommand ), ID_EDIT_COPYBRUSH          );
+	item = create_menu_item_with_mnemonic( menu, _( "_Paste"               ), G_CALLBACK( HandleCommand ), ID_EDIT_PASTEBRUSH         );
+	item = create_menu_item_with_mnemonic( menu, _( "P_aste To Camera"     ), G_CALLBACK( HandleCommand ), ID_EDIT_PASTEBRUSHTOCAMERA );
+	item = create_menu_item_with_mnemonic( menu, _( "_Delete"              ), G_CALLBACK( HandleCommand ), ID_SELECTION_DELETE        ); g_object_set_data( G_OBJECT( window ), "menu_selection_delete", item );
+	create_menu_item_with_mnemonic( menu, _( "Map Info..."                 ), G_CALLBACK( HandleCommand ), ID_EDIT_MAPINFO            );
+	create_menu_item_with_mnemonic( menu, _( "Entity Info..."              ), G_CALLBACK( HandleCommand ), ID_EDIT_ENTITYINFO         );
+	create_menu_item_with_mnemonic( menu, _( "Brush Scripts..."            ), G_CALLBACK( HandleCommand ), ID_BRUSH_SCRIPTS           );
+	create_menu_item_with_mnemonic( menu, _( "Load Pre_fab..."             ), G_CALLBACK( HandleCommand ), ID_EDIT_LOADPREFAB         );
+	create_menu_item_with_mnemonic( menu, _( "Save Selection as Prefab..." ), G_CALLBACK( HandleCommand ), ID_EDIT_SAVEPREFAB         );
+	create_menu_item_with_mnemonic( menu, _( "Preferences..."              ), G_CALLBACK( HandleCommand ), ID_PREFS                   );
+
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_View" ) );
-	if ( g_PrefsDlg.m_bDetachableMenus ) {
-		menu_tearoff( menu );
-	}
 
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Toggle" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Camera View" ), G_CALLBACK( HandleCommand ), ID_TOGGLECAMERA );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Console View" ), G_CALLBACK( HandleCommand ), ID_TOGGLECONSOLE );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Entity View" ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITY );
-	g_object_set_data( G_OBJECT( window ), "menu_view_entity", item );
-	//  create_menu_item_with_mnemonic (menu_in_menu, "Groups View", G_CALLBACK (HandleCommand), ID_VIEW_GROUPS);
-	create_menu_item_with_mnemonic( menu_in_menu, _( "XY (Top)" ), G_CALLBACK( HandleCommand ), ID_TOGGLEVIEW );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "YZ (Side)" ), G_CALLBACK( HandleCommand ), ID_TOGGLEVIEW_YZ );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "XZ (Front)" ), G_CALLBACK( HandleCommand ), ID_TOGGLEVIEW_XZ );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Z View" ), G_CALLBACK( HandleCommand ), ID_TOGGLEZ );
-	menu_separator( menu );
-	item = create_menu_item_with_mnemonic( menu, _( "_Center" ), G_CALLBACK( HandleCommand ), ID_VIEW_CENTER );
-	item = create_menu_item_with_mnemonic( menu, _( "_Center 2d" ), G_CALLBACK( HandleCommand ), ID_VIEW_CENTERVIEW );
-	item = create_menu_item_with_mnemonic( menu, _( "_Up Floor" ), G_CALLBACK( HandleCommand ), ID_VIEW_UPFLOOR );
-	item = create_menu_item_with_mnemonic( menu, _( "_Down Floor" ), G_CALLBACK( HandleCommand ), ID_VIEW_DOWNFLOOR );
-	menu_separator( menu );
-	item = create_menu_item_with_mnemonic( menu, _( "_Next (XY, YZ, XY)" ), G_CALLBACK( HandleCommand ), ID_VIEW_NEXTVIEW );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Camera View"        ), G_CALLBACK( HandleCommand ), ID_TOGGLECAMERA    );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Console View"       ), G_CALLBACK( HandleCommand ), ID_TOGGLECONSOLE   );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Entity View"        ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITY     ); g_object_set_data( G_OBJECT( window ), "menu_view_entity", item );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Groups View"        ), G_CALLBACK( HandleCommand ), ID_VIEW_GROUPS     );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XY (Top)"           ), G_CALLBACK( HandleCommand ), ID_TOGGLEVIEW      );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "YZ (Side)"          ), G_CALLBACK( HandleCommand ), ID_TOGGLEVIEW_YZ   );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XZ (Front)"         ), G_CALLBACK( HandleCommand ), ID_TOGGLEVIEW_XZ   );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z View"             ), G_CALLBACK( HandleCommand ), ID_TOGGLEZ         );
+	item = create_menu_item_with_mnemonic( menu        , _( "_Center"            ), G_CALLBACK( HandleCommand ), ID_VIEW_CENTER     );
+	item = create_menu_item_with_mnemonic( menu        , _( "_Center 2d"         ), G_CALLBACK( HandleCommand ), ID_VIEW_CENTERVIEW );
+	item = create_menu_item_with_mnemonic( menu        , _( "_Up Floor"          ), G_CALLBACK( HandleCommand ), ID_VIEW_UPFLOOR    );
+	item = create_menu_item_with_mnemonic( menu        , _( "_Down Floor"        ), G_CALLBACK( HandleCommand ), ID_VIEW_DOWNFLOOR  );
+	item = create_menu_item_with_mnemonic( menu        , _( "_Next (XY, YZ, XY)" ), G_CALLBACK( HandleCommand ), ID_VIEW_NEXTVIEW   );
+
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Layout" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "XY (Top)" ), G_CALLBACK( HandleCommand ), ID_VIEW_XY );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "YZ" ), G_CALLBACK( HandleCommand ), ID_VIEW_SIDE );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "XZ" ), G_CALLBACK( HandleCommand ), ID_VIEW_FRONT );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XY (Top)" ), G_CALLBACK( HandleCommand ), ID_VIEW_XY );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "YZ"       ), G_CALLBACK( HandleCommand ), ID_VIEW_SIDE );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XZ"       ), G_CALLBACK( HandleCommand ), ID_VIEW_FRONT );
+
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Zoom" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "_XY 100%" ), G_CALLBACK( HandleCommand ), ID_VIEW_100 );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XY Zoom _In" ), G_CALLBACK( HandleCommand ), ID_VIEW_ZOOMIN );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XY Zoom _Out" ), G_CALLBACK( HandleCommand ), ID_VIEW_ZOOMOUT );
-	menu_separator( menu_in_menu );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "_Z 100%" ), G_CALLBACK( HandleCommand ), ID_VIEW_Z100 );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z Zoo_m In"  ), G_CALLBACK( HandleCommand ), ID_VIEW_ZZOOMIN  ); g_object_set_data( G_OBJECT( window ), "menu_view_zzoomin" , item );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z Zoom O_ut" ), G_CALLBACK( HandleCommand ), ID_VIEW_ZZOOMOUT ); g_object_set_data( G_OBJECT( window ), "menu_view_zzoomout", item );
-	menu_separator( menu_in_menu );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Cubic Clip Zoom In"  ), G_CALLBACK( HandleCommand ), ID_VIEW_CUBEIN );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Cubic Clip Zoom Out" ), G_CALLBACK( HandleCommand ), ID_VIEW_CUBEOUT );
-	menu_separator( menu );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "_XY 100%"            ), G_CALLBACK( HandleCommand ), ID_VIEW_100      );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XY Zoom _In"         ), G_CALLBACK( HandleCommand ), ID_VIEW_ZOOMIN   );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XY Zoom _Out"        ), G_CALLBACK( HandleCommand ), ID_VIEW_ZOOMOUT  );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "_Z 100%"             ), G_CALLBACK( HandleCommand ), ID_VIEW_Z100     );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z Zoo_m In"          ), G_CALLBACK( HandleCommand ), ID_VIEW_ZZOOMIN  ); g_object_set_data( G_OBJECT( window ), "menu_view_zzoomin" , item );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z Zoom O_ut"         ), G_CALLBACK( HandleCommand ), ID_VIEW_ZZOOMOUT ); g_object_set_data( G_OBJECT( window ), "menu_view_zzoomout", item );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Cubic Clip Zoom In"  ), G_CALLBACK( HandleCommand ), ID_VIEW_CUBEIN   );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Cubic Clip Zoom Out" ), G_CALLBACK( HandleCommand ), ID_VIEW_CUBEOUT  );
 
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Show" ) );
 	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show _Angles"           ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWANGLES      , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_showangles"     , item );
@@ -1195,68 +1095,54 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Workzone"          ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWWORKZONE    , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_showworkzone"   , item );
 
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Filter" ) );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "World" ), G_CALLBACK( HandleCommand ), ID_FILTER_WORLD, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Entities" ), G_CALLBACK( HandleCommand ), ID_FILTER_ENTITIES, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Areaportals" ), G_CALLBACK( HandleCommand ), ID_FILTER_AREAPORTALS, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Translucent" ), G_CALLBACK( HandleCommand ), ID_FILTER_TRANSLUCENT, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Liquids" ), G_CALLBACK( HandleCommand ), ID_FILTER_LIQUIDS, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Caulk" ), G_CALLBACK( HandleCommand ), ID_FILTER_CAULK, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Clips" ), G_CALLBACK( HandleCommand ), ID_FILTER_CLIPS, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Paths" ), G_CALLBACK( HandleCommand ), ID_FILTER_PATHS, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Clusterportals" ), G_CALLBACK( HandleCommand ), ID_FILTER_CLUSTERPORTALS, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Lights" ), G_CALLBACK( HandleCommand ), ID_FILTER_LIGHTS, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Structural" ), G_CALLBACK( HandleCommand ), ID_FILTER_STRUCTURAL, FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Lightgrid" ), G_CALLBACK( HandleCommand ), ID_FILTER_LIGHTGRID, FALSE );
-	g_object_set_data( G_OBJECT( window ), "menu_filter_lightgrid", item );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Patches" ), G_CALLBACK( HandleCommand ), ID_FILTER_PATCHES, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Details" ), G_CALLBACK( HandleCommand ), ID_FILTER_DETAILS, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Hints" ), G_CALLBACK( HandleCommand ), ID_FILTER_HINTSSKIPS, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Models" ), G_CALLBACK( HandleCommand ), ID_FILTER_MODELS, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Triggers" ), G_CALLBACK( HandleCommand ), ID_FILTER_TRIGGERS, FALSE );
-	create_check_menu_item_with_mnemonic( menu_in_menu, _( "Botclips" ), G_CALLBACK( HandleCommand ), ID_FILTER_BOTCLIPS, FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "World"          ), G_CALLBACK( HandleCommand ), ID_FILTER_WORLD         , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Entities"       ), G_CALLBACK( HandleCommand ), ID_FILTER_ENTITIES      , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Areaportals"    ), G_CALLBACK( HandleCommand ), ID_FILTER_AREAPORTALS   , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Translucent"    ), G_CALLBACK( HandleCommand ), ID_FILTER_TRANSLUCENT   , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Liquids"        ), G_CALLBACK( HandleCommand ), ID_FILTER_LIQUIDS       , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Caulk"          ), G_CALLBACK( HandleCommand ), ID_FILTER_CAULK         , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Clips"          ), G_CALLBACK( HandleCommand ), ID_FILTER_CLIPS         , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Paths"          ), G_CALLBACK( HandleCommand ), ID_FILTER_PATHS         , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Clusterportals" ), G_CALLBACK( HandleCommand ), ID_FILTER_CLUSTERPORTALS, FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Lights"         ), G_CALLBACK( HandleCommand ), ID_FILTER_LIGHTS        , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Structural"     ), G_CALLBACK( HandleCommand ), ID_FILTER_STRUCTURAL    , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Lightgrid"      ), G_CALLBACK( HandleCommand ), ID_FILTER_LIGHTGRID     , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_filter_lightgrid", item );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Patches"        ), G_CALLBACK( HandleCommand ), ID_FILTER_PATCHES       , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Details"        ), G_CALLBACK( HandleCommand ), ID_FILTER_DETAILS       , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Hints"          ), G_CALLBACK( HandleCommand ), ID_FILTER_HINTSSKIPS    , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Models"         ), G_CALLBACK( HandleCommand ), ID_FILTER_MODELS        , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Triggers"       ), G_CALLBACK( HandleCommand ), ID_FILTER_TRIGGERS      , FALSE );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Botclips"       ), G_CALLBACK( HandleCommand ), ID_FILTER_BOTCLIPS      , FALSE );
 
-	menu_separator( menu );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Hide/Show" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Hide Selected" ),
-									G_CALLBACK( HandleCommand ), ID_VIEW_HIDESHOW_HIDESELECTED );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Show Hidden" ),
-									G_CALLBACK( HandleCommand ), ID_VIEW_HIDESHOW_SHOWHIDDEN );
-	menu_separator( menu );
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Entities as" ) );
-	g_object_set_data( G_OBJECT( window ), "view_entitiesas_menu", menu_in_menu );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Hide Selected" ), G_CALLBACK( HandleCommand ), ID_VIEW_HIDESHOW_HIDESELECTED );
+	create_menu_item_with_mnemonic( menu_in_menu, _( "Show Hidden" ), G_CALLBACK( HandleCommand ), ID_VIEW_HIDESHOW_SHOWHIDDEN );
+	
+	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Entities as" ) ); g_object_set_data( G_OBJECT( window ), "view_entitiesas_menu", menu_in_menu );
 	item = create_radio_menu_item_with_mnemonic( menu_in_menu, NULL, _( "Bounding box"       ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_BOUNDINGBOX      , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_boundingbox"      , item );
 	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Wireframe"          ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_WIREFRAME        , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_wireframe"        , item );
 	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Selected Wireframe" ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_SELECTEDWIREFRAME, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_selectedwireframe", item );
 	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Selected Skinned"   ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_SELECTEDSKINNED  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_selectedskinned"  , item );
 	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Skinned"            ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_SKINNED          , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_skinned"          , item );
 	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Skinned and Boxed"  ), G_CALLBACK( HandleCommand ), ID_VIEW_ENTITIESAS_SKINNEDANDBOXED  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_skinnedandboxed"  , item );
-	menu_separator( menu );
 	item = create_check_menu_item_with_mnemonic( menu, _( "Cubic Clipping" ), G_CALLBACK( HandleCommand ), ID_VIEW_CUBICCLIPPING, TRUE ); g_object_set_data( G_OBJECT( window ), "menu_view_cubicclipping", item );
-	menu_separator( menu );
 	item = create_check_menu_item_with_mnemonic( menu, _( "OpenGL Lighting" ), G_CALLBACK( HandleCommand ), ID_VIEW_OPENGLLIGHTING, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_opengllighting", item );
 
-	// Selection menu
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Selection" ) );
-	if ( g_PrefsDlg.m_bDetachableMenus ) {
-		menu_tearoff( menu );
-	}
 
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Drag" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Drag _Edges" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DRAGEDGES );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Drag _Vertices" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DRAGVERTECIES );
-	menu_separator( menu );
-	create_menu_item_with_mnemonic( menu, _( "_Clone" ), G_CALLBACK( HandleCommand ), ID_SELECTION_CLONE );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Drag _Edges" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DRAGEDGES );
+	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Drag _Vertices" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DRAGVERTECIES );
+	item = create_menu_item_with_mnemonic( menu, _( "_Clone" ), G_CALLBACK( HandleCommand ), ID_SELECTION_CLONE );
 	item = create_menu_item_with_mnemonic( menu, _( "Deselect" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DESELECT );
 	item = create_menu_item_with_mnemonic( menu, _( "Invert" ), G_CALLBACK( HandleCommand ), ID_SELECTION_INVERT );
-#ifndef QUAKE3
-	create_menu_item_with_mnemonic( menu, _( "_Delete" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DELETE );
-#endif
-	menu_separator( menu );
+	item = create_menu_item_with_mnemonic( menu, _( "_Delete" ), G_CALLBACK( HandleCommand ), ID_SELECTION_DELETE );
+
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Flip" ) );
 	create_menu_item_with_mnemonic( menu_in_menu, _( "Flip _X" ), G_CALLBACK( HandleCommand ), ID_BRUSH_FLIPX );
 	create_menu_item_with_mnemonic( menu_in_menu, _( "Flip _Y" ), G_CALLBACK( HandleCommand ), ID_BRUSH_FLIPY );
 	create_menu_item_with_mnemonic( menu_in_menu, _( "Flip _Z" ), G_CALLBACK( HandleCommand ), ID_BRUSH_FLIPZ );
-	menu_separator( menu );
+
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Rotate" ) );
 	create_menu_item_with_mnemonic( menu_in_menu, _( "Rotate X"              ), G_CALLBACK( HandleCommand ), ID_BRUSH_ROTATEX );
 	create_menu_item_with_mnemonic( menu_in_menu, _( "Rotate Y"              ), G_CALLBACK( HandleCommand ), ID_BRUSH_ROTATEY );
@@ -1301,11 +1187,7 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	menu_separator( menu );
 	g_object_set_data( G_OBJECT( window ), "menu_bsp", menu );
 
-	// Grid menu
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Grid" ) );
-	if ( g_PrefsDlg.m_bDetachableMenus ) {
-		menu_tearoff( menu );
-	}
 
 	item = create_radio_menu_item_with_mnemonic( menu, NULL, _( "Grid0.25" ), G_CALLBACK( HandleCommand ), ID_GRID_025  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_025"  , item );
 	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid0.5"  ), G_CALLBACK( HandleCommand ), ID_GRID_05   , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_05"   , item );
@@ -1318,26 +1200,18 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid64"   ), G_CALLBACK( HandleCommand ), ID_GRID_64   , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_64"   , item );
 	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid128"  ), G_CALLBACK( HandleCommand ), ID_GRID_128  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_128"  , item );
 	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid256"  ), G_CALLBACK( HandleCommand ), ID_GRID_256  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_256"  , item );
-	menu_separator( menu );
 	item = create_check_menu_item_with_mnemonic( menu, _( "Snap to grid"   ), G_CALLBACK( HandleCommand ), ID_SNAPTOGRID, TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_snaptogrid", item );
 
-	// Textures menu
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Textures" ) );
-	if ( g_PrefsDlg.m_bDetachableMenus ) {
-		menu_tearoff( menu );
-	}
 
 	item = create_check_menu_item_with_mnemonic( menu, _( "Show In _Use" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHOWINUSE, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_showinuse", item );
 	item = create_check_menu_item_with_mnemonic( menu, _( "Show _All" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHOWALL, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_showall", item );
-	menu_separator( menu );
 	item = create_check_menu_item_with_mnemonic( menu, _( "Show shaders" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHADERS_SHOW, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_shaders_show", item );
 	item = create_menu_item_with_mnemonic( menu, _( "Flush & Reload Shaders" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_RELOADSHADERS ); g_object_set_data( G_OBJECT( window ), "menu_textures_reloadshaders", item );
 	item = create_menu_item_with_mnemonic( menu, _( "Load directory..." ), G_CALLBACK( HandleCommand ), ID_TEXTURES_LOAD ); g_object_set_data( G_OBJECT( window ), "menu_textures_load", item );
 	item = create_menu_item_with_mnemonic( menu, _( "Directory list..." ), G_CALLBACK( HandleCommand ), ID_TEXTURES_LOADLIST );
-	menu_separator( menu );
-
+	
 	item = create_menu_item_with_mnemonic( menu, _( "_Surface Inspector" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_INSPECTOR );
-	menu_separator( menu );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Render Quality" ) );
 	g_object_set_data( G_OBJECT( window ), "render_quality_menu", menu_in_menu );
 	item = create_radio_menu_item_with_mnemonic( menu_in_menu, NULL, _( "_Wireframe"       ), G_CALLBACK( HandleCommand ), ID_TEXTURES_WIREFRAME , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_wireframe", item );
@@ -1351,22 +1225,14 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	create_menu_item_with_mnemonic( menu, _( "Find / Replace..." ), G_CALLBACK( HandleCommand ), ID_TEXTURE_REPLACEALL );
 
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Texture Lock" ) );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Moves" ), G_CALLBACK( HandleCommand ), ID_TOGGLE_LOCK, TRUE );
-	g_object_set_data( G_OBJECT( window ), "menu_toggle_lock", item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Rotations" ), G_CALLBACK( HandleCommand ), ID_TOGGLE_ROTATELOCK, TRUE );
-	g_object_set_data( G_OBJECT( window ), "menu_toggle_rotatelock", item );
-	item = menu_separator( menu );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Moves"     ), G_CALLBACK( HandleCommand ), ID_TOGGLE_LOCK      , TRUE ); g_object_set_data( G_OBJECT( window ), "menu_toggle_lock"      , item );
+	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Rotations" ), G_CALLBACK( HandleCommand ), ID_TOGGLE_ROTATELOCK, TRUE ); g_object_set_data( G_OBJECT( window ), "menu_toggle_rotatelock", item );
 	item = create_check_menu_item_with_mnemonic( menu, _( "shaderlist.txt only" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHADERLISTONLY, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_shaderlistonly", item );
-	item = menu_separator( menu );
-
+	
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Texture Directories" ) );
 	g_object_set_data( G_OBJECT( window ), "menu_texture_dirs", menu_in_menu );
 
-	// Misc menu
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Misc" ) );
-	if ( g_PrefsDlg.m_bDetachableMenus ) {
-		menu_tearoff( menu );
-	}
 
 	create_menu_item_with_mnemonic( menu, _( "_Benchmark" ), G_CALLBACK( HandleCommand ), ID_MISC_BENCHMARK );
 	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Colors" ) );
@@ -1403,9 +1269,6 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 
 	// Region menu
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Region" ) );
-	if ( g_PrefsDlg.m_bDetachableMenus ) {
-		menu_tearoff( menu );
-	}
 
 	create_menu_item_with_mnemonic( menu, _( "_Off"                  ), G_CALLBACK( HandleCommand ), ID_REGION_OFF          );
 	create_menu_item_with_mnemonic( menu, _( "_Set XY"               ), G_CALLBACK( HandleCommand ), ID_REGION_SETXY        );
@@ -1413,11 +1276,7 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	create_menu_item_with_mnemonic( menu, _( "Set _Brush"            ), G_CALLBACK( HandleCommand ), ID_REGION_SETBRUSH     );
 	create_menu_item_with_mnemonic( menu, _( "Set Se_lected Brushes" ), G_CALLBACK( HandleCommand ), ID_REGION_SETSELECTION );
 
-	// Brush menu
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Brush" ) );
-	if ( g_PrefsDlg.m_bDetachableMenus ) {
-		menu_tearoff( menu );
-	}
 
 	item = create_menu_item_with_mnemonic( menu, _( "3 sided" ), G_CALLBACK( HandleCommand ), ID_BRUSH_3SIDED );
 	item = create_menu_item_with_mnemonic( menu, _( "4 sided" ), G_CALLBACK( HandleCommand ), ID_BRUSH_4SIDED );
@@ -1510,14 +1369,9 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 		menu_tearoff( menu );
 	}
 
-	item = create_menu_item_with_mnemonic( menu, _( "GtkRadiant Manual" ),
-										   G_CALLBACK( HandleCommand ), ID_HELP );
+	item = create_menu_item_with_mnemonic( menu, _( "GtkRadiant Manual" ), G_CALLBACK( HandleCommand ), ID_HELP );
 	// does not work, using g_Commands for the key binding
 	//gtk_widget_add_accelerator( item, "activate", accel, GDK_F1, (GdkModifierType)0, GTK_ACCEL_VISIBLE );
-
-	// this creates all the per-game drop downs for the game pack helps
-	// it will take care of hooking the Sys_OpenURL calls etc.
-	create_game_help_menu( menu, accel );
 
 	// TTimo: this is in global.xlink now
 	//create_menu_item_with_mnemonic (menu, "Links", G_CALLBACK (HandleCommand), ID_HELP_LINKS);
