@@ -681,7 +681,7 @@ void CPlugInManager::Init(){
 	}
 
 	// adding a manager is a special case that ConfigXML doesn't take care of
-	//g_pParentWnd->GetSynapseServer().SelectClientConfig( "core" );
+	g_pParentWnd->GetSynapseServer().SelectClientConfig( "core" );
 	char *minor;
 	if ( !g_pParentWnd->GetSynapseServer().GetConfigForAPI( IMAGE_MAJOR, &minor ) ) {
 		Syn_Printf( "GetConfigForAPI '%s' failed - invalid XML config file?\n", IMAGE_MAJOR );

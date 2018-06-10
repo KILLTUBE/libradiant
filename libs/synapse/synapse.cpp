@@ -95,6 +95,14 @@ CSynapseServer::CSynapseServer(){
 }
 
 CSynapseServer::~CSynapseServer(){
+	//if ( m_api_name ) {
+	//	//xmlFree( m_api_name );
+    //            m_api_name = NULL;
+	//}
+	//if ( m_content ) {
+	//	g_free( m_content );
+	//}
+	//Syn_Printf( "TODO: free API managers\n" );
 }
 
 void CSynapseServer::AddSearchPath( char* path ){
@@ -672,6 +680,33 @@ void CSynapseServer::DumpActiveClients(){
 }
 
 bool CSynapseServer::SelectClientConfig( const char *client_name ){
+	if ( !mpDoc ) {
+		return false;
+	}
+	xmlNodePtr pNode = xmlDocGetRootElement( mpDoc );
+	if ( !pNode ) {
+		return false;
+	}
+	// look for the client
+	pNode = pNode->children;
+	while ( pNode )
+	{
+		if ( pNode->type == XML_ELEMENT_NODE ) {
+			xmlChar *prop = xmlGetProp( pNode, (const xmlChar *)"name" );
+			if ( !strcmp( (const char *)prop, client_name ) ) {
+				//xmlFree( prop );
+				break;
+			}
+			//xmlFree( prop );
+		}
+		pNode = pNode->next;
+	}
+	if ( !pNode ) {
+		return false; // config you asked for isn't there
+	}
+	// focus
+	mpFocusedNode = pNode->children;
+	mpCurrentClientConfig = pNode;
 	return true;
 }
 
@@ -700,51 +735,43 @@ bool CSynapseServer::GetNextConfig( char **api_name, char **minor ){
 }
 
 bool CSynapseServer::GetConfigForAPI( const char *api, char **minor ) {
-	
-
-	*minor = g_strdup("png tga jpg");
-	return true;
-
-	//xmlNodePtr pNode = mpCurrentClientConfig->children;
-	//while ( pNode && pNode->name ) {
-	//	if ( pNode->type == XML_ELEMENT_NODE && !strcmp( (const char *)pNode->name, "api" ) ) {
-	//		if ( m_api_name ) {
-	//			//xmlFree( m_api_name );
-    //                            m_api_name = NULL;
-	//		}
-	//		m_api_name = xmlGetProp( pNode, (const xmlChar *)"name" );
-	//		if ( !strcmp( (const char *)m_api_name, api ) ) {
-	//			if ( m_content ) {
-	//				g_free( m_content );
-	//			}
-	//			m_content = g_strdup( (const gchar *)pNode->children->content );
-	//			g_strstrip( m_content );
-	//			*minor = m_content;
-	//
-	//
-	//			printf("bool CSynapseServer::GetConfigForAPI( /*const char *api*/\"%s\", /* OUT: char **minor*/\"%s\" );\n", api, *minor);
-	//			return true;
-	//		}
-	//	}
-	//	pNode = pNode->next;
-	//}
-	//return false;
+	xmlNodePtr pNode = mpCurrentClientConfig->children;
+	while ( pNode && pNode->name ) {
+		if ( pNode->type == XML_ELEMENT_NODE && !strcmp( (const char *)pNode->name, "api" ) ) {
+			if ( m_api_name ) {
+				//xmlFree( m_api_name );
+                                m_api_name = NULL;
+			}
+			m_api_name = xmlGetProp( pNode, (const xmlChar *)"name" );
+			if ( !strcmp( (const char *)m_api_name, api ) ) {
+				if ( m_content ) {
+					g_free( m_content );
+				}
+				m_content = g_strdup( (const gchar *)pNode->children->content );
+				g_strstrip( m_content );
+				*minor = m_content;
+				return true;
+			}
+		}
+		pNode = pNode->next;
+	}
+	return false;
 }
 
 const char *CSynapseServer::GetModuleFilename( CSynapseClient *pClient ){
-	//list<CSynapseClientSlot>::iterator iSlot;
-	//for ( iSlot = mClients.begin(); iSlot != mClients.end(); iSlot++ )
-	//{
-	//	if ( ( *iSlot ).mpClient == pClient ) {
-	//		if ( ( *iSlot ).mType == SYN_BUILTIN ) {
-	//			return ""; // FIXME
-	//		}
-	//		else
-	//		{
-	//			return ( *iSlot ).mFileName;
-	//		}
-	//	}
-	//}
+	list<CSynapseClientSlot>::iterator iSlot;
+	for ( iSlot = mClients.begin(); iSlot != mClients.end(); iSlot++ )
+	{
+		if ( ( *iSlot ).mpClient == pClient ) {
+			if ( ( *iSlot ).mType == SYN_BUILTIN ) {
+				return ""; // FIXME
+			}
+			else
+			{
+				return ( *iSlot ).mFileName;
+			}
+		}
+	}
 	return NULL;
 }
 
@@ -818,9 +845,6 @@ CSynapseAPIManager* CSynapseClient::GetManagerList( int i ){
 }
 
 bool CSynapseClient::AddAPI( const char *major, const char *minor, int size, EAPIType type, void *pTable ){
-
-	printf("AddAPI( \"%s\", \"%s\", entries[i].size, entries[i].type, entries[i].pTable );\n", major, minor);
-
 	// do some safe checks before actual addition
 	if ( type == SYN_REQUIRE && !pTable ) {
 		Syn_Printf( "ERROR: interface '%s' '%s' from '%s' is SYN_REQUIRE and doesn't provide a function table pointer\n", major, minor, GetInfo() );
@@ -922,24 +946,21 @@ bool CSynapseClient::ConfigXML( CSynapseServer *pServer, const char *client_name
 	}
 
 	Syn_Printf( "Dynamic APIs for client '%s'\n", GetInfo() );
-	//if ( !pServer->SelectClientConfig( client_name ) ) {
-	//	Syn_Printf( "Failed to select synapse client config '%s'\n", client_name );
-	//	return false;
-	//}
+	if ( !pServer->SelectClientConfig( client_name ) ) {
+		Syn_Printf( "Failed to select synapse client config '%s'\n", client_name );
+		return false;
+	}
 
 	int i = 0;
-
-	i = 0;
-	AddAPI( "VFS", "pk3", entries[i].size, entries[i].type, entries[i].pTable );
-	i = 1;
-	AddAPI( "shaders", "quake3", entries[i].size, entries[i].type, entries[i].pTable );
-	i = 2;
-	AddAPI( "map", "mapq3", entries[i].size, entries[i].type, entries[i].pTable );
-	i = 3;
-	AddAPI( "eclass", "def", entries[i].size, entries[i].type, entries[i].pTable );
-	i = 4;
-	AddAPI( "surfdialog", "quake3", entries[i].size, entries[i].type, entries[i].pTable );
-
+	while ( entries[i].type != SYN_UNKNOWN ) { // don't test pTable, for a SYN_PROVIDE it will be empty
+		char *minor;
+		if ( !pServer->GetConfigForAPI( entries[i].api, &minor ) ) {
+			Syn_Printf( "GetConfigForAPI '%s' failed - invalid XML config file?\n", entries[i].api );
+			return false;
+		}
+		AddAPI( entries[i].api, minor, entries[i].size, entries[i].type, entries[i].pTable );
+		i++;
+	}
 	Syn_Printf( "%d dynamic interfaces parsed for '%s'\n", i, client_name );
 	return true;
 }

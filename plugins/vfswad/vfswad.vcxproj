@@ -66,6 +66,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\msys64\mingw64\include\libxml2;$(IncludePath)</IncludePath>
+    <OutDir>C:\G\gtkradiant\GtkRadiant-1.6.4-20131213\GtkRadiant-1.6.4-20131213\modules</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\install\modules\</OutDir>
