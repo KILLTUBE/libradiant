@@ -1592,160 +1592,81 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	g_bIgnoreCommands--;
 }
 
-void toolbar_append_item( GtkToolbar *toolbar, const gchar *text, const gchar *tooltip_text, const gchar *private_text, GtkWidget *icon, int id, GtkWidget *window, const char *keyInWindow )
-{
-	GtkToolItem *item;
-	
-	item = gtk_tool_button_new( icon, text );
+void toolbar_append_item( GtkToolbar *toolbar, const gchar *tooltip_text, const char *icon, int id, GtkWidget *window, const char *keyInWindow ) {
+	GtkToolItem *item = gtk_tool_button_new( new_image_icon(icon), "" );
 	gtk_widget_set_tooltip_text( GTK_WIDGET( item ), tooltip_text );
 	g_signal_connect( item, "clicked", G_CALLBACK( HandleCommand ), GINT_TO_POINTER(id) );
 	gtk_toolbar_insert( GTK_TOOLBAR( toolbar ), item, -1 ); //-1 append
 	gtk_widget_show( GTK_WIDGET( item ) );
-
 	GtkWidget *w = GTK_WIDGET( item );
 	g_object_set_data( G_OBJECT( window ), keyInWindow, w );
 }
-static GtkWidget * toolbar_append_space( GtkToolbar *toolbar )
-{
-	GtkToolItem *sep_item;
 
-	sep_item = gtk_separator_tool_item_new();
+GtkWidget * toolbar_append_space( GtkToolbar *toolbar ) {
+	GtkToolItem *sep_item = gtk_separator_tool_item_new();
 	gtk_toolbar_insert( GTK_TOOLBAR( toolbar ), sep_item, -1 ); //-1 append
 	gtk_widget_show( GTK_WIDGET( sep_item ) );
-
 	return GTK_WIDGET( sep_item );
 }
-void toolbar_append_element( GtkToolbar *toolbar, short childtype, const gchar *text, const gchar *tooltip_text, const gchar *private_text, GtkWidget *icon, int id, GtkWidget *window, const char *keyInWindow)
-{
-	GtkToolItem *item;
-	
-	item = gtk_toggle_tool_button_new();
-	gtk_tool_button_set_icon_widget( GTK_TOOL_BUTTON( item ), icon );
-	gtk_tool_button_set_label( GTK_TOOL_BUTTON( item ), text );
+
+void toolbar_append_element( GtkToolbar *toolbar, const gchar *tooltip_text, const char *icon, int id, GtkWidget *window, const char *keyInWindow) {
+	GtkToolItem *item = gtk_toggle_tool_button_new();
+	gtk_tool_button_set_icon_widget( GTK_TOOL_BUTTON( item ), new_image_icon(icon) );
+	gtk_tool_button_set_label( GTK_TOOL_BUTTON( item ), "" );
 	gtk_widget_set_tooltip_text( GTK_WIDGET( item ), tooltip_text );
 	g_signal_connect( item, "clicked", G_CALLBACK( HandleCommand ), GINT_TO_POINTER(id) );
 	gtk_toolbar_insert( GTK_TOOLBAR( toolbar ), item, -1 ); //-1 append
 	gtk_widget_show( GTK_WIDGET( item ) );
-
 	GtkWidget *w = GTK_WIDGET( item );
 	g_object_set_data( G_OBJECT( window ), keyInWindow, w );
 }
 
 void MainFrame::create_main_toolbar( GtkWidget *window, GtkWidget *vbox ){
-	GtkToolbar *toolbar;
-	GtkWidget *w;
-	const short TOOLBAR_CHILD_TOGGLEBUTTON = 1;
-
-	toolbar = GTK_TOOLBAR(gtk_toolbar_new());
+	GtkToolbar *toolbar = GTK_TOOLBAR(gtk_toolbar_new());
 	gtk_orientable_set_orientation( GTK_ORIENTABLE( toolbar ), GTK_ORIENTATION_HORIZONTAL );
 	gtk_toolbar_set_style( GTK_TOOLBAR( toolbar ), GTK_TOOLBAR_ICONS );
-	//  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), user_rc.toolbar_style);
 	gtk_box_pack_start( GTK_BOX( vbox ), (GtkWidget*)toolbar, FALSE, FALSE, 0 );
 
-
-	
-
-	toolbar_append_item( toolbar, _( "Open" ), _( "Open an existing map" ), "", new_image_icon("file_open.png"), ID_FILE_OPEN, window, "tb_file_open");
-	toolbar_append_item( toolbar, _( "Save" ), _( "Save the active map"  ), "", new_image_icon("file_save.png"), ID_FILE_SAVE, window, "tb_file_save");
-	toolbar_append_space( toolbar );
-	toolbar_append_item( toolbar, "", _( "x-axis Flip"   ), "", new_image_icon("brush_flipx.png"  ), ID_BRUSH_FLIPX  , window, "tb_brush_flipx"  );
-	toolbar_append_item( toolbar, "", _( "x-axis Rotate" ), "", new_image_icon("brush_rotatex.png"), ID_BRUSH_ROTATEX, window, "tb_brush_rotatex");
-	toolbar_append_item( toolbar, "", _( "y-axis Flip"   ), "", new_image_icon("brush_flipy.png"  ), ID_BRUSH_FLIPY  , window, "tb_brush_flipy"  );
-	toolbar_append_item( toolbar, "", _( "y-axis Rotate" ), "", new_image_icon("brush_rotatey.png"), ID_BRUSH_ROTATEY, window, "tb_brush_rotatey");
-	toolbar_append_item( toolbar, "", _( "z-axis Flip"   ), "", new_image_icon("brush_flipz.png"  ), ID_BRUSH_FLIPZ  , window, "tb_brush_flipz"  );
-	toolbar_append_item( toolbar, "", _( "z-axis Rotate" ), "", new_image_icon("brush_rotatez.png"), ID_BRUSH_ROTATEZ, window, "tb_brush_rotatez");
-	toolbar_append_space( GTK_TOOLBAR( toolbar ) );
-
-	if ( g_PrefsDlg.m_bWideToolbar ) {
-		toolbar_append_item( toolbar, "", _( "Complete Tall"       ), "", new_image_icon("selection_selectcompletetall.png"), ID_SELECTION_SELECTCOMPLETETALL, window, "tb_selection_selectcompletetall");
-		toolbar_append_item( toolbar, "", _( "Select Touching"     ), "", new_image_icon("selection_selecttouching.png"    ), ID_SELECTION_SELECTTOUCHING    , window, "tb_selection_selecttouching"    );
-		toolbar_append_item( toolbar, "", _( "Select Partial Tall" ), "", new_image_icon("selection_selectpartialtall.png" ), ID_SELECTION_SELECTPARTIALTALL , window, "tb_selection_selectpartialtall" );
-		toolbar_append_item( toolbar, "", _( "Select Inside"       ), "", new_image_icon("selection_selectinside.png"      ), ID_SELECTION_SELECTINSIDE      , window, "tb_selection_selectinside"      );
-	}
-	else
-	{
-		toolbar_append_item( toolbar, "", _( "Selection" ), "", new_image_icon("popup_selection.png"), ID_POPUP_SELECTION, window, "tb_popup_selection");
-	}
-	toolbar_append_space( toolbar );
-
-	toolbar_append_item( toolbar, "", _( "CSG Subtract" ), "", new_image_icon("selection_csgsubtract.png"), ID_SELECTION_CSGSUBTRACT, window, "tb_selection_csgsubtract");
-
-	if ( g_PrefsDlg.m_bWideToolbar ) {
-		toolbar_append_item( toolbar, "", _( "CSG Merge" ), "", new_image_icon("selection_csgmerge.png"),ID_SELECTION_CSGMERGE, window, "tb_selection_csgmerge");
-	}
-
-	toolbar_append_item( toolbar, "", _( "Hollow Overlap" ), "", new_image_icon("selection_makehollow.png"     ), ID_SELECTION_MAKEHOLLOW      , window, "tb_selection_makehollow"      );
-	toolbar_append_item( toolbar, "", _( "Hollow Touch"   ), "", new_image_icon("selection_makehollowtouch.png"), ID_SELECTION_MAKEHOLLOW_TOUCH, window, "tb_selection_makehollow_touch");
-
-	if ( g_PrefsDlg.m_bWideToolbar ) {
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Clipper" ), "", new_image_icon("view_clipper.png"), ID_VIEW_CLIPPER, window, "ttb_view_clipper" );
-	}
-
-	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Make Detail Brushes" ), "", new_image_icon("toggle_struct.png"), ID_TOGGLE_DETAIL, window, "ttb_toggle_detail" );
-
-	toolbar_append_space( toolbar );
-
-	toolbar_append_item( toolbar, "", _( "Change views" ), "", new_image_icon("view_change.png"), ID_VIEW_CHANGE, window, "tb_view_change" );
-
-	if ( !g_PrefsDlg.m_bWideToolbar ) {
-		toolbar_append_space( toolbar );
-	}
-
-	toolbar_append_item( toolbar, "", _( "Texture view mode" ), "", new_image_icon("textures_popup.png"), ID_TEXTURES_POPUP, window, "tb_textures_popup" );
-
-	if ( g_PrefsDlg.m_bWideToolbar ) {
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Cubic clip the camera view" ), "", new_image_icon("view_cubicclipping.png"), ID_VIEW_CUBICCLIPPING, window, "ttb_view_cubicclipping"  );
-	}
-
-	toolbar_append_space( toolbar );
-
-	if ( !g_PrefsDlg.m_bWideToolbar ) {
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Camera preview" ),             "", new_image_icon("view_cameratoggle.png" ), ID_VIEW_CAMERATOGGLE , window, "ttb_view_cameratoggle"  );
-		toolbar_append_item(    toolbar, "", _( "Update Camera" ),                                          "", new_image_icon("view_cameraupdate.png" ), ID_VIEW_CAMERAUPDATE , window, "tb_view_cameraupdate"   );
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Cubic clip the camera view" ), "", new_image_icon("view_cubicclipping.png"), ID_VIEW_CUBICCLIPPING, window, "ttb_view_cubicclipping" );
-		toolbar_append_space( toolbar );
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Entity inspector" ), "", new_image_icon("view_entity.png"), ID_VIEW_ENTITY, window, "ttb_view_entity" );
-		toolbar_append_space(       toolbar );
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Clipper" ), "", new_image_icon("view_clipper.png"), ID_VIEW_CLIPPER, window, "ttb_view_clipper" );
-		toolbar_append_space      ( toolbar );
-	}
-
-
-	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Free Rotation" ), "", new_image_icon("select_mouserotate.png"), ID_SELECT_MOUSEROTATE, window, "ttb_select_mouserotate");
-	toolbar_append_space( toolbar );
-	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Free Scaling" )           , "", new_image_icon("select_mousescale.png"), ID_SELECT_MOUSESCALE, window, "ttb_select_mousescale");
-	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along X" ), "", new_image_icon("scalelockx.png"       ), ID_SCALELOCKX       , window, "ttb_scalelockx"       );
-	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along Y" ), "", new_image_icon("scalelocky.png"       ), ID_SCALELOCKY       , window, "ttb_scalelocky"       );
-	toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Disable Scaling Along Z" ), "", new_image_icon("scalelockz.png"       ), ID_SCALELOCKZ       , window, "ttb_scalelockz"       );
-
-	if ( g_PrefsDlg.m_bWideToolbar ) {
-		toolbar_append_space( toolbar );
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Don't select model brushes" ), "", new_image_icon("dontselectmodel.png"), ID_DONTSELECTMODEL , window , "ttb_dontselectmodel" );
-		toolbar_append_space( toolbar );
-
-		if ( !g_pGameDescription->mNoPatch ) {
-			toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Don't select curved brushes" ), "", new_image_icon("dontselectcurve.png"), ID_DONTSELECTCURVE, window, "ttb_dontselectcurve" );
-		}
-	}
-
-	// bug #292, patch toolbar option
-	if ( g_PrefsDlg.m_bPatchToolbar ) {
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Show patch bounding box"                  ), "",   new_image_icon("patch_showboundingbox.png"), ID_PATCH_SHOWBOUNDINGBOX, window, "ttb_patch_showboundingbox");
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Show patches as wireframes"               ), "",   new_image_icon("patch_wireframe.png"      ), ID_PATCH_WIREFRAME      , window, "ttb_patch_wireframe"      );
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Patch Bend mode" ), "",                            new_image_icon("patch_bend.png"           ), ID_PATCH_BEND           , window, "ttb_patch_bend"           );
-		toolbar_append_item   ( toolbar, "", _( "Put caps on the current patch" ), "",                                          new_image_icon("curve_cap.png"            ), ID_CURVE_CAP            , window, "tb_curve_cap"             );
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Welds equal patch points during moves"     ), "",  new_image_icon("patch_weld.png"           ), ID_PATCH_WELD           , window, "ttb_patch_weld"           );
-		toolbar_append_element( toolbar, TOOLBAR_CHILD_TOGGLEBUTTON, "", _( "Selects drill down rows and columns"        ), "", new_image_icon("patch_drilldown.png"      ), ID_PATCH_DRILLDOWN      , window, "ttb_patch_drilldown"      );
-	}
-
-	if ( g_PrefsDlg.m_bWideToolbar ) {
-		toolbar_append_space( toolbar );
-		toolbar_append_item( toolbar, "", _( "Show Entities as" ), "", new_image_icon("show_entities.png"), ID_SHOW_ENTITIES, window, "tb_show_entities" );
-	}
+	toolbar_append_item( toolbar, _( "Open an existing map"          ), "file_open.png"                   , ID_FILE_OPEN                   , window, "tb_file_open"                   );
+	toolbar_append_item( toolbar, _( "Save the active map"           ), "file_save.png"                   , ID_FILE_SAVE                   , window, "tb_file_save"                   );
+	toolbar_append_item( toolbar, _( "x-axis Flip"                   ), "brush_flipx.png"                 , ID_BRUSH_FLIPX                 , window, "tb_brush_flipx"                 );
+	toolbar_append_item( toolbar, _( "x-axis Rotate"                 ), "brush_rotatex.png"               , ID_BRUSH_ROTATEX               , window, "tb_brush_rotatex"               );
+	toolbar_append_item( toolbar, _( "y-axis Flip"                   ), "brush_flipy.png"                 , ID_BRUSH_FLIPY                 , window, "tb_brush_flipy"                 );
+	toolbar_append_item( toolbar, _( "y-axis Rotate"                 ), "brush_rotatey.png"               , ID_BRUSH_ROTATEY               , window, "tb_brush_rotatey"               );
+	toolbar_append_item( toolbar, _( "z-axis Flip"                   ), "brush_flipz.png"                 , ID_BRUSH_FLIPZ                 , window, "tb_brush_flipz"                 );
+	toolbar_append_item( toolbar, _( "z-axis Rotate"                 ), "brush_rotatez.png"               , ID_BRUSH_ROTATEZ               , window, "tb_brush_rotatez"               );
+	toolbar_append_item( toolbar, _( "Complete Tall"                 ), "selection_selectcompletetall.png", ID_SELECTION_SELECTCOMPLETETALL, window, "tb_selection_selectcompletetall");
+	toolbar_append_item( toolbar, _( "Select Touching"               ), "selection_selecttouching.png"    , ID_SELECTION_SELECTTOUCHING    , window, "tb_selection_selecttouching"    );
+	toolbar_append_item( toolbar, _( "Select Partial Tall"           ), "selection_selectpartialtall.png" , ID_SELECTION_SELECTPARTIALTALL , window, "tb_selection_selectpartialtall" );
+	toolbar_append_item( toolbar, _( "Select Inside"                 ), "selection_selectinside.png"      , ID_SELECTION_SELECTINSIDE      , window, "tb_selection_selectinside"      );
+	toolbar_append_item( toolbar, _( "Selection"                     ), "popup_selection.png"             , ID_POPUP_SELECTION             , window, "tb_popup_selection"             );
+	toolbar_append_item( toolbar, _( "CSG Subtract"                  ), "selection_csgsubtract.png"       , ID_SELECTION_CSGSUBTRACT       , window, "tb_selection_csgsubtract"       );
+	toolbar_append_item( toolbar, _( "CSG Merge"                     ), "selection_csgmerge.png"          , ID_SELECTION_CSGMERGE          , window, "tb_selection_csgmerge"          );
+	toolbar_append_item( toolbar, _( "Hollow Overlap"                ), "selection_makehollow.png"        , ID_SELECTION_MAKEHOLLOW        , window, "tb_selection_makehollow"        );
+	toolbar_append_item( toolbar, _( "Hollow Touch"                  ), "selection_makehollowtouch.png"   , ID_SELECTION_MAKEHOLLOW_TOUCH  , window, "tb_selection_makehollow_touch"  );
+	toolbar_append_item( toolbar, _( "Change views"                  ), "view_change.png"                 , ID_VIEW_CHANGE                 , window, "tb_view_change"                 );
+	toolbar_append_item( toolbar, _( "Texture view mode"             ), "textures_popup.png"              , ID_TEXTURES_POPUP              , window, "tb_textures_popup"              );
+	toolbar_append_item( toolbar, _( "Put caps on the current patch" ), "curve_cap.png"                   , ID_CURVE_CAP                   , window, "tb_curve_cap"                   );
+	toolbar_append_item( toolbar, _( "Show Entities as"              ), "show_entities.png"               , ID_SHOW_ENTITIES               , window, "tb_show_entities"               );
+	toolbar_append_space(toolbar);
+	toolbar_append_element( toolbar, _( "Clipper"                                ), "view_clipper.png"         , ID_VIEW_CLIPPER         , window, "ttb_view_clipper"          );
+	toolbar_append_element( toolbar, _( "Make Detail Brushes"                    ), "toggle_struct.png"        , ID_TOGGLE_DETAIL        , window, "ttb_toggle_detail"         );
+	toolbar_append_element( toolbar, _( "Cubic clip the camera view"             ), "view_cubicclipping.png"   , ID_VIEW_CUBICCLIPPING   , window, "ttb_view_cubicclipping"    );
+	toolbar_append_element( toolbar, _( "Free Rotation"                          ), "select_mouserotate.png"   , ID_SELECT_MOUSEROTATE   , window, "ttb_select_mouserotate"    );
+	toolbar_append_element( toolbar, _( "Free Scaling"                           ), "select_mousescale.png"    , ID_SELECT_MOUSESCALE    , window, "ttb_select_mousescale"     );
+	toolbar_append_element( toolbar, _( "Disable Scaling Along X"                ), "scalelockx.png"           , ID_SCALELOCKX           , window, "ttb_scalelockx"            );
+	toolbar_append_element( toolbar, _( "Disable Scaling Along Y"                ), "scalelocky.png"           , ID_SCALELOCKY           , window, "ttb_scalelocky"            );
+	toolbar_append_element( toolbar, _( "Disable Scaling Along Z"                ), "scalelockz.png"           , ID_SCALELOCKZ           , window, "ttb_scalelockz"            );
+	toolbar_append_element( toolbar, _( "Don't select model brushes"             ), "dontselectmodel.png"      , ID_DONTSELECTMODEL      , window, "ttb_dontselectmodel"       );
+	toolbar_append_element( toolbar, _( "Don't select curved brushes"            ), "dontselectcurve.png"      , ID_DONTSELECTCURVE      , window, "ttb_dontselectcurve"       );
+	toolbar_append_element( toolbar, _( "Show patch bounding box"                ), "patch_showboundingbox.png", ID_PATCH_SHOWBOUNDINGBOX, window, "ttb_patch_showboundingbox" );
+	toolbar_append_element( toolbar, _( "Show patches as wireframes"             ), "patch_wireframe.png"      , ID_PATCH_WIREFRAME      , window, "ttb_patch_wireframe"       );
+	toolbar_append_element( toolbar, _( "Patch Bend mode"                        ), "patch_bend.png"           , ID_PATCH_BEND           , window, "ttb_patch_bend"            );
+	toolbar_append_element( toolbar, _( "Welds equal patch points during moves"  ), "patch_weld.png"           , ID_PATCH_WELD           , window, "ttb_patch_weld"            );
+	toolbar_append_element( toolbar, _( "Selects drill down rows and columns"    ), "patch_drilldown.png"      , ID_PATCH_DRILLDOWN      , window, "ttb_patch_drilldown"       );
 
 	m_bCamPreview = true;
 	g_nScaleHow = ( SCALE_X | SCALE_Y | SCALE_Z );
-
 	gtk_widget_show( (GtkWidget *)toolbar );
 }
 
