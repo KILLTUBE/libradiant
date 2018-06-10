@@ -500,52 +500,6 @@ static void ReplaceTemplates( char* w, const char* r ){
 	*w = '\0';
 }
 
-/*
-Load up a project file to get the current version
- */
-int QE_GetTemplateVersionForProject( const char * projectfile ) {
-  xmlDocPtr doc;
-  xmlNodePtr node, project;
-  int ret;
-
-  Sys_Printf( "Scanning template version in %s\n", projectfile );
-  doc = ParseXMLFile( projectfile, true );
-  if ( doc == NULL ) {
-    Sys_FPrintf( SYS_ERR, "ERROR: XML parse failed %s\n", projectfile );
-    return 0;
-  }
-  node = doc->children;
-  while ( node != NULL && node->type != XML_DTD_NODE ) {
-    node = node->next;
-  }
-  if ( node == NULL || strcmp( (char*)node->name, "project" ) != 0 ) {
-    Sys_FPrintf( SYS_ERR, "ERROR: invalid file type %s\n", projectfile );
-    //xmlFree( doc );
-	
-    return 0;
-  }
-  while ( node->type != XML_ELEMENT_NODE ) {
-    node = node->next;
-  }
-  // <project>
-  project = node;
-
-  for ( node = project->children; node != NULL; node = node->next ) {
-    if ( node->type != XML_ELEMENT_NODE ) {
-      continue;
-    }
-    if ( strcmp( (char*)node->properties->children->content, "template_version" ) == 0 ) {
-      ret = atoi( (char*)node->properties->next->children->content );
-      //xmlFreeDoc( doc );
-      return ret;
-    }
-  }
-  Sys_FPrintf( SYS_WRN, "Version key not found in %s\n", projectfile );
-  //xmlFreeDoc( doc );
-  ///g_dir_open
-  return 0;
-}
-
 //extern "C" GDir    *                g_dir_open           (const gchar  *path,
 //					       guint         flags,
 //	GError      **error) {
@@ -561,59 +515,40 @@ int QE_GetTemplateVersionForProject( const char * projectfile ) {
  */
 bool QE_LoadProject( const char *projectfile ){
 	char buf[1024];
-	xmlDocPtr doc;
-	xmlNodePtr node, project;
-
-	Sys_Printf( "Loading project file: \"%s\"\n", projectfile );
-	doc = ParseXMLFile( projectfile, true );
-
-	if ( doc == NULL ) {
-		return false;
-	}
-
-	node = doc->children;
-	while ( node != NULL && node->type != XML_DTD_NODE ) node = node->next;
-	if ( node == NULL || strcmp( (char*)node->name, "project" ) != 0 ) {
-		Sys_FPrintf( SYS_ERR, "ERROR: invalid file type\n" );
-		return false;
-	}
-
-	while ( node->type != XML_ELEMENT_NODE ) node = node->next;
-	// <project>
-	project = node;
 
 	if ( g_qeglobals.d_project_entity != NULL ) {
 		Entity_Free( g_qeglobals.d_project_entity );
 	}
 	g_qeglobals.d_project_entity = Entity_Alloc();
 
-	for ( node = project->children; node != NULL; node = node->next )
-	{
-		if ( node->type != XML_ELEMENT_NODE ) {
-			continue;
-		}
 
-		// <key>
-		ReplaceTemplates( buf, (char*)node->properties->next->children->content );
 
-		SetKeyValue( g_qeglobals.d_project_entity, (char*)node->properties->children->content, buf );
-	}
+	SetKeyValue( g_qeglobals.d_project_entity, "gamename"                                                                                                           , "base");
+	SetKeyValue( g_qeglobals.d_project_entity, "version"                                                                                                            , "2");
+	SetKeyValue( g_qeglobals.d_project_entity, "template_version"                                                                                                   , "8");
+	SetKeyValue( g_qeglobals.d_project_entity, "basepath"                                                                                                           , "C:\\OpenSciTech\\build\\Debug\\");
+	SetKeyValue( g_qeglobals.d_project_entity, "rshcmd"                                                                                                             , "");
+	SetKeyValue( g_qeglobals.d_project_entity, "remotebasepath"                                                                                                     , "C:\\OpenSciTech\\build\\Debug\\");
+	SetKeyValue( g_qeglobals.d_project_entity, "entitypath"                                                                                                         , "C:\\OpenSciTech\\build\\Debug\\base\\scripts\\entities.def");
+	SetKeyValue( g_qeglobals.d_project_entity, "texturepath"                                                                                                        , "C:\\OpenSciTech\\build\\Debug\\base/textures/");
+	SetKeyValue( g_qeglobals.d_project_entity, "autosave"                                                                                                           , "C:\\OpenSciTech\\build\\Debug\\base/maps/autosave.map");
+	SetKeyValue( g_qeglobals.d_project_entity, "mapspath"                                                                                                           , "C:\\OpenSciTech\\build\\Debug\\base/maps/");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_Q3Map2: (single bsp) -meta"                                                                                     , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" -v # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -meta $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_Q3Map2: (single vis)"                                                                                           , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -vis -saveprt $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_Q3Map2: (single vis) -fast"                                                                                     , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -vis -fast -saveprt $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_Q3Map2: (single light) -light -fast -patchshadows"                                                              , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -light -fast -patchshadows $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_Q3Map2: (single light) -light -fast -patchshadows -samples 2 -bounce 2 -dirty"                                  , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -light -fast -patchshadows -samples 2 -bounce 2 -dirty $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_Q3Map2: (single light) -light -fast -patchshadows -samples 2 -bounce 2 -dirty -gamma 2 -compensate 4"           , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -light -fast -patchshadows -samples 2 -bounce 2 -dirty -gamma 2 -compensate 4 $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_Q3Map2: (single light) -light -fast -patchshadows -samples 3 -bounce 8 -dirty"                                  , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -light -fast -patchshadows -samples 3 -bounce 8 -dirty $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_Q3Map2: (single light) -light -fast -patchshadows -samples 3 -bounce 8 -dirty -gamma 2 -compensate 4"           , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -light -fast -patchshadows -samples 3 -bounce 8 -dirty -gamma 2 -compensate 4 $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_Q3Map2: (fast test) -meta -vis -fast -light -fast -patchshadows"                                                , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" -v # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -meta $ && ! "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -vis -fast -saveprt $ && ! "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -light -fast -patchshadows $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_Q3Map2: (full test) -meta -vis -light -fast -patchshadows -samples 2 -bounce 2 -dirty -gamma 2 -compensate 4"   , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" -v # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -meta $ && ! "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -vis -saveprt $ && ! "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -light -fast -patchshadows -samples 2 -bounce 2 -dirty -gamma 2 -compensate 4 $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_Q3Map2: (full final) -meta -vis -light -fast -patchshadows -samples 3 -bounce 8 -dirty -gamma 2 -compensate 4"  , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" -v # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -meta $ && ! "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -vis -saveprt $ && ! "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -light -fast -patchshadows -samples 3 -bounce 8 -dirty -gamma 2 -compensate 4 $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_AAS: compile AAS"                                                                                               , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/bspc" -optimize -forcesidesvisible -bsp2aas $");
+	//SetKeyValue( g_qeglobals.d_project_entity, "bsp_ASE: convert to ASE model"                                                                                      , "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -meta -patchmeta -subdivisions 4 $ && ! "C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/x64/q3map2" # -game quake3 -fs_basepath "C:/xampp/htdocs/imgui/FileDistributor.php/projects/" -convert $");
+	SetKeyValue( g_qeglobals.d_project_entity, "brush_primit"                                                                                                       , "0");
+	SetKeyValue( g_qeglobals.d_project_entity, "user_project"                                                                                                       , "1");
 
-	xmlFreeDoc( doc );
-
-	// project file version checking
-	// add a version checking to avoid people loading later versions of the project file and bitching
-	int ver = IntForKey( g_qeglobals.d_project_entity, "version" );
-	if ( ver > PROJECT_VERSION ) {
-		char strMsg[1024];
-		sprintf( strMsg, _( "This is a version %d project file. This build only supports <=%d project files.\n"
-						 "Please choose another project file or upgrade your version of Radiant." ), ver, PROJECT_VERSION );
-		gtk_MessageBox( g_pParentWnd->m_pWidget, strMsg, _( "Can't load project file" ), MB_ICONERROR | MB_OK );
-		// set the project file to nothing so we are sure we'll ask next time?
-		g_PrefsDlg.m_strLastProject = "";
-		g_PrefsDlg.SavePrefs();
-		return false;
-	}
 
 	// set here some default project settings you need
 	if ( strlen( ValueForKey( g_qeglobals.d_project_entity, "brush_primit" ) ) == 0 ) {
@@ -642,55 +577,6 @@ bool QE_LoadProject( const char *projectfile ){
 	Sys_Printf( "basepath    : %s\n", ValueForKey( g_qeglobals.d_project_entity, "basepath" ) );
 	Sys_Printf( "entitypath  : %s\n", ValueForKey( g_qeglobals.d_project_entity, "entitypath" ) );
 
-
-	// check whether user_project key exists..
-	// if not, save the current project under a new name
-	if ( ValueForKey( g_qeglobals.d_project_entity, "user_project" )[0] == '\0' ) {
-		Sys_Printf( "Loaded a template project file\n" );
-
-		// create the user_project key
-		SetKeyValue( g_qeglobals.d_project_entity, "user_project", "1" );
-
-		if ( IntForKey( g_qeglobals.d_project_entity, "version" ) != PROJECT_VERSION ) {
-			char strMsg[2048];
-			sprintf( strMsg,
-					_( "The template project '%s' has version %d. The editor binary is configured for version %d.\n"
-					 "This indicates a problem in your setup.\n"
-					 "I will keep going with this project till you fix this" ),
-					 projectfile, IntForKey( g_qeglobals.d_project_entity, "version" ), PROJECT_VERSION );
-			gtk_MessageBox( g_pParentWnd->m_pWidget, strMsg, _( "Can't load project file" ), MB_ICONERROR | MB_OK );
-		}
-
-		// create the writable project file path
-		strcpy( buf, g_qeglobals.m_strHomeGame.GetBuffer() );
-		strcat( buf, g_pGameDescription->mBaseGame.GetBuffer() );
-		strcat( buf, G_DIR_SEPARATOR_S "scripts" G_DIR_SEPARATOR_S );
-		// while the filename is already in use, increment the number we add to the end
-		int counter = 0;
-		char pUser[PATH_MAX];
-		while ( 1 )
-		{
-			sprintf( pUser, "%suser%d." PROJECT_FILETYPE, buf, counter );
-			counter++;
-			if ( access( pUser, R_OK ) != 0 ) {
-				// this is the one
-				strcpy( buf, pUser );
-				break;
-			}
-		}
-		// saving project will cause a save prefs
-		g_PrefsDlg.m_strLastProject = buf;
-		g_PrefsDlg.m_nLastProjectVer = IntForKey( g_qeglobals.d_project_entity, "version" );
-		QE_SaveProject( buf );
-	}
-	else
-	{
-		// update preferences::LastProject with path of this successfully-loaded project
-		// save preferences
-		Sys_Printf( "Setting current project in prefs to \"%s\"\n", g_PrefsDlg.m_strLastProject.GetBuffer() );
-		g_PrefsDlg.m_strLastProject = projectfile;
-		g_PrefsDlg.SavePrefs();
-	}
 	g_dir_read_name;
 	return true;
 }

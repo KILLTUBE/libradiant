@@ -2866,67 +2866,7 @@ const bool IsMap(const char* filename){
 }
 
 void MainFrame::CreateQEChildren(){
-	// load the project file, if it is a project file. (Or at least no .map)
-	if ( g_argc > 1 && !IsMap( g_argv[1] ) ) {
-		Sys_Printf( "loading project file from the command line: %s\n", g_argv[1] );
-		if ( !QE_LoadProject( g_argv[1] ) ) {
-			Error( "Unable to load project file %s\n", g_argv[1] );
-		}
-	}
-	else
-	{
-		const char* filename = NULL;
-		char buf[PATH_MAX];
-		const char *r;
-		bool bTriedTemplate = false;
-        int templateVersion = 0;
-
-		if ( g_PrefsDlg.m_nLastProjectVer != 0 && g_PrefsDlg.m_nLastProjectVer != PROJECT_VERSION ) {
-			// we need to regenerate from template
-			Sys_Printf( "last project has version %d, this binary wants version %d - regenerating from the template\n", g_PrefsDlg.m_nLastProjectVer, PROJECT_VERSION );
-			g_PrefsDlg.m_strLastProject = "";
-		}
-
-        
-        // check to see if the project template is versioned
-        strcpy( buf, g_pGameDescription->mEnginePath.GetBuffer() );
-        strcat( buf, g_pGameDescription->mBaseGame.GetBuffer() );
-        strcat( buf, "/scripts/" );
-        strcat( buf, PROJECT_TEMPLATE_NAME );
-
-		// for some reason libacidtech is always set somewhere... xml aids
-		snprintf(buf, PATH_MAX, "%s", "C:\\OpenSciTech\\build\\Debug\\base\\scripts\\openscitech.proj");
-
-        templateVersion = QE_GetTemplateVersionForProject( buf );
-
-		r = g_PrefsDlg.m_strLastProject.GetBuffer();
-
-		while ( r == NULL || *r == '\0' || access( r, R_OK ) != 0 || !QE_LoadProject( r ) || templateVersion != IntForKey( g_qeglobals.d_project_entity, "template_version" ) )
-		{
-			if ( !bTriedTemplate ) {
-				// try default project location
-				bTriedTemplate = true;
-				// for all OSes, we look for the template in the base installation (no homepath here)
-				strcpy( buf, g_pGameDescription->mEnginePath.GetBuffer() );
-				strcat( buf, g_pGameDescription->mBaseGame.GetBuffer() );
-				strcat( buf, "/scripts/" );
-				strcat( buf, PROJECT_TEMPLATE_NAME );
-				r = buf;
-			}
-			else
-			{
-				gtk_MessageBox( NULL, _( "Failed to load project file.\nPlease enter a valid project file." ), _( "Load Project" ) );
-
-				filename = file_dialog( m_pWidget, TRUE, _( "Choose Project File" ), buf, "project" );
-				if ( filename != NULL ) {
-					r = filename;
-				} else {
-					Error( "Cannot continue without loading a project..." );
-				}
-			}
-		}
-	}
-
+	QE_LoadProject( "C:\\OpenSciTech\\build\\Debug\\base\\scripts\\openscitech.proj" );
 	QE_Init();
 }
 
