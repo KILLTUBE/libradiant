@@ -262,138 +262,50 @@ void CXMLPropertyBag::PushAssignment( const char *name, PrefTypes_t type, void *
 }
 
 xmlNodePtr CXMLPropertyBag::EpairForName( const char *name ){
-	xmlNodePtr ret = NULL;
-
-	xmlNodePtr pNode = mpDocNode->children;
-	while ( pNode != NULL )
-	{
-		if ( pNode->type == XML_ELEMENT_NODE ) {
-			xmlAttrPtr tmp_attr_ptr = xmlHasProp( pNode, (xmlChar *)"name" );
-			if ( tmp_attr_ptr != NULL && !strcmp( name, (char *)tmp_attr_ptr->children->content ) ) {
-				if ( ret ) {
-					Sys_FPrintf( SYS_WRN, "WARNING: dupe property in CXMLPropertyBag::EpairForName '%s'\n", name );
-				}
-				else {
-					ret = pNode;
-				}
-			}
-		}
-		pNode = pNode->next;
-	}
-	return ret;
+	return NULL;
 }
 
 void CXMLPropertyBag::GetPref( const char *name, Str *pV, const char *V ){
-	xmlNodePtr pNode = EpairForName( name );
-	if ( pNode ) {
-		if ( pNode->children && pNode->children->content ) {
-			*pV = pNode->children->content;
-		}
-		else {
-			// means the pref exists, and that the value is ""
-			*pV = "";
-		}
-	}
-	else
-	{
-		pNode = xmlNewChild( mpDocNode, NULL, (xmlChar *)"epair", (xmlChar *)V );
-		xmlSetProp( pNode, (xmlChar *)"name", (xmlChar *)name );
-	}
-	// push the pref assignment if needed
-	PushAssignment( name, PREF_STR, pV );
+	// means the pref exists, and that the value is ""
+	*pV = "";
+	PushAssignment( name, PREF_STR, pV ); // push the pref assignment if needed
 }
 
 void CXMLPropertyBag::GetPref( const char *name, int *pV, int V ){
-	xmlNodePtr pNode;
-	if ( ( pNode = EpairForName( name ) ) && pNode->children && pNode->children->content ) {
-		*pV = atoi( (char *)pNode->children->content );
-	}
-	else
-	{
-		char s[10];
-		sprintf( s, "%d", V );
-		pNode = xmlNewChild( mpDocNode, NULL, (xmlChar *)"epair", (xmlChar *)s );
-		xmlSetProp( pNode, (xmlChar *)"name", (xmlChar *)name );
-		*pV = V;
-	}
-	// push the pref assignment if needed
-	PushAssignment( name, PREF_INT, pV );
+	char s[10];
+	sprintf( s, "%d", V );
+	*pV = V;
+	PushAssignment( name, PREF_INT, pV ); // push the pref assignment if needed
 }
 
 void CXMLPropertyBag::GetPref( const char *name, bool *pV, bool V ){
-	xmlNodePtr pNode;
-	if ( ( pNode = EpairForName( name ) ) && pNode->children && pNode->children->content ) {
-		if ( !strcmp( (char *)pNode->children->content, "true" ) ) {
-			*pV = true;
-		}
-		else
-		{
-			*pV = false;
-		}
-	}
-	else
-	{
-		char s[10];
-		V ? strcpy( s, "true" ) : strcpy( s, "false" );
-		pNode = xmlNewChild( mpDocNode, NULL, (xmlChar *)"epair", (xmlChar *)s );
-		xmlSetProp( pNode, (xmlChar *)"name", (xmlChar *)name );
-		*pV = V;
-	}
-	// push the pref assignment
-	PushAssignment( name, PREF_BOOL, pV );
+	char s[10];
+	V ? strcpy( s, "true" ) : strcpy( s, "false" );
+	*pV = V;
+	PushAssignment( name, PREF_BOOL, pV ); // push the pref assignment
 }
 
 void CXMLPropertyBag::GetPref( const char *name, float *pV, float V ){
-	xmlNodePtr pNode;
-	if ( ( pNode = EpairForName( name ) ) && pNode->children && pNode->children->content ) {
-		*pV = atof( (char *)pNode->children->content );
-	}
-	else
-	{
-		char s[10];
-		sprintf( s, "%f", V );
-		pNode = xmlNewChild( mpDocNode, NULL, (xmlChar *)"epair", (xmlChar *)s );
-		xmlSetProp( pNode, (xmlChar *)"name", (xmlChar *)name );
-		*pV = V;
-	}
-	// push the pref assignment if needed
-	PushAssignment( name, PREF_FLOAT, pV );
+	char s[10];
+	sprintf( s, "%f", V );
+	*pV = V;
+	PushAssignment( name, PREF_FLOAT, pV ); // push the pref assignment if needed
 }
 
 void CXMLPropertyBag::GetPref( const char *name, float* pV, float* V ){
-	xmlNodePtr pNode;
-	if ( ( pNode = EpairForName( name ) ) && pNode->children && pNode->children->content ) {
-		sscanf( (char *)pNode->children->content, "%f %f %f", &pV[0], &pV[1], &pV[2] );
-	}
-	else
-	{
-		char s[128];
-		sprintf( s, "%f %f %f", V[0], V[1], V[2] );
-		pNode = xmlNewChild( mpDocNode, NULL, (xmlChar *)"epair", (xmlChar *)s );
-		xmlSetProp( pNode, (xmlChar *)"name", (xmlChar *)name );
-		pV[0] = V[0];
-		pV[1] = V[1];
-		pV[2] = V[2];
-	}
-	// push the pref assignment if needed
-	PushAssignment( name, PREF_VEC3, pV );
+	char s[128];
+	sprintf( s, "%f %f %f", V[0], V[1], V[2] );
+	pV[0] = V[0];
+	pV[1] = V[1];
+	pV[2] = V[2];
+	PushAssignment( name, PREF_VEC3, pV ); // push the pref assignment if needed
 }
 
 void CXMLPropertyBag::GetPref( const char *name, window_position_t* pV, window_position_t V ){
-	xmlNodePtr pNode;
-	if ( ( pNode = EpairForName( name ) ) && pNode->children && pNode->children->content ) {
-		WindowPosition_Parse( *pV, CString( (xmlChar *)pNode->children->content ) );
-	}
-	else
-	{
-		CString str;
-		WindowPosition_Write( V, str );
-		pNode = xmlNewChild( mpDocNode, NULL, (xmlChar *)"epair", (xmlChar *)str.GetBuffer() );
-		xmlSetProp( pNode, (xmlChar *)"name", (xmlChar *)name );
-		*pV = V;
-	}
-	// push the pref assignment if needed
-	PushAssignment( name, PREF_WNDPOS, pV );
+	CString str;
+	WindowPosition_Write( V, str );
+	*pV = V;
+	PushAssignment( name, PREF_WNDPOS, pV ); // push the pref assignment if needed
 }
 
 void CXMLPropertyBag::UpdatePrefTree(){
@@ -2956,7 +2868,7 @@ void PrefsDlg::LoadPrefs(){
 	}
 
 	// load local.pref file
-	mLocalPrefs.ReadXMLFile( m_inipath->str );
+	//mLocalPrefs.ReadXMLFile( m_inipath->str );
 
 	mLocalPrefs.GetPref( PATCHSHOWBOUNDS_KEY,  &g_bPatchShowBounds,  FALSE );
 	mLocalPrefs.GetPref( MOUSE_KEY,            &m_nMouse,            MOUSE_DEF );

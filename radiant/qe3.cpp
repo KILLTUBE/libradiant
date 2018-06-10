@@ -587,37 +587,8 @@ bool QE_LoadProject( const char *projectfile ){
    TTimo: whenever QE_SaveProject is called, prefs are updated and saved with the path to the project
    ===========
  */
-qboolean QE_SaveProject( const char* filename ){
-	Sys_Printf( "Save project file '%s'\n", filename );
-
-	xmlNodePtr node;
-	xmlDocPtr doc = xmlNewDoc( (xmlChar *)"1.0" );
-	// create DTD node
-	xmlCreateIntSubset( doc, (xmlChar *)"project", NULL, (xmlChar *)"project.dtd" );
-	// create project node
-	doc->children->next = xmlNewDocNode( doc, NULL, (xmlChar *)"project", NULL );
-
-	for ( epair_t* epair = g_qeglobals.d_project_entity->epairs; epair != NULL; epair = epair->next )
-	{
-		node = xmlNewChild( doc->children->next, NULL, (xmlChar *)"key", NULL );
-		xmlSetProp( node, (xmlChar*)"name", (xmlChar*)epair->key );
-		xmlSetProp( node, (xmlChar*)"value", (xmlChar*)epair->value );
-	}
-
-	CreateDirectoryPath( filename );
-	if ( xmlSaveFormatFile( filename, doc, 1 ) != -1 ) {
-		xmlFreeDoc( doc );
-		Sys_Printf( "Setting current project in prefs to \"%s\"\n", filename );
-		g_PrefsDlg.m_strLastProject = filename;
-		g_PrefsDlg.SavePrefs();
-		return TRUE;
-	}
-	else
-	{
-		xmlFreeDoc( doc );
-		Sys_FPrintf( SYS_ERR, "failed to save project file: \"%s\"\n", filename );
-		return FALSE;
-	}
+qboolean QE_SaveProject( const char *filename ) {
+	return true;
 }
 
 
