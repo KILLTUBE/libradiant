@@ -394,53 +394,52 @@ SCommandInfo g_Commands[] = {
 
 int g_nCommandCount = sizeof( g_Commands ) / sizeof( SCommandInfo );
 
-SKeyInfo g_Keys[] =
-{
-	{"Space", GDK_KEY_space},
-	{"Backspace", GDK_KEY_BackSpace},
-	{"Escape", GDK_KEY_Escape},
-	{"End", GDK_KEY_End},
-	{"Insert", GDK_KEY_Insert},
-	{"Delete", GDK_KEY_Delete},
-	{"PageUp", GDK_KEY_Prior},
-	{"PageDown", GDK_KEY_Next},
-	{"Up", GDK_KEY_Up},
-	{"Down", GDK_KEY_Down},
-	{"Left", GDK_KEY_Left},
-	{"Right", GDK_KEY_Right},
-	{"F1", GDK_KEY_F1},
-	{"F2", GDK_KEY_F2},
-	{"F3", GDK_KEY_F3},
-	{"F4", GDK_KEY_F4},
-	{"F5", GDK_KEY_F5},
-	{"F6", GDK_KEY_F6},
-	{"F7", GDK_KEY_F7},
-	{"F8", GDK_KEY_F8},
-	{"F9", GDK_KEY_F9},
-	{"F10", GDK_KEY_F10},
-	{"F11", GDK_KEY_F11},
-	{"F12", GDK_KEY_F12},
-	{"Tab", GDK_KEY_Tab},
-	{"Return", GDK_KEY_Return},
-	{"Comma", GDK_KEY_comma},
-	{"Period", GDK_KEY_period},
-	{"Plus", GDK_KEY_KP_Add},
-	{"Multiply", GDK_KEY_multiply},
-	{"Subtract", GDK_KEY_KP_Subtract},
-	{"NumPad0", GDK_KEY_KP_0},
-	{"NumPad1", GDK_KEY_KP_1},
-	{"NumPad2", GDK_KEY_KP_2},
-	{"NumPad3", GDK_KEY_KP_3},
-	{"NumPad4", GDK_KEY_KP_4},
-	{"NumPad5", GDK_KEY_KP_5},
-	{"NumPad6", GDK_KEY_KP_6},
-	{"NumPad7", GDK_KEY_KP_7},
-	{"NumPad8", GDK_KEY_KP_8},
-	{"NumPad9", GDK_KEY_KP_9},
-	{"[", GDK_KEY_braceleft},
-	{"]", GDK_KEY_braceright},
-	{"\\", GDK_KEY_backslash},
-	{"Home", GDK_KEY_Home}
+SKeyInfo g_Keys[] = {
+	{"Space"    , GDK_KEY_space      },
+	{"Backspace", GDK_KEY_BackSpace  },
+	{"Escape"   , GDK_KEY_Escape     },
+	{"End"      , GDK_KEY_End        },
+	{"Insert"   , GDK_KEY_Insert     },
+	{"Delete"   , GDK_KEY_Delete     },
+	{"PageUp"   , GDK_KEY_Prior      },
+	{"PageDown" , GDK_KEY_Next       },
+	{"Up"       , GDK_KEY_Up         },
+	{"Down"     , GDK_KEY_Down       },
+	{"Left"     , GDK_KEY_Left       },
+	{"Right"    , GDK_KEY_Right      },
+	{"F1"       , GDK_KEY_F1         },
+	{"F2"       , GDK_KEY_F2         },
+	{"F3"       , GDK_KEY_F3         },
+	{"F4"       , GDK_KEY_F4         },
+	{"F5"       , GDK_KEY_F5         },
+	{"F6"       , GDK_KEY_F6         },
+	{"F7"       , GDK_KEY_F7         },
+	{"F8"       , GDK_KEY_F8         },
+	{"F9"       , GDK_KEY_F9         },
+	{"F10"      , GDK_KEY_F10        },
+	{"F11"      , GDK_KEY_F11        },
+	{"F12"      , GDK_KEY_F12        },
+	{"Tab"      , GDK_KEY_Tab        },
+	{"Return"   , GDK_KEY_Return     },
+	{"Comma"    , GDK_KEY_comma      },
+	{"Period"   , GDK_KEY_period     },
+	{"Plus"     , GDK_KEY_KP_Add     },
+	{"Multiply" , GDK_KEY_multiply   },
+	{"Subtract" , GDK_KEY_KP_Subtract},
+	{"NumPad0"  , GDK_KEY_KP_0       },
+	{"NumPad1"  , GDK_KEY_KP_1       },
+	{"NumPad2"  , GDK_KEY_KP_2       },
+	{"NumPad3"  , GDK_KEY_KP_3       },
+	{"NumPad4"  , GDK_KEY_KP_4       },
+	{"NumPad5"  , GDK_KEY_KP_5       },
+	{"NumPad6"  , GDK_KEY_KP_6       },
+	{"NumPad7"  , GDK_KEY_KP_7       },
+	{"NumPad8"  , GDK_KEY_KP_8       },
+	{"NumPad9"  , GDK_KEY_KP_9       },
+	{"["        , GDK_KEY_braceleft  },
+	{"]"        , GDK_KEY_braceright },
+	{"\\"       , GDK_KEY_backslash  },
+	{"Home"     , GDK_KEY_Home       }
 };
 
 int g_nKeyCount = sizeof( g_Keys ) / sizeof( SKeyInfo );
@@ -462,18 +461,16 @@ void HandleKeyUp( GtkWidget *widget, gpointer data ){
 	Sys_Printf( "HandleKeyUp: %d\n", id );
 #endif
 
-	if ( g_bIgnoreCommands ) {
+	if ( g_bIgnoreCommands )
 		return;
-	}
 
-	switch ( id )
-	{
-	case ID_CAMERA_FORWARD: g_pParentWnd->OnCameraForward( FALSE ); break;
-	case ID_CAMERA_BACK: g_pParentWnd->OnCameraBack( FALSE ); break;
-	case ID_CAMERA_LEFT: g_pParentWnd->OnCameraLeft( FALSE ); break;
-	case ID_CAMERA_RIGHT: g_pParentWnd->OnCameraRight( FALSE ); break;
-	case ID_CAMERA_STRAFELEFT: g_pParentWnd->OnCameraStrafeleft( FALSE ); break;
-	case ID_CAMERA_STRAFERIGHT: g_pParentWnd->OnCameraStraferight( FALSE ); break;
+	switch ( id ) {
+		case ID_CAMERA_FORWARD    : g_pParentWnd->OnCameraForward(     FALSE ); break;
+		case ID_CAMERA_BACK       : g_pParentWnd->OnCameraBack(        FALSE ); break;
+		case ID_CAMERA_LEFT       : g_pParentWnd->OnCameraLeft(        FALSE ); break;
+		case ID_CAMERA_RIGHT      : g_pParentWnd->OnCameraRight(       FALSE ); break;
+		case ID_CAMERA_STRAFELEFT : g_pParentWnd->OnCameraStrafeleft(  FALSE ); break;
+		case ID_CAMERA_STRAFERIGHT: g_pParentWnd->OnCameraStraferight( FALSE ); break;
 	}
 }
 
@@ -517,11 +514,9 @@ gint HandleCommand( GtkWidget *widget, gpointer data ){
 
 		if( GTK_IS_MENU_ITEM( widget ) ) {
 			GtkWidget *label = GTK_WIDGET( g_object_get_data( G_OBJECT( widget ), "classname-label" ) );
-			if( label )
-			{
+			if( label ) {
 				str = gtk_label_get_text( GTK_LABEL( label ) );	
-			} else
-			{
+			} else {
 				str = gtk_menu_item_get_label( GTK_MENU_ITEM( widget ) );
 			}
 		} else if( GTK_IS_LABEL( widget ) ) {
@@ -530,298 +525,286 @@ gint HandleCommand( GtkWidget *widget, gpointer data ){
 			str = gtk_label_get_text( GTK_LABEL( gtk_bin_get_child( GTK_BIN( widget ) ) ) );
 		}
 		g_pParentWnd->ActiveXY()->OnEntityCreate( str );
+	} else {
+		switch ( id ) {
+			case ID_FILE_NEW                               : g_pParentWnd->OnFileNew();                                     break;
+			case ID_FILE_SLEEP                             : g_pParentWnd->OnSleep();                                       break;
+			case ID_FILE_OPEN                              : g_pParentWnd->OnFileOpen();                                    break;
+			case ID_FILE_SAVE                              : g_pParentWnd->OnFileSave();                                    break;
+			case ID_FILE_SAVEAS                            : g_pParentWnd->OnFileSaveas();                                  break;
+			case ID_FILE_EXPORTMAP                         : g_pParentWnd->OnFileExportmap();                               break;
+			case ID_FILE_SAVEREGION                        : g_pParentWnd->OnFileSaveregion();                              break;
+			case ID_FILE_NEWPROJECT                        : g_pParentWnd->OnFileNewproject();                              break;
+			case ID_FILE_LOADPROJECT                       : g_pParentWnd->OnFileLoadproject();                             break;
+			case ID_FILE_PROJECTSETTINGS                   : g_pParentWnd->OnFileProjectsettings();                         break;
+			case ID_FILE_POINTFILE                         : g_pParentWnd->OnFilePointfile();                               break;
+			case ID_FILE_CHECKUPDATE                       : g_pParentWnd->OnFileCheckUpdate();                             break;
+			case ID_FILE_EXIT                              : g_pParentWnd->OnFileExit();                                    break;
+			case ID_FILE_IMPORTMAP                         : g_pParentWnd->OnFileImportmap();                               break;
+			case ID_EDIT_UNDO                              : g_pParentWnd->OnEditUndo();                                    break;
+			case ID_EDIT_REDO                              : g_pParentWnd->OnEditRedo();                                    break;
+			case ID_EDIT_COPYBRUSH                         : g_pParentWnd->OnEditCopybrush();                               break;
+			case ID_EDIT_PASTEBRUSH                        : g_pParentWnd->OnEditPastebrush();                              break;
+			case ID_EDIT_PASTEBRUSHTOCAMERA                : g_pParentWnd->OnEditPastebrushToCamera();                      break;
+			case ID_SELECTION_DELETE                       : g_pParentWnd->OnSelectionDelete();                             break;
+			case ID_EDIT_MAPINFO                           : g_pParentWnd->OnEditMapinfo();                                 break;
+			case ID_EDIT_ENTITYINFO                        : g_pParentWnd->OnEditEntityinfo();                              break;
+			case ID_BRUSH_SCRIPTS                          : g_pParentWnd->OnBrushScripts();                                break;
+			case ID_EDIT_LOADPREFAB                        : g_pParentWnd->OnEditLoadprefab();                              break;
+			case ID_EDIT_SAVEPREFAB                        : g_pParentWnd->OnEditSaveprefab();                              break;
+			case ID_PREFS                                  : g_pParentWnd->OnPrefs();                                       break;
+			case ID_TOGGLECAMERA                           : g_pParentWnd->OnTogglecamera();                                break;
+			case ID_TOGGLECONSOLE                          : g_pParentWnd->OnToggleconsole();                               break;
+			case ID_VIEW_ENTITY                            : g_pParentWnd->OnViewEntity();                                  break;
+			case ID_VIEW_GROUPS                            : g_pParentWnd->OnViewGroups();                                  break;
+			case ID_SELECT_FUNC_GROUP                      : g_pParentWnd->OnSelectFuncGroup();                             break;
+			case ID_TOGGLEVIEW                             : g_pParentWnd->OnToggleview();                                  break;
+			case ID_TOGGLEVIEW_YZ                          : g_pParentWnd->OnToggleviewYz();                                break;
+			case ID_TOGGLEVIEW_XZ                          : g_pParentWnd->OnToggleviewXz();                                break;
+			case ID_TOGGLEZ                                : g_pParentWnd->OnTogglez();                                     break;
+			case ID_VIEW_CENTER                            : g_pParentWnd->OnViewCenter();                                  break;
+			case ID_VIEW_UPFLOOR                           : g_pParentWnd->OnViewUpfloor();                                 break;
+			case ID_VIEW_DOWNFLOOR                         : g_pParentWnd->OnViewDownfloor();                               break;
+			case ID_VIEW_CENTERVIEW                        : g_pParentWnd->OnViewCenterview();                              break;
+			case ID_VIEW_NEXTVIEW                          : g_pParentWnd->OnViewNextview();                                break;
+			case ID_VIEW_XY                                : g_pParentWnd->OnViewXy();                                      break;
+			case ID_VIEW_SIDE                              : g_pParentWnd->OnViewSide();                                    break;
+			case ID_VIEW_FRONT                             : g_pParentWnd->OnViewFront();                                   break;
+			case ID_VIEW_100                               : g_pParentWnd->OnView100();                                     break;
+			case ID_VIEW_ZOOMIN                            : g_pParentWnd->OnViewZoomin();                                  break;
+			case ID_VIEW_ZOOMOUT                           : g_pParentWnd->OnViewZoomout();                                 break;
+			case ID_VIEW_Z100                              : g_pParentWnd->OnViewZ100();                                    break;
+			case ID_VIEW_ZZOOMIN                           : g_pParentWnd->OnViewZzoomin();                                 break;
+			case ID_VIEW_ZZOOMOUT                          : g_pParentWnd->OnViewZzoomout();                                break;
+			case ID_VIEW_CUBEIN                            : g_pParentWnd->OnViewCubein();                                  break;
+			case ID_VIEW_CUBEOUT                           : g_pParentWnd->OnViewCubeout();                                 break;
+			case ID_VIEW_SHOWNAMES                         : g_pParentWnd->OnViewShownames();                               break;
+			case ID_VIEW_SHOWBLOCKS                        : g_pParentWnd->OnViewShowblocks();                              break;
+			case ID_VIEW_SHOWCOORDINATES                   : g_pParentWnd->OnViewShowcoordinates();                         break;
+			case ID_VIEW_SHOWOUTLINE                       : g_pParentWnd->OnViewShowOutline();                             break;
+			case ID_VIEW_SHOWAXES                          : g_pParentWnd->OnViewShowAxes();                                break;
+			case ID_VIEW_SHOWWORKZONE                      : g_pParentWnd->OnViewShowWorkzone();                            break;
+			case ID_VIEW_SHOWANGLES                        : g_pParentWnd->OnViewShowAngles();                              break;
+			case ID_VIEW_HIDESHOW_HIDESELECTED             : g_pParentWnd->OnViewHideshowHideselected();                    break;
+			case ID_VIEW_HIDESHOW_SHOWHIDDEN               : g_pParentWnd->OnViewHideshowShowhidden();                      break;
+			case ID_VIEW_ENTITIESAS_BOUNDINGBOX            : g_pParentWnd->OnEntitiesSetViewAs( id );                       break;
+			case ID_VIEW_ENTITIESAS_WIREFRAME              : g_pParentWnd->OnEntitiesSetViewAs( id );                       break;
+			case ID_VIEW_ENTITIESAS_SELECTEDWIREFRAME      : g_pParentWnd->OnEntitiesSetViewAs( id );                       break;
+			case ID_VIEW_ENTITIESAS_SELECTEDSKINNED        : g_pParentWnd->OnEntitiesSetViewAs( id );                       break;
+			case ID_VIEW_ENTITIESAS_SKINNED                : g_pParentWnd->OnEntitiesSetViewAs( id );                       break;
+			case ID_VIEW_ENTITIESAS_SKINNEDANDBOXED        : g_pParentWnd->OnEntitiesSetViewAs( id );                       break;
+			case ID_VIEW_CUBICCLIPPING                     : g_pParentWnd->OnViewCubicclipping();                           break;
+			case ID_VIEW_OPENGLLIGHTING                    : g_pParentWnd->OnViewOpengllighting();                          break;
+			case ID_SELECTION_DRAGEDGES                    : g_pParentWnd->OnSelectionDragedges();                          break;
+			case ID_SELECTION_DRAGVERTECIES                : g_pParentWnd->OnSelectionDragvertecies();                      break;
+			case ID_SELECTION_CLONE                        : g_pParentWnd->OnSelectionClone();                              break;
+			case ID_SELECTION_DESELECT                     : g_pParentWnd->OnSelectionDeselect();                           break;
+			case ID_BRUSH_FLIPX                            : g_pParentWnd->OnBrushFlipx();                                  break;
+			case ID_BRUSH_FLIPY                            : g_pParentWnd->OnBrushFlipy();                                  break;
+			case ID_BRUSH_FLIPZ                            : g_pParentWnd->OnBrushFlipz();                                  break;
+			case ID_BRUSH_ROTATEX                          : g_pParentWnd->OnBrushRotatex();                                break;
+			case ID_BRUSH_ROTATEY                          : g_pParentWnd->OnBrushRotatey();                                break;
+			case ID_BRUSH_ROTATEZ                          : g_pParentWnd->OnBrushRotatez();                                break;
+			case ID_SELECTION_ARBITRARYROTATION            : g_pParentWnd->OnSelectionArbitraryrotation();                  break;
+			case ID_SELECT_SCALE                           : g_pParentWnd->OnSelectScale();                                 break;
+			case ID_SELECTION_MAKEHOLLOW                   : g_pParentWnd->OnSelectionMakehollow();                         break;
+			case ID_SELECTION_MAKEHOLLOW_TOUCH             : g_pParentWnd->OnSelectionMakehollowTouch();                    break;
+			case ID_SELECTION_CSGSUBTRACT                  : g_pParentWnd->OnSelectionCsgsubtract();                        break;
+			case ID_SELECTION_CSGMERGE                     : g_pParentWnd->OnSelectionCsgmerge();                           break;
+			case ID_SELECTION_NOOUTLINE                    : g_pParentWnd->OnSelectionNoOutline();                          break;
+			case ID_SELECTION_OUTLINESTYLE                 : g_pParentWnd->OnSelectionOutlineStyle();                       break;
+			case ID_SELECTION_SELECTCOMPLETETALL           : g_pParentWnd->OnSelectionSelectcompletetall();                 break;
+			case ID_SELECTION_SELECTTOUCHING               : g_pParentWnd->OnSelectionSelecttouching();                     break;
+			case ID_SELECTION_SELECTPARTIALTALL            : g_pParentWnd->OnSelectionSelectpartialtall();                  break;
+			case ID_SELECTION_SELECTINSIDE                 : g_pParentWnd->OnSelectionSelectinside();                       break;
+			case ID_SELECTION_SELECT_NUDGELEFT             : g_pParentWnd->OnSelectionSelectNudgeleft();                    break;
+			case ID_SELECTION_SELECT_NUDGERIGHT            : g_pParentWnd->OnSelectionSelectNudgeright();                   break;
+			case ID_SELECTION_SELECT_NUDGEUP               : g_pParentWnd->OnSelectionSelectNudgeup();                      break;
+			case ID_SELECTION_SELECT_NUDGEDOWN             : g_pParentWnd->OnSelectionSelectNudgedown();                    break;
+			case ID_VIEW_CLIPPER                           : g_pParentWnd->OnViewClipper();                                 break;
+			case ID_CLIP_SELECTED                          : g_pParentWnd->OnClipSelected();                                break;
+			case ID_SPLIT_SELECTED                         : g_pParentWnd->OnSplitSelected();                               break;
+			case ID_FLIP_CLIP                              : g_pParentWnd->OnFlipClip();                                    break;
+			case ID_SELECTION_CONNECT                      : g_pParentWnd->OnSelectionConnect();                            break;
+			case ID_SELECTION_UNGROUPENTITY                : g_pParentWnd->OnSelectionUngroupentity();                      break;
+			case ID_SELECTION_MERGE                        : Select_MergeEntity();                                          break;
+			case ID_SELECTION_SEPERATE                     : Select_Seperate();                                             break;
+			case ID_SELECTION_MAKE_DETAIL                  : g_pParentWnd->OnSelectionMakeDetail();                         break;
+			case ID_SELECTION_MAKE_STRUCTURAL              : g_pParentWnd->OnSelectionMakeStructural();                     break;
+			case ID_SNAPTOGRID                             : g_pParentWnd->OnSnaptogrid();                                  break;
+			case ID_TEXTURES_SHOWINUSE                     : g_pParentWnd->OnTexturesShowinuse();                           break;
+			case ID_TEXTURES_SHOWALL                       : g_pParentWnd->OnTexturesShowall();                             break;
+			case ID_TEXTURES_INSPECTOR                     : g_pParentWnd->OnTexturesInspector();                           break;
+			case ID_TEXTURE_REPLACEALL                     : g_pParentWnd->OnTextureReplaceall();                           break;
+			case ID_TOGGLE_LOCK                            : g_pParentWnd->OnToggleLock();                                  break;
+			case ID_TOGGLE_ROTATELOCK                      : g_pParentWnd->OnToggleRotatelock();                            break;
+			case ID_TEXTURES_LOAD                          : g_pParentWnd->OnTexturesLoad();                                break;
+			case ID_TEXTURES_RELOADSHADERS                 : g_pParentWnd->OnTexturesReloadshaders();                       break;
+			case ID_TEXTURES_SHADERS_SHOW                  : g_pParentWnd->OnTexturesShadersShow();                         break;
+			case ID_TEXTURES_LOADLIST                      : g_pParentWnd->OnTexturesLoadlist();                            break;
+			case ID_TEXTURES_SHADERLISTONLY                : g_pParentWnd->OnTexturesShaderlistonly();                      break;
+			case ID_TEXTUREWINDOW_SCALEUP                  : g_pParentWnd->OnTexturewindowScaleup();                        break;
+			case ID_TEXTUREWINDOW_SCALEDOWN                : g_pParentWnd->OnTexturewindowScaledown();                      break;
+			case ID_MISC_BENCHMARK                         : g_pParentWnd->OnMiscBenchmark();                               break;
+			case ID_COLOR_SETORIGINAL                      : g_pParentWnd->OnColorSetoriginal();                            break;
+			case ID_COLOR_SETQER                           : g_pParentWnd->OnColorSetqer();                                 break;
+			case ID_COLOR_SETBLACK                         : g_pParentWnd->OnColorSetblack();                               break;
+			case ID_COLOR_SETYDNAR                         : g_pParentWnd->OnColorSetydnar();                               break;
+			case ID_TEXTUREBK                              : g_pParentWnd->OnTexturebk();                                   break;
+			case ID_COLORS_XYBK                            : g_pParentWnd->OnColorsXybk();                                  break;
+			case ID_COLORS_MAJOR                           : g_pParentWnd->OnColorsMajor();                                 break;
+			case ID_COLORS_MINOR                           : g_pParentWnd->OnColorsMinor();                                 break;
+			case ID_COLORS_GRIDTEXT                        : g_pParentWnd->OnColorsGridtext();                              break;
+			case ID_COLORS_GRIDBLOCK                       : g_pParentWnd->OnColorsGridblock();                             break;
+			case ID_COLORS_CAMERABACK                      : g_pParentWnd->OnColorsCameraBack();                            break;
+			case ID_COLORS_BRUSH                           : g_pParentWnd->OnColorsBrush();                                 break;
+			case ID_COLORS_SELECTEDBRUSH                   : g_pParentWnd->OnColorsSelectedbrush();                         break;
+			case ID_COLORS_SELECTEDBRUSH3D                 : g_pParentWnd->OnColorsSelectedbrush3D();                       break;
+			case ID_COLORS_CLIPPER                         : g_pParentWnd->OnColorsClipper();                               break;
+			case ID_COLORS_VIEWNAME                        : g_pParentWnd->OnColorsViewname();                              break;
+			case ID_COLORS_DETAIL                          : g_pParentWnd->OnColorsDetail();                                break;
+			case ID_MISC_GAMMA                             : g_pParentWnd->OnMiscGamma();                                   break;
+			case ID_MISC_FINDBRUSH                         : g_pParentWnd->OnMiscFindbrush();                               break;
+			case ID_MISC_NEXTLEAKSPOT                      : g_pParentWnd->OnMiscNextleakspot();                            break;
+			case ID_MISC_PREVIOUSLEAKSPOT                  : g_pParentWnd->OnMiscPreviousleakspot();                        break;
+			case ID_MISC_PRINTXY                           : g_pParentWnd->OnMiscPrintxy();                                 break;
+			case ID_MISC_SELECTENTITYCOLOR                 : g_pParentWnd->OnMiscSelectentitycolor();                       break;
+			case ID_CONVERTCURVES                          : g_pParentWnd->OnConvertcurves();                               break;
+			case ID_REGION_OFF                             : g_pParentWnd->OnRegionOff();                                   break;
+			case ID_REGION_SETXY                           : g_pParentWnd->OnRegionSetxy();                                 break;
+			case ID_REGION_SETTALLBRUSH                    : g_pParentWnd->OnRegionSettallbrush();                          break;
+			case ID_REGION_SETBRUSH                        : g_pParentWnd->OnRegionSetbrush();                              break;
+			case ID_REGION_SETSELECTION                    : g_pParentWnd->OnRegionSetselection();                          break;
+			case ID_BRUSH_3SIDED                           : g_pParentWnd->OnBrush3sided();                                 break;
+			case ID_BRUSH_4SIDED                           : g_pParentWnd->OnBrush4sided();                                 break;
+			case ID_BRUSH_5SIDED                           : g_pParentWnd->OnBrush5sided();                                 break;
+			case ID_BRUSH_6SIDED                           : g_pParentWnd->OnBrush6sided();                                 break;
+			case ID_BRUSH_7SIDED                           : g_pParentWnd->OnBrush7sided();                                 break;
+			case ID_BRUSH_8SIDED                           : g_pParentWnd->OnBrush8sided();                                 break;
+			case ID_BRUSH_9SIDED                           : g_pParentWnd->OnBrush9sided();                                 break;
+			case ID_BRUSH_ARBITRARYSIDED                   : g_pParentWnd->OnBrushArbitrarysided();                         break;
+			case ID_BRUSH_MAKECONE                         : g_pParentWnd->OnBrushMakecone();                               break;
+			case ID_BRUSH_PRIMITIVES_SPHERE                : g_pParentWnd->OnBrushPrimitivesSphere();                       break;
+			case ID_CURVE_PATCHTUBE                        : g_pParentWnd->OnCurvePatchtube();                              break;
+			case ID_CURVE_PATCHDENSETUBE                   : g_pParentWnd->OnCurvePatchdensetube();                         break;
+			case ID_CURVE_PATCHVERYDENSETUBE               : g_pParentWnd->OnCurvePatchverydensetube();                     break;
+			case ID_CURVE_PATCHSQUARE                      : g_pParentWnd->OnCurvePatchsquare();                            break;
+			case ID_CURVE_PATCHENDCAP                      : g_pParentWnd->OnCurvePatchendcap();                            break;
+			case ID_CURVE_PATCHBEVEL                       : g_pParentWnd->OnCurvePatchbevel();                             break;
+			case ID_CURVE_MOREENDCAPSBEVELS_SQUAREBEVEL    : g_pParentWnd->OnCurveMoreendcapsbevelsSquarebevel();           break;
+			case ID_CURVE_MOREENDCAPSBEVELS_SQUAREENDCAP   : g_pParentWnd->OnCurveMoreendcapsbevelsSquareendcap();          break;
+			case ID_CURVE_PATCHCONE                        : g_pParentWnd->OnCurvePatchcone();                              break;
+			case ID_CURVE_SIMPLEPATCHMESH                  : g_pParentWnd->OnCurveSimplepatchmesh();                        break;
+			case ID_CURVE_INSERT_INSERTCOLUMN              : g_pParentWnd->OnCurveInsertInsertcolumn();                     break;
+			case ID_CURVE_INSERT_ADDCOLUMN                 : g_pParentWnd->OnCurveInsertAddcolumn();                        break;
+			case ID_CURVE_INSERT_INSERTROW                 : g_pParentWnd->OnCurveInsertInsertrow();                        break;
+			case ID_CURVE_INSERT_ADDROW                    : g_pParentWnd->OnCurveInsertAddrow();                           break;
+			case ID_CURVE_DELETE_FIRSTCOLUMN               : g_pParentWnd->OnCurveDeleteFirstcolumn();                      break;
+			case ID_CURVE_DELETE_LASTCOLUMN                : g_pParentWnd->OnCurveDeleteLastcolumn();                       break;
+			case ID_CURVE_DELETE_FIRSTROW                  : g_pParentWnd->OnCurveDeleteFirstrow();                         break;
+			case ID_CURVE_DELETE_LASTROW                   : g_pParentWnd->OnCurveDeleteLastrow();                          break;
+			case ID_CURVE_NEGATIVE                         : g_pParentWnd->OnCurveNegative();                               break;
+			case ID_CURVE_REDISPERSE_ROWS                  : g_pParentWnd->OnCurveRedisperseRows();                         break;
+			case ID_CURVE_REDISPERSE_INTERMEDIATE_COLS     : g_pParentWnd->OnCurveRedisperseIntermediateCols();             break;
+			case ID_CURVE_REDISPERSE_INTERMEDIATE_ROWS     : g_pParentWnd->OnCurveRedisperseIntermediateRows();             break;
+			case ID_CURVE_MATRIX_TRANSPOSE                 : g_pParentWnd->OnCurveMatrixTranspose();                        break;
+			case ID_CURVE_CAP                              : g_pParentWnd->OnCurveCap();                                    break;
+			case ID_CURVE_CYCLECAP                         : g_pParentWnd->OnCurveCyclecap();                               break;
+			case ID_CURVE_OVERLAY_SET                      : g_pParentWnd->OnCurveOverlaySet();                             break;
+			case ID_CURVE_OVERLAY_CLEAR                    : g_pParentWnd->OnCurveOverlayClear();                           break;
+			case ID_CURVE_THICKEN                          : g_pParentWnd->OnCurveThicken();                                break;
+			case ID_PLUGINS_REFRESH                        : g_pParentWnd->OnPluginsRefresh();                              break;
+			case ID_HELP                                   : g_pParentWnd->OnHelp();                                        break;
+			case ID_HELP_LINKS                             : g_pParentWnd->OnHelpLinks();                                   break;
+			case ID_HELP_BUGREPORT                         : g_pParentWnd->OnHelpBugreport();                               break;
+			case ID_HELP_COMMANDLIST                       : g_pParentWnd->OnHelpCommandlist();                             break;
+			case ID_HELP_ABOUT                             : g_pParentWnd->OnHelpAbout();                                   break;
+			case ID_DONTSELECTMODEL                        : g_pParentWnd->OnDontselectmodel();                             break;
+			case ID_FILTER_AREAPORTALS                     : g_pParentWnd->OnFilterAreaportals();                           break;
+			case ID_FILTER_CAULK                           : g_pParentWnd->OnFilterCaulk();                                 break;
+			case ID_FILTER_STRUCTURAL                      : g_pParentWnd->OnFilterStructural();                            break;
+			case ID_FILTER_CLIPS                           : g_pParentWnd->OnFilterClips();                                 break;
+			case ID_FILTER_BOTCLIPS                        : g_pParentWnd->OnFilterBotClips();                              break;
+			case ID_FILTER_DETAILS                         : g_pParentWnd->OnFilterDetails();                               break;
+			case ID_FILTER_ENTITIES                        : g_pParentWnd->OnFilterEntities();                              break;
+			case ID_FILTER_HINTSSKIPS                      : g_pParentWnd->OnFilterHintsskips();                            break;
+			case ID_FILTER_LIGHTS                          : g_pParentWnd->OnFilterLights();                                break;
+			case ID_FILTER_LIQUIDS                         : g_pParentWnd->OnFilterLiquids();                               break;
+			case ID_FILTER_MODELS                          : g_pParentWnd->OnFilterModels();                                break;
+			case ID_FILTER_PATCHES                         : g_pParentWnd->OnFilterPatches();                               break;
+			case ID_FILTER_TRANSLUCENT                     : g_pParentWnd->OnFilterTranslucent();                           break;
+			case ID_FILTER_TRIGGERS                        : g_pParentWnd->OnFilterTriggers();                              break;
+			case ID_FILTER_WORLD                           : g_pParentWnd->OnFilterWorld();                                 break;
+			case ID_FILTER_PATHS                           : g_pParentWnd->OnFilterPaths();                                 break;
+			case ID_FILTER_CLUSTERPORTALS                  : g_pParentWnd->OnFilterClusterportals();                        break;
+			case ID_FILTER_LIGHTGRID                       : g_pParentWnd->OnFilterLightgrid();                             break;
+			case ID_POPUP_SELECTION                        : g_pParentWnd->OnPopupSelection();                              break;
+			case ID_VIEW_CHANGE                            : g_pParentWnd->OnViewChange();                                  break;
+			case ID_TEXTURES_POPUP                         : g_pParentWnd->OnTexturesPopup();                               break;
+			case ID_VIEW_CAMERATOGGLE                      : g_pParentWnd->ToggleCamera();                                  break;
+			case ID_VIEW_CAMERAUPDATE                      : g_pParentWnd->OnViewCameraupdate();                            break;
+			case ID_SELECT_MOUSEROTATE                     : g_pParentWnd->OnSelectMouserotate();                           break;
+			case ID_SELECT_MOUSESCALE                      : g_pParentWnd->OnSelectMousescale();                            break;
+			case ID_SCALELOCKX                             : g_pParentWnd->OnScalelockx();                                  break;
+			case ID_SCALELOCKY                             : g_pParentWnd->OnScalelocky();                                  break;
+			case ID_SCALELOCKZ                             : g_pParentWnd->OnScalelockz();                                  break;
+			case ID_DONTSELECTCURVE                        : g_pParentWnd->OnDontselectcurve();                             break;
+			case ID_PATCH_SHOWBOUNDINGBOX                  : g_pParentWnd->OnPatchToggleBox();                              break;
+			case ID_PATCH_WIREFRAME                        : g_pParentWnd->OnPatchWireframe();                              break;
+			case ID_PATCH_BEND                             : g_pParentWnd->OnPatchBend();                                   break;
+			case ID_PATCH_WELD                             : g_pParentWnd->OnPatchWeld();                                   break;
+			case ID_PATCH_DRILLDOWN                        : g_pParentWnd->OnPatchDrilldown();                              break;
+			case ID_DROP_GROUP_NAME                        : g_pParentWnd->OnDropGroupName();                               break;
+			case ID_DROP_GROUP_NEWGROUP                    : g_pParentWnd->OnDropGroupNewgroup();                           break;
+			case ID_DROP_GROUP_REMOVE                      : g_pParentWnd->OnDropGroupRemove();                             break;
+			case ID_SHOW_ENTITIES                          : g_pParentWnd->OnShowEntities();                                break;
+			case IDC_BTN_FACEFIT                           : g_pParentWnd->OnFaceFit();                                     break;
+			case ID_VIEW_TEXTURE                           : g_pParentWnd->OnViewTexture();                                 break;
+			case ID_PATCH_INSPECTOR                        : g_pParentWnd->OnPatchInspector();                              break;
+			case ID_CURVE_NEGATIVETEXTUREX                 : g_pParentWnd->OnCurveNegativeTextureX();                       break;
+			case ID_CURVE_NEGATIVETEXTUREY                 : g_pParentWnd->OnCurveNegativeTextureY();                       break;
+			case ID_CURVE_INSERTCOLUMN                     : g_pParentWnd->OnCurveInsertcolumn();                           break;
+			case ID_CURVE_INSERTROW                        : g_pParentWnd->OnCurveInsertrow();                              break;
+			case ID_CURVE_DELETECOLUMN                     : g_pParentWnd->OnCurveDeletecolumn();                           break;
+			case ID_CURVE_DELETEROW                        : g_pParentWnd->OnCurveDeleterow();                              break;
+			case ID_PATCH_TAB                              : g_pParentWnd->OnPatchTab();                                    break;
+			case ID_CAMERA_FORWARD                         : g_pParentWnd->OnCameraForward( TRUE );                         break;
+			case ID_CAMERA_BACK                            : g_pParentWnd->OnCameraBack( TRUE );                            break;
+			case ID_CAMERA_LEFT                            : g_pParentWnd->OnCameraLeft( TRUE );                            break;
+			case ID_CAMERA_RIGHT                           : g_pParentWnd->OnCameraRight( TRUE );                           break;
+			case ID_CAMERA_UP                              : g_pParentWnd->OnCameraUp();                                    break;
+			case ID_CAMERA_DOWN                            : g_pParentWnd->OnCameraDown();                                  break;
+			case ID_CAMERA_ANGLEUP                         : g_pParentWnd->OnCameraAngleup();                               break;
+			case ID_CAMERA_ANGLEDOWN                       : g_pParentWnd->OnCameraAngledown();                             break;
+			case ID_CAMERA_STRAFELEFT                      : g_pParentWnd->OnCameraStrafeleft( TRUE );                      break;
+			case ID_CAMERA_STRAFERIGHT                     : g_pParentWnd->OnCameraStraferight( TRUE );                     break;
+			case ID_GRID_TOGGLE                            : g_pParentWnd->OnGridToggle();                                  break;
+			case ID_VIEW_CONSOLE                           : g_pParentWnd->OnViewConsole();                                 break;
+			case ID_VIEW_CROSSHAIR                         : g_pParentWnd->OnViewCrosshair();                               break;
+			case ID_SELECTION_TEXTURE_FIT                  : g_pParentWnd->OnSelectionTextureFit();                         break;
+			case ID_SELECTION_TEXTURE_ROTATECLOCK          : g_pParentWnd->OnSelectionTextureRotateclock();                 break;
+			case ID_SELECTION_TEXTURE_ROTATECOUNTER        : g_pParentWnd->OnSelectionTextureRotatecounter();               break;
+			case ID_SELECTION_TEXTURE_SCALEUP              : g_pParentWnd->OnSelectionTextureScaleup();                     break;
+			case ID_SELECTION_TEXTURE_SCALEDOWN            : g_pParentWnd->OnSelectionTextureScaledown();                   break;
+			case ID_SELECTION_TEXTURE_SHIFTLEFT            : g_pParentWnd->OnSelectionTextureShiftleft();                   break;
+			case ID_SELECTION_TEXTURE_SHIFTRIGHT           : g_pParentWnd->OnSelectionTextureShiftright();                  break;
+			case ID_SELECTION_TEXTURE_SHIFTUP              : g_pParentWnd->OnSelectionTextureShiftup();                     break;
+			case ID_SELECTION_TEXTURE_SHIFTDOWN            : g_pParentWnd->OnSelectionTextureShiftdown();                   break;
+			case ID_GRID_PREV                              : g_pParentWnd->OnGridPrev();                                    break;
+			case ID_GRID_NEXT                              : g_pParentWnd->OnGridNext();                                    break;
+			case ID_SELECTION_TEXTURE_SCALELEFT            : g_pParentWnd->OnSelectionTextureScaleLeft();                   break;
+			case ID_SELECTION_TEXTURE_SCALERIGHT           : g_pParentWnd->OnSelectionTextureScaleRight();                  break;
+			case ID_SELECTION_MOVEDOWN                     : g_pParentWnd->OnSelectionMovedown();                           break;
+			case ID_SELECTION_MOVEUP                       : g_pParentWnd->OnSelectionMoveup();                             break;
+			case ID_SELECTION_PRINT                        : g_pParentWnd->OnSelectionPrint();                              break;
+			case ID_SELECTION_TOGGLESIZEPAINT              : g_pParentWnd->OnSelectionTogglesizepaint();                    break;
+			case ID_PATCH_NATURALIZE                       : g_pParentWnd->OnPatchNaturalize();                             break;
+			case ID_SELECT_SNAPTOGRID                      : g_pParentWnd->OnSnapToGrid();                                  break;
+			case ID_SELECT_ALL                             : g_pParentWnd->OnSelectAll();                                   break;
+			case ID_SELECTION_INVERT                       : g_pParentWnd->OnSelectionInvert();                             break;
+			case ID_TOGGLE_DETAIL                          : g_pParentWnd->OnToggleDetail();                                break;
+		}
 	}
-	else{ switch ( id )
-		  {
-		  case ID_FILE_NEW: g_pParentWnd->OnFileNew(); break;
-		  case ID_FILE_SLEEP: g_pParentWnd->OnSleep(); break;
-		  case ID_FILE_OPEN: g_pParentWnd->OnFileOpen(); break;
-		  case ID_FILE_SAVE: g_pParentWnd->OnFileSave(); break;
-		  case ID_FILE_SAVEAS: g_pParentWnd->OnFileSaveas(); break;
-		  case ID_FILE_EXPORTMAP: g_pParentWnd->OnFileExportmap(); break;
-		  case ID_FILE_SAVEREGION: g_pParentWnd->OnFileSaveregion(); break;
-		  case ID_FILE_NEWPROJECT: g_pParentWnd->OnFileNewproject(); break;
-		  case ID_FILE_LOADPROJECT: g_pParentWnd->OnFileLoadproject(); break;
-		  case ID_FILE_PROJECTSETTINGS: g_pParentWnd->OnFileProjectsettings(); break;
-		  case ID_FILE_POINTFILE: g_pParentWnd->OnFilePointfile(); break;
-		  case ID_FILE_CHECKUPDATE: g_pParentWnd->OnFileCheckUpdate(); break;
-		  case ID_FILE_EXIT: g_pParentWnd->OnFileExit(); break;
-		  case ID_FILE_IMPORTMAP: g_pParentWnd->OnFileImportmap(); break;
-		  case ID_EDIT_UNDO: g_pParentWnd->OnEditUndo(); break;
-		  case ID_EDIT_REDO: g_pParentWnd->OnEditRedo(); break;
-		  case ID_EDIT_COPYBRUSH: g_pParentWnd->OnEditCopybrush(); break;
-		  case ID_EDIT_PASTEBRUSH: g_pParentWnd->OnEditPastebrush(); break;
-		  case ID_EDIT_PASTEBRUSHTOCAMERA: g_pParentWnd->OnEditPastebrushToCamera(); break;
-		  case ID_SELECTION_DELETE: g_pParentWnd->OnSelectionDelete(); break;
-		  case ID_EDIT_MAPINFO: g_pParentWnd->OnEditMapinfo(); break;
-		  case ID_EDIT_ENTITYINFO: g_pParentWnd->OnEditEntityinfo(); break;
-		  case ID_BRUSH_SCRIPTS: g_pParentWnd->OnBrushScripts(); break;
-		  case ID_EDIT_LOADPREFAB: g_pParentWnd->OnEditLoadprefab(); break;
-		  case ID_EDIT_SAVEPREFAB: g_pParentWnd->OnEditSaveprefab(); break;
-		  case ID_PREFS: g_pParentWnd->OnPrefs(); break;
-		  case ID_TOGGLECAMERA: g_pParentWnd->OnTogglecamera(); break;
-		  case ID_TOGGLECONSOLE: g_pParentWnd->OnToggleconsole(); break;
-		  case ID_VIEW_ENTITY: g_pParentWnd->OnViewEntity(); break;
-		  case ID_VIEW_GROUPS: g_pParentWnd->OnViewGroups(); break;
-		  case ID_SELECT_FUNC_GROUP: g_pParentWnd->OnSelectFuncGroup(); break;
-		  case ID_TOGGLEVIEW: g_pParentWnd->OnToggleview(); break;
-		  case ID_TOGGLEVIEW_YZ: g_pParentWnd->OnToggleviewYz(); break;
-		  case ID_TOGGLEVIEW_XZ: g_pParentWnd->OnToggleviewXz(); break;
-		  case ID_TOGGLEZ: g_pParentWnd->OnTogglez(); break;
-		  case ID_VIEW_CENTER: g_pParentWnd->OnViewCenter(); break;
-		  case ID_VIEW_UPFLOOR: g_pParentWnd->OnViewUpfloor(); break;
-		  case ID_VIEW_DOWNFLOOR: g_pParentWnd->OnViewDownfloor(); break;
-		  case ID_VIEW_CENTERVIEW: g_pParentWnd->OnViewCenterview(); break;
-		  case ID_VIEW_NEXTVIEW: g_pParentWnd->OnViewNextview(); break;
-		  case ID_VIEW_XY: g_pParentWnd->OnViewXy(); break;
-		  case ID_VIEW_SIDE: g_pParentWnd->OnViewSide(); break;
-		  case ID_VIEW_FRONT: g_pParentWnd->OnViewFront(); break;
-		  case ID_VIEW_100: g_pParentWnd->OnView100(); break;
-		  case ID_VIEW_ZOOMIN: g_pParentWnd->OnViewZoomin(); break;
-		  case ID_VIEW_ZOOMOUT: g_pParentWnd->OnViewZoomout(); break;
-		  case ID_VIEW_Z100: g_pParentWnd->OnViewZ100(); break;
-		  case ID_VIEW_ZZOOMIN: g_pParentWnd->OnViewZzoomin(); break;
-		  case ID_VIEW_ZZOOMOUT: g_pParentWnd->OnViewZzoomout(); break;
-		  case ID_VIEW_CUBEIN: g_pParentWnd->OnViewCubein(); break;
-		  case ID_VIEW_CUBEOUT: g_pParentWnd->OnViewCubeout(); break;
-		  case ID_VIEW_SHOWNAMES: g_pParentWnd->OnViewShownames(); break;
-		  case ID_VIEW_SHOWBLOCKS: g_pParentWnd->OnViewShowblocks(); break;
-		  case ID_VIEW_SHOWCOORDINATES: g_pParentWnd->OnViewShowcoordinates(); break;
-		  case ID_VIEW_SHOWOUTLINE: g_pParentWnd->OnViewShowOutline(); break;
-		  case ID_VIEW_SHOWAXES: g_pParentWnd->OnViewShowAxes(); break;
-		  case ID_VIEW_SHOWWORKZONE: g_pParentWnd->OnViewShowWorkzone(); break;
-		  case ID_VIEW_SHOWANGLES: g_pParentWnd->OnViewShowAngles(); break;
-		  case ID_VIEW_HIDESHOW_HIDESELECTED: g_pParentWnd->OnViewHideshowHideselected(); break;
-		  case ID_VIEW_HIDESHOW_SHOWHIDDEN: g_pParentWnd->OnViewHideshowShowhidden(); break;
-		  case ID_VIEW_ENTITIESAS_BOUNDINGBOX:
-		  case ID_VIEW_ENTITIESAS_WIREFRAME:
-		  case ID_VIEW_ENTITIESAS_SELECTEDWIREFRAME:
-		  case ID_VIEW_ENTITIESAS_SELECTEDSKINNED:
-		  case ID_VIEW_ENTITIESAS_SKINNED:
-		  case ID_VIEW_ENTITIESAS_SKINNEDANDBOXED:
-			  g_pParentWnd->OnEntitiesSetViewAs( id );
-			  break;
-		  case ID_VIEW_CUBICCLIPPING: g_pParentWnd->OnViewCubicclipping(); break;
-		  case ID_VIEW_OPENGLLIGHTING: g_pParentWnd->OnViewOpengllighting(); break;
-		  case ID_SELECTION_DRAGEDGES: g_pParentWnd->OnSelectionDragedges(); break;
-		  case ID_SELECTION_DRAGVERTECIES: g_pParentWnd->OnSelectionDragvertecies(); break;
-		  case ID_SELECTION_CLONE: g_pParentWnd->OnSelectionClone(); break;
-		  case ID_SELECTION_DESELECT: g_pParentWnd->OnSelectionDeselect(); break;
-		  case ID_BRUSH_FLIPX: g_pParentWnd->OnBrushFlipx(); break;
-		  case ID_BRUSH_FLIPY: g_pParentWnd->OnBrushFlipy(); break;
-		  case ID_BRUSH_FLIPZ: g_pParentWnd->OnBrushFlipz(); break;
-		  case ID_BRUSH_ROTATEX: g_pParentWnd->OnBrushRotatex(); break;
-		  case ID_BRUSH_ROTATEY: g_pParentWnd->OnBrushRotatey(); break;
-		  case ID_BRUSH_ROTATEZ: g_pParentWnd->OnBrushRotatez(); break;
-		  case ID_SELECTION_ARBITRARYROTATION: g_pParentWnd->OnSelectionArbitraryrotation(); break;
-		  case ID_SELECT_SCALE: g_pParentWnd->OnSelectScale(); break;
-		  case ID_SELECTION_MAKEHOLLOW: g_pParentWnd->OnSelectionMakehollow(); break;
-		  case ID_SELECTION_MAKEHOLLOW_TOUCH: g_pParentWnd->OnSelectionMakehollowTouch(); break;
-		  case ID_SELECTION_CSGSUBTRACT: g_pParentWnd->OnSelectionCsgsubtract(); break;
-		  case ID_SELECTION_CSGMERGE: g_pParentWnd->OnSelectionCsgmerge(); break;
-		  case ID_SELECTION_NOOUTLINE: g_pParentWnd->OnSelectionNoOutline(); break;
-		  case ID_SELECTION_OUTLINESTYLE: g_pParentWnd->OnSelectionOutlineStyle(); break;
-		  case ID_SELECTION_SELECTCOMPLETETALL: g_pParentWnd->OnSelectionSelectcompletetall(); break;
-		  case ID_SELECTION_SELECTTOUCHING: g_pParentWnd->OnSelectionSelecttouching(); break;
-		  case ID_SELECTION_SELECTPARTIALTALL: g_pParentWnd->OnSelectionSelectpartialtall(); break;
-		  case ID_SELECTION_SELECTINSIDE: g_pParentWnd->OnSelectionSelectinside(); break;
-		  case ID_SELECTION_SELECT_NUDGELEFT: g_pParentWnd->OnSelectionSelectNudgeleft(); break;
-		  case ID_SELECTION_SELECT_NUDGERIGHT: g_pParentWnd->OnSelectionSelectNudgeright(); break;
-		  case ID_SELECTION_SELECT_NUDGEUP: g_pParentWnd->OnSelectionSelectNudgeup(); break;
-		  case ID_SELECTION_SELECT_NUDGEDOWN: g_pParentWnd->OnSelectionSelectNudgedown(); break;
-		  case ID_VIEW_CLIPPER: g_pParentWnd->OnViewClipper(); break;
-		  case ID_CLIP_SELECTED: g_pParentWnd->OnClipSelected(); break;
-		  case ID_SPLIT_SELECTED: g_pParentWnd->OnSplitSelected(); break;
-		  case ID_FLIP_CLIP: g_pParentWnd->OnFlipClip(); break;
-		  case ID_SELECTION_CONNECT: g_pParentWnd->OnSelectionConnect(); break;
-		  case ID_SELECTION_UNGROUPENTITY: g_pParentWnd->OnSelectionUngroupentity(); break;
-		  case ID_SELECTION_MERGE: Select_MergeEntity(); break;
-		  case ID_SELECTION_SEPERATE: Select_Seperate(); break;
-		  case ID_SELECTION_MAKE_DETAIL: g_pParentWnd->OnSelectionMakeDetail(); break;
-		  case ID_SELECTION_MAKE_STRUCTURAL: g_pParentWnd->OnSelectionMakeStructural(); break;
-		  case ID_SNAPTOGRID: g_pParentWnd->OnSnaptogrid(); break;
-		  case ID_TEXTURES_SHOWINUSE: g_pParentWnd->OnTexturesShowinuse(); break;
-		  case ID_TEXTURES_SHOWALL: g_pParentWnd->OnTexturesShowall(); break;
-		  case ID_TEXTURES_INSPECTOR: g_pParentWnd->OnTexturesInspector(); break;
-		  case ID_TEXTURE_REPLACEALL: g_pParentWnd->OnTextureReplaceall(); break;
-		  case ID_TOGGLE_LOCK: g_pParentWnd->OnToggleLock(); break;
-		  case ID_TOGGLE_ROTATELOCK: g_pParentWnd->OnToggleRotatelock(); break;
-		  case ID_TEXTURES_LOAD: g_pParentWnd->OnTexturesLoad(); break;
-		  case ID_TEXTURES_RELOADSHADERS: g_pParentWnd->OnTexturesReloadshaders(); break;
-		  case ID_TEXTURES_SHADERS_SHOW: g_pParentWnd->OnTexturesShadersShow(); break;
-		  case ID_TEXTURES_TEXTUREWINDOWSCALE_200:
-		  case ID_TEXTURES_TEXTUREWINDOWSCALE_100:
-		  case ID_TEXTURES_TEXTUREWINDOWSCALE_50:
-		  case ID_TEXTURES_TEXTUREWINDOWSCALE_25:
-		  case ID_TEXTURES_TEXTUREWINDOWSCALE_10:
-			  g_pParentWnd->SetTextureScale( id );
-			  break;
-		  case ID_TEXTURES_LOADLIST: g_pParentWnd->OnTexturesLoadlist(); break;
-		  case ID_TEXTURES_SHADERLISTONLY: g_pParentWnd->OnTexturesShaderlistonly(); break;
-		  case ID_TEXTUREWINDOW_SCALEUP: g_pParentWnd->OnTexturewindowScaleup(); break;
-		  case ID_TEXTUREWINDOW_SCALEDOWN: g_pParentWnd->OnTexturewindowScaledown(); break;
-		  case ID_MISC_BENCHMARK: g_pParentWnd->OnMiscBenchmark(); break;
-		  case ID_COLOR_SETORIGINAL: g_pParentWnd->OnColorSetoriginal(); break;
-		  case ID_COLOR_SETQER: g_pParentWnd->OnColorSetqer(); break;
-		  case ID_COLOR_SETBLACK: g_pParentWnd->OnColorSetblack(); break;
-		  case ID_COLOR_SETYDNAR: g_pParentWnd->OnColorSetydnar(); break; /* ydnar */
-		  case ID_TEXTUREBK: g_pParentWnd->OnTexturebk(); break;
-		  case ID_COLORS_XYBK: g_pParentWnd->OnColorsXybk(); break;
-		  case ID_COLORS_MAJOR: g_pParentWnd->OnColorsMajor(); break;
-		  case ID_COLORS_MINOR: g_pParentWnd->OnColorsMinor(); break;
-		  case ID_COLORS_GRIDTEXT: g_pParentWnd->OnColorsGridtext(); break;
-		  case ID_COLORS_GRIDBLOCK: g_pParentWnd->OnColorsGridblock(); break;
-		  case ID_COLORS_CAMERABACK: g_pParentWnd->OnColorsCameraBack(); break;
-		  case ID_COLORS_BRUSH: g_pParentWnd->OnColorsBrush(); break;
-		  case ID_COLORS_SELECTEDBRUSH: g_pParentWnd->OnColorsSelectedbrush(); break;
-		  case ID_COLORS_SELECTEDBRUSH3D: g_pParentWnd->OnColorsSelectedbrush3D(); break;
-		  case ID_COLORS_CLIPPER: g_pParentWnd->OnColorsClipper(); break;
-		  case ID_COLORS_VIEWNAME: g_pParentWnd->OnColorsViewname(); break;
-		  case ID_COLORS_DETAIL: g_pParentWnd->OnColorsDetail(); break;
-		  case ID_MISC_GAMMA: g_pParentWnd->OnMiscGamma(); break;
-		  case ID_MISC_FINDBRUSH: g_pParentWnd->OnMiscFindbrush(); break;
-		  case ID_MISC_NEXTLEAKSPOT: g_pParentWnd->OnMiscNextleakspot(); break;
-		  case ID_MISC_PREVIOUSLEAKSPOT: g_pParentWnd->OnMiscPreviousleakspot(); break;
-		  case ID_MISC_PRINTXY: g_pParentWnd->OnMiscPrintxy(); break;
-		  case ID_MISC_SELECTENTITYCOLOR: g_pParentWnd->OnMiscSelectentitycolor(); break;
-		  case ID_CONVERTCURVES: g_pParentWnd->OnConvertcurves(); break;
-		  case ID_REGION_OFF: g_pParentWnd->OnRegionOff(); break;
-		  case ID_REGION_SETXY: g_pParentWnd->OnRegionSetxy(); break;
-		  case ID_REGION_SETTALLBRUSH: g_pParentWnd->OnRegionSettallbrush(); break;
-		  case ID_REGION_SETBRUSH: g_pParentWnd->OnRegionSetbrush(); break;
-		  case ID_REGION_SETSELECTION: g_pParentWnd->OnRegionSetselection(); break;
-		  case ID_BRUSH_3SIDED: g_pParentWnd->OnBrush3sided(); break;
-		  case ID_BRUSH_4SIDED: g_pParentWnd->OnBrush4sided(); break;
-		  case ID_BRUSH_5SIDED: g_pParentWnd->OnBrush5sided(); break;
-		  case ID_BRUSH_6SIDED: g_pParentWnd->OnBrush6sided(); break;
-		  case ID_BRUSH_7SIDED: g_pParentWnd->OnBrush7sided(); break;
-		  case ID_BRUSH_8SIDED: g_pParentWnd->OnBrush8sided(); break;
-		  case ID_BRUSH_9SIDED: g_pParentWnd->OnBrush9sided(); break;
-		  case ID_BRUSH_ARBITRARYSIDED: g_pParentWnd->OnBrushArbitrarysided(); break;
-		  case ID_BRUSH_MAKECONE: g_pParentWnd->OnBrushMakecone(); break;
-		  case ID_BRUSH_PRIMITIVES_SPHERE: g_pParentWnd->OnBrushPrimitivesSphere(); break;
-		  case ID_CURVE_PATCHTUBE: g_pParentWnd->OnCurvePatchtube(); break;
-		  case ID_CURVE_PATCHDENSETUBE: g_pParentWnd->OnCurvePatchdensetube(); break;
-		  case ID_CURVE_PATCHVERYDENSETUBE: g_pParentWnd->OnCurvePatchverydensetube(); break;
-		  case ID_CURVE_PATCHSQUARE: g_pParentWnd->OnCurvePatchsquare(); break;
-		  case ID_CURVE_PATCHENDCAP: g_pParentWnd->OnCurvePatchendcap(); break;
-		  case ID_CURVE_PATCHBEVEL: g_pParentWnd->OnCurvePatchbevel(); break;
-		  case ID_CURVE_MOREENDCAPSBEVELS_SQUAREBEVEL: g_pParentWnd->OnCurveMoreendcapsbevelsSquarebevel(); break;
-		  case ID_CURVE_MOREENDCAPSBEVELS_SQUAREENDCAP: g_pParentWnd->OnCurveMoreendcapsbevelsSquareendcap(); break;
-		  case ID_CURVE_PATCHCONE: g_pParentWnd->OnCurvePatchcone(); break;
-		  case ID_CURVE_SIMPLEPATCHMESH: g_pParentWnd->OnCurveSimplepatchmesh(); break;
-		  case ID_CURVE_INSERT_INSERTCOLUMN: g_pParentWnd->OnCurveInsertInsertcolumn(); break;
-		  case ID_CURVE_INSERT_ADDCOLUMN: g_pParentWnd->OnCurveInsertAddcolumn(); break;
-		  case ID_CURVE_INSERT_INSERTROW: g_pParentWnd->OnCurveInsertInsertrow(); break;
-		  case ID_CURVE_INSERT_ADDROW: g_pParentWnd->OnCurveInsertAddrow(); break;
-		  case ID_CURVE_DELETE_FIRSTCOLUMN: g_pParentWnd->OnCurveDeleteFirstcolumn(); break;
-		  case ID_CURVE_DELETE_LASTCOLUMN: g_pParentWnd->OnCurveDeleteLastcolumn(); break;
-		  case ID_CURVE_DELETE_FIRSTROW: g_pParentWnd->OnCurveDeleteFirstrow(); break;
-		  case ID_CURVE_DELETE_LASTROW: g_pParentWnd->OnCurveDeleteLastrow(); break;
-		  case ID_CURVE_NEGATIVE: g_pParentWnd->OnCurveNegative(); break;
-		  case ID_CURVE_REDISPERSE_ROWS: g_pParentWnd->OnCurveRedisperseRows(); break;
-		  case ID_CURVE_REDISPERSE_INTERMEDIATE_COLS: g_pParentWnd->OnCurveRedisperseIntermediateCols(); break;
-		  case ID_CURVE_REDISPERSE_INTERMEDIATE_ROWS: g_pParentWnd->OnCurveRedisperseIntermediateRows(); break;
-		  case ID_CURVE_MATRIX_TRANSPOSE: g_pParentWnd->OnCurveMatrixTranspose(); break;
-		  case ID_CURVE_CAP: g_pParentWnd->OnCurveCap(); break;
-		  case ID_CURVE_CYCLECAP: g_pParentWnd->OnCurveCyclecap(); break;
-		  case ID_CURVE_OVERLAY_SET: g_pParentWnd->OnCurveOverlaySet(); break;
-		  case ID_CURVE_OVERLAY_CLEAR: g_pParentWnd->OnCurveOverlayClear(); break;
-		  case ID_CURVE_THICKEN: g_pParentWnd->OnCurveThicken(); break;
-		  case ID_PLUGINS_REFRESH: g_pParentWnd->OnPluginsRefresh(); break;
-		  case ID_HELP: g_pParentWnd->OnHelp(); break;
-		  case ID_HELP_LINKS: g_pParentWnd->OnHelpLinks(); break;
-		  case ID_HELP_BUGREPORT: g_pParentWnd->OnHelpBugreport(); break;
-		  case ID_HELP_COMMANDLIST: g_pParentWnd->OnHelpCommandlist(); break;
-		  case ID_HELP_ABOUT: g_pParentWnd->OnHelpAbout(); break;
-		  case ID_DONTSELECTMODEL: g_pParentWnd->OnDontselectmodel(); break;
-		  case ID_FILTER_AREAPORTALS: g_pParentWnd->OnFilterAreaportals(); break;
-		  case ID_FILTER_CAULK: g_pParentWnd->OnFilterCaulk(); break;
-		  case ID_FILTER_STRUCTURAL: g_pParentWnd->OnFilterStructural(); break;
-		  case ID_FILTER_CLIPS: g_pParentWnd->OnFilterClips(); break;
-		  case ID_FILTER_BOTCLIPS: g_pParentWnd->OnFilterBotClips(); break;
-		  case ID_FILTER_DETAILS: g_pParentWnd->OnFilterDetails(); break;
-		  case ID_FILTER_ENTITIES: g_pParentWnd->OnFilterEntities(); break;
-		  case ID_FILTER_HINTSSKIPS: g_pParentWnd->OnFilterHintsskips(); break;
-		  case ID_FILTER_LIGHTS: g_pParentWnd->OnFilterLights(); break;
-		  case ID_FILTER_LIQUIDS: g_pParentWnd->OnFilterLiquids(); break;
-		  case ID_FILTER_MODELS: g_pParentWnd->OnFilterModels(); break;
-		  case ID_FILTER_PATCHES: g_pParentWnd->OnFilterPatches(); break;
-		  case ID_FILTER_TRANSLUCENT: g_pParentWnd->OnFilterTranslucent(); break;
-		  case ID_FILTER_TRIGGERS: g_pParentWnd->OnFilterTriggers(); break;
-		  case ID_FILTER_WORLD: g_pParentWnd->OnFilterWorld(); break;
-		  case ID_FILTER_PATHS: g_pParentWnd->OnFilterPaths(); break;
-		  case ID_FILTER_CLUSTERPORTALS: g_pParentWnd->OnFilterClusterportals(); break;
-		  case ID_FILTER_LIGHTGRID: g_pParentWnd->OnFilterLightgrid(); break;
-
-		  case ID_POPUP_SELECTION: g_pParentWnd->OnPopupSelection(); break;
-		  case ID_VIEW_CHANGE: g_pParentWnd->OnViewChange(); break;
-		  case ID_TEXTURES_POPUP: g_pParentWnd->OnTexturesPopup(); break;
-		  case ID_VIEW_CAMERATOGGLE: g_pParentWnd->ToggleCamera(); break;
-		  case ID_VIEW_CAMERAUPDATE: g_pParentWnd->OnViewCameraupdate(); break;
-		  case ID_SELECT_MOUSEROTATE: g_pParentWnd->OnSelectMouserotate(); break;
-		  case ID_SELECT_MOUSESCALE: g_pParentWnd->OnSelectMousescale(); break;
-		  case ID_SCALELOCKX: g_pParentWnd->OnScalelockx(); break;
-		  case ID_SCALELOCKY: g_pParentWnd->OnScalelocky(); break;
-		  case ID_SCALELOCKZ: g_pParentWnd->OnScalelockz(); break;
-		  case ID_DONTSELECTCURVE: g_pParentWnd->OnDontselectcurve(); break;
-		  case ID_PATCH_SHOWBOUNDINGBOX: g_pParentWnd->OnPatchToggleBox(); break;
-		  case ID_PATCH_WIREFRAME: g_pParentWnd->OnPatchWireframe(); break;
-		  case ID_PATCH_BEND: g_pParentWnd->OnPatchBend(); break;
-		  case ID_PATCH_WELD: g_pParentWnd->OnPatchWeld(); break;
-		  case ID_PATCH_DRILLDOWN: g_pParentWnd->OnPatchDrilldown(); break;
-		  case ID_DROP_GROUP_NAME: g_pParentWnd->OnDropGroupName(); break;
-		  case ID_DROP_GROUP_NEWGROUP: g_pParentWnd->OnDropGroupNewgroup(); break;
-		  case ID_DROP_GROUP_REMOVE: g_pParentWnd->OnDropGroupRemove(); break;
-		  case ID_SHOW_ENTITIES: g_pParentWnd->OnShowEntities(); break;
-
-		  case IDC_BTN_FACEFIT: g_pParentWnd->OnFaceFit(); break;
-		  case ID_VIEW_TEXTURE: g_pParentWnd->OnViewTexture(); break;
-		  case ID_PATCH_INSPECTOR: g_pParentWnd->OnPatchInspector(); break;
-		  case ID_CURVE_NEGATIVETEXTUREX: g_pParentWnd->OnCurveNegativeTextureX(); break;
-		  case ID_CURVE_NEGATIVETEXTUREY: g_pParentWnd->OnCurveNegativeTextureY(); break;
-		  case ID_CURVE_INSERTCOLUMN: g_pParentWnd->OnCurveInsertcolumn(); break;
-		  case ID_CURVE_INSERTROW: g_pParentWnd->OnCurveInsertrow(); break;
-		  case ID_CURVE_DELETECOLUMN: g_pParentWnd->OnCurveDeletecolumn(); break;
-		  case ID_CURVE_DELETEROW: g_pParentWnd->OnCurveDeleterow(); break;
-		  case ID_PATCH_TAB: g_pParentWnd->OnPatchTab(); break;
-		  case ID_CAMERA_FORWARD: g_pParentWnd->OnCameraForward( TRUE ); break;
-		  case ID_CAMERA_BACK: g_pParentWnd->OnCameraBack( TRUE ); break;
-		  case ID_CAMERA_LEFT: g_pParentWnd->OnCameraLeft( TRUE ); break;
-		  case ID_CAMERA_RIGHT: g_pParentWnd->OnCameraRight( TRUE ); break;
-		  case ID_CAMERA_UP: g_pParentWnd->OnCameraUp(); break;
-		  case ID_CAMERA_DOWN: g_pParentWnd->OnCameraDown(); break;
-		  case ID_CAMERA_ANGLEUP: g_pParentWnd->OnCameraAngleup(); break;
-		  case ID_CAMERA_ANGLEDOWN: g_pParentWnd->OnCameraAngledown(); break;
-		  case ID_CAMERA_STRAFELEFT: g_pParentWnd->OnCameraStrafeleft( TRUE ); break;
-		  case ID_CAMERA_STRAFERIGHT: g_pParentWnd->OnCameraStraferight( TRUE ); break;
-		  case ID_GRID_TOGGLE: g_pParentWnd->OnGridToggle(); break;
-		  case ID_VIEW_CONSOLE: g_pParentWnd->OnViewConsole(); break;
-		  case ID_VIEW_CROSSHAIR: g_pParentWnd->OnViewCrosshair(); break;
-		  case ID_SELECTION_TEXTURE_FIT: g_pParentWnd->OnSelectionTextureFit(); break;
-		  case ID_SELECTION_TEXTURE_ROTATECLOCK: g_pParentWnd->OnSelectionTextureRotateclock(); break;
-		  case ID_SELECTION_TEXTURE_ROTATECOUNTER: g_pParentWnd->OnSelectionTextureRotatecounter(); break;
-		  case ID_SELECTION_TEXTURE_SCALEUP: g_pParentWnd->OnSelectionTextureScaleup(); break;
-		  case ID_SELECTION_TEXTURE_SCALEDOWN: g_pParentWnd->OnSelectionTextureScaledown(); break;
-		  case ID_SELECTION_TEXTURE_SHIFTLEFT: g_pParentWnd->OnSelectionTextureShiftleft(); break;
-		  case ID_SELECTION_TEXTURE_SHIFTRIGHT: g_pParentWnd->OnSelectionTextureShiftright(); break;
-		  case ID_SELECTION_TEXTURE_SHIFTUP: g_pParentWnd->OnSelectionTextureShiftup(); break;
-		  case ID_SELECTION_TEXTURE_SHIFTDOWN: g_pParentWnd->OnSelectionTextureShiftdown(); break;
-		  case ID_GRID_PREV: g_pParentWnd->OnGridPrev(); break;
-		  case ID_GRID_NEXT: g_pParentWnd->OnGridNext(); break;
-		  case ID_SELECTION_TEXTURE_SCALELEFT: g_pParentWnd->OnSelectionTextureScaleLeft(); break;
-		  case ID_SELECTION_TEXTURE_SCALERIGHT: g_pParentWnd->OnSelectionTextureScaleRight(); break;
-		  case ID_SELECTION_MOVEDOWN: g_pParentWnd->OnSelectionMovedown(); break;
-		  case ID_SELECTION_MOVEUP: g_pParentWnd->OnSelectionMoveup(); break;
-		  case ID_SELECTION_PRINT: g_pParentWnd->OnSelectionPrint(); break;
-		  case ID_SELECTION_TOGGLESIZEPAINT: g_pParentWnd->OnSelectionTogglesizepaint(); break;
-		  case ID_PATCH_NATURALIZE: g_pParentWnd->OnPatchNaturalize(); break;
-		  case ID_SELECT_SNAPTOGRID: g_pParentWnd->OnSnapToGrid(); break;
-		  case ID_SELECT_ALL: g_pParentWnd->OnSelectAll(); break;
-		  case ID_SELECTION_INVERT: g_pParentWnd->OnSelectionInvert(); break;
-		  case ID_TOGGLE_DETAIL: g_pParentWnd->OnToggleDetail(); break;
-		  }}
-
 	return TRUE;
 }
 
@@ -1372,12 +1355,6 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	g_object_set_data( G_OBJECT( window ), "menu_toggle_lock", item );
 	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Rotations" ), G_CALLBACK( HandleCommand ), ID_TOGGLE_ROTATELOCK, TRUE );
 	g_object_set_data( G_OBJECT( window ), "menu_toggle_rotatelock", item );
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Texture Window Scale" ) );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, NULL, _( "200%" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_200, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_200", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "100%" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_100, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_100", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "50%"  ), G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_50 , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_50", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "25%"  ), G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_25 , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_25", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "10%"  ), G_CALLBACK( HandleCommand ), ID_TEXTURES_TEXTUREWINDOWSCALE_10 , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_texturewindowscale_10", item );
 	item = menu_separator( menu );
 	item = create_check_menu_item_with_mnemonic( menu, _( "shaderlist.txt only" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHADERLISTONLY, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_shaderlistonly", item );
 	item = menu_separator( menu );
@@ -5236,45 +5213,9 @@ void MainFrame::OnTexturesShadersShow(){
 	Sys_UpdateWindows( W_TEXTURE );
 }
 
-void MainFrame::SetTextureScale( int id ){
-	GtkWidget *item;
-
-	switch ( id )
-	{
-	case ID_TEXTURES_TEXTUREWINDOWSCALE_10:
-		g_PrefsDlg.m_nTextureScale = 10;
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_textures_texturewindowscale_10" ) );
-		break;
-	case ID_TEXTURES_TEXTUREWINDOWSCALE_25:
-		g_PrefsDlg.m_nTextureScale = 25;
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_textures_texturewindowscale_25" ) );
-		break;
-	case ID_TEXTURES_TEXTUREWINDOWSCALE_50:
-		g_PrefsDlg.m_nTextureScale = 50;
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_textures_texturewindowscale_50" ) );
-		break;
-	case ID_TEXTURES_TEXTUREWINDOWSCALE_200:
-		g_PrefsDlg.m_nTextureScale = 200;
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_textures_texturewindowscale_200" ) );
-		break;
-	default:
-		g_PrefsDlg.m_nTextureScale = 100;
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_textures_texturewindowscale_100" ) );
-		break;
-	}
-
-	g_bIgnoreCommands++;
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), TRUE );
-	g_bIgnoreCommands--;
-
-	Texture_ResetPosition();
-}
-
-void MainFrame::OnTexturewindowScaleup(){
-}
-
-void MainFrame::OnTexturewindowScaledown(){
-}
+void MainFrame::SetTextureScale( int id ) {}
+void MainFrame::OnTexturewindowScaleup() {}
+void MainFrame::OnTexturewindowScaledown() {}
 
 void MainFrame::OnTexturesLoadlist(){
 	DoTextureListDlg();
