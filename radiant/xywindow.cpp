@@ -2820,12 +2820,19 @@ void XYWnd::XY_Draw(){
 	//
 	m_bDirty = false;
 
-	qglViewport( 0, 0, m_nWidth, m_nHeight );
+	qglEnable(GL_SCISSOR_TEST);
+	qglViewport( viewport_left, viewport_bottom, m_nWidth, m_nHeight );
+	qglScissor(viewport_left, viewport_bottom, m_nWidth, m_nHeight);
+	
 	qglClearColor( g_qeglobals.d_savedinfo.colors[COLOR_GRIDBACK][0],
 				   g_qeglobals.d_savedinfo.colors[COLOR_GRIDBACK][1],
 				   g_qeglobals.d_savedinfo.colors[COLOR_GRIDBACK][2],0 );
 
+	
+
 	qglClear( GL_COLOR_BUFFER_BIT );
+
+	//qglEnable(GL_SCISSOR_TEST);
 
 	//
 	// set up viewpoint
@@ -3180,14 +3187,7 @@ void XYWnd::OnCreate(){
 	qglLineStipple( 3, 0xaaaa );
 }
 
-void XYWnd::OnExpose(){
-	bool bPaint = true;
-	if ( !MakeCurrent() ) {
-		Sys_FPrintf( SYS_ERR, "ERROR: glXMakeCurrent failed.. Error:%i\n",qglGetError() );
-		Sys_Printf( "Please restart Radiant if the Map view is not working\n" );
-		bPaint = false;
-	}
-	if ( bPaint ) {
+void XYWnd::Render() {
 		QE_CheckOpenGLForErrors();
 		XY_Draw();
 		QE_CheckOpenGLForErrors();
@@ -3271,6 +3271,17 @@ void XYWnd::OnExpose(){
 		}
 
 		m_XORRectangle.set( rectangle_t() );
+}
+
+void XYWnd::OnExpose(){
+	bool bPaint = true;
+	if ( !MakeCurrent() ) {
+		Sys_FPrintf( SYS_ERR, "ERROR: glXMakeCurrent failed.. Error:%i\n",qglGetError() );
+		Sys_Printf( "Please restart Radiant if the Map view is not working\n" );
+		bPaint = false;
+	}
+	if ( bPaint ) {
+		Render();
 		SwapBuffers();
 	}
 }

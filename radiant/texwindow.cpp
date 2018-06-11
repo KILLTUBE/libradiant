@@ -1930,6 +1930,8 @@ CCALL void set_callback_oninit(int (*cb)()) {
 }
 
 
+extern MainFrame *mainframe_intance;
+
 
 void TexWnd::OnExpose() {
 	int nOld = g_qeglobals.d_texturewin.m_nTotalHeight;
@@ -1967,6 +1969,10 @@ void TexWnd::OnExpose() {
 			if (callback_oninit)
 				callback_oninit();
 		}
+
+		if (mainframe_intance)
+		if (mainframe_intance->m_pXYWnd)
+			mainframe_intance->m_pXYWnd->Render();
 
 		SwapBuffers();
 	}

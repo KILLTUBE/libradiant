@@ -1920,7 +1920,11 @@ static ZWnd *create_floating_zwnd( MainFrame *mainframe ){
 static const int gutter = 12;
 HWND hwnd = 0;
 
+MainFrame *mainframe_intance = NULL;
+
 void MainFrame::Create(){
+	mainframe_intance = this;
+
 	GtkWidget* window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
 	
 	toplevelwindow = window;

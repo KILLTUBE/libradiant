@@ -8,6 +8,7 @@
 // custom docks
 #include "../imgui_docks_radiant/dock_all.h"
 #include "../imgui_docks_radiant/dock_textures.h"
+#include "../imgui_docks_radiant/dock_xy.h"
 
 #include <list>
 std::list<Dock *> imgui_quake_docks;
@@ -30,6 +31,7 @@ CCALL int imgui_radiant_default_docks() {
 		//imgui_quake_docks.push_back(new DockPerf());
 		imgui_quake_docks.push_back(new DockAll());
 		imgui_quake_docks.push_back(new DockTextures());
+		imgui_quake_docks.push_back(new DockXY());
 		//imgui_quake_docks.push_back(new DockExplorer());
 		//imgui_quake_docks.push_back(new DockAnims());
 		//imgui_quake_docks.push_back(new DockSound());

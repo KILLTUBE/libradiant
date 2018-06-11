@@ -63,140 +63,115 @@ void Draw( float fScale, int num );
 void Draw( float fScale, const char *label );
 };
 
-class XYWnd : public GLWindow
-{
-public:
-XYWnd();
-virtual ~XYWnd() { }
+class XYWnd : public GLWindow { public:
+	bool m_bActive;
+	int m_nUpdateBits;
+	int viewport_left;
+	int viewport_bottom;
+	int m_nWidth;
+	int m_nHeight;
+	bool m_bTiming;
+	float m_fScale;
+	float m_TopClip;
+	float m_BottomClip;
+	bool m_bDirty;
+	vec3_t m_vOrigin;
+	int m_ptCursorX, m_ptCursorY;
+	bool m_bRButtonDown;
+	int m_nButtonstate;
+	int m_nPressx;
+	int m_nPressy;
+	vec3_t m_vPressdelta;
+	bool m_bPress_selection;
+	static GtkWidget* m_mnuDrop; // this is unique for all views
+	int m_nViewType;
+	int m_nScrollFlags;
+	int m_ptDragX, m_ptDragY;
+	int m_ptDragAdjX, m_ptDragAdjY;
+	int m_ptDragTotalX, m_ptDragTotalY;
+	int m_ptDownX, m_ptDownY;
 
-public:
-bool AreaSelectOK();
-vec3_t& RotateOrigin();
-vec3_t& Rotation();
-void UndoClear();
-bool UndoAvailable();
-void KillPathMode();
-void Undo();
-void UndoCopy();
-void Copy();
-void Paste();
-void Redraw( unsigned int nBits );
-void VectorCopyXY( vec3_t in, vec3_t out );
-void PositionView();
-void FlipClip();
-void SplitClip();
-void Clip();
-vec3_t& GetOrigin();
-void SetOrigin( vec3_t org );       // PGM
-void XY_Init();
-void XY_Overlay();
-void XY_Draw();
-void DrawZIcon();
-void DrawRotateIcon();
-void DrawCameraIcon();
-void XY_DrawBlockGrid();
-void XY_DrawGrid();
-void XY_MouseMoved( int x, int y, int buttons );
-// TTimo: FIXME: was experimental stuff to track possible endless loop issues
-//  void XY_MouseMovedRec (int x, int y, int buttons);
-void NewBrushDrag( int x, int y );
-qboolean DragDelta( int x, int y, vec3_t move );
-void XY_MouseUp( int x, int y, int buttons );
-void XY_MouseDown( int x, int y, int buttons );
-void XY_ToGridPoint( int x, int y, vec3_t point );
-void XY_ToPoint( int x, int y, vec3_t point );
-void SnapToPoint( int x, int y, vec3_t point );
-void SetActive( bool b ) {m_bActive = b; };
-bool Active() {return m_bActive; };
-
-void DropClipPoint( guint32 nFlags, int pointx, int pointy );
-bool RogueClipMode();
-bool ClipMode();
-void SetClipMode( bool bMode );
-void RetainClipMode( bool bMode );
-
-bool RotateMode();
-bool SetRotateMode( bool bMode );
-bool ScaleMode();
-void SetScaleMode( bool bMode );
-
-bool PathMode();
-void DropPathPoint( guint32 nFlags, int pointx, int pointy );
-bool PointMode();
-//  void AddPointPoint(guint32 nFlags, vec3_t* pVec);
-void SetPointMode( bool b );
-
-void SetViewType( int n );
-bool m_bActive;
-
-protected:
-int m_nUpdateBits;
-int m_nWidth;
-int m_nHeight;
-bool m_bTiming;
-float m_fScale;
-float m_TopClip;
-float m_BottomClip;
-bool m_bDirty;
-vec3_t m_vOrigin;
-
-int m_ptCursorX, m_ptCursorY;
-bool m_bRButtonDown;
-
-int m_nButtonstate;
-int m_nPressx;
-int m_nPressy;
-vec3_t m_vPressdelta;
-bool m_bPress_selection;
-
-friend class CamWnd;
-
-private:
-// this is unique for all views
-static GtkWidget* m_mnuDrop;
-
-int m_nViewType;
-
-int m_nScrollFlags;
-int m_ptDragX, m_ptDragY;
-int m_ptDragAdjX, m_ptDragAdjY;
-int m_ptDragTotalX, m_ptDragTotalY;
-
-void OriginalButtonUp( guint32 nFlags, int point, int pointy );
-void OriginalButtonDown( guint32 nFlags, int point, int pointy );
-//  void ProduceSplits(brush_t** pFront, brush_t** pBack);
-void PlanePointsFromClipPoints( vec3_t planepts[3], brush_t * pBrush );
-void ProduceSplitLists();
-void HandleDrop();
-void PaintSizeInfo( int nDim1, int nDim2, vec3_t vMinBounds, vec3_t vMaxBounds );
-
-int m_ptDownX, m_ptDownY;
-
-public:
-void OnEntityCreate( const char* item );
-int GetViewType() {return m_nViewType; }
-void SetScale( float f ) {m_fScale = f; }
-float Scale() {return m_fScale; }
-int Width() {return m_nWidth; }
-int Height() {return m_nHeight; }
-
-protected:
-
-void OnCreate();
-void OnExpose();
-void OnLButtonDown( guint32 flags, int pointx, int pointy );
-void OnRButtonDown( guint32 flags, int pointx, int pointy );
-void OnMButtonDown( guint32 flags, int pointx, int pointy );
-void OnLButtonUp( guint32 flags, int pointx, int pointy );
-void OnRButtonUp( guint32 flags, int pointx, int pointy );
-void OnMButtonUp( guint32 flags, int pointx, int pointy );
-void OnMouseMove( guint32 nFlags, int pointx, int pointy );
-void OnMouseWheel( bool bUp, int pointx, int pointy );
-void OnSize( int cx, int cy );
-void OnTimer();
-
-private:
-XORRectangle m_XORRectangle;
+	XYWnd();
+	virtual ~XYWnd() { }
+	bool AreaSelectOK();
+	vec3_t& RotateOrigin();
+	vec3_t& Rotation();
+	void UndoClear();
+	bool UndoAvailable();
+	void KillPathMode();
+	void Undo();
+	void UndoCopy();
+	void Copy();
+	void Paste();
+	void Redraw( unsigned int nBits );
+	void VectorCopyXY( vec3_t in, vec3_t out );
+	void PositionView();
+	void FlipClip();
+	void SplitClip();
+	void Clip();
+	vec3_t& GetOrigin();
+	void SetOrigin( vec3_t org );       // PGM
+	void XY_Init();
+	void XY_Overlay();
+	void XY_Draw();
+	void DrawZIcon();
+	void DrawRotateIcon();
+	void DrawCameraIcon();
+	void XY_DrawBlockGrid();
+	void XY_DrawGrid();
+	void XY_MouseMoved( int x, int y, int buttons );
+	//void XY_MouseMovedRec (int x, int y, int buttons); // TTimo: FIXME: was experimental stuff to track possible endless loop issues
+	void NewBrushDrag( int x, int y );
+	qboolean DragDelta( int x, int y, vec3_t move );
+	void XY_MouseUp( int x, int y, int buttons );
+	void XY_MouseDown( int x, int y, int buttons );
+	void XY_ToGridPoint( int x, int y, vec3_t point );
+	void XY_ToPoint( int x, int y, vec3_t point );
+	void SnapToPoint( int x, int y, vec3_t point );
+	void SetActive( bool b ) {m_bActive = b; };
+	bool Active() {return m_bActive; };
+	void DropClipPoint( guint32 nFlags, int pointx, int pointy );
+	bool RogueClipMode();
+	bool ClipMode();
+	void SetClipMode( bool bMode );
+	void RetainClipMode( bool bMode );
+	bool RotateMode();
+	bool SetRotateMode( bool bMode );
+	bool ScaleMode();
+	void SetScaleMode( bool bMode );
+	bool PathMode();
+	void DropPathPoint( guint32 nFlags, int pointx, int pointy );
+	bool PointMode();
+	//  void AddPointPoint(guint32 nFlags, vec3_t* pVec);
+	void SetPointMode( bool b );
+	void SetViewType( int n );
+	void OriginalButtonUp( guint32 nFlags, int point, int pointy );
+	void OriginalButtonDown( guint32 nFlags, int point, int pointy );
+	//  void ProduceSplits(brush_t** pFront, brush_t** pBack);
+	void PlanePointsFromClipPoints( vec3_t planepts[3], brush_t * pBrush );
+	void ProduceSplitLists();
+	void HandleDrop();
+	void PaintSizeInfo( int nDim1, int nDim2, vec3_t vMinBounds, vec3_t vMaxBounds );
+	void OnEntityCreate( const char* item );
+	int GetViewType() {return m_nViewType; }
+	void SetScale( float f ) {m_fScale = f; }
+	float Scale() {return m_fScale; }
+	int Width() {return m_nWidth; }
+	int Height() {return m_nHeight; }
+	void OnCreate();
+	void OnExpose();
+	void Render();
+	void OnLButtonDown( guint32 flags, int pointx, int pointy );
+	void OnRButtonDown( guint32 flags, int pointx, int pointy );
+	void OnMButtonDown( guint32 flags, int pointx, int pointy );
+	void OnLButtonUp( guint32 flags, int pointx, int pointy );
+	void OnRButtonUp( guint32 flags, int pointx, int pointy );
+	void OnMButtonUp( guint32 flags, int pointx, int pointy );
+	void OnMouseMove( guint32 nFlags, int pointx, int pointy );
+	void OnMouseWheel( bool bUp, int pointx, int pointy );
+	void OnSize( int cx, int cy );
+	void OnTimer();
+	XORRectangle m_XORRectangle;
 };
 
 #endif // _XYWINDOW_H_

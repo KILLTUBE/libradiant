@@ -459,7 +459,7 @@ GtkWidget *m_pWidget;
  */
 void handle_help_command( int id );
 
-protected:
+public:
 
 /*!
    the urls to fire up in the game packs help menus
