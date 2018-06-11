@@ -24,6 +24,9 @@ CCALL void *imgui_get_current_dock();
 CCALL bool dockRight(CDock *from, CDock *to);
 CCALL CDock *findDock(char *name);
 
+// extern DockXY *dock_xy;
+DockXY *dock_xy = NULL;
+
 CCALL int imgui_radiant_default_docks() {
 	if (imgui_quake_docks.size() == 0) {
 		// the last dock is seen first when pressing F2, so lets make it an useful one
@@ -31,7 +34,8 @@ CCALL int imgui_radiant_default_docks() {
 		//imgui_quake_docks.push_back(new DockPerf());
 		imgui_quake_docks.push_back(new DockAll());
 		imgui_quake_docks.push_back(new DockTextures());
-		imgui_quake_docks.push_back(new DockXY());
+		dock_xy = new DockXY(); // just temporally, so i can test the OnLeftMouseDown etc. methods on this dock
+		imgui_quake_docks.push_back(dock_xy);
 		//imgui_quake_docks.push_back(new DockExplorer());
 		//imgui_quake_docks.push_back(new DockAnims());
 		//imgui_quake_docks.push_back(new DockSound());

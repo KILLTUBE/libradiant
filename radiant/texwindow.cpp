@@ -1992,9 +1992,24 @@ void TexWnd::OnExpose() {
 	//}
 }
 
-void TexWnd::OnLButtonDown( guint32 flags, int pointx, int pointy ){
+#include "imgui_docks_radiant/dock_xy.h"
+extern DockXY *dock_xy;
+
+void TexWnd::OnLButtonDown( guint32 flags, int pointx, int pointy ) {
 	imgui_mouse_set_button(0, true);
-	//Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
+	Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
+
+
+	// pointx/pointy is relative to the (atm) gtk widget, so we need to recalculate it into dock space
+	// each dock has a screenspace_left and screenspace_top for that purpose
+	// example when (pointx,pointy)==(300,300) and dock.screenspace==(50,50), then the mousepos for dock is (250,250)
+
+	if (dock_xy) {
+		auto screenPosMouse = ImVec2(pointx, pointy);
+		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
+		dock_xy->OnLeftMouseDown(dockPosMouse);
+	}
+
 	SetCapture();
 	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
 	UpdateSurfaceDialog();

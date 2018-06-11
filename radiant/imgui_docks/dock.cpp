@@ -10,3 +10,5 @@ const char *Dock::label() {
 void Dock::imgui() {
 	ImGui::Button("implement Dock::imgui()");
 }
+
+void Dock::OnLeftMouseDown(ImVec2 posLeftTop) {}
