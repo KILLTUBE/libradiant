@@ -711,51 +711,71 @@ bool CSynapseServer::SelectClientConfig( const char *client_name ){
 }
 
 bool CSynapseServer::GetNextConfig( char **api_name, char **minor ){
-	while ( mpFocusedNode && mpFocusedNode->name )
-	{
-		if ( mpFocusedNode->type == XML_ELEMENT_NODE && !strcmp( (const char *)mpFocusedNode->name, "api" ) ) {
-			if ( m_api_name ) {
-				//xmlFree( m_api_name );
-                                m_api_name = NULL;
-			}
-			m_api_name = xmlGetProp( mpFocusedNode, (const xmlChar *)"name" );
-			*api_name = (char *)m_api_name;
-			if ( m_content ) {
-				g_free( m_content );
-			}
-			m_content = g_strdup( (const gchar *)mpFocusedNode->children->content );
-			g_strstrip( m_content );
-			*minor = m_content;
-			mpFocusedNode = mpFocusedNode->next;
-			return true;
-		}
-		mpFocusedNode = mpFocusedNode->next;
-	}
-	return false;
+	*api_name = g_strdup("VFS");
+	*minor = g_strdup("pk3");
+	return true;
+
+	//while ( mpFocusedNode && mpFocusedNode->name )
+	//{
+	//	if ( mpFocusedNode->type == XML_ELEMENT_NODE && !strcmp( (const char *)mpFocusedNode->name, "api" ) ) {
+	//		if ( m_api_name ) {
+	//			//xmlFree( m_api_name );
+    //                            m_api_name = NULL;
+	//		}
+	//		m_api_name = xmlGetProp( mpFocusedNode, (const xmlChar *)"name" );
+	//		*api_name = (char *)m_api_name;
+	//		if ( m_content ) {
+	//			g_free( m_content );
+	//		}
+	//		m_content = g_strdup( (const gchar *)mpFocusedNode->children->content );
+	//		g_strstrip( m_content );
+	//		*minor = m_content;
+	//		printf("GetNextConfig(%s, %s)\n", *api_name, *minor);
+	//		mpFocusedNode = mpFocusedNode->next;
+	//		return true;
+	//	}
+	//	mpFocusedNode = mpFocusedNode->next;
+	//}
+	//return false;
 }
 
 bool CSynapseServer::GetConfigForAPI( const char *api, char **minor ) {
-	xmlNodePtr pNode = mpCurrentClientConfig->children;
-	while ( pNode && pNode->name ) {
-		if ( pNode->type == XML_ELEMENT_NODE && !strcmp( (const char *)pNode->name, "api" ) ) {
-			if ( m_api_name ) {
-				//xmlFree( m_api_name );
-                                m_api_name = NULL;
-			}
-			m_api_name = xmlGetProp( pNode, (const xmlChar *)"name" );
-			if ( !strcmp( (const char *)m_api_name, api ) ) {
-				if ( m_content ) {
-					g_free( m_content );
-				}
-				m_content = g_strdup( (const gchar *)pNode->children->content );
-				g_strstrip( m_content );
-				*minor = m_content;
-				return true;
-			}
-		}
-		pNode = pNode->next;
-	}
-	return false;
+
+	if (strcmp(api, "image") == 0)
+		*minor = g_strdup("png tga jpg");
+	if (strcmp(api, "VFS") == 0)
+		*minor = g_strdup("pk3");
+	if (strcmp(api, "shaders") == 0)
+		*minor = g_strdup("quake3");
+	if (strcmp(api, "map") == 0)
+		*minor = g_strdup("mapq3");
+	if (strcmp(api, "eclass") == 0)
+		*minor = g_strdup("def");
+	if (strcmp(api, "surfdialog") == 0)
+		*minor = g_strdup("quake3");
+	return true;
+
+	//xmlNodePtr pNode = mpCurrentClientConfig->children;
+	//while ( pNode && pNode->name ) {
+	//	if ( pNode->type == XML_ELEMENT_NODE && !strcmp( (const char *)pNode->name, "api" ) ) {
+	//		if ( m_api_name ) {
+	//			//xmlFree( m_api_name );
+    //                            m_api_name = NULL;
+	//		}
+	//		m_api_name = xmlGetProp( pNode, (const xmlChar *)"name" );
+	//		if ( !strcmp( (const char *)m_api_name, api ) ) {
+	//			if ( m_content ) {
+	//				g_free( m_content );
+	//			}
+	//			m_content = g_strdup( (const gchar *)pNode->children->content );
+	//			g_strstrip( m_content );
+	//			*minor = m_content;
+	//			return true;
+	//		}
+	//	}
+	//	pNode = pNode->next;
+	//}
+	//return false;
 }
 
 const char *CSynapseServer::GetModuleFilename( CSynapseClient *pClient ){

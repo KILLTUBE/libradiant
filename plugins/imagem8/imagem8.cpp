@@ -74,7 +74,8 @@ extern "C" CSynapseClient * SYNAPSE_DLL_EXPORT Synapse_EnumerateInterfaces( cons
 		return NULL;
 	}
 	char *api, *minor;
-	while ( g_pSynapseServer->GetNextConfig( &api, &minor ) )
+	//while ( g_pSynapseServer->GetNextConfig( &api, &minor ) )
+	g_pSynapseServer->GetNextConfig( &api, &minor ); // just get it once, since i fixed it now VFS->pk3
 	{
 		Syn_Printf( "api: '%s' minor: '%s'\n", api, minor );
 		if ( !strcmp( api, VFS_MAJOR ) ) {
