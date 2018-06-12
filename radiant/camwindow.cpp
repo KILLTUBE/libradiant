@@ -73,53 +73,7 @@ void CamWnd::OnCreate(){
 		Error( "camwindow: glMakeCurrent failed" );
 	}
 
-	// report OpenGL information
-	Sys_Printf( "GL_VENDOR: %s\n", qglGetString( GL_VENDOR ) );
-	Sys_Printf( "GL_RENDERER: %s\n", qglGetString( GL_RENDERER ) );
-	Sys_Printf( "GL_VERSION: %s\n", qglGetString( GL_VERSION ) );
-	Sys_Printf( "GL_EXTENSIONS: %s\n", qglGetString( GL_EXTENSIONS ) );
 
-	// Set off texture compression supported
-	g_qeglobals.bTextureCompressionSupported = 0;
-
-	// finalize OpenGL init
-	// NOTE
-	// why is this here? well .. the Gtk objects get constructed when you enter gtk_main
-	// and I wanted to have the extensions information in the editor startup console (avoid looking that up in the early console)
-	// RIANT
-	// I Split this up so as to add support for extension and user-friendly
-	// compression format selection.
-	// ADD new globals for your new format so as to minimise
-	// calls to Sys_QGL_ExtensionSupported
-	// NOTE TTimo: I don't really like this approach with globals. Frequent calls to Sys_QGL_ExtensionSupported don't sound like
-	//   a problem to me. If there is some caching to be done, then I think it should be inside Sys_QGL_ExtensionSupported
-	///////////////////////////////////////////
-	// Check for default OpenGL
-	if ( Sys_QGL_ExtensionSupported( "GL_ARB_texture_compression" ) ) {
-		g_qeglobals.bTextureCompressionSupported = 1;
-		g_qeglobals.m_bOpenGLCompressionSupported = 1;
-	}
-
-	// INSERT PROPRIETARY EXTENSIONS HERE
-	// Check for S3 extensions
-	// create a bool global for extension supported
-	if ( Sys_QGL_ExtensionSupported( "GL_EXT_texture_compression_s3tc" ) ) {
-		g_qeglobals.bTextureCompressionSupported = 1;
-		g_qeglobals.m_bS3CompressionSupported = 1;
-	}
-
-	g_qeglobals.m_bOpenGLReady = true;
-
-	g_PrefsDlg.UpdateTextureCompression();
-
-#ifdef ATIHACK_812
-	g_PrefsDlg.UpdateATIHack();
-#endif
-
-	g_qeglobals_gui.d_camera = m_pWidget;
-
-	g_signal_connect( G_OBJECT( m_pWidget ), "focus-in-event", G_CALLBACK( cam_entry_focus_in ), NULL );
-	g_signal_connect( G_OBJECT( m_pWidget ), "focus-out-event", G_CALLBACK( cam_entry_focus_out ), NULL );
 }
 
 void CamWnd::Cam_Init(){
@@ -136,7 +90,7 @@ void CamWnd::Cam_Init(){
 void CamWnd::OnSize( int cx, int cy ){
 	m_Camera.width = cx;
 	m_Camera.height = cy;
-	gtk_widget_queue_draw( m_pWidget );
+	//gtk_widget_queue_draw( m_pWidget );
 }
 
 rectangle_t rectangle_from_area_cam(){
@@ -148,11 +102,12 @@ rectangle_t rectangle_from_area_cam(){
 }
 
 void update_xor_rectangle( XORRectangle& xor_rectangle ){
-	rectangle_t rectangle;
-	if ( g_qeglobals.d_select_mode == sel_area ) {
-		rectangle = rectangle_from_area_cam();
-	}
-	xor_rectangle.set( rectangle );
+	// kung: dont call any gdk shit atm, its just causing assertions
+	//rectangle_t rectangle;
+	//if ( g_qeglobals.d_select_mode == sel_area ) {
+	//	rectangle = rectangle_from_area_cam();
+	//}
+	//xor_rectangle.set( rectangle );
 }
 
 void CamWnd::OnMouseMove( guint32 flags, int pointx, int pointy ){
@@ -508,59 +463,59 @@ void CamWnd::ToggleFreeMove(){
 	}
 
 	if ( m_bFreeMove ) {
-		GdkDisplay *display;
-		GdkCursor *cursor;
-
+//		GdkDisplay *display;
+//		GdkCursor *cursor;
+//
 		SetFocus();
 		SetCapture();
-
-		display = gdk_window_get_display( window );
-		cursor = gdk_cursor_new_for_display( display, GDK_BLANK_CURSOR );
-		gdk_window_set_cursor( window, cursor );
-
-		// RR2DO2: FIXME why does this only work the 2nd and
-		// further times the event is called? (floating windows
-		// mode seems to work fine though...)
-		m_FocusOutHandler_id = g_signal_connect( G_OBJECT( widget ), "focus-out-event",
-												   G_CALLBACK( camwindow_focusout ), g_pParentWnd );
-
-		{
-			GdkEventMask mask = (GdkEventMask)( GDK_POINTER_MOTION_MASK
-												| GDK_POINTER_MOTION_HINT_MASK
-												| GDK_BUTTON_MOTION_MASK
-												| GDK_BUTTON1_MOTION_MASK
-												| GDK_BUTTON2_MOTION_MASK
-												| GDK_BUTTON3_MOTION_MASK
-												| GDK_BUTTON_PRESS_MASK
-												| GDK_BUTTON_RELEASE_MASK );
-
-			gdk_pointer_grab( gtk_widget_get_window( widget ), TRUE, mask, gtk_widget_get_window( widget ), NULL, GDK_CURRENT_TIME );
-		}
-#if GTK_CHECK_VERSION( 3, 0, 0 )
-		g_object_unref( cursor );
-#else
-		gdk_cursor_unref( cursor );
-#endif
+//
+//		display = gdk_window_get_display( window );
+//		cursor = gdk_cursor_new_for_display( display, GDK_BLANK_CURSOR );
+//		gdk_window_set_cursor( window, cursor );
+//
+//		// RR2DO2: FIXME why does this only work the 2nd and
+//		// further times the event is called? (floating windows
+//		// mode seems to work fine though...)
+//		m_FocusOutHandler_id = g_signal_connect( G_OBJECT( widget ), "focus-out-event",
+//												   G_CALLBACK( camwindow_focusout ), g_pParentWnd );
+//
+//		{
+//			GdkEventMask mask = (GdkEventMask)( GDK_POINTER_MOTION_MASK
+//												| GDK_POINTER_MOTION_HINT_MASK
+//												| GDK_BUTTON_MOTION_MASK
+//												| GDK_BUTTON1_MOTION_MASK
+//												| GDK_BUTTON2_MOTION_MASK
+//												| GDK_BUTTON3_MOTION_MASK
+//												| GDK_BUTTON_PRESS_MASK
+//												| GDK_BUTTON_RELEASE_MASK );
+//
+//			gdk_pointer_grab( gtk_widget_get_window( widget ), TRUE, mask, gtk_widget_get_window( widget ), NULL, GDK_CURRENT_TIME );
+//		}
+//#if GTK_CHECK_VERSION( 3, 0, 0 )
+//		g_object_unref( cursor );
+//#else
+//		gdk_cursor_unref( cursor );
+//#endif
 	}
 	else
 	{
-		GdkDisplay *display;
-		GdkCursor *cursor;
-
-		gdk_pointer_ungrab( GDK_CURRENT_TIME );
-
-		g_signal_handler_disconnect( G_OBJECT( widget ), m_FocusOutHandler_id );
-
-		display = gdk_window_get_display( window );
-		cursor = gdk_cursor_new_for_display( display, GDK_LEFT_PTR );
-
-		gdk_window_set_cursor( window, cursor );
-#if GTK_CHECK_VERSION( 3, 0, 0 )
-		g_object_unref( cursor );
-#else
-		gdk_cursor_unref( cursor );
-#endif
-
+//		GdkDisplay *display;
+//		GdkCursor *cursor;
+//
+//		gdk_pointer_ungrab( GDK_CURRENT_TIME );
+//
+//		g_signal_handler_disconnect( G_OBJECT( widget ), m_FocusOutHandler_id );
+//
+//		display = gdk_window_get_display( window );
+//		cursor = gdk_cursor_new_for_display( display, GDK_LEFT_PTR );
+//
+//		gdk_window_set_cursor( window, cursor );
+//#if GTK_CHECK_VERSION( 3, 0, 0 )
+//		g_object_unref( cursor );
+//#else
+//		gdk_cursor_unref( cursor );
+//#endif
+//
 		ReleaseCapture();
 	}
 

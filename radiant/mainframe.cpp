@@ -2024,89 +2024,26 @@ void MainFrame::Create(){
 
 	gtk_widget_show( window );
 
-	// not needed on win32, it's in the .rc
-#ifndef _WIN32
-	{
-		CString icon = g_strBitmapsPath;
-		icon += "icon.png";
 
-		GError *error = NULL;
+	m_pCamWnd = new CamWnd();
+	m_pXYWnd = new XYWnd();
+	m_pXYWnd->SetViewType( XY );
+	m_pZWnd = new ZWnd();
+	m_pTexWnd = new TexWnd();
 
-		gtk_window_set_icon_from_file( GTK_WINDOW( window ), icon.GetBuffer(), &error );
-		if ( error != NULL ) {
-			Sys_FPrintf( SYS_ERR, "ERROR: Failed to load icon: %s\n", error->message );
-			g_error_free( error );
-		}
-	}
-#endif
 
-	{
-
-		{
-			GtkWidget* vsplit = gtk_vpaned_new();
-			m_pSplits[0] = vsplit;
-			gtk_box_pack_start( GTK_BOX( vbox ), vsplit, TRUE, TRUE, 0 );
-			gtk_widget_show( vsplit );
-
-			{
-				GtkWidget* hsplit = gtk_hpaned_new();
-				m_pSplits[2] = hsplit;
-				gtk_paned_add1( GTK_PANED( vsplit ), hsplit );
-				gtk_widget_show( hsplit );
-
-				{
-					GtkWidget* hsplit2 = gtk_hpaned_new();
-					m_pSplits[3] = hsplit2;
-					gtk_paned_add2( GTK_PANED( hsplit ), hsplit2 );
-					gtk_widget_show( hsplit2 );
-
-					{
-						GtkWidget* vsplit2 = gtk_vpaned_new();
-						m_pSplits[1] = vsplit2;
-						gtk_paned_add2( GTK_PANED( hsplit2 ), vsplit2 );
-						gtk_widget_show( vsplit2 );
-
-						m_pCamWnd = new CamWnd();
-						GtkWidget* frame_cam = m_pCamWnd->GetWidget();
-						gtk_widget_show(frame_cam);
-						gtk_paned_add1( GTK_PANED( vsplit2 ), frame_cam );
-
-						m_pXYWnd = new XYWnd();
-						m_pXYWnd->SetViewType( XY );
-						//GtkWidget* frame_xy = m_pXYWnd->GetWidget();
-						//gtk_widget_show(frame_xy);
-						//gtk_paned_add1( GTK_PANED( hsplit2 ), frame_xy );
-
-						m_pZWnd = new ZWnd();
-						GtkWidget* frame_z = m_pZWnd->GetWidget();
-						gtk_widget_show(frame_z);
-						gtk_paned_add1( GTK_PANED( hsplit ), frame_z );
-
-						m_pTexWnd = new TexWnd();
-						GtkWidget* frame = m_pTexWnd->GetWidget();
-						gtk_widget_show( frame );
-						/*
-							GSList *texdirs = NULL;
-							FillTextureList( &texdirs );
-							FillTextureDirListWidget( texdirs );
-							ClearGSList( texdirs );						
-						*/
-						m_pSplits[4] = frame;
-						
-						EASYGTKWIDGET(vsplit)->addChildB(EASYGTKWIDGET(frame));
-
-					}
-				}
-			}
-		}
-
-		// minimize the gtk widgets, they contain only blackness and will be removed later
-		gtk_paned_set_position( GTK_PANED( m_pSplits[0] ), 1 ); // g_PrefsDlg.mWindowInfo.nXYHeight  );
-		gtk_paned_set_position( GTK_PANED( m_pSplits[1] ), 1 ); // g_PrefsDlg.mWindowInfo.nCamHeight );
-		gtk_paned_set_position( GTK_PANED( m_pSplits[2] ), 1 ); // g_PrefsDlg.mWindowInfo.nZWidth    );
-		gtk_paned_set_position( GTK_PANED( m_pSplits[3] ), 1 ); // g_PrefsDlg.mWindowInfo.nXYWidth   );
-	}
-
+	/*
+		GSList *texdirs = NULL;
+		FillTextureList( &texdirs );
+		FillTextureDirListWidget( texdirs );
+		ClearGSList( texdirs );						
+	*/
+			
+	GtkWidget* frame = m_pTexWnd->GetWidget();
+	gtk_widget_show( frame );
+	gtk_box_pack_start( GTK_BOX( vbox ), frame, TRUE, TRUE, 0 );
+			
+		
 	if ( g_PrefsDlg.mWindowInfo.nState & GDK_WINDOW_STATE_MAXIMIZED ) {
 		gtk_window_maximize( GTK_WINDOW( window ) );
 	}
