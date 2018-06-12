@@ -3284,16 +3284,12 @@ void XYWnd::Render() {
 }
 
 void XYWnd::OnExpose(){
-	bool bPaint = true;
-	if ( !MakeCurrent() ) {
-		Sys_FPrintf( SYS_ERR, "ERROR: glXMakeCurrent failed.. Error:%i\n",qglGetError() );
-		Sys_Printf( "Please restart Radiant if the Map view is not working\n" );
-		bPaint = false;
-	}
-	if ( bPaint ) {
-		Render();
-		SwapBuffers();
-	}
+	if ( !MakeCurrent() )
+		return;
+	// just render some blackness here, so the old gtk widget doesnt flicker
+	qglClearColor(0,0,0,0);
+	qglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	SwapBuffers();
 }
 
 void XYWnd::KillPathMode(){

@@ -1645,15 +1645,12 @@ void CamWnd::Render() {
 }
 
 void CamWnd::OnExpose() {
-	if ( !MakeCurrent() ) {
-		Sys_FPrintf( SYS_ERR, "ERROR: glXMakeCurrent failed..\n " );
-		Sys_Printf( "Please restart Radiant if the camera view is not working\n" );
-	}
-	else
-	{
-		Render();
-		SwapBuffers();
-	}
+	if ( !MakeCurrent() )
+		return;
+	// just render some blackness here, so the old gtk widget doesnt flicker
+	qglClearColor(0,0,0,0);
+	qglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	SwapBuffers();
 }
 
 void CamWnd::BenchMark(){

@@ -130,15 +130,12 @@ void ZWnd::Render(){
 }
 
 void ZWnd::OnExpose(){
-	if ( !MakeCurrent() ) {
-		Sys_FPrintf( SYS_ERR, "ERROR: wglMakeCurrent failed..\n " );
-		Sys_Printf( "Please restart Radiant if the Z view is not working\n" );
-	}
-	else
-	{
-		Render();
-		SwapBuffers();
-	}
+	if ( !MakeCurrent() )
+		return;
+	// just render some blackness here, so the old gtk widget doesnt flicker
+	qglClearColor(0,0,0,0);
+	qglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	SwapBuffers();
 }
 
 void ZWnd::OnSize( int cx, int cy ){
