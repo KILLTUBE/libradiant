@@ -10,6 +10,7 @@
 #include "../imgui_docks_radiant/dock_textures.h"
 #include "../imgui_docks_radiant/dock_xy.h"
 #include "../imgui_docks_radiant/dock_z.h"
+#include "../imgui_docks_radiant/dock_cam.h"
 
 #include <list>
 std::list<Dock *> imgui_quake_docks;
@@ -27,8 +28,10 @@ CCALL CDock *findDock(char *name);
 
 // extern DockXY *dock_xy;
 // extern DockZ *dock_z;
+// extern DockCam *dock_cam;
 DockXY *dock_xy = NULL;
 DockZ *dock_z = NULL;
+DockCam *dock_cam = NULL;
 
 CCALL int imgui_radiant_default_docks() {
 	if (imgui_quake_docks.size() == 0) {
@@ -41,6 +44,8 @@ CCALL int imgui_radiant_default_docks() {
 		imgui_quake_docks.push_back(dock_xy);
 		dock_z = new DockZ(); // just temporally, so i can test the OnLeftMouseDown etc. methods on this dock
 		imgui_quake_docks.push_back(dock_z);
+		dock_cam = new DockCam(); // just temporally, so i can test the OnLeftMouseDown etc. methods on this dock
+		imgui_quake_docks.push_back(dock_cam);
 		//imgui_quake_docks.push_back(new DockExplorer());
 		//imgui_quake_docks.push_back(new DockAnims());
 		//imgui_quake_docks.push_back(new DockSound());

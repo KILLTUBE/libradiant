@@ -1974,6 +1974,8 @@ void TexWnd::OnExpose() {
 			mainframe_intance->m_pXYWnd->Render();
 		if (mainframe_intance && mainframe_intance->m_pZWnd)
 			mainframe_intance->m_pZWnd->Render();
+		if (mainframe_intance && mainframe_intance->m_pCamWnd)
+			mainframe_intance->m_pCamWnd->Render();
 
 		SwapBuffers();
 	}

@@ -203,6 +203,7 @@
     <ClCompile Include="imgui_docks\dock_repl.cpp" />
     <ClCompile Include="imgui_docks\dock_skeleton.cpp" />
     <ClCompile Include="imgui_docks_radiant\dock_all.cpp" />
+    <ClCompile Include="imgui_docks_radiant\dock_cam.cpp" />
     <ClCompile Include="imgui_docks_radiant\dock_textures.cpp" />
     <ClCompile Include="imgui_docks_radiant\dock_xy.cpp" />
     <ClCompile Include="imgui_docks_radiant\dock_z.cpp" />
@@ -304,6 +305,7 @@
     <ClInclude Include="imgui_docks\dock_repl.h" />
     <ClInclude Include="imgui_docks\dock_skeleton.h" />
     <ClInclude Include="imgui_docks_radiant\dock_all.h" />
+    <ClInclude Include="imgui_docks_radiant\dock_cam.h" />
     <ClInclude Include="imgui_docks_radiant\dock_textures.h" />
     <ClInclude Include="imgui_docks_radiant\dock_xy.h" />
     <ClInclude Include="imgui_docks_radiant\dock_z.h" />

@@ -1317,7 +1317,13 @@ void CamWnd::Cam_Draw(){
 	//
 	QE_CheckOpenGLForErrors();
 
-	qglViewport( 0, 0, m_Camera.width, m_Camera.height );
+
+    qglEnable(GL_SCISSOR_TEST);
+    qglViewport( viewport_left, viewport_bottom, m_nWidth, m_nHeight );
+    qglScissor(viewport_left, viewport_bottom, m_nWidth, m_nHeight);
+
+	//qglViewport( 0, 0, m_Camera.width, m_Camera.height );
+
 	qglClearColor( g_qeglobals.d_savedinfo.colors[COLOR_CAMERABACK][0],
 				   g_qeglobals.d_savedinfo.colors[COLOR_CAMERABACK][1],
 				   g_qeglobals.d_savedinfo.colors[COLOR_CAMERABACK][2], 0 );
@@ -1624,28 +1630,28 @@ void CamWnd::Cam_Draw(){
 		brush->bCamCulled = false;
 }
 
-void CamWnd::OnExpose(){
+void CamWnd::Render() {
+	QE_CheckOpenGLForErrors();
+	g_pSplitList = NULL;
+	if ( g_bClipMode ) {
+		if ( g_Clip1.Set() && g_Clip2.Set() ) {
+			g_pSplitList = ( g_bSwitch ) ? &g_brBackSplits : &g_brFrontSplits;
+		}
+	}
+	Patch_LODMatchAll(); // spog
+	Cam_Draw();
+	QE_CheckOpenGLForErrors();
+	m_XORRectangle.set( rectangle_t() );
+}
+
+void CamWnd::OnExpose() {
 	if ( !MakeCurrent() ) {
 		Sys_FPrintf( SYS_ERR, "ERROR: glXMakeCurrent failed..\n " );
 		Sys_Printf( "Please restart Radiant if the camera view is not working\n" );
 	}
 	else
 	{
-		QE_CheckOpenGLForErrors();
-		g_pSplitList = NULL;
-		if ( g_bClipMode ) {
-			if ( g_Clip1.Set() && g_Clip2.Set() ) {
-				g_pSplitList = ( g_bSwitch ) ?
-							   &g_brBackSplits : &g_brFrontSplits;
-			}
-		}
-
-		Patch_LODMatchAll(); // spog
-
-		Cam_Draw();
-		QE_CheckOpenGLForErrors();
-
-		m_XORRectangle.set( rectangle_t() );
+		Render();
 		SwapBuffers();
 	}
 }
