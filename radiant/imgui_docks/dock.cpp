@@ -15,4 +15,7 @@ void Dock::OnLeftMouseDown(ImVec2 posLeftTop) {}
 void Dock::OnLeftMouseUp(ImVec2 posLeftTop) {}
 void Dock::OnRightMouseDown(ImVec2 posLeftTop) {}
 void Dock::OnRightMouseUp(ImVec2 posLeftTop) {}
+void Dock::OnMiddleMouseDown(ImVec2 posLeftTop) {}
+void Dock::OnMiddleMouseUp(ImVec2 posLeftTop) {}
 void Dock::OnMouseMove(ImVec2 posLeftTop) {}
+void Dock::OnEscape() {}

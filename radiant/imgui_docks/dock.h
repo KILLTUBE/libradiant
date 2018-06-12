@@ -16,7 +16,10 @@ public:
 	virtual void OnLeftMouseUp(ImVec2 posLeftTop);
 	virtual void OnRightMouseDown(ImVec2 posLeftTop);
 	virtual void OnRightMouseUp(ImVec2 posLeftTop);
+	virtual void OnMiddleMouseDown(ImVec2 posLeftTop);
+	virtual void OnMiddleMouseUp(ImVec2 posLeftTop);
 	virtual void OnMouseMove(ImVec2 posLeftTop);
+	virtual void OnEscape();
 };
 
 #endif

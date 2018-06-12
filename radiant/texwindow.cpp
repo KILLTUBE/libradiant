@@ -2030,6 +2030,12 @@ void TexWnd::OnRButtonDown( guint32 flags, int pointx, int pointy ){
 }
 
 void TexWnd::OnMButtonDown( guint32 flags, int pointx, int pointy ){
+	imgui_mouse_set_button(2, true);
+	if (dock_xy) {
+		auto screenPosMouse = ImVec2(pointx, pointy);
+		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
+		dock_xy->OnMiddleMouseDown(dockPosMouse);
+	}
 	SetCapture();
 	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
 }
@@ -2045,6 +2051,10 @@ LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     io.KeyShift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
     io.KeyAlt = (GetKeyState(VK_MENU) & 0x8000) != 0;
     io.KeySuper = false;
+
+	//if (io.KeyShift) {
+	//	imgui_log("io.KeyShift\n");
+	//}
 
 	//imgui_log("dunno : msg=%d wparam=%d lparam=%d\n", msg, wParam, lParam);
 	switch (msg) {
@@ -2067,6 +2077,13 @@ LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			//imgui_log("WM_KEYDOWN: %c %d\n", wParam, wParam);
 			if (wParam < 256)
 				io.KeysDown[wParam] = 1;
+
+			if (wParam == VK_ESCAPE) {
+				
+				
+				dock_xy->OnEscape();
+			}
+
 			goto stop_gtk_event_processing;
 		case WM_CHAR:
 			// You can also use ToAscii()+GetKeyboardState() to retrieve characters.
@@ -2129,6 +2146,12 @@ void TexWnd::OnRButtonUp( guint32 flags, int pointx, int pointy ){
 }
 
 void TexWnd::OnMButtonUp( guint32 flags, int pointx, int pointy ){
+	imgui_mouse_set_button(2, false);
+	if (dock_xy) {
+		auto screenPosMouse = ImVec2(pointx, pointy);
+		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
+		dock_xy->OnMiddleMouseUp(dockPosMouse);
+	}
 	ReleaseCapture();
 }
 

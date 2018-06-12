@@ -81,7 +81,7 @@ void ZWnd::OnRButtonUp( guint32 nFlags, int pointx, int pointy ){
 
 void ZWnd::OnMouseMove( guint32 nFlags, int pointx, int pointy ){
 
-	current_glwindow = this;
+	//current_glwindow = this;
 
 	pointy = m_pWidget->allocation.height - 1 - pointy;
 	float fz = z.origin[2] + ( pointy - ( z.height / 2 ) ) / z.scale;
