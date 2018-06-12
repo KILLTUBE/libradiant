@@ -205,6 +205,7 @@
     <ClCompile Include="imgui_docks_radiant\dock_all.cpp" />
     <ClCompile Include="imgui_docks_radiant\dock_textures.cpp" />
     <ClCompile Include="imgui_docks_radiant\dock_xy.cpp" />
+    <ClCompile Include="imgui_docks_radiant\dock_z.cpp" />
     <ClCompile Include="imgui_radiant\gluecode.cpp" />
     <ClCompile Include="imgui_radiant\imgui_radiant_default_docks.cpp" />
     <ClCompile Include="kung\easygtkwidget.cpp" />
@@ -305,6 +306,7 @@
     <ClInclude Include="imgui_docks_radiant\dock_all.h" />
     <ClInclude Include="imgui_docks_radiant\dock_textures.h" />
     <ClInclude Include="imgui_docks_radiant\dock_xy.h" />
+    <ClInclude Include="imgui_docks_radiant\dock_z.h" />
     <ClInclude Include="imgui_radiant\gluecode.h" />
     <ClInclude Include="imgui_radiant\imgui_radiant_default_docks.h" />
     <ClInclude Include="kung\easygtkwidget.h" />

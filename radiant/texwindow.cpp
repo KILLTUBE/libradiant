@@ -1969,10 +1969,11 @@ void TexWnd::OnExpose() {
 			if (callback_oninit)
 				callback_oninit();
 		}
-
-		if (mainframe_intance)
-		if (mainframe_intance->m_pXYWnd)
+		
+		if (mainframe_intance && mainframe_intance->m_pXYWnd)
 			mainframe_intance->m_pXYWnd->Render();
+		if (mainframe_intance && mainframe_intance->m_pZWnd)
+			mainframe_intance->m_pZWnd->Render();
 
 		SwapBuffers();
 	}

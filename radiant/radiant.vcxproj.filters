@@ -269,6 +269,9 @@
     <ClCompile Include="imgui_docks_radiant\dock_xy.cpp">
       <Filter>src\imgui_docks_radiant</Filter>
     </ClCompile>
+    <ClCompile Include="imgui_docks_radiant\dock_z.cpp">
+      <Filter>src\imgui_docks_radiant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="radiant.ico">
@@ -489,6 +492,9 @@
       <Filter>src\imgui_radiant</Filter>
     </ClInclude>
     <ClInclude Include="imgui_docks_radiant\dock_xy.h">
+      <Filter>src\imgui_docks_radiant</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_docks_radiant\dock_z.h">
       <Filter>src\imgui_docks_radiant</Filter>
     </ClInclude>
   </ItemGroup>

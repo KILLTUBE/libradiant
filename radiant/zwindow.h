@@ -24,23 +24,25 @@
 
 #include "glwindow.h"
 
-class ZWnd : public GLWindow
-{
-public:
-ZWnd ();
-virtual ~ZWnd ();
-
-void OnCreate();
-void OnExpose();
-void OnLButtonDown( guint32 flags, int x, int y );
-void OnRButtonDown( guint32 flags, int x, int y );
-void OnMButtonDown( guint32 flags, int x, int y );
-void OnLButtonUp( guint32 flags, int pointx, int pointy );
-void OnRButtonUp( guint32 flags, int pointx, int pointy );
-void OnMButtonUp( guint32 flags, int pointx, int pointy );
-void OnMouseMove( guint32 flags, int pointx, int pointy );
-void OnSize( int cx, int cy );
-void OnMouseWheel(bool bUp, int pointx, int pointy);
+class ZWnd : public GLWindow { public:
+	int m_nWidth;
+	int m_nHeight;
+	int viewport_left;
+	int viewport_bottom;
+	ZWnd ();
+	virtual ~ZWnd ();
+	void OnCreate();
+	void OnExpose();
+	void OnLButtonDown( guint32 flags, int x, int y );
+	void OnRButtonDown( guint32 flags, int x, int y );
+	void OnMButtonDown( guint32 flags, int x, int y );
+	void OnLButtonUp( guint32 flags, int pointx, int pointy );
+	void OnRButtonUp( guint32 flags, int pointx, int pointy );
+	void OnMButtonUp( guint32 flags, int pointx, int pointy );
+	void OnMouseMove( guint32 flags, int pointx, int pointy );
+	void OnSize( int cx, int cy );
+	void OnMouseWheel(bool bUp, int pointx, int pointy);
+	void Render();
 };
 
 

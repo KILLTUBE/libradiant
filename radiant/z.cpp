@@ -316,7 +316,7 @@ void Z_Draw( void ){
 	//
 	// clear
 	//
-	qglViewport( 0, 0, z.width, z.height );
+	//qglViewport( 0, 0, z.width, z.height );
 
 	qglClearColor(
 		g_qeglobals.d_savedinfo.colors[COLOR_GRIDBACK][0],

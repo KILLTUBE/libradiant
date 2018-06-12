@@ -117,6 +117,18 @@ void ZWnd::OnMouseWheel(bool bUp, int pointx, int pointy) {
 	Sys_UpdateWindows(W_Z);
 }
 
+void ZWnd::Render(){
+
+    qglEnable(GL_SCISSOR_TEST);
+    qglViewport( viewport_left, viewport_bottom, m_nWidth, m_nHeight );
+    qglScissor(viewport_left, viewport_bottom, m_nWidth, m_nHeight);
+	z.width = m_nWidth;
+	z.height = m_nHeight;
+	QE_CheckOpenGLForErrors();
+	Z_Draw();
+	QE_CheckOpenGLForErrors();
+}
+
 void ZWnd::OnExpose(){
 	if ( !MakeCurrent() ) {
 		Sys_FPrintf( SYS_ERR, "ERROR: wglMakeCurrent failed..\n " );
@@ -124,9 +136,7 @@ void ZWnd::OnExpose(){
 	}
 	else
 	{
-		QE_CheckOpenGLForErrors();
-		Z_Draw();
-		QE_CheckOpenGLForErrors();
+		Render();
 		SwapBuffers();
 	}
 }
