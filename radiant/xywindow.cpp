@@ -1169,28 +1169,30 @@ void XYWnd::OnMouseMove( guint32 nFlags, int pointx, int pointy ){
 	}
 
 	if ( ( nFlags & MK_RBUTTON ) == 0 ) {
-		if ( bCrossHair && !g_bWaitCursor ) {
-			GdkWindow *window;
-			GdkDisplay *display;
-			GdkCursor *cursor;
-
-			window = gtk_widget_get_window( m_pWidget );
-			display = gdk_window_get_display( window );
-			cursor = gdk_cursor_new_for_display( display, GDK_CROSSHAIR );
-			gdk_window_set_cursor( window, cursor );
-#if GTK_CHECK_VERSION( 3, 0, 0 )
-			g_object_unref( cursor );
-#else
-			gdk_cursor_unref( cursor );
-#endif
-		}
-		else
-		{
-			gdk_window_set_cursor( gtk_widget_get_window( m_pWidget ), NULL );
-		}
+//		if ( bCrossHair && !g_bWaitCursor ) {
+//			GdkWindow *window;
+//			GdkDisplay *display;
+//			GdkCursor *cursor;
+//
+//			window = gtk_widget_get_window( m_pWidget );
+//			display = gdk_window_get_display( window );
+//			cursor = gdk_cursor_new_for_display( display, GDK_CROSSHAIR );
+//			gdk_window_set_cursor( window, cursor );
+//#if GTK_CHECK_VERSION( 3, 0, 0 )
+//			g_object_unref( cursor );
+//#else
+//			gdk_cursor_unref( cursor );
+//#endif
+//		}
+//		else
+//		{
+//			gdk_window_set_cursor( gtk_widget_get_window( m_pWidget ), NULL );
+//		}
 	}
 
-	update_xor_rectangle_xy( m_XORRectangle );
+	// todo kung: bring this back via imgui
+	// atm this is causing lots of gtk assertion errors in console, lagging everything
+	//update_xor_rectangle_xy( m_XORRectangle );
 }
 
 void XYWnd::OnMouseWheel( bool bUp, int pointx, int pointy ) {
@@ -1432,7 +1434,9 @@ void XYWnd::XY_MouseDown( int x, int y, int buttons ){
 		}
 	}
 
-	update_xor_rectangle_xy( m_XORRectangle );
+	// todo kung: bring this back via imgui
+	// atm this is causing lots of gtk assertion errors in console, lagging everything
+	//update_xor_rectangle_xy( m_XORRectangle );
 }
 
 void XYWnd::XY_MouseUp( int x, int y, int buttons ){
@@ -1444,7 +1448,9 @@ void XYWnd::XY_MouseUp( int x, int y, int buttons ){
 
 	gdk_window_set_cursor( gtk_widget_get_window( m_pWidget ), NULL );
 
-	update_xor_rectangle_xy( m_XORRectangle );
+	// todo kung: bring this back via imgui
+	// atm this is causing lots of gtk assertion errors in console, lagging everything
+	//update_xor_rectangle_xy( m_XORRectangle );
 }
 
 qboolean XYWnd::DragDelta( int x, int y, vec3_t move ){
@@ -1832,23 +1838,23 @@ void XYWnd::XY_MouseMoved( int x, int y, int buttons ){
 			m_vOrigin[nDim2] += ( y - m_ptCursorY ) / m_fScale;
 			Sys_SetCursorPos( m_ptCursorX, m_ptCursorY );
 
-			// create an empty cursor
-			if ( !g_bWaitCursor ) {
-				GdkWindow *window;
-				GdkDisplay *display;
-				GdkCursor *cursor;
-
-				window = gtk_widget_get_window( m_pWidget );
-				display = gdk_window_get_display( window );
-				cursor = gdk_cursor_new_for_display( display, GDK_BLANK_CURSOR );
-
-				gdk_window_set_cursor( window, cursor );
-#if GTK_CHECK_VERSION( 3, 0, 0 )
-				g_object_unref( cursor );
-#else
-				gdk_cursor_unref( cursor );
-#endif
-			}
+//			// create an empty cursor
+//			if ( !g_bWaitCursor ) {
+//				GdkWindow *window;
+//				GdkDisplay *display;
+//				GdkCursor *cursor;
+//
+//				window = gtk_widget_get_window( m_pWidget );
+//				display = gdk_window_get_display( window );
+//				cursor = gdk_cursor_new_for_display( display, GDK_BLANK_CURSOR );
+//
+//				gdk_window_set_cursor( window, cursor );
+//#if GTK_CHECK_VERSION( 3, 0, 0 )
+//				g_object_unref( cursor );
+//#else
+//				gdk_cursor_unref( cursor );
+//#endif
+//			}
 
 			Sys_UpdateWindows( W_XY | W_XY_OVERLAY );
 		}
@@ -3280,16 +3286,19 @@ void XYWnd::Render() {
 			qglPopMatrix();
 		}
 
-		m_XORRectangle.set( rectangle_t() );
+		// todo kung: bring this back via imgui
+		// atm this is causing lots of gtk assertion errors in console, lagging everything
+		//m_XORRectangle.set( rectangle_t() );
 }
 
 void XYWnd::OnExpose(){
-	if ( !MakeCurrent() )
-		return;
-	// just render some blackness here, so the old gtk widget doesnt flicker
-	qglClearColor(0,0,0,0);
-	qglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-	SwapBuffers();
+	printf("asd\n");
+	//if ( !MakeCurrent() )
+	//	return;
+	//// just render some blackness here, so the old gtk widget doesnt flicker
+	//qglClearColor(0,0,0,0);
+	//qglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	//SwapBuffers();
 }
 
 void XYWnd::KillPathMode(){

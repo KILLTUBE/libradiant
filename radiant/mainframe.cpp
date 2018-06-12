@@ -811,6 +811,7 @@ gint HandleCommand( GtkWidget *widget, gpointer data ){
 static gint timer( gpointer data ){
 	MainFrame *wnd = (MainFrame*)data;
 	wnd->OnTimer();
+	wnd->UpdateWindows(W_TEXTURE);
 	return TRUE;
 }
 
@@ -2065,36 +2066,21 @@ void MainFrame::Create(){
 						gtk_paned_add2( GTK_PANED( hsplit2 ), vsplit2 );
 						gtk_widget_show( vsplit2 );
 
-						// camera
 						m_pCamWnd = new CamWnd();
-						{
-							GtkWidget* frame = m_pCamWnd->GetWidget();
-							gtk_widget_show(frame);
-							gtk_paned_add1( GTK_PANED( vsplit2 ), frame );
-						}
+						GtkWidget* frame_cam = m_pCamWnd->GetWidget();
+						gtk_widget_show(frame_cam);
+						gtk_paned_add1( GTK_PANED( vsplit2 ), frame_cam );
 
-						// xy
 						m_pXYWnd = new XYWnd();
 						m_pXYWnd->SetViewType( XY );
-						{
-							GtkWidget* frame = m_pXYWnd->GetWidget();
-							gtk_widget_show(frame);
-							gtk_paned_add1( GTK_PANED( hsplit2 ), frame );
-						}
+						//GtkWidget* frame_xy = m_pXYWnd->GetWidget();
+						//gtk_widget_show(frame_xy);
+						//gtk_paned_add1( GTK_PANED( hsplit2 ), frame_xy );
 
-						// z
 						m_pZWnd = new ZWnd();
-						{
-							GtkWidget* frame = m_pZWnd->GetWidget();
-							gtk_widget_show(frame);
-							if ( CurrentStyle() == eRegular ) {
-								gtk_paned_add1( GTK_PANED( hsplit ), frame );
-							}
-							else{
-								gtk_paned_add2( GTK_PANED( hsplit2 ), frame );
-							}
-						}
-
+						GtkWidget* frame_z = m_pZWnd->GetWidget();
+						gtk_widget_show(frame_z);
+						gtk_paned_add1( GTK_PANED( hsplit ), frame_z );
 
 						m_pTexWnd = new TexWnd();
 						GtkWidget* frame = m_pTexWnd->GetWidget();
@@ -2114,10 +2100,11 @@ void MainFrame::Create(){
 			}
 		}
 
-		gtk_paned_set_position( GTK_PANED( m_pSplits[0] ), g_PrefsDlg.mWindowInfo.nXYHeight  );
-		gtk_paned_set_position( GTK_PANED( m_pSplits[1] ), g_PrefsDlg.mWindowInfo.nCamHeight );
-		gtk_paned_set_position( GTK_PANED( m_pSplits[2] ), g_PrefsDlg.mWindowInfo.nZWidth    );
-		gtk_paned_set_position( GTK_PANED( m_pSplits[3] ), g_PrefsDlg.mWindowInfo.nXYWidth   );
+		// minimize the gtk widgets, they contain only blackness and will be removed later
+		gtk_paned_set_position( GTK_PANED( m_pSplits[0] ), 1 ); // g_PrefsDlg.mWindowInfo.nXYHeight  );
+		gtk_paned_set_position( GTK_PANED( m_pSplits[1] ), 1 ); // g_PrefsDlg.mWindowInfo.nCamHeight );
+		gtk_paned_set_position( GTK_PANED( m_pSplits[2] ), 1 ); // g_PrefsDlg.mWindowInfo.nZWidth    );
+		gtk_paned_set_position( GTK_PANED( m_pSplits[3] ), 1 ); // g_PrefsDlg.mWindowInfo.nXYWidth   );
 	}
 
 	if ( g_PrefsDlg.mWindowInfo.nState & GDK_WINDOW_STATE_MAXIMIZED ) {
@@ -2167,15 +2154,12 @@ void MainFrame::Create(){
 		g_PrefsDlg.mLocalPrefs.mbEmpty = false;
 		g_PrefsDlg.SavePrefs();
 	}
-
-	// remove the pid file
-	remove( g_pidGameFile.GetBuffer() );
-
+	
 	Sys_Printf( "Entering message loop\n" );
 
 	m_bDoLoop = true;
 
-	m_nTimer = g_timeout_add( 1000, timer, this );
+	m_nTimer = g_timeout_add( /*1000*/16, timer, this ); // 1000/60 == 16ms aka 60fps
 
 
 	//EASYGTKWIDGET(m_pSplits[0] )->setExpand(true)->setFill(true);
