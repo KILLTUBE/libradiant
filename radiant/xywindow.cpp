@@ -1020,9 +1020,7 @@ void XYWnd::OnMouseMove( guint32 nFlags, int pointx, int pointy ){
 	m_ptDownX = 0;
 	m_ptDownY = 0;
 
-	if ( g_PrefsDlg.m_bChaseMouse == TRUE &&
-		 ( pointx < 0 || pointy < 0 || pointx > m_nWidth || pointy > m_nHeight ) &&
-		 HasCapture() ) {
+	if ( g_PrefsDlg.m_bChaseMouse == TRUE &&  ( pointx < 0 || pointy < 0 || pointx > m_nWidth || pointy > m_nHeight ) && HasCapture() ) {
 		float fAdjustment = ( g_qeglobals.d_gridsize / 8 * 64 ) / m_fScale;
 		//m_ptDrag = point;
 		m_ptDragAdjX = 0;

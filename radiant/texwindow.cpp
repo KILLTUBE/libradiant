@@ -2018,6 +2018,13 @@ void TexWnd::OnLButtonDown( guint32 flags, int pointx, int pointy ) {
 }
 
 void TexWnd::OnRButtonDown( guint32 flags, int pointx, int pointy ){
+	imgui_mouse_set_button(1, true);
+	if (dock_xy) {
+		auto screenPosMouse = ImVec2(pointx, pointy);
+		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
+		dock_xy->OnRightMouseDown(dockPosMouse);
+	}
+
 	SetCapture();
 	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
 }
@@ -2098,12 +2105,26 @@ void TexWnd::OnLButtonUp( guint32 flags, int pointx, int pointy ){
 	imgui_mouse_set_button(0, false);
 	//Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
 
+	if (dock_xy) {
+		auto screenPosMouse = ImVec2(pointx, pointy);
+		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
+		dock_xy->OnLeftMouseUp(dockPosMouse);
+	}
+
 	ReleaseCapture();
 	//DragDropTexture( flags, pointx, pointy );
 	RedrawWindow();
 }
 
 void TexWnd::OnRButtonUp( guint32 flags, int pointx, int pointy ){
+	imgui_mouse_set_button(1, false);
+	if (dock_xy) {
+		auto screenPosMouse = ImVec2(pointx, pointy);
+		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
+
+		dock_xy->OnRightMouseUp(dockPosMouse);
+	}
+
 	ReleaseCapture();
 }
 
@@ -2114,6 +2135,16 @@ void TexWnd::OnMButtonUp( guint32 flags, int pointx, int pointy ){
 void TexWnd::OnMouseMove( guint32 flags, int pointx, int pointy ){
 	current_glwindow = this;
 	imgui_set_mousepos(pointx, pointy);
+
+
+	//imgui_log("%d\n", flags);
+
+	if (dock_xy) {
+		auto screenPosMouse = ImVec2(pointx, pointy);
+		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
+		dock_xy->OnMouseMove(dockPosMouse);
+	}
+
 	//Texture_MouseMoved( pointx, pointy - g_nTextureOffset, flags );
 	// if scrollbar is hidden, we don't seem to get an update
 	//if ( !g_PrefsDlg.m_bTextureScrollbar )
