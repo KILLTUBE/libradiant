@@ -1553,73 +1553,30 @@ inline void CHECK_RESTORE( GtkWidget* w ){
 	}
 }
 
-
-// this is called when the window is restored from the iconified state
-static void mainframe_map( GtkWidget *widget ){
-	if ( g_pParentWnd->IsSleeping() ) {
-		g_pParentWnd->OnSleep();
-	}
-
-	if ( ( g_pParentWnd->CurrentStyle() == MainFrame::eFloating ) && ( widget == g_pParentWnd->m_pWidget ) ) {
-		// restore previously visible windows
-		CHECK_RESTORE( g_pParentWnd->GetCamWnd()->m_pParent );
-		if ( g_PrefsDlg.m_bFloatingZ ) {
-			CHECK_RESTORE( g_pParentWnd->GetZWnd()->m_pParent );
-		}
-		CHECK_RESTORE( g_pParentWnd->GetXYWnd()->m_pParent );
-		CHECK_RESTORE( g_pParentWnd->GetXZWnd()->m_pParent );
-		CHECK_RESTORE( g_pParentWnd->GetYZWnd()->m_pParent );
-		CHECK_RESTORE( g_pGroupDlg->m_pWidget );
-	}
-}
-
 inline void CHECK_MINIMIZE( GtkWidget* w ){
 	g_object_set_data( G_OBJECT( w ), "was_mapped", (void*)( gtk_widget_get_visible( w ) != 0 ) );
 	gtk_widget_hide( w );
 }
 
-static void mainframe_unmap( GtkWidget *widget ){
-
-	if ( ( g_pParentWnd->CurrentStyle() == MainFrame::eFloating ) && ( widget == g_pParentWnd->m_pWidget ) ) {
-		// minimize all other windows when the main window is minimized
-		CHECK_MINIMIZE( g_pParentWnd->GetCamWnd()->m_pParent );
-		if ( g_PrefsDlg.m_bFloatingZ ) {
-			CHECK_MINIMIZE( g_pParentWnd->GetZWnd()->m_pParent );
-		}
-		CHECK_MINIMIZE( g_pParentWnd->GetXYWnd()->m_pParent );
-		CHECK_MINIMIZE( g_pParentWnd->GetXZWnd()->m_pParent );
-		CHECK_MINIMIZE( g_pParentWnd->GetYZWnd()->m_pParent );
-		CHECK_MINIMIZE( g_pGroupDlg->m_pWidget );
-	}
-}
-static gboolean mainframe_state( GtkWidget *widget, GdkEventWindowState *e, gpointer user_data ){
-
-	if( e->changed_mask & GDK_WINDOW_STATE_ICONIFIED && !( e->new_window_state & GDK_WINDOW_STATE_ICONIFIED ) ) {
-		mainframe_map( widget );
-	}
-	return FALSE;
-}
-
 static GtkWidget* create_floating( MainFrame* mainframe ){
-	GtkWidget *wnd = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-	//workaround for a bug with set_transient_for in GTK - resulting behaviour is not perfect but better than the bug.
-	//(see https://bugzilla.gnome.org/show_bug.cgi?id=658975 regarding the bug)
-	if (mainframe->CurrentStyle() != MainFrame::eFloating)
-		gtk_window_set_transient_for( GTK_WINDOW( wnd ), GTK_WINDOW( mainframe->m_pWidget ) );
-	gtk_widget_set_events( wnd, GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
-	g_signal_connect( G_OBJECT( wnd ), "delete-event"       , G_CALLBACK( widget_delete_hide ), NULL );
-	g_signal_connect( G_OBJECT( wnd ), "destroy"            , G_CALLBACK( gtk_widget_destroy ), NULL );
-	g_signal_connect( G_OBJECT( wnd ), "key-press-event"    , G_CALLBACK( mainframe_keypress ), mainframe );
-	g_signal_connect( G_OBJECT( wnd ), "key-release-event"  , G_CALLBACK( mainframe_keyrelease ), mainframe );
-	g_signal_connect( G_OBJECT( wnd ), "map-event"          , G_CALLBACK( mainframe_map ), mainframe );
-
-	gtk_window_set_default_size( GTK_WINDOW( wnd ), 100, 100 );
-
-#ifdef DBG_WINDOWPOS
-	Sys_Printf( "create_floating: %p, gtk_window_set_default_size 100, 100\n", wnd );
-#endif
-
-	return wnd;
+	//GtkWidget *wnd = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+	////workaround for a bug with set_transient_for in GTK - resulting behaviour is not perfect but better than the bug.
+	////(see https://bugzilla.gnome.org/show_bug.cgi?id=658975 regarding the bug)
+	//if (mainframe->CurrentStyle() != MainFrame::eFloating)
+	//	gtk_window_set_transient_for( GTK_WINDOW( wnd ), GTK_WINDOW( mainframe->m_pWidget ) );
+	//gtk_widget_set_events( wnd, GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
+	//g_signal_connect( G_OBJECT( wnd ), "delete-event"       , G_CALLBACK( widget_delete_hide ), NULL );
+	//g_signal_connect( G_OBJECT( wnd ), "destroy"            , G_CALLBACK( gtk_widget_destroy ), NULL );
+	//g_signal_connect( G_OBJECT( wnd ), "key-press-event"    , G_CALLBACK( mainframe_keypress ), mainframe );
+	//g_signal_connect( G_OBJECT( wnd ), "key-release-event"  , G_CALLBACK( mainframe_keyrelease ), mainframe );
+	//g_signal_connect( G_OBJECT( wnd ), "map-event"          , G_CALLBACK( mainframe_map ), mainframe );
+	//
+	//gtk_window_set_default_size( GTK_WINDOW( wnd ), 100, 100 );
+	//
+	//
+	//
+	//return wnd;
+	return NULL;
 }
 
 void console_populate_popup( GtkTextView* textview, GtkMenu* menu, gpointer user_data ){
@@ -1649,76 +1606,9 @@ void Clipboard_PasteMap(){
 	}
 }
 
-/*!
-   Platform-independent GTK clipboard support.
-   \todo Using GDK_SELECTION_CLIPBOARD fails on win32, so we use the win32 API directly for now.
- */
-#if defined ( __linux__ ) || defined ( __APPLE__ )
-
-enum
-{
-	RADIANT_CLIPPINGS = 23,
-};
-
-static const GtkTargetEntry clipboard_targets[] = {
-	{ (gchar *)"RADIANT_CLIPPINGS", 0, RADIANT_CLIPPINGS, },
-};
-
-static void clipboard_get( GtkClipboard *clipboard, GtkSelectionData *selection_data, guint info, gpointer user_data_or_owner ){
-	guchar *buffer;
-	gint len;
-	GdkAtom type = GDK_NONE;
-
-	len = g_Clipboard.GetLength();
-
-	if ( !len ) {
-		buffer = NULL;
-	}
-	else
-	{
-		buffer = g_Clipboard.GetBuffer();
-	}
-
-	if ( info == clipboard_targets[0].info ) {
-		type = gdk_atom_intern( clipboard_targets[0].target, FALSE );
-	}
-
-	gtk_selection_data_set( selection_data, type, 8, buffer, len );
-}
-
-static void clipboard_clear( GtkClipboard *clipboard, gpointer user_data_or_owner ){
-}
-
-static void clipboard_received( GtkClipboard *clipboard, GtkSelectionData *data, gpointer user_data ){
-	//g_Clipboard.SetLength( 0 );
-
-	if ( gtk_selection_data_get_length( data ) < 0 ) {
-		Sys_FPrintf( SYS_ERR, "Error retrieving selection\n" );
-	}
-	else if ( strcmp( gdk_atom_name( gtk_selection_data_get_data_type( data ) ), clipboard_targets[0].target ) == 0 ) {
-		g_Clipboard.SetLength( 0 );
-		g_Clipboard.Write( gtk_selection_data_get_data( data ), gtk_selection_data_get_length( data ) );
-	}
-
-	Clipboard_PasteMap();
-}
-
-void clipboard_copy(){
-	Clipboard_CopyMap();
-
-	GtkClipboard* clipboard = gtk_clipboard_get( GDK_SELECTION_CLIPBOARD );
-
-	gtk_clipboard_set_with_data( clipboard, clipboard_targets, 1, clipboard_get, clipboard_clear, NULL );
-}
-
-void clipboard_paste(){
-	GtkClipboard* clipboard = gtk_clipboard_get( GDK_SELECTION_CLIPBOARD );
-
-	gtk_clipboard_request_contents( clipboard, gdk_atom_intern( clipboard_targets[0].target, FALSE ), clipboard_received, NULL );
-}
 
 
-#elif defined( WIN32 )
+#if defined( WIN32 )
 
 void clipboard_copy(){
 	Clipboard_CopyMap();
@@ -1782,143 +1672,6 @@ void MainFrame::Paste(){
 	UpdateSurfaceDialog();
 }
 
-
-#ifdef DBG_WINDOWPOS
-GtkWidget *watchit = NULL;
-
-void CheckWatchit( char *msg ){
-	static int width = 0;
-	if ( ( watchit != NULL ) && ( watchit->allocation.width != width ) ) {
-		Sys_Printf( "CheckWatchit %s: %d\n", msg, watchit->allocation.width );
-		width = watchit->allocation.width;
-	}
-}
-#endif
-
-#ifdef _WIN32
-BOOL CALLBACK m_pCountMonitor( HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData ){
-	int *n = (int *) dwData;
-
-	( *n )++;
-
-	return TRUE;
-}
-
-struct monitorInfo_s {
-	GdkRectangle *win_monitors;
-	int i_win_mon;
-};
-
-BOOL CALLBACK m_pEnumMonitor( HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData ){
-	monitorInfo_s *monitorInfo = (monitorInfo_s *) dwData;
-	GdkRectangle *monitor;
-	MONITORINFOEX lpmi;
-
-	monitor = monitorInfo->win_monitors + monitorInfo->i_win_mon;
-
-	memset( &lpmi, 0, sizeof( MONITORINFOEX ) );
-	lpmi.cbSize = sizeof( MONITORINFOEX );
-
-	GetMonitorInfo( hMonitor, &lpmi );
-
-	if ( lpmi.dwFlags & MONITORINFOF_PRIMARY ) {
-		RECT rect;
-
-		SystemParametersInfo( SPI_GETWORKAREA, 0, &rect, 0 );
-		monitor->x = rect.left;
-		monitor->y = rect.top;
-		monitor->width = rect.right - rect.left;
-		monitor->height = rect.bottom - rect.top;
-
-		if ( monitorInfo->i_win_mon != 0 ) {
-			GdkRectangle temp = *monitor;
-			*monitor = monitorInfo->win_monitors[0];
-			monitorInfo->win_monitors[0] = temp;
-		}
-	}
-	else {
-		monitor->x = lpmi.rcMonitor.left;
-		monitor->y = lpmi.rcMonitor.top;
-		monitor->width = lpmi.rcMonitor.right - lpmi.rcMonitor.left;
-		monitor->height = lpmi.rcMonitor.bottom - lpmi.rcMonitor.top;
-	}
-
-	monitorInfo->i_win_mon++;
-
-	return TRUE;
-}
-
-void PositionWindowOnPrimaryScreen( window_position_t& position ){
-	const GdkRectangle primaryMonitorRect = g_pParentWnd->GetPrimaryMonitorRect();
-
-	if ( position.x <= primaryMonitorRect.x + 6 ) {
-		position.x = primaryMonitorRect.x + 6;
-	}
-	else if ( position.x >= ( primaryMonitorRect.x + primaryMonitorRect.width ) - 6 ) {
-		position.x = primaryMonitorRect.x + 6;
-	}
-
-	if ( position.y <= primaryMonitorRect.y + 6 ) {
-		position.y = primaryMonitorRect.y + 6;
-	}
-	else if ( position.y >= ( primaryMonitorRect.y + primaryMonitorRect.height ) - 6 ) {
-		position.y = primaryMonitorRect.y + 6;
-	}
-
-	if ( position.x + position.w >= ( primaryMonitorRect.x + primaryMonitorRect.width ) - 18 ) {
-		position.w = primaryMonitorRect.width - 18;
-	}
-	if ( position.y + position.h >= ( primaryMonitorRect.y + primaryMonitorRect.height ) - 18 ) {
-		position.h = primaryMonitorRect.height - 18;
-	}
-}
-#endif
-
-static ZWnd *create_floating_zwnd( MainFrame *mainframe ){
-	ZWnd *pZWnd = new ZWnd();
-	GtkWidget* wnd = create_floating( mainframe );
-
-	gtk_window_set_title( GTK_WINDOW( wnd ), _( "Z" ) );
-
-	pZWnd->m_pParent = wnd;
-
-	{
-		GtkWidget* frame = pZWnd->GetWidget();
-		gtk_widget_show(frame);
-		gtk_container_add( GTK_CONTAINER( wnd ), frame );
-	}
-
-	gtk_widget_realize( wnd );
-
-	// turn OFF minimize and maximize boxes.
-	// Must be *after* realize, or gtk_widget_get_window( wnd ) is NULL
-	// should do the right thing on *nix, need to verify.
-	gdk_window_set_decorations( gtk_widget_get_window( wnd ),
-								GdkWMDecoration( GDK_DECOR_ALL | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE ) );
-	//TODO 50 by observation, will vary depending on decoration sizes
-	{
-		GdkGeometry geometry;
-		geometry.min_width = 50;
-		//we only care about width, but have to set this too, or get nasty bugs
-		geometry.min_height = 10;
-		gdk_window_set_geometry_hints( gtk_widget_get_window( wnd ), &geometry, GDK_HINT_MIN_SIZE );
-	}
-
-#ifdef _WIN32
-	if ( g_PrefsDlg.m_bStartOnPrimMon ) {
-		PositionWindowOnPrimaryScreen( g_PrefsDlg.mWindowInfo.posZWnd );
-	}
-#endif
-	load_window_pos( wnd, g_PrefsDlg.mWindowInfo.posZWnd );
-
-	if ( g_PrefsDlg.m_bZVis ) {
-		gtk_widget_show( wnd );
-	}
-
-	return pZWnd;
-}
-
-static const int gutter = 12;
 HWND hwnd = 0;
 
 MainFrame *mainframe_intance = NULL;
@@ -1935,73 +1688,8 @@ void MainFrame::Create(){
 	g_signal_connect( G_OBJECT( window ), "destroy"           , G_CALLBACK( mainframe_destroy    ), this );
 	g_signal_connect( G_OBJECT( window ), "key-press-event"   , G_CALLBACK( mainframe_keypress   ), this );
 	g_signal_connect( G_OBJECT( window ), "key-release-event" , G_CALLBACK( mainframe_keyrelease ), this );
-	g_signal_connect( G_OBJECT( window ), "map-event"         , G_CALLBACK( mainframe_map        ), this );
-	g_signal_connect( G_OBJECT( window ), "unmap-event"       , G_CALLBACK( mainframe_unmap      ), this );
-	g_signal_connect( G_OBJECT( window ), "window-state-event", G_CALLBACK( mainframe_state      ), this );
 
 	g_qeglobals_gui.d_main_window = window;
-
-#ifdef _WIN32
-	// calculate gdk offset
-	int n_win_monitors = 0;
-
-	monitorInfo_s monitorInfo;
-
-	// detect multiple monitors
-	EnumDisplayMonitors( NULL, NULL, m_pCountMonitor, reinterpret_cast<LPARAM>( &n_win_monitors ) );
-
-	monitorInfo.win_monitors = new GdkRectangle [ n_win_monitors ];
-	monitorInfo.i_win_mon = 0;
-	EnumDisplayMonitors( NULL, NULL, m_pEnumMonitor, reinterpret_cast<LPARAM>( &monitorInfo ) );
-
-	gdk_offset_x = G_MININT;
-	gdk_offset_y = G_MININT;
-
-	// calculate offset
-	for ( monitorInfo.i_win_mon = 0; monitorInfo.i_win_mon < n_win_monitors; monitorInfo.i_win_mon++ ) {
-		gdk_offset_x = MAX( gdk_offset_x, -monitorInfo.win_monitors[monitorInfo.i_win_mon].x );
-		gdk_offset_y = MAX( gdk_offset_y, -monitorInfo.win_monitors[monitorInfo.i_win_mon].y );
-	}
-
-	// We do not use these offsets anymore. This could all probably be trashed. I doubt the multi monitor does anything useful/works either.
-	Sys_Printf( "GDK's coordinate system is offset by %d over the x-axis and %d over the y-axis from Windows' coordinate system.\n", gdk_offset_x, gdk_offset_y );
-
-	if ( g_PrefsDlg.m_bStartOnPrimMon ) {
-		// get gdk monitors
-		GdkDisplay *display;
-		GdkScreen *screen;
-		gint n_gdk_monitors = 0;
-		gint i_mon;
-		GdkRectangle rect;
-
-		// detect multiple monitors
-		display = gdk_display_get_default();
-		Sys_Printf( "GDK detects that server %s manages %d screens\n", gdk_display_get_name( display ), gdk_display_get_n_screens( display ) );
-
-		screen = gdk_display_get_screen( display, 1 );
-		n_gdk_monitors = gdk_screen_get_n_monitors( screen );
-
-		Sys_Printf( "GDK detects that screen 1 has %d monitors\n", n_gdk_monitors );
-
-		for ( i_mon = 0; i_mon < n_gdk_monitors; i_mon++ ) {
-			memset( &rect, 0, sizeof( rect ) );
-			gdk_screen_get_monitor_geometry( screen, i_mon, &rect );
-			Sys_Printf( "  monitor %d: x: %d y: %d w: %d h: %d\n", i_mon, rect.x, rect.y, rect.width, rect.height );
-
-			if ( i_mon == 0 ) {
-				memcpy( &primaryMonitorRect, &rect, sizeof( primaryMonitorRect ) );
-			}
-		}
-
-		PositionWindowOnPrimaryScreen( g_PrefsDlg.mWindowInfo.position );
-	}
-	else {
-		primaryMonitorRect.x = primaryMonitorRect.y = 0;
-		primaryMonitorRect.width = gdk_screen_width();
-		primaryMonitorRect.height = gdk_screen_height();
-	}
-
-#endif
 
 	load_window_pos( window, g_PrefsDlg.mWindowInfo.position );
 
@@ -2042,8 +1730,7 @@ void MainFrame::Create(){
 	GtkWidget* frame = m_pTexWnd->GetWidget();
 	gtk_widget_show( frame );
 	gtk_box_pack_start( GTK_BOX( vbox ), frame, TRUE, TRUE, 0 );
-			
-		
+
 	if ( g_PrefsDlg.mWindowInfo.nState & GDK_WINDOW_STATE_MAXIMIZED ) {
 		gtk_window_maximize( GTK_WINDOW( window ) );
 	}
@@ -2093,25 +1780,16 @@ void MainFrame::Create(){
 	}
 	
 	Sys_Printf( "Entering message loop\n" );
-
 	m_bDoLoop = true;
-
 	m_nTimer = g_timeout_add( /*1000*/16, timer, this ); // 1000/60 == 16ms aka 60fps
-
-
-	//EASYGTKWIDGET(m_pSplits[0] )->setExpand(true)->setFill(true);
 	hwnd = (struct HWND__ *) gdk_win32_drawable_get_handle( ( toplevelwindow->window ) );
 	printf("WINDOW HWND: %d\n", hwnd);
 	change_WndProc(hwnd);
-	//mainframe->GetCamWnd()->OnCreate();
 }
 
 CCALL HWND get_hwnd() {
 	return hwnd;
 }
-
-// =============================================================================
-// MainFrame class
 
 MainFrame::MainFrame(){
 	m_bDoLoop = false;
@@ -2142,73 +1820,10 @@ MainFrame::~MainFrame(){
 	}
 }
 
-void MainFrame::ReleaseContexts(){
-	if ( m_pXYWnd ) {
-		m_pXYWnd->DestroyContext();
-	}
-	if ( m_pYZWnd ) {
-		m_pYZWnd->DestroyContext();
-	}
-	if ( m_pXZWnd ) {
-		m_pXZWnd->DestroyContext();
-	}
-	if ( m_pCamWnd ) {
-		m_pCamWnd->DestroyContext();
-	}
-	if ( m_pTexWnd ) {
-		m_pTexWnd->DestroyContext();
-	}
-	if ( m_pZWnd ) {
-		m_pZWnd->DestroyContext();
-	}
-}
-
-void MainFrame::CreateContexts(){
-	if ( m_pCamWnd ) {
-		m_pCamWnd->CreateContext();
-	}
-	if ( m_pXYWnd ) {
-		m_pXYWnd->CreateContext();
-	}
-	if ( m_pYZWnd ) {
-		m_pYZWnd->CreateContext();
-	}
-	if ( m_pXZWnd ) {
-		m_pXZWnd->CreateContext();
-	}
-	if ( m_pTexWnd ) {
-		m_pTexWnd->CreateContext();
-	}
-	if ( m_pZWnd ) {
-		m_pZWnd->CreateContext();
-	}
-}
-
-static void Sys_Iconify( GtkWidget *w ){
-	// we might not have been realized yet
-	if ( gtk_widget_get_window( w ) == NULL ) {
-		return;
-	}
-
-	if ( !gtk_widget_get_mapped( w ) ) {
-		return;
-	}
-
-	gtk_window_iconify( GTK_WINDOW( w ) );
-}
-
-static void Sys_Restore( GtkWidget *w ){
-	// we might not have been realized yet
-	if ( gtk_widget_get_window( w ) == NULL ) {
-		return;
-	}
-
-	if ( !gtk_widget_get_visible( w ) ) {
-		return;
-	}
-
-	gtk_window_deiconify( GTK_WINDOW( w ) );
-}
+void MainFrame::ReleaseContexts() {}
+void MainFrame::CreateContexts() {}
+static void Sys_Iconify( GtkWidget *w ) {}
+static void Sys_Restore( GtkWidget *w ) {}
 
 #ifdef _DEBUG
 //#define DBG_SLEEP
@@ -2380,42 +1995,7 @@ void WINAPI QERApp_Sleep(){
 	g_pParentWnd->OnSleep();
 }
 
-/*!
-   NOTE TTimo
-   the exit path is a bit complicated, I guess we have to run the window pos saving in OnDelete
-   and not in OnDestroy because the info may be lost already?
-   \todo try sinking OnDelete into OnDestroy and see if it breaks anything
- */
-void MainFrame::OnDelete(){
-	save_window_pos( m_pWidget, g_PrefsDlg.mWindowInfo.position );
-
-	// surface inspector and patch inspector
-	save_window_pos( g_dlgSurface.GetWidget(), g_PrefsDlg.mWindowInfo.posSurfaceWnd );
-	save_window_pos( g_PatchDialog.GetWidget(), g_PrefsDlg.mWindowInfo.posPatchWnd );
-
-	// entity inspector / group dialog
-	// NOTE TTimo do we have to save a different window depending on the view mode?
-	save_window_pos( g_pGroupDlg->m_pWidget, g_PrefsDlg.mWindowInfo.posEntityWnd );
-
-	if ( g_PrefsDlg.m_bFloatingZ ) {
-		save_window_pos( m_pZWnd->m_pParent, g_PrefsDlg.mWindowInfo.posZWnd );
-	}
-	else{
-		g_PrefsDlg.mWindowInfo.nZFloatWidth = gtk_paned_get_position( GTK_PANED( m_pSplits[0] ) );
-	}
-	if( g_PrefsDlg.m_bShowTexDirList && m_pSplits[4] ) {
-		g_PrefsDlg.mWindowInfo.nTextureDirectoryListWidth = gtk_paned_get_position( GTK_PANED( m_pSplits[4] ) );
-	}
-
-	if ( CurrentStyle() == eFloating ) {
-		save_window_pos( m_pCamWnd->m_pParent, g_PrefsDlg.mWindowInfo.posCamWnd );
-		save_window_pos( m_pXYWnd->m_pParent, g_PrefsDlg.mWindowInfo.posXYWnd );
-		save_window_pos( m_pXZWnd->m_pParent, g_PrefsDlg.mWindowInfo.posXZWnd );
-		save_window_pos( m_pYZWnd->m_pParent, g_PrefsDlg.mWindowInfo.posYZWnd );
-	}
-
-	g_PrefsDlg.mWindowInfo.nState = gdk_window_get_state( gtk_widget_get_window( g_pParentWnd->m_pWidget ) );
-}
+void MainFrame::OnDelete() {}
 
 void MainFrame::OnDestroy(){
 	// shut down console output first
@@ -2445,37 +2025,6 @@ void MainFrame::OnDestroy(){
 		w = g_object_get_data( G_OBJECT( g_pGroupDlg->m_pWidget ), "split2" );
 		g_PrefsDlg.mWindowInfo.nEntitySplit2 = gtk_paned_get_position( GTK_PANED( w ) );
 
-		if ( !FloatingGroupDialog() ) {
-			GtkWidget *vsplit, *hsplit, *vsplit2, *hsplit2;
-
-			vsplit = m_pSplits[0];
-			vsplit2 = m_pSplits[1];
-			hsplit = m_pSplits[2];
-			hsplit2 = m_pSplits[3];
-
-			g_PrefsDlg.mWindowInfo.nXYHeight  = gtk_paned_get_position( GTK_PANED( vsplit ) );
-			g_PrefsDlg.mWindowInfo.nXYWidth   = gtk_paned_get_position( GTK_PANED( hsplit2 ) );
-
-			if ( CurrentStyle() == eRegular ) {
-				g_PrefsDlg.mWindowInfo.nZWidth = gtk_paned_get_position( GTK_PANED( hsplit ) );
-			}
-			else{
-				g_PrefsDlg.mWindowInfo.nCamWidth = gtk_paned_get_position( GTK_PANED( hsplit ) );
-			}
-
-			g_PrefsDlg.mWindowInfo.nCamHeight = gtk_paned_get_position( GTK_PANED( vsplit2 ) );
-		}
-		else
-		{
-			if ( g_PrefsDlg.m_bFloatingZ || CurrentStyle() == eSplit ) {
-				if ( gtk_widget_get_visible( m_pZWnd->m_pParent ) ) {
-					g_PrefsDlg.m_bZVis = TRUE;
-				}
-				else{
-					g_PrefsDlg.m_bZVis = FALSE;
-				}
-			}
-		}
 		g_PrefsDlg.SavePrefs();
 		Sys_Printf( "Done prefs\n" );
 	}
@@ -2490,12 +2039,6 @@ void MainFrame::OnDestroy(){
 	delete m_pZWnd; m_pZWnd = NULL;
 	delete m_pTexWnd; m_pTexWnd = NULL;
 	delete m_pCamWnd; m_pCamWnd = NULL;
-
-	if ( g_pGroupDlg->m_pWidget ) {
-		//!\todo fix "Gtk-CRITICAL **: file gtknotebook.c: line 4643 (gtk_notebook_get_tab_label): assertion `GTK_IS_WIDGET (child)' failed"
-		gtk_widget_destroy( g_pGroupDlg->m_pWidget );
-		g_pGroupDlg->m_pWidget = NULL;
-	}
 
 	if ( strcmpi( currentmap, "unnamed.map" ) != 0 ) {
 		g_PrefsDlg.m_strLastMap = currentmap;

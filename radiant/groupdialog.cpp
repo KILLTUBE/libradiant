@@ -1231,10 +1231,6 @@ GroupDlg::GroupDlg (){
 	m_pWidget = NULL;
 }
 
-#ifdef _WIN32
-extern void PositionWindowOnPrimaryScreen( window_position_t& position );
-#endif
-
 void GroupDlg::Create(){
 	GtkWidget *dialog, *content_area;
 	GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
@@ -1247,11 +1243,7 @@ void GroupDlg::Create(){
 
 	content_area = gtk_dialog_get_content_area( GTK_DIALOG( dialog ) );
 
-#ifdef _WIN32
-	if ( g_PrefsDlg.m_bStartOnPrimMon ) {
-		PositionWindowOnPrimaryScreen( g_PrefsDlg.mWindowInfo.posEntityWnd );
-	}
-#endif
+
 	load_window_pos( dialog, g_PrefsDlg.mWindowInfo.posEntityWnd );
 
 	g_signal_connect( G_OBJECT( dialog ), "delete-event", G_CALLBACK( OnDeleteHide ), NULL );
