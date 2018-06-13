@@ -53,28 +53,7 @@ CamWnd::CamWnd ()
 CamWnd::~CamWnd (){
 }
 
-int set_global_hotkeys(int state);
-extern GtkAccelGroup* global_accel;
-
-gboolean cam_entry_focus_in( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
-	//gtk_window_remove_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
-	//set_global_hotkeys(0);
-	return FALSE;
-}
-
-gboolean cam_entry_focus_out( GtkWidget *widget, GdkEventFocus *event, gpointer user_data ){
-	//gtk_window_add_accel_group( GTK_WINDOW( g_pParentWnd->m_pWidget ), global_accel );
-	//set_global_hotkeys(1);
-	return FALSE;
-}
-
-void CamWnd::OnCreate(){
-	if ( !MakeCurrent() ) {
-		Error( "camwindow: glMakeCurrent failed" );
-	}
-
-
-}
+void CamWnd::OnCreate() {}
 
 void CamWnd::Cam_Init(){
 	m_Camera.timing = false;
@@ -90,7 +69,6 @@ void CamWnd::Cam_Init(){
 void CamWnd::OnSize( int cx, int cy ){
 	m_Camera.width = cx;
 	m_Camera.height = cy;
-	//gtk_widget_queue_draw( m_pWidget );
 }
 
 rectangle_t rectangle_from_area_cam(){
@@ -287,6 +265,8 @@ void CamWnd::Cam_PositionDrag(){
 	}
 }
 
+#include "imgui/imgui.h"
+
 void CamWnd::Cam_MouseControl( float dtime ){
 	Cam_KeyControl( dtime );
 
@@ -304,12 +284,14 @@ void CamWnd::Cam_MouseControl( float dtime ){
 		dx = m_ptLastCamCursorX - m_ptCursorX;
 		dy = m_ptLastCamCursorY - m_ptCursorY;
 
-		gdk_window_get_origin( gtk_widget_get_window( m_pWidget ), &x, &y );
+		x = 0;
+		y = 0;
+		//gdk_window_get_origin( gtk_widget_get_window( m_pWidget ), &x, &y );
 
 		m_ptLastCamCursorX = x + ( m_Camera.width / 2 );
 		m_ptLastCamCursorY = y + ( m_Camera.height / 2 );
 
-		Sys_SetCursorPos( m_ptLastCamCursorX, m_ptLastCamCursorY );
+		//Sys_SetCursorPos( m_ptLastCamCursorX, m_ptLastCamCursorY );
 
 		// Don't use pitch
 		if ( !g_PrefsDlg.m_bCamFreeLookStrafe ) {

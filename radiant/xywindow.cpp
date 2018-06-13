@@ -1446,7 +1446,7 @@ void XYWnd::XY_MouseUp( int x, int y, int buttons ){
 	}
 	m_nButtonstate = 0;
 
-	gdk_window_set_cursor( gtk_widget_get_window( m_pWidget ), NULL );
+	//gdk_window_set_cursor( gtk_widget_get_window( m_pWidget ), NULL );
 
 	// todo kung: bring this back via imgui
 	// atm this is causing lots of gtk assertion errors in console, lagging everything

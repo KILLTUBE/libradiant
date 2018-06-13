@@ -49,10 +49,10 @@ class XORRectangle { public:
 		}
 	}
 	void set( rectangle_t rectangle ) {
-		lazy_init();
-		draw();
-		m_rectangle = rectangle;
-		draw();
+		//lazy_init();
+		//draw();
+		//m_rectangle = rectangle;
+		//draw();
 	}
 
 	bool initialised() const {
