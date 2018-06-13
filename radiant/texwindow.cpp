@@ -1990,9 +1990,14 @@ CCALL void set_callback_oninit(int (*cb)()) {
 	callback_oninit = cb;
 }
 
-
 extern MainFrame *mainframe_intance;
 
+#include "imgui_docks_radiant/dock_xy.h"
+#include "imgui_docks_radiant/dock_z.h"
+#include "imgui_docks_radiant/dock_cam.h"
+extern DockXY *dock_xy;
+extern DockZ *dock_z;
+extern DockCam *dock_cam;
 
 void TexWnd::OnExpose() {
 	int nOld = g_qeglobals.d_texturewin.m_nTotalHeight;
@@ -2031,11 +2036,11 @@ void TexWnd::OnExpose() {
 				callback_oninit();
 		}
 		
-		if (mainframe_intance && mainframe_intance->m_pXYWnd)
+		if (dock_xy->cdock->active && mainframe_intance && mainframe_intance->m_pXYWnd)
 			mainframe_intance->m_pXYWnd->Render();
-		if (mainframe_intance && mainframe_intance->m_pZWnd)
+		if (dock_z->cdock->active && mainframe_intance && mainframe_intance->m_pZWnd)
 			mainframe_intance->m_pZWnd->Render();
-		if (mainframe_intance && mainframe_intance->m_pCamWnd)
+		if (dock_cam->cdock->active && mainframe_intance && mainframe_intance->m_pCamWnd)
 			mainframe_intance->m_pCamWnd->Render();
 
 		SwapBuffers();
@@ -2175,7 +2180,7 @@ stop_gtk_event_processing:
 	return 1; // 1 == stop gtk event processing
 }
 
-void TexWnd::OnLButtonUp( guint32 flags, int pointx, int pointy ){
+void TexWnd::OnLButtonUp( guint32 flags, int pointx, int pointy ) {
 	imgui_mouse_set_button(0, false);
 	//Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
 
@@ -2190,7 +2195,7 @@ void TexWnd::OnLButtonUp( guint32 flags, int pointx, int pointy ){
 	RedrawWindow();
 }
 
-void TexWnd::OnRButtonUp( guint32 flags, int pointx, int pointy ){
+void TexWnd::OnRButtonUp( guint32 flags, int pointx, int pointy ) {
 	imgui_mouse_set_button(1, false);
 	if (current_dock) {
 		auto screenPosMouse = ImVec2(pointx, pointy);
@@ -2202,7 +2207,7 @@ void TexWnd::OnRButtonUp( guint32 flags, int pointx, int pointy ){
 	ReleaseCapture();
 }
 
-void TexWnd::OnMButtonUp( guint32 flags, int pointx, int pointy ){
+void TexWnd::OnMButtonUp( guint32 flags, int pointx, int pointy ) {
 	imgui_mouse_set_button(2, false);
 	if (current_dock) {
 		auto screenPosMouse = ImVec2(pointx, pointy);
@@ -2212,7 +2217,7 @@ void TexWnd::OnMButtonUp( guint32 flags, int pointx, int pointy ){
 	ReleaseCapture();
 }
 
-void TexWnd::OnMouseMove( guint32 flags, int pointx, int pointy ){
+void TexWnd::OnMouseMove( guint32 flags, int pointx, int pointy ) {
 	current_glwindow = this;
 	imgui_set_mousepos(pointx, pointy);
 

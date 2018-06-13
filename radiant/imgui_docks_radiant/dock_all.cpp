@@ -31,11 +31,11 @@ CCALL CDock *findDock(char *name) {
 	}
 	return NULL;
 }
-CDock *rootDock() {
+CCALL CDock *rootDock() {
 	return g_dock.getRootDock();
 }
 
-bool undock(CDock *dock) {
+CCALL bool undock(CDock *dock) {
 	if (dock == NULL)
 		return false;
 	//if (dock->status != Status_::Status_Docked)
@@ -44,7 +44,7 @@ bool undock(CDock *dock) {
 	dock->status = Status_Float;
 }
 
-bool dockLeft(CDock *from, CDock *to) {
+CCALL bool dockLeft(CDock *from, CDock *to) {
 	if (from == NULL || to == NULL)
 		return false;
 	g_dock.doUndock(*from);
@@ -62,7 +62,7 @@ CCALL bool dockTop(CDock *from, CDock *to) {
 	from->status = Status_Docked;
 	return true;
 }
-bool dockBottom(CDock *from, CDock *to) {
+CCALL bool dockBottom(CDock *from, CDock *to) {
 	if (from == NULL || to == NULL)
 		return false;
 	g_dock.doUndock(*from);

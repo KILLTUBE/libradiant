@@ -10,6 +10,7 @@ class Dock {
 public:
 	CDock *cdock = NULL;
 	ImVec2 screenpos;
+	ImVec2 size;
 	virtual const char *label();
 	virtual void imgui();
 	virtual void OnLeftMouseDown(ImVec2 posLeftTop);

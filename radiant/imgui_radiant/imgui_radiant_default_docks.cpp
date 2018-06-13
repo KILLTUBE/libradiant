@@ -38,8 +38,10 @@ CCALL Dock *getHoveredDock(ImVec2 screenpos) {
 	int x = screenpos.x;
 	int y = screenpos.y;
 	for (Dock *dock : imgui_quake_docks) {
+		if (dock->cdock->active == 0)
+			continue;
 		auto min = dock->screenpos;
-		auto max = dock->screenpos + dock->cdock->size;
+		auto max = dock->screenpos + dock->size;
 		int min_x = min.x;
 		int min_y = min.y;
 		int max_x = max.x;
@@ -86,6 +88,7 @@ CCALL int imgui_radiant_default_docks() {
 			if (dock->cdock == NULL)
 				dock->cdock = (CDock *)imgui_get_current_dock();
 			dock->screenpos = ImGui::GetCursorScreenPos();
+			dock->size = ImGui::GetWindowSize();
 			dock->imgui();
 		}
 		EndDock();
