@@ -100,6 +100,12 @@ void DockZ::OnMouseMove(ImVec2 posLeftTop) {
 	}
 }
 
-void DockZ::OnEscape() {
-	mainframe_intance->OnSelectionDeselect();
+void DockZ::OnKeyDown(int key) {
+	switch (key) {
+		case VK_ESCAPE:
+			mainframe_intance->OnSelectionDeselect();
+		default:
+			mainframe_keypress(key);
+			//imgui_log("DockXY::OnKeyDown(int key=%d)\n", key);
+	}
 }

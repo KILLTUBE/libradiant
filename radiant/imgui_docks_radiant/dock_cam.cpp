@@ -102,6 +102,12 @@ void DockCam::OnMouseMove(ImVec2 posLeftTop) {
 	}
 }
 
-void DockCam::OnEscape() {
-	mainframe_intance->OnSelectionDeselect();
+void DockCam::OnKeyDown(int key) {
+	switch (key) {
+		case VK_ESCAPE:
+			mainframe_intance->OnSelectionDeselect();
+		default:
+			mainframe_keypress(key);
+			//imgui_log("DockXY::OnKeyDown(int key=%d)\n", key);
+	}
 }

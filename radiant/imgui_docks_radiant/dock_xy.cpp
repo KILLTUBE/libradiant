@@ -131,12 +131,12 @@ void DockXY::OnMouseMove(ImVec2 posLeftTop) {
 	}
 }
 
-
 void DockXY::OnKeyDown(int key) {
 	switch (key) {
 		case VK_ESCAPE:
 			mainframe_intance->OnSelectionDeselect();
 		default:
-			imgui_log("DockXY::OnKeyDown(int key=%d)\n", key);
+			mainframe_keypress(key);
+			//imgui_log("DockXY::OnKeyDown(int key=%d)\n", key);
 	}
 }

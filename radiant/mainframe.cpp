@@ -860,55 +860,30 @@ static void mainframe_destroy( GtkWidget *widget, gpointer data ){
 	gtk_main_quit();
 }
 
-static gint mainframe_keypress( GtkWidget* widget, GdkEventKey* event, gpointer data ){
-
-	if ( ! are_global_hotkeys_activated())
-		return FALSE; // force GTK to send events to our Julia REPL
-
-	unsigned int code = gdk_keyval_to_upper( event->keyval );
-
-	if ( code == GDK_KEY_ISO_Left_Tab ) {
-		code = GDK_KEY_Tab;
-	}
-
-#ifdef DBG_KBD
-	Sys_Printf( "key: %d (keyval: %d) (ctrl: %d)\n", code, event->keyval, event->state & GDK_CONTROL_MASK );
-#endif
-
-	// return only if Texture Viewport  is in main window, otherwise if Tex viewport is in it's own window
-	// the Filter GtkEntry won't release focus
-	if ( g_pParentWnd->GetTexWnd()->m_pFilter == gtk_window_get_focus( GTK_WINDOW( widget ) ) ) {
-		if ( gtk_widget_is_focus( g_pParentWnd->GetTexWnd()->m_pFilter ) ) {
-			return FALSE;
-		}
-	}
-
-#ifdef DBG_KBD
-	Sys_Printf( "mainframe_keypress processing into a command\n" );
-#endif
-	for ( int i = 0; i < g_nCommandCount; i++ )
-	{
-		if ( g_Commands[i].m_nKey == code ) { // find a match?
+gint mainframe_keypress( int key ) {
+	//if ( code == GDK_KEY_ISO_Left_Tab ) {
+	//	code = GDK_KEY_Tab;
+	//}
+	for ( int i = 0; i < g_nCommandCount; i++ ) {
+		if ( g_Commands[i].m_nKey == key ) { // find a match?
 			// check modifiers
 			unsigned int nState = 0;
-			if ( Sys_AltDown() ) {
-				nState |= RAD_ALT;
-			}
-			if ( ( event->state & GDK_CONTROL_MASK ) != 0 ) {
-				nState |= RAD_CONTROL;
-			}
-			if ( ( event->state & GDK_SHIFT_MASK ) != 0 ) {
-				nState |= RAD_SHIFT;
-			}
+			//if ( Sys_AltDown() ) {
+			//	nState |= RAD_ALT;
+			//}
+			//if ( ( event->state & GDK_CONTROL_MASK ) != 0 ) {
+			//	nState |= RAD_CONTROL;
+			//}
+			//if ( ( event->state & GDK_SHIFT_MASK ) != 0 ) {
+			//	nState |= RAD_SHIFT;
+			//}
 			if ( ( g_Commands[i].m_nModifiers & 0x7 ) == nState ) {
 				HandleCommand( NULL, GINT_TO_POINTER( g_Commands[i].m_nCommand ) );
-				g_signal_stop_emission_by_name( G_OBJECT( widget ), "key-press-event" );
 				return FALSE;
 			}
 		}
 	}
-
-	return FALSE; // was TRUE, causing that no other widgets (my julia repl e.g.) could receive key events
+	return FALSE;
 }
 
 static gint mainframe_keyrelease( GtkWidget* widget, GdkEventKey* event, gpointer data ){
@@ -960,6 +935,16 @@ void AddMenuItem( GtkWidget* item, unsigned int id ){
 			break;
 		}
 }
+
+void MainFrame::SetActiveXY( XYWnd* p ){
+	if ( m_pActiveXY ) {
+		m_pActiveXY->SetActive( false );
+	}
+	m_pActiveXY = p;
+	if ( m_pActiveXY ) {
+		m_pActiveXY->SetActive( true );
+	}
+};
 
 void MainFrame::handle_help_command( int id ){
 	OpenURL( m_pWidget, mHelpURLs[id]->GetBuffer() );
@@ -1558,26 +1543,7 @@ inline void CHECK_MINIMIZE( GtkWidget* w ){
 	gtk_widget_hide( w );
 }
 
-static GtkWidget* create_floating( MainFrame* mainframe ){
-	//GtkWidget *wnd = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-	////workaround for a bug with set_transient_for in GTK - resulting behaviour is not perfect but better than the bug.
-	////(see https://bugzilla.gnome.org/show_bug.cgi?id=658975 regarding the bug)
-	//if (mainframe->CurrentStyle() != MainFrame::eFloating)
-	//	gtk_window_set_transient_for( GTK_WINDOW( wnd ), GTK_WINDOW( mainframe->m_pWidget ) );
-	//gtk_widget_set_events( wnd, GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
-	//g_signal_connect( G_OBJECT( wnd ), "delete-event"       , G_CALLBACK( widget_delete_hide ), NULL );
-	//g_signal_connect( G_OBJECT( wnd ), "destroy"            , G_CALLBACK( gtk_widget_destroy ), NULL );
-	//g_signal_connect( G_OBJECT( wnd ), "key-press-event"    , G_CALLBACK( mainframe_keypress ), mainframe );
-	//g_signal_connect( G_OBJECT( wnd ), "key-release-event"  , G_CALLBACK( mainframe_keyrelease ), mainframe );
-	//g_signal_connect( G_OBJECT( wnd ), "map-event"          , G_CALLBACK( mainframe_map ), mainframe );
-	//
-	//gtk_window_set_default_size( GTK_WINDOW( wnd ), 100, 100 );
-	//
-	//
-	//
-	//return wnd;
-	return NULL;
-}
+//static GtkWidget* create_floating( MainFrame* mainframe ) { return NULL; }
 
 void console_populate_popup( GtkTextView* textview, GtkMenu* menu, gpointer user_data ){
 	menu_separator( GTK_WIDGET( menu ) );
@@ -1686,8 +1652,8 @@ void MainFrame::Create(){
 	gtk_widget_set_events( window, GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
 	g_signal_connect( G_OBJECT( window ), "delete-event"      , G_CALLBACK( mainframe_delete     ), this );
 	g_signal_connect( G_OBJECT( window ), "destroy"           , G_CALLBACK( mainframe_destroy    ), this );
-	g_signal_connect( G_OBJECT( window ), "key-press-event"   , G_CALLBACK( mainframe_keypress   ), this );
-	g_signal_connect( G_OBJECT( window ), "key-release-event" , G_CALLBACK( mainframe_keyrelease ), this );
+	//g_signal_connect( G_OBJECT( window ), "key-press-event"   , G_CALLBACK( mainframe_keypress   ), this );
+	//g_signal_connect( G_OBJECT( window ), "key-release-event" , G_CALLBACK( mainframe_keyrelease ), this );
 
 	g_qeglobals_gui.d_main_window = window;
 

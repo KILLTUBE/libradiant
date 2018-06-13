@@ -78,71 +78,13 @@ void save_window_pos( GtkWidget *wnd, window_position_t& pos ){
 #endif
 }
 
-#ifdef _WIN32
-void win32_get_window_pos( GtkWidget *widget, gint *x, gint *y ){
-	if ( g_PrefsDlg.m_bStartOnPrimMon ) {
-		RECT rc;
-		POINT point;
-		HWND xwnd = (HWND)GDK_WINDOW_HWND( gtk_widget_get_window( widget ) );
-		const GdkRectangle primaryMonitorRect = g_pParentWnd->GetPrimaryMonitorRect();
-
-		GetClientRect( xwnd,&rc );
-		point.x = rc.left;
-		point.y = rc.top;
-		ClientToScreen( xwnd,&point );
-
-		*x = point.x;
-		*y = point.y;
-
-		*x = max( *x,-widget->allocation.width + 10 );
-		*x = min( *x,primaryMonitorRect.width - 10 );
-		*y = max( *y,-widget->allocation.height + 10 );
-		*y = min( *y,primaryMonitorRect.height - 10 );
-	}
-	else {
-		// this is the same as the unix version of get_window_pos
-		gdk_window_get_root_origin( gtk_widget_get_window( widget ), x, y );
-	}
-#ifdef DBG_WINDOWPOS
-	Sys_Printf( "win32_get_window_pos %p %d,%d\n",widget,*x,*y );
-#endif
-}
-#endif
-
-void load_window_pos( GtkWidget *wnd, window_position_t& pos ){
-#ifdef _WIN32
-	const GdkRectangle primaryMonitorRect = g_pParentWnd->GetPrimaryMonitorRect();
-
-	if ( pos.x < primaryMonitorRect.x
-		 || pos.y < primaryMonitorRect.y
-		 || pos.x > primaryMonitorRect.x + primaryMonitorRect.width
-		 || pos.y > primaryMonitorRect.y + primaryMonitorRect.height ) {
-		gtk_window_set_position( GTK_WINDOW( wnd ), GTK_WIN_POS_CENTER_ON_PARENT );
-	}
-#else
-	// FIXME: not multihead safe
-	if ( pos.x < 0
-		 || pos.y < 0
-		 || pos.x > gdk_screen_width()
-		 || pos.y > gdk_screen_height() ) {
-		gtk_window_set_position( GTK_WINDOW( wnd ), GTK_WIN_POS_CENTER_ON_PARENT );
-	}
-#endif
-	else{
-		gtk_window_move( GTK_WINDOW( wnd ), pos.x, pos.y );
-	}
-
-	gtk_window_set_default_size( GTK_WINDOW( wnd ), pos.w, pos.h );
-#ifdef DBG_WINDOWPOS
-	Sys_Printf( "load_window_pos %p 'Window,%s'\n",wnd,windowData );
-#endif
-}
+void win32_get_window_pos( GtkWidget *widget, gint *x, gint *y ) {}
+void load_window_pos( GtkWidget *wnd, window_position_t& pos ) {}
 
 gint widget_delete_hide( GtkWidget *widget ) {
   gtk_widget_hide( widget );
   return TRUE;
 }
-
 
 // Thanks to Mercury, Fingolfin - ETG
 int readLongLE( FILE *file, unsigned long *m_bytesRead, int *value ){

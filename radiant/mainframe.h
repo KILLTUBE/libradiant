@@ -426,491 +426,418 @@ struct SKeyInfo
 
 #define ID_TOGGLE_DETAIL				40323
 
-class CSynapseClientRadiant : public CSynapseClient
-{
-public:
-bool RequestAPI( APIDescriptor_t *pAPI );
-const char* GetInfo();
-const char* GetName();
-
-void ImportMap( IDataStream *in, CPtrArray *ents, const char *type );
-void ExportMap( CPtrArray *ents, IDataStream *out, const char *type );
-
-CSynapseClientRadiant() { }
-virtual ~CSynapseClientRadiant() { }
+class CSynapseClientRadiant : public CSynapseClient { public:
+	bool RequestAPI( APIDescriptor_t *pAPI );
+	const char* GetInfo();
+	const char* GetName();
+	void ImportMap( IDataStream *in, CPtrArray *ents, const char *type );
+	void ExportMap( CPtrArray *ents, IDataStream *out, const char *type );
+	CSynapseClientRadiant() { }
+	virtual ~CSynapseClientRadiant() { }
 };
 
-class MainFrame
-{
-public:
-enum EViewStyle
-{
-	eRegular,
-	eFloating,
-	eSplit,
-	eRegularLeft,
+class MainFrame { public:
+	enum EViewStyle {
+		eRegular,
+		eFloating,
+		eSplit,
+		eRegularLeft,
+	};
+
+	MainFrame();
+	void handle_help_command( int id ); // called to fire up the help links
+	void create_game_help_menu( GtkWidget *menu, GtkAccelGroup *accel ); // scan the .game files for game install packs, look there for help description nodes, build the corresponding menus in Radiant
+	void process_xlink( Str &FileName, const char *menu_name, const char *base_url, GtkWidget *menu, GtkAccelGroup *accel ); // build the menu once the filename is found
+	void Create();
+	void create_main_menu( GtkWidget *window, GtkWidget *vbox );
+	void create_main_toolbar( GtkWidget *window, GtkWidget *vbox );
+	void create_plugin_toolbar( GtkWidget *window, GtkWidget *vbox );
+	void create_main_statusbar( GtkWidget *window, GtkWidget *vbox );
+
+	EViewStyle m_nCurrentStyle;
+	vector<Str *> mHelpURLs; // the urls to fire up in the game packs help menus	
+	GtkWidget *m_pWidget;
+	GtkWidget *m_pStatusLabel[6];
+	GtkWidget *m_pSplits[5];
+	XYWnd* m_pXYWnd = NULL;
+	XYWnd* m_pYZWnd = NULL;
+	XYWnd* m_pXZWnd = NULL;
+	CamWnd* m_pCamWnd = NULL;
+	TexWnd* m_pTexWnd = NULL;
+	ZWnd* m_pZWnd = NULL;
+	CWatchBSP* m_pWatchBSP = NULL;
+	XYWnd* m_pActiveXY = NULL;
+	bool m_bCamPreview;
+	CPlugInManager m_PlugInMgr;
+	int m_nNextPlugInID;
+	guint m_nTimer;
+	bool m_bSleeping;
+	CString m_strStatus[15];
+	bool m_bNeedStatusUpdate;
+	CSynapseServer m_SynapseServer; // deals with dynamically loading the modules, initializing them, requesting the APIs
+	CSynapseClientRadiant m_SynapseClient; // we are also a synapse client in that we provide and require some APIs as well
+
+	void DoWatchBSP(); // BSP window, trigger network listen
+	bool IsSleeping() { return m_bSleeping; }
+	void UpdatePatchToolbarButtons();
+	void NudgeSelection( int nDirection, float nAmount ); // Gef: Changed to float for sub-integer grid size
+	void SetButtonMenuStates();
+	void SetGridStatus();
+	void RoutineProcessing();
+	XYWnd* ActiveXY() { return m_pActiveXY; };
+	void UpdateWindows( int nBits );
+	void SetStatusText( int nPane, const char* pText );
+	void UpdateStatusText();
+	virtual ~MainFrame();
+	XYWnd* GetXYWnd() {return m_pXYWnd; }
+	XYWnd* GetXZWnd() {return m_pXZWnd; }
+	XYWnd* GetYZWnd() {return m_pYZWnd; }
+	ZWnd* GetZWnd() {return m_pZWnd; }
+	CamWnd* GetCamWnd() {return m_pCamWnd; }
+	TexWnd* GetTexWnd() {return m_pTexWnd; }
+	CWatchBSP *GetWatchBSP() { return m_pWatchBSP; }
+	void ReleaseContexts();
+	void CreateContexts();
+
+	void SetActiveXY( XYWnd* p );
+
+	EViewStyle CurrentStyle(){
+		return m_nCurrentStyle;
+	};
+
+	bool FloatingGroupDialog(){
+		return CurrentStyle() == eFloating || CurrentStyle() == eSplit;
+	};
+
+	protected:
+	bool m_bDoLoop;
+	bool m_bSplittersOK;
+	void CreateQEChildren();
+	void LoadCommandMap();
+	void ShowMenuItemKeyBindings( GtkWidget* window );
+
+	public:
+	void Copy();
+	void Paste();
+	void Nudge( int nDim, float fNudge );
+	CPlugInManager &GetPlugInMgr() {return m_PlugInMgr; };
+	CSynapseServer &GetSynapseServer() {return m_SynapseServer; };
+	CSynapseClientRadiant &GetSynapseClient() {return m_SynapseClient; };
+	void AddPlugInToolbarButton( const IToolbarButton* button );
+	void AddPlugInMenuItem( IPlugIn* pPlugIn );
+	void CleanPlugInMenu();
+
+	// these are public so i can easily reflect messages
+	// from child windows..
+	void OnTimer();
+	void OnDelete();
+	void OnDestroy();
+	void ToggleCamera();
+	void OnFileExit();
+	void OnFileLoadproject();
+	void OnFileNew();
+	void OnFileOpen();
+	void OnFilePointfile();
+	void OnFileSave();
+	void OnFileSaveas();
+	void OnFileCheckUpdate();
+	void OnView100();
+	void OnViewCenter();
+	void OnViewConsole();
+	void OnViewDownfloor();
+	void OnViewEntity();
+	void OnViewFront();
+	void OnViewShowblocks();
+	void OnViewShowclip();
+	void OnViewShowcoordinates();
+	void OnViewShowOutline();
+	void OnViewShowAxes();
+	void OnViewShowdetail();
+	void OnViewShowent();
+	void OnViewShowlights();
+	void OnViewShownames();
+	void OnViewShowpath();
+	void OnViewShowwater();
+	void OnViewShowworld();
+	void OnViewTexture();
+	void OnViewUpfloor();
+	void OnViewXy();
+	void OnViewZ100();
+	void OnViewZoomin();
+	void OnViewZoomout();
+	void OnViewZzoomin();
+	void OnViewZzoomout();
+	void OnViewSide();
+	void OnTexturesShowinuse();
+	void OnTexturesInspector();
+	void OnMiscBenchmark();
+	void OnMiscFindbrush();
+	void OnMiscGamma();
+	void OnMiscNextleakspot();
+	void OnMiscPreviousleakspot();
+	void OnMiscPrintxy();
+	void OnMiscSelectentitycolor();
+	void OnTexturebk();
+	void OnColorsMajor();
+	void OnColorsMinor();
+	void OnColorsMajor_Alt();
+	void OnColorsMinor_Alt();
+	void OnColorsXybk();
+	void OnBrush3sided();
+	void OnBrush4sided();
+	void OnBrush5sided();
+	void OnBrush6sided();
+	void OnBrush7sided();
+	void OnBrush8sided();
+	void OnBrush9sided();
+	void OnBrushArbitrarysided();
+	void OnBrushFlipx();
+	void OnBrushFlipy();
+	void OnBrushFlipz();
+	void OnBrushRotatex();
+	void OnBrushRotatey();
+	void OnBrushRotatez();
+	void OnRegionOff();
+	void OnRegionSetbrush();
+	void OnRegionSetselection();
+	void OnRegionSettallbrush();
+	void OnRegionSetxy();
+	void OnSelectionArbitraryrotation();
+	void OnSelectionClone();
+	void OnSelectionConnect();
+	void OnSelectionCsgsubtract();
+	void OnSelectionCsgmerge();
+	void OnSelectionNoOutline();
+	void OnSelectionOutlineStyle();
+	void OnSelectionDelete();
+	void OnSelectionDeselect();
+	void OnSelectionDragedges();
+	void OnSelectionDragvertecies();
+	void OnSelectionMakeDetail();
+	void OnSelectionMakeStructural();
+	void OnSelectionMakehollow();
+	void OnSelectionMakehollowTouch();
+	void OnSelectionSelectcompletetall();
+	void OnSelectionSelectinside();
+	void OnSelectionSelectpartialtall();
+	void OnSelectionSelecttouching();
+	void OnSelectionUngroupentity();
+	void OnSelectionMergeentity();
+	void OnSelectionGroupworld();
+	void OnTexturesPopup();
+	void OnPopupSelection();
+	void OnViewChange();
+	void OnViewCameraupdate();
+	void OnHelpAbout();
+	void OnHelp();
+	void OnHelpLinks();
+	void OnHelpBugreport();
+	void OnViewClipper();
+	void OnToggleDetail();
+	void OnCameraAngledown();
+	void OnCameraAngleup();
+	void OnCameraBack( bool keydown );
+	void OnCameraDown();
+	void OnCameraForward( bool keydown );
+	void OnCameraLeft( bool keydown );
+	void OnCameraRight( bool keydown );
+	void OnCameraStrafeleft( bool keydown );
+	void OnCameraStraferight( bool keydown );
+	void OnCameraUp();
+	void OnGridToggle();
+	void OnPrefs();
+	void OnTogglecamera();
+	void OnToggleconsole();
+	void OnToggleview();
+	void OnTogglez();
+	void OnToggleLock();
+	void OnEditMapinfo();
+	void OnEditEntityinfo();
+	void OnBrushScripts();
+	void OnViewCenterview();
+	void OnViewNextview();
+	void OnHelpCommandlist();
+	void OnFileNewproject();
+	void OnFlipClip();
+	void OnClipSelected();
+	void OnSplitSelected();
+	void OnToggleviewXz();
+	void OnToggleviewYz();
+	void OnColorsBrush();
+	void OnColorsClipper();
+	void OnColorsGridtext();
+	void OnColorsSelectedbrush();
+	void OnColorsSelectedbrush3D();
+	void OnColorsCameraBack();
+	void OnColorsGridblock();
+	void OnColorsViewname();
+	void OnColorsDetail();
+	void OnColorSetoriginal();
+	void OnColorSetqer();
+	void OnColorSetblack();
+	void OnColorSetydnar();    /* ydnar */
+	void OnSnaptogrid();
+	void OnSelectScale();
+	void OnSelectMouserotate();
+	void OnEditCopybrush();
+	void OnEditPastebrush();
+	void OnEditPastebrushToCamera();
+	void OnEditUndo();
+	void OnEditRedo();
+	void OnSelectionInvert();
+	//  void OnSelectionTextureDec();
+	void OnSelectionTextureFit();
+	//  void OnSelectionTextureInc();
+	void OnSelectionTextureRotateclock();
+	void OnSelectionTextureRotatecounter();
+	void OnSelectionTextureScaledown();
+	void OnSelectionTextureScaleup();
+	void OnSelectionTextureShiftdown();
+	void OnSelectionTextureShiftleft();
+	void OnSelectionTextureShiftright();
+	void OnSelectionTextureShiftup();
+	void OnGridNext();
+	void OnGridPrev();
+	void OnSelectionTextureScaleLeft();
+	void OnSelectionTextureScaleRight();
+	void OnTextureReplaceall();
+	void OnScalelockx();
+	void OnScalelocky();
+	void OnScalelockz();
+	void OnSelectMousescale();
+	void OnViewCubicclipping();
+	void OnFileProjectsettings();
+	void OnViewCubein();
+	void OnViewCubeout();
+	void OnFileSaveregion();
+	void OnSelectionMovedown();
+	void OnSelectionMoveup();
+	void OnToolbarMain();
+	void OnToolbarTexture();
+	void OnSelectionPrint();
+	void OnSelectionTogglesizepaint();
+	void OnBrushMakecone();
+	void OnTexturesLoad();
+	void OnToggleRotatelock();
+	void OnFileImportmap();
+	void OnFileExportmap();
+	void OnEditLoadprefab();
+	void OnSelectionSelectNudgedown();
+	void OnSelectionSelectNudgeleft();
+	void OnSelectionSelectNudgeright();
+	void OnSelectionSelectNudgeup();
+	void OnTexturesLoadlist();
+	void OnDontselectcurve();
+	void OnConvertcurves();
+	void OnCurveSimplepatchmesh();
+	void OnPatchToggleBox();
+	void OnPatchWireframe();
+	void OnCurvePatchcone();
+	void OnCurvePatchtube();
+	void OnPatchWeld();
+	void OnCurvePatchbevel();
+	void OnCurvePatchendcap();
+	void OnPatchDrilldown();
+	void OnCurveInsertcolumn();
+	void OnCurveInsertrow();
+	void OnCurveDeletecolumn();
+	void OnCurveDeleterow();
+	void OnCurveInsertAddcolumn();
+	void OnCurveInsertAddrow();
+	void OnCurveInsertInsertcolumn();
+	void OnCurveInsertInsertrow();
+	void OnCurveNegative();
+	void OnCurveNegativeTextureX();
+	void OnCurveNegativeTextureY();
+	void OnCurveDeleteFirstcolumn();
+	void OnCurveDeleteFirstrow();
+	void OnCurveDeleteLastcolumn();
+	void OnCurveDeleteLastrow();
+	void OnPatchBend();
+	//  void OnPatchInsdel();
+	void OnPatchEnter();
+	void OnPatchTab();
+	void OnCurvePatchdensetube();
+	void OnCurvePatchverydensetube();
+	void OnCurveCap();
+	void OnCurveCapInvertedbevel();
+	void OnCurveCapInvertedendcap();
+	void OnCurveRedisperseRows();
+	void OnCurveRedisperseIntermediateCols();
+	void OnCurveRedisperseIntermediateRows();
+	void OnPatchNaturalize();
+	void OnSnapToGrid();
+	void OnCurvePatchsquare();
+	void OnTexturewindowScaleup();
+	void OnTexturewindowScaledown();
+	void OnCurveOverlayClear();
+	void OnCurveOverlaySet();
+	void OnCurveThicken();
+	void OnCurveCyclecap();
+	void OnCurveMatrixTranspose();
+	void OnTexturesReloadshaders();
+	void OnShowEntities();
+	// will set the view mode right, don't set the value for mode if you only want to update the radio item
+	void OnEntitiesSetViewAs( int mode = 0 );
+	void OnPluginsRefresh();
+	void OnTexturesShowall();
+	void OnPatchInspector();
+	void OnViewOpengllighting();
+	void OnSelectAll();
+	void OnCurveFreeze();
+	void OnCurveUnFreeze();
+	void OnCurveUnFreezeAll();
+	void OnSelectReselect();
+	void OnEditSaveprefab();
+	void OnCurveMoreendcapsbevelsSquarebevel();
+	void OnCurveMoreendcapsbevelsSquareendcap();
+	void OnBrushPrimitivesSphere();
+	void OnViewCrosshair();
+	void OnViewHideshowHideselected();
+	void OnViewHideshowShowhidden();
+	void OnTexturesShadersShow();
+	void OnViewGroups();
+	void OnDropGroupAddtoWorld();
+	void OnDropGroupName();
+	void OnDropGroupNewgroup();
+	void OnDropGroupRemove();
+	void OnViewShowWorkzone();
+	void OnViewShowAngles();
+	void OnMru( unsigned int nID );
+	void OnViewNearest( unsigned int nID );
+	void OnTextureWad( unsigned int nID );
+	void OnBspCommand( unsigned int nID );
+	void OnGrid( unsigned int nID );
+	void OnPlugIn( unsigned int nID, const char *str );
+	void OnFaceFit();
+	void SetTextureScale( int id );
+	void OnDontselectmodel();
+	void OnTexturesShaderlistonly();
+	void OnSleep();
+	void OnFilterAreaportals();
+	void OnFilterCaulk();
+	void OnFilterStructural();
+	void OnFilterClips();
+	void OnFilterBotClips();
+	void OnFilterDetails();
+	void OnFilterEntities();
+	void OnFilterHintsskips();
+	void OnFilterLights();
+	void OnFilterLiquids();
+	void OnFilterModels();
+	void OnFilterPatches();
+	void OnFilterTranslucent();
+	void OnFilterTriggers();
+	void OnFilterWorld();
+	void OnFilterPaths();
+	void OnFilterClusterportals();
+	void OnFilterLightgrid();
+	void OnSelectFuncGroup();
 };
 
-MainFrame();
-GtkWidget *m_pWidget;
 
-/*!
-   called to fire up the help links
- */
-void handle_help_command( int id );
-
-public:
-
-/*!
-   the urls to fire up in the game packs help menus
- */
-vector<Str *> mHelpURLs;
-
-/*!
-   scan the .game files for game install packs
-   look there for help description nodes
-   build the corresponding menus in Radiant
- */
-void create_game_help_menu( GtkWidget *menu, GtkAccelGroup *accel );
-
-/*!
-   build the menu once the filename is found
- */
-void process_xlink( Str &FileName, const char *menu_name, const char *base_url, GtkWidget *menu, GtkAccelGroup *accel );
-
-void Create();
-void create_main_menu( GtkWidget *window, GtkWidget *vbox );
-void create_main_toolbar( GtkWidget *window, GtkWidget *vbox );
-void create_plugin_toolbar( GtkWidget *window, GtkWidget *vbox );
-void create_main_statusbar( GtkWidget *window, GtkWidget *vbox );
-GtkWidget *m_pStatusLabel[6];
-GtkWidget *m_pSplits[5];
-XYWnd* m_pXYWnd;
-XYWnd* m_pYZWnd;
-XYWnd* m_pXZWnd;
-CamWnd* m_pCamWnd;
-TexWnd* m_pTexWnd;
-ZWnd* m_pZWnd;
-CWatchBSP* m_pWatchBSP;
-
-XYWnd* m_pActiveXY;
-bool m_bCamPreview;
-CPlugInManager m_PlugInMgr;
-int m_nNextPlugInID;
-guint m_nTimer;
-bool m_bSleeping;
-
-CString m_strStatus[15];
-bool m_bNeedStatusUpdate;
-
-/*!
-   synapse server
-   deals with dynamically loading the modules, initializing them, requesting the APIs
- */
-CSynapseServer m_SynapseServer;
-/*!
-   we are also a synapse client in that we provide and require some APIs as well
- */
-CSynapseClientRadiant m_SynapseClient;
-
-public:
-
-// BSP window
-// trigger network listen
-void DoWatchBSP();
-bool IsSleeping()
-{ return m_bSleeping; }
-
-void UpdatePatchToolbarButtons();
-// Gef: Changed to float for sub-integer grid size
-void NudgeSelection( int nDirection, float nAmount );
-void SetButtonMenuStates();
-void SetGridStatus();
-void RoutineProcessing();
-XYWnd* ActiveXY() { return m_pActiveXY; };
-void UpdateWindows( int nBits );
-void SetStatusText( int nPane, const char* pText );
-void UpdateStatusText();
-void SetWindowStyle( int nStyle );
-virtual ~MainFrame();
-XYWnd* GetXYWnd() {return m_pXYWnd; }
-XYWnd* GetXZWnd() {return m_pXZWnd; }
-XYWnd* GetYZWnd() {return m_pYZWnd; }
-ZWnd* GetZWnd() {return m_pZWnd; }
-CamWnd* GetCamWnd() {return m_pCamWnd; }
-TexWnd* GetTexWnd() {return m_pTexWnd; }
-CWatchBSP *GetWatchBSP() { return m_pWatchBSP; }
-void ReleaseContexts();
-void CreateContexts();
-
-void SetActiveXY( XYWnd* p ){
-	if ( m_pActiveXY ) {
-		m_pActiveXY->SetActive( false );
-	}
-
-	m_pActiveXY = p;
-
-	if ( m_pActiveXY ) {
-		m_pActiveXY->SetActive( true );
-	}
-
-};
-
-EViewStyle CurrentStyle(){
-	return m_nCurrentStyle;
-};
-
-bool FloatingGroupDialog(){
-	return CurrentStyle() == eFloating || CurrentStyle() == eSplit;
-};
-
-#ifdef _WIN32
-const GdkRectangle & GetPrimaryMonitorRect( void ) const { return primaryMonitorRect; }
-const int GetGDKOffsetX( void ) const { return gdk_offset_x; }
-const int GetGDKOffsetY( void ) const { return gdk_offset_y; }
-#endif
-
-protected:
-bool m_bDoLoop;
-bool m_bSplittersOK;
-void CreateQEChildren();
-void LoadCommandMap();
-void ShowMenuItemKeyBindings( GtkWidget* window );
-
-public:
-void Copy();
-void Paste();
-void Nudge( int nDim, float fNudge );
-CPlugInManager &GetPlugInMgr() {return m_PlugInMgr; };
-CSynapseServer &GetSynapseServer() {return m_SynapseServer; };
-CSynapseClientRadiant &GetSynapseClient() {return m_SynapseClient; };
-void AddPlugInToolbarButton( const IToolbarButton* button );
-void AddPlugInMenuItem( IPlugIn* pPlugIn );
-void CleanPlugInMenu();
-
-// these are public so i can easily reflect messages
-// from child windows..
-void OnTimer();
-void OnDelete();
-void OnDestroy();
-void ToggleCamera();
-
-void OnFileExit();
-void OnFileLoadproject();
-void OnFileNew();
-void OnFileOpen();
-void OnFilePointfile();
-void OnFileSave();
-void OnFileSaveas();
-void OnFileCheckUpdate();
-void OnView100();
-void OnViewCenter();
-void OnViewConsole();
-void OnViewDownfloor();
-void OnViewEntity();
-void OnViewFront();
-void OnViewShowblocks();
-void OnViewShowclip();
-void OnViewShowcoordinates();
-void OnViewShowOutline();
-void OnViewShowAxes();
-void OnViewShowdetail();
-void OnViewShowent();
-void OnViewShowlights();
-void OnViewShownames();
-void OnViewShowpath();
-void OnViewShowwater();
-void OnViewShowworld();
-void OnViewTexture();
-void OnViewUpfloor();
-void OnViewXy();
-void OnViewZ100();
-void OnViewZoomin();
-void OnViewZoomout();
-void OnViewZzoomin();
-void OnViewZzoomout();
-void OnViewSide();
-void OnTexturesShowinuse();
-void OnTexturesInspector();
-void OnMiscBenchmark();
-void OnMiscFindbrush();
-void OnMiscGamma();
-void OnMiscNextleakspot();
-void OnMiscPreviousleakspot();
-void OnMiscPrintxy();
-void OnMiscSelectentitycolor();
-void OnTexturebk();
-void OnColorsMajor();
-void OnColorsMinor();
-void OnColorsMajor_Alt();
-void OnColorsMinor_Alt();
-void OnColorsXybk();
-void OnBrush3sided();
-void OnBrush4sided();
-void OnBrush5sided();
-void OnBrush6sided();
-void OnBrush7sided();
-void OnBrush8sided();
-void OnBrush9sided();
-void OnBrushArbitrarysided();
-void OnBrushFlipx();
-void OnBrushFlipy();
-void OnBrushFlipz();
-void OnBrushRotatex();
-void OnBrushRotatey();
-void OnBrushRotatez();
-void OnRegionOff();
-void OnRegionSetbrush();
-void OnRegionSetselection();
-void OnRegionSettallbrush();
-void OnRegionSetxy();
-void OnSelectionArbitraryrotation();
-void OnSelectionClone();
-void OnSelectionConnect();
-void OnSelectionCsgsubtract();
-void OnSelectionCsgmerge();
-void OnSelectionNoOutline();
-void OnSelectionOutlineStyle();
-void OnSelectionDelete();
-void OnSelectionDeselect();
-void OnSelectionDragedges();
-void OnSelectionDragvertecies();
-void OnSelectionMakeDetail();
-void OnSelectionMakeStructural();
-void OnSelectionMakehollow();
-void OnSelectionMakehollowTouch();
-void OnSelectionSelectcompletetall();
-void OnSelectionSelectinside();
-void OnSelectionSelectpartialtall();
-void OnSelectionSelecttouching();
-void OnSelectionUngroupentity();
-void OnSelectionMergeentity();
-void OnSelectionGroupworld();
-void OnTexturesPopup();
-void OnPopupSelection();
-void OnViewChange();
-void OnViewCameraupdate();
-void OnHelpAbout();
-void OnHelp();
-void OnHelpLinks();
-void OnHelpBugreport();
-void OnViewClipper();
-void OnToggleDetail();
-void OnCameraAngledown();
-void OnCameraAngleup();
-void OnCameraBack( bool keydown );
-void OnCameraDown();
-void OnCameraForward( bool keydown );
-void OnCameraLeft( bool keydown );
-void OnCameraRight( bool keydown );
-void OnCameraStrafeleft( bool keydown );
-void OnCameraStraferight( bool keydown );
-void OnCameraUp();
-void OnGridToggle();
-void OnPrefs();
-void OnTogglecamera();
-void OnToggleconsole();
-void OnToggleview();
-void OnTogglez();
-void OnToggleLock();
-void OnEditMapinfo();
-void OnEditEntityinfo();
-void OnBrushScripts();
-void OnViewCenterview();
-void OnViewNextview();
-void OnHelpCommandlist();
-void OnFileNewproject();
-void OnFlipClip();
-void OnClipSelected();
-void OnSplitSelected();
-void OnToggleviewXz();
-void OnToggleviewYz();
-void OnColorsBrush();
-void OnColorsClipper();
-void OnColorsGridtext();
-void OnColorsSelectedbrush();
-void OnColorsSelectedbrush3D();
-void OnColorsCameraBack();
-void OnColorsGridblock();
-void OnColorsViewname();
-void OnColorsDetail();
-void OnColorSetoriginal();
-void OnColorSetqer();
-void OnColorSetblack();
-void OnColorSetydnar();    /* ydnar */
-void OnSnaptogrid();
-void OnSelectScale();
-void OnSelectMouserotate();
-void OnEditCopybrush();
-void OnEditPastebrush();
-void OnEditPastebrushToCamera();
-void OnEditUndo();
-void OnEditRedo();
-void OnSelectionInvert();
-//  void OnSelectionTextureDec();
-void OnSelectionTextureFit();
-//  void OnSelectionTextureInc();
-void OnSelectionTextureRotateclock();
-void OnSelectionTextureRotatecounter();
-void OnSelectionTextureScaledown();
-void OnSelectionTextureScaleup();
-void OnSelectionTextureShiftdown();
-void OnSelectionTextureShiftleft();
-void OnSelectionTextureShiftright();
-void OnSelectionTextureShiftup();
-void OnGridNext();
-void OnGridPrev();
-void OnSelectionTextureScaleLeft();
-void OnSelectionTextureScaleRight();
-void OnTextureReplaceall();
-void OnScalelockx();
-void OnScalelocky();
-void OnScalelockz();
-void OnSelectMousescale();
-void OnViewCubicclipping();
-void OnFileProjectsettings();
-void OnViewCubein();
-void OnViewCubeout();
-void OnFileSaveregion();
-void OnSelectionMovedown();
-void OnSelectionMoveup();
-void OnToolbarMain();
-void OnToolbarTexture();
-void OnSelectionPrint();
-void OnSelectionTogglesizepaint();
-void OnBrushMakecone();
-void OnTexturesLoad();
-void OnToggleRotatelock();
-void OnFileImportmap();
-void OnFileExportmap();
-void OnEditLoadprefab();
-void OnSelectionSelectNudgedown();
-void OnSelectionSelectNudgeleft();
-void OnSelectionSelectNudgeright();
-void OnSelectionSelectNudgeup();
-void OnTexturesLoadlist();
-void OnDontselectcurve();
-void OnConvertcurves();
-void OnCurveSimplepatchmesh();
-void OnPatchToggleBox();
-void OnPatchWireframe();
-void OnCurvePatchcone();
-void OnCurvePatchtube();
-void OnPatchWeld();
-void OnCurvePatchbevel();
-void OnCurvePatchendcap();
-void OnPatchDrilldown();
-void OnCurveInsertcolumn();
-void OnCurveInsertrow();
-void OnCurveDeletecolumn();
-void OnCurveDeleterow();
-void OnCurveInsertAddcolumn();
-void OnCurveInsertAddrow();
-void OnCurveInsertInsertcolumn();
-void OnCurveInsertInsertrow();
-void OnCurveNegative();
-void OnCurveNegativeTextureX();
-void OnCurveNegativeTextureY();
-void OnCurveDeleteFirstcolumn();
-void OnCurveDeleteFirstrow();
-void OnCurveDeleteLastcolumn();
-void OnCurveDeleteLastrow();
-void OnPatchBend();
-//  void OnPatchInsdel();
-void OnPatchEnter();
-void OnPatchTab();
-void OnCurvePatchdensetube();
-void OnCurvePatchverydensetube();
-void OnCurveCap();
-void OnCurveCapInvertedbevel();
-void OnCurveCapInvertedendcap();
-void OnCurveRedisperseRows();
-void OnCurveRedisperseIntermediateCols();
-void OnCurveRedisperseIntermediateRows();
-void OnPatchNaturalize();
-void OnSnapToGrid();
-void OnCurvePatchsquare();
-void OnTexturewindowScaleup();
-void OnTexturewindowScaledown();
-void OnCurveOverlayClear();
-void OnCurveOverlaySet();
-void OnCurveThicken();
-void OnCurveCyclecap();
-void OnCurveMatrixTranspose();
-void OnTexturesReloadshaders();
-void OnShowEntities();
-// will set the view mode right, don't set the value for mode if you only want to update the radio item
-void OnEntitiesSetViewAs( int mode = 0 );
-void OnPluginsRefresh();
-void OnTexturesShowall();
-void OnPatchInspector();
-void OnViewOpengllighting();
-void OnSelectAll();
-void OnCurveFreeze();
-void OnCurveUnFreeze();
-void OnCurveUnFreezeAll();
-void OnSelectReselect();
-void OnEditSaveprefab();
-void OnCurveMoreendcapsbevelsSquarebevel();
-void OnCurveMoreendcapsbevelsSquareendcap();
-void OnBrushPrimitivesSphere();
-void OnViewCrosshair();
-void OnViewHideshowHideselected();
-void OnViewHideshowShowhidden();
-void OnTexturesShadersShow();
-void OnViewGroups();
-void OnDropGroupAddtoWorld();
-void OnDropGroupName();
-void OnDropGroupNewgroup();
-void OnDropGroupRemove();
-void OnViewShowWorkzone();
-void OnViewShowAngles();
-void OnMru( unsigned int nID );
-void OnViewNearest( unsigned int nID );
-void OnTextureWad( unsigned int nID );
-void OnBspCommand( unsigned int nID );
-void OnGrid( unsigned int nID );
-void OnPlugIn( unsigned int nID, const char *str );
-void OnFaceFit();
-void SetTextureScale( int id );
-void OnDontselectmodel();
-void OnTexturesShaderlistonly();
-void OnSleep();
-void OnFilterAreaportals();
-void OnFilterCaulk();
-void OnFilterStructural();
-void OnFilterClips();
-void OnFilterBotClips();
-void OnFilterDetails();
-void OnFilterEntities();
-void OnFilterHintsskips();
-void OnFilterLights();
-void OnFilterLiquids();
-void OnFilterModels();
-void OnFilterPatches();
-void OnFilterTranslucent();
-void OnFilterTriggers();
-void OnFilterWorld();
-void OnFilterPaths();
-void OnFilterClusterportals();
-void OnFilterLightgrid();
-void OnSelectFuncGroup();
-
-private:
-EViewStyle m_nCurrentStyle;
-
-#ifdef _WIN32
-GdkRectangle primaryMonitorRect;
-int gdk_offset_x;
-int gdk_offset_y;
-#endif
-
-};
-
-// some C API to the mainframe functions
-void WINAPI QERApp_Sleep();
-
-// Checks whether a given filename ends in .map
-const bool IsMap(const char* filename);
+void WINAPI QERApp_Sleep(); // some C API to the mainframe functions
+const bool IsMap(const char* filename); // Checks whether a given filename ends in .map
+gint mainframe_keypress( int key );
 
 #endif // _MAINFRAME_H_
