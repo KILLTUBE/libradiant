@@ -14,8 +14,6 @@ const char *DockCam::label() {
 extern MainFrame *mainframe_intance;
 
 void DockCam::imgui() {
-	//auto pos = ImGui::GetWindowPos();
-	screenpos = ImGui::GetCursorScreenPos();
 	auto size = ImGui::GetWindowSize();
 	size -= ImVec2(16,16); // substract a bit so there is no overflow to right/bottom
 	//ImGui::Text("pos %f %f size %f %f", pos.x, pos.y, size.x, size.y);
@@ -41,18 +39,15 @@ void DockCam::OnLeftMouseDown(ImVec2 posLeftTop) {
 	int left = posLeftTop.x;
 	int top = posLeftTop.y;
 	//imgui_log("DockXY::OnLeftMouseDown %d %d\n", left, top);
-
 	if (mainframe_intance && mainframe_intance->m_pCamWnd) {
 		mainframe_intance->m_pCamWnd->OnLButtonDown(getMouseFlags(), left, top);
 	}
-
 }
 
 void DockCam::OnLeftMouseUp(ImVec2 posLeftTop) {
 	int left = posLeftTop.x;
 	int top = posLeftTop.y;
 	//imgui_log("DockXY::OnLeftMouseUp %d %d\n", left, top);
-
 	if (mainframe_intance && mainframe_intance->m_pCamWnd) {
 		mainframe_intance->m_pCamWnd->OnLButtonUp(getMouseFlags(), left, top);
 	}
@@ -64,7 +59,6 @@ void DockCam::OnRightMouseDown(ImVec2 posLeftTop) {
 	int left = posLeftTop.x;
 	int top = posLeftTop.y;
 	//imgui_log("DockXY::OnLeftMouseDown %d %d\n", left, top);
-
 	if (mainframe_intance && mainframe_intance->m_pCamWnd) {
 		mainframe_intance->m_pCamWnd->OnRButtonDown(getMouseFlags(), left, top);
 	}
@@ -74,7 +68,6 @@ void DockCam::OnRightMouseUp(ImVec2 posLeftTop) {
 	int left = posLeftTop.x;
 	int top = posLeftTop.y;
 	//imgui_log("DockXY::OnLeftMouseUp %d %d\n", left, top);
-
 	if (mainframe_intance && mainframe_intance->m_pCamWnd) {
 		mainframe_intance->m_pCamWnd->OnRButtonUp(getMouseFlags(), left, top);
 	}
@@ -86,7 +79,6 @@ void DockCam::OnMiddleMouseDown(ImVec2 posLeftTop) {
 	int left = posLeftTop.x;
 	int top = posLeftTop.y;
 	//imgui_log("DockXY::OnLeftMouseDown %d %d\n", left, top);
-
 	if (mainframe_intance && mainframe_intance->m_pCamWnd) {
 		mainframe_intance->m_pCamWnd->OnMButtonDown(getMouseFlags(), left, top);
 	}
@@ -96,25 +88,19 @@ void DockCam::OnMiddleMouseUp(ImVec2 posLeftTop) {
 	int left = posLeftTop.x;
 	int top = posLeftTop.y;
 	//imgui_log("DockXY::OnLeftMouseUp %d %d\n", left, top);
-
 	if (mainframe_intance && mainframe_intance->m_pCamWnd) {
 		mainframe_intance->m_pCamWnd->OnMButtonUp(getMouseFlags(), left, top);
 	}
 }
 
-
 void DockCam::OnMouseMove(ImVec2 posLeftTop) {
 	int left = posLeftTop.x;
 	int top = posLeftTop.y;
 	//imgui_log("DockXY::OnMouseMove %d %d\n", left, top);
-
-
-
 	if (mainframe_intance && mainframe_intance->m_pCamWnd) {
 		mainframe_intance->m_pCamWnd->OnMouseMove(getMouseFlags(), left, top);
 	}
 }
-
 
 void DockCam::OnEscape() {
 	mainframe_intance->OnSelectionDeselect();

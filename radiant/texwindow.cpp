@@ -44,6 +44,8 @@
 #include "missing.h"
 #include "texmanip.h"
 
+
+
 #define TYP_MIPTEX  68
 
 #define FONT_HEIGHT 10
@@ -1889,6 +1891,23 @@ void TexWnd::OnCreate(){
 	//g_signal_connect( G_OBJECT( m_pWidget ), "focus-out-event", G_CALLBACK( cam_entry_focus_out ), NULL );
 }
 
+
+#include "imgui/imgui_api.h"
+#include "imgui/imgui.h"
+#include "imgui_docks/dock_console.h"
+
+bool ImGui_CreateDeviceObjects();
+bool ImGui_Init();
+bool ImGui_NewFrame();
+
+
+#include "imgui_radiant/imgui_radiant_default_docks.h"
+
+#include "imgui/imgui.h"
+#include "imgui/imgui_api.h"
+
+Dock *current_dock = NULL;
+
 void TexWnd::UpdateFilter( const char* pFilter ){
 	g_bFilterEnabled = false;
 	if ( pFilter ) {
@@ -1906,16 +1925,7 @@ void TexWnd::OnSize( int cx, int cy ){
 	m_bNeedRange = true;
 }
 
-#include "imgui/imgui_api.h"
-#include "imgui/imgui.h"
-#include "imgui_docks/dock_console.h"
 
-bool ImGui_CreateDeviceObjects();
-bool ImGui_Init();
-bool ImGui_NewFrame();
-
-
-#include "imgui_radiant/imgui_radiant_default_docks.h"
 
 
 void texwnd_imgui() {
@@ -2046,9 +2056,6 @@ void TexWnd::OnExpose() {
 	//}
 }
 
-#include "imgui_docks_radiant/dock_xy.h"
-extern DockXY *dock_xy;
-
 void TexWnd::OnLButtonDown( guint32 flags, int pointx, int pointy ) {
 	imgui_mouse_set_button(0, true);
 	Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
@@ -2058,10 +2065,10 @@ void TexWnd::OnLButtonDown( guint32 flags, int pointx, int pointy ) {
 	// each dock has a screenspace_left and screenspace_top for that purpose
 	// example when (pointx,pointy)==(300,300) and dock.screenspace==(50,50), then the mousepos for dock is (250,250)
 
-	if (dock_xy) {
+	if (current_dock) {
 		auto screenPosMouse = ImVec2(pointx, pointy);
-		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
-		dock_xy->OnLeftMouseDown(dockPosMouse);
+		auto dockPosMouse = screenPosMouse - current_dock->screenpos;
+		current_dock->OnLeftMouseDown(dockPosMouse);
 	}
 
 	SetCapture();
@@ -2073,10 +2080,10 @@ void TexWnd::OnLButtonDown( guint32 flags, int pointx, int pointy ) {
 
 void TexWnd::OnRButtonDown( guint32 flags, int pointx, int pointy ){
 	imgui_mouse_set_button(1, true);
-	if (dock_xy) {
+	if (current_dock) {
 		auto screenPosMouse = ImVec2(pointx, pointy);
-		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
-		dock_xy->OnRightMouseDown(dockPosMouse);
+		auto dockPosMouse = screenPosMouse - current_dock->screenpos;
+		current_dock->OnRightMouseDown(dockPosMouse);
 	}
 
 	SetCapture();
@@ -2085,17 +2092,15 @@ void TexWnd::OnRButtonDown( guint32 flags, int pointx, int pointy ){
 
 void TexWnd::OnMButtonDown( guint32 flags, int pointx, int pointy ){
 	imgui_mouse_set_button(2, true);
-	if (dock_xy) {
+	if (current_dock) {
 		auto screenPosMouse = ImVec2(pointx, pointy);
-		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
-		dock_xy->OnMiddleMouseDown(dockPosMouse);
+		auto dockPosMouse = screenPosMouse - current_dock->screenpos;
+		current_dock->OnMiddleMouseDown(dockPosMouse);
 	}
 	SetCapture();
 	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
 }
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_api.h"
 
 LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	ImGuiIO& io = ImGui::GetIO();
@@ -2132,11 +2137,9 @@ LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			if (wParam < 256)
 				io.KeysDown[wParam] = 1;
 
-			if (wParam == VK_ESCAPE) {
-				
-				
-				dock_xy->OnEscape();
-			}
+			
+			if (current_dock)
+				current_dock->OnKeyDown(wParam);
 
 			goto stop_gtk_event_processing;
 		case WM_CHAR:
@@ -2176,10 +2179,10 @@ void TexWnd::OnLButtonUp( guint32 flags, int pointx, int pointy ){
 	imgui_mouse_set_button(0, false);
 	//Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
 
-	if (dock_xy) {
+	if (current_dock) {
 		auto screenPosMouse = ImVec2(pointx, pointy);
-		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
-		dock_xy->OnLeftMouseUp(dockPosMouse);
+		auto dockPosMouse = screenPosMouse - current_dock->screenpos;
+		current_dock->OnLeftMouseUp(dockPosMouse);
 	}
 
 	ReleaseCapture();
@@ -2189,11 +2192,11 @@ void TexWnd::OnLButtonUp( guint32 flags, int pointx, int pointy ){
 
 void TexWnd::OnRButtonUp( guint32 flags, int pointx, int pointy ){
 	imgui_mouse_set_button(1, false);
-	if (dock_xy) {
+	if (current_dock) {
 		auto screenPosMouse = ImVec2(pointx, pointy);
-		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
+		auto dockPosMouse = screenPosMouse - current_dock->screenpos;
 
-		dock_xy->OnRightMouseUp(dockPosMouse);
+		current_dock->OnRightMouseUp(dockPosMouse);
 	}
 
 	ReleaseCapture();
@@ -2201,10 +2204,10 @@ void TexWnd::OnRButtonUp( guint32 flags, int pointx, int pointy ){
 
 void TexWnd::OnMButtonUp( guint32 flags, int pointx, int pointy ){
 	imgui_mouse_set_button(2, false);
-	if (dock_xy) {
+	if (current_dock) {
 		auto screenPosMouse = ImVec2(pointx, pointy);
-		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
-		dock_xy->OnMiddleMouseUp(dockPosMouse);
+		auto dockPosMouse = screenPosMouse - current_dock->screenpos;
+		current_dock->OnMiddleMouseUp(dockPosMouse);
 	}
 	ReleaseCapture();
 }
@@ -2215,11 +2218,14 @@ void TexWnd::OnMouseMove( guint32 flags, int pointx, int pointy ){
 
 
 	//imgui_log("%d\n", flags);
+	auto screenPosMouse = ImVec2(pointx, pointy);
+	current_dock = getHoveredDock(screenPosMouse);
 
-	if (dock_xy) {
-		auto screenPosMouse = ImVec2(pointx, pointy);
-		auto dockPosMouse = screenPosMouse - dock_xy->screenpos;
-		dock_xy->OnMouseMove(dockPosMouse);
+	// figure out which dock is hovered
+	
+	if (current_dock) {
+		auto dockPosMouse = screenPosMouse - current_dock->screenpos;
+		current_dock->OnMouseMove(dockPosMouse);
 	}
 
 	//Texture_MouseMoved( pointx, pointy - g_nTextureOffset, flags );

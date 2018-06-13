@@ -16,7 +16,7 @@ extern MainFrame *mainframe_intance;
 
 void DockXY::imgui() {
 	//auto pos = ImGui::GetWindowPos();
-	screenpos = ImGui::GetCursorScreenPos();
+	
 	auto size = ImGui::GetWindowSize();
 	size -= ImVec2(16,16); // substract a bit so there is no overflow to right/bottom
 	//ImGui::Text("pos %f %f size %f %f", pos.x, pos.y, size.x, size.y);
@@ -132,6 +132,11 @@ void DockXY::OnMouseMove(ImVec2 posLeftTop) {
 }
 
 
-void DockXY::OnEscape() {
-	mainframe_intance->OnSelectionDeselect();
+void DockXY::OnKeyDown(int key) {
+	switch (key) {
+		case VK_ESCAPE:
+			mainframe_intance->OnSelectionDeselect();
+		default:
+			imgui_log("DockXY::OnKeyDown(int key=%d)\n", key);
+	}
 }

@@ -33,6 +33,26 @@ DockXY *dock_xy = NULL;
 DockZ *dock_z = NULL;
 DockCam *dock_cam = NULL;
 
+
+CCALL Dock *getHoveredDock(ImVec2 screenpos) {
+	int x = screenpos.x;
+	int y = screenpos.y;
+	for (Dock *dock : imgui_quake_docks) {
+		auto min = dock->screenpos;
+		auto max = dock->screenpos + dock->cdock->size;
+		int min_x = min.x;
+		int min_y = min.y;
+		int max_x = max.x;
+		int max_y = max.y;
+		if (
+			x >= min_x && x <= max_x &&
+			y >= min_y && y <= max_y
+		)
+		return dock;
+	}
+	return NULL;
+}
+
 CCALL int imgui_radiant_default_docks() {
 	if (imgui_quake_docks.size() == 0) {
 		// the last dock is seen first when pressing F2, so lets make it an useful one
@@ -65,6 +85,7 @@ CCALL int imgui_radiant_default_docks() {
 		if (BeginDock(dock->label(), &closed, 0, dock->cdock)) {
 			if (dock->cdock == NULL)
 				dock->cdock = (CDock *)imgui_get_current_dock();
+			dock->screenpos = ImGui::GetCursorScreenPos();
 			dock->imgui();
 		}
 		EndDock();

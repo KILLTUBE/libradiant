@@ -49,33 +49,33 @@ void ZWnd::OnCreate(){
 void ZWnd::OnLButtonDown( guint32 nFlags, int pointx, int pointy ){
 	SetFocus();
 	SetCapture();
-	Z_MouseDown( pointx, m_pWidget->allocation.height - 1 - pointy, nFlags );
+	Z_MouseDown( pointx, m_nHeight - 1 - pointy, nFlags );
 }
 
 void ZWnd::OnMButtonDown( guint32 nFlags, int pointx, int pointy ){
 	SetFocus();
 	SetCapture();
-	Z_MouseDown( pointx, m_pWidget->allocation.height - 1 - pointy, nFlags );
+	Z_MouseDown( pointx, m_nHeight - 1 - pointy, nFlags );
 }
 
 void ZWnd::OnRButtonDown( guint32 nFlags, int pointx, int pointy ){
 	SetFocus();
 	SetCapture();
-	Z_MouseDown( pointx, m_pWidget->allocation.height - 1 - pointy, nFlags );
+	Z_MouseDown( pointx, m_nHeight - 1 - pointy, nFlags );
 }
 
 void ZWnd::OnLButtonUp( guint32 nFlags, int pointx, int pointy ){
-	Z_MouseUp( pointx, m_pWidget->allocation.height - 1 - pointy, nFlags );
+	Z_MouseUp( pointx, m_nHeight - 1 - pointy, nFlags );
 	ReleaseCapture();
 }
 
 void ZWnd::OnMButtonUp( guint32 nFlags, int pointx, int pointy ){
-	Z_MouseUp( pointx, m_pWidget->allocation.height - 1 - pointy, nFlags );
+	Z_MouseUp( pointx, m_nHeight - 1 - pointy, nFlags );
 	ReleaseCapture();
 }
 
 void ZWnd::OnRButtonUp( guint32 nFlags, int pointx, int pointy ){
-	Z_MouseUp( pointx, m_pWidget->allocation.height - 1 - pointy, nFlags );
+	Z_MouseUp( pointx, m_nHeight - 1 - pointy, nFlags );
 	ReleaseCapture();
 }
 
@@ -83,7 +83,7 @@ void ZWnd::OnMouseMove( guint32 nFlags, int pointx, int pointy ){
 
 	//current_glwindow = this;
 
-	pointy = m_pWidget->allocation.height - 1 - pointy;
+	pointy = m_nHeight - 1 - pointy;
 	float fz = z.origin[2] + ( pointy - ( z.height / 2 ) ) / z.scale;
 	fz = floor( fz / g_qeglobals.d_gridsize + 0.5 ) * g_qeglobals.d_gridsize;
 	CString strStatus;

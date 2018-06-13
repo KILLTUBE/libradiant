@@ -111,7 +111,6 @@ void update_xor_rectangle( XORRectangle& xor_rectangle ){
 }
 
 void CamWnd::OnMouseMove( guint32 flags, int pointx, int pointy ){
-	int height = m_pWidget->allocation.height;
 	// NOTE RR2DO2 this hasn't got any use anymore really. It is an old qeradiant feature
 	// that can be re-enabled by removing the checks for HasCapture and not shift/ctrl down
 	// but the scaling/rotating (unless done with the steps set in the surface inspector
@@ -131,7 +130,7 @@ void CamWnd::OnMouseMove( guint32 flags, int pointx, int pointy ){
 	}
 	else
 	{
-		Cam_MouseMoved( pointx, height - 1 - pointy, flags );
+		Cam_MouseMoved( pointx, m_nHeight - 1 - pointy, flags );
 	}
 	m_ptLastCursorX = pointx;
 	m_ptLastCursorY = pointy;
@@ -179,25 +178,20 @@ void CamWnd::OnRButtonUp( guint32 nFlags, int pointx, int pointy ){
 }
 
 void CamWnd::OriginalMouseUp( guint32 nFlags, int pointx, int pointy ){
-	int height = m_pWidget->allocation.height;
-
 	if ( g_qeglobals.d_select_mode == sel_facets_on || g_qeglobals.d_select_mode == sel_facets_off ) {
 		g_qeglobals.d_select_mode = sel_brush;
 	}
 
-	Cam_MouseUp( pointx, height - 1 - pointy, nFlags );
+	Cam_MouseUp( pointx, m_nHeight - 1 - pointy, nFlags );
 	ReleaseCapture();
 
 	update_xor_rectangle( m_XORRectangle );
 }
 
 void CamWnd::OriginalMouseDown( guint32 nFlags, int pointx, int pointy ){
-	int height = m_pWidget->allocation.height;
-
 	SetFocus();
 	SetCapture();
-	Cam_MouseDown( pointx, height - 1 - pointy, nFlags );
-
+	Cam_MouseDown( pointx, m_nHeight - 1 - pointy, nFlags );
 	update_xor_rectangle( m_XORRectangle );
 }
 
