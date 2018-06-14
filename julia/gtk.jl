@@ -11,8 +11,9 @@ end
 function gtk_start_timer()
 	global gtk_timer = Timer(function(timer)
 		try
+			Base.invokelatest(mainloop)
 			gtk_step()
 		catch e
 		end
-	end, 0, 0.01)
+	end, 0, 1 / 60)
 end

@@ -34,6 +34,11 @@ const WM_PARENTNOTIFY = UInt(528)
 function callback_wndproc(msg::UInt, wParam::UInt, lParam::Int)::Int
         #log(console, "repl $selection_from $selection_to $text")
 
+		# im not exactly happy about this, but gtk seems to block all events when moving the mouse
+		# but i need the events for runthreads(), so stuff like camera movement can be implemented via coroutines
+		# once gtk is gone, just make it properly without such mainloop-in-wndproc hack
+		Base.invokelatest(mainloop)
+		
 		if msg == WM_SETCURSOR
 			#log(console, "WM_SETCURSOR")
 			return 0

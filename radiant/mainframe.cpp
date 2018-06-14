@@ -1733,6 +1733,7 @@ void MainFrame::Create(){
 	Sys_Printf( "Entering message loop\n" );
 	m_bDoLoop = true;
 	m_nTimer = g_timeout_add( /*1000*/16, timer, this ); // 1000/60 == 16ms aka 60fps
+	//m_nTimer = g_timeout_add( 1000, timer, this ); // each 1s
 	hwnd = (struct HWND__ *) gdk_win32_drawable_get_handle( ( toplevelwindow->window ) );
 	printf("WINDOW HWND: %d\n", hwnd);
 	change_WndProc(hwnd);

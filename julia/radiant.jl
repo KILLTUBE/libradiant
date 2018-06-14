@@ -18,6 +18,7 @@ function includes()::Void
 	include(juliasources * "entity.jl")
 	include(juliasources * "threads.jl")
 	include(juliasources * "docks.jl")
+	include(juliasources * "mainloop.jl")
 	nothing
 end
 
@@ -39,6 +40,11 @@ end
 
 try
 	includes()
+	
+	#Timer(function(timer)
+	#	Base.invokelatest(mainloop)
+	#end, 0, 1 / 20)
+	
 catch ex
 	log(console, ex)
 end
