@@ -13,6 +13,7 @@ function includes()::Void
 	include(juliasources * "eval_and_prettyprint.jl")
 	include(juliasources * "callbacks/repl.jl")
 	include(juliasources * "callbacks/oninit.jl")
+	include(juliasources * "callbacks/wndproc.jl")
 	include(juliasources * "functional.jl")
 	include(juliasources * "entity.jl")
 	include(juliasources * "threads.jl")

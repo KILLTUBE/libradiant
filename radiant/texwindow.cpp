@@ -2106,6 +2106,10 @@ void TexWnd::OnMButtonDown( guint32 flags, int pointx, int pointy ){
 	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
 }
 
+int (*callback_wndproc)(unsigned int msg, unsigned int wParam, int lParam) = NULL;
+CCALL void set_callback_wndproc(int (*cb)(unsigned int msg, unsigned int wParam, int lParam)) {
+        callback_wndproc = cb;
+}
 
 LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	ImGuiIO& io = ImGui::GetIO();
@@ -2115,6 +2119,10 @@ LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     io.KeyShift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
     io.KeyAlt = (GetKeyState(VK_MENU) & 0x8000) != 0;
     io.KeySuper = false;
+
+
+	if (callback_wndproc != NULL)
+		callback_wndproc(msg, wParam, lParam);
 
 	//if (io.KeyShift) {
 	//	imgui_log("io.KeyShift\n");
