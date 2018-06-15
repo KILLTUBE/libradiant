@@ -4,6 +4,10 @@ gtk_main() = ccall((:gtk_main, "libgtk-win32-2.0-0.dll"), Void, ())
 
 function gtk_step()
 	while (gtk_events_pending() == Cint(1))
+	
+		# cant hurt
+		Base.invokelatest(mainloop)	
+	
 		gtk_main_iteration()
 	end
 end

@@ -1637,8 +1637,6 @@ void MainFrame::Create(){
 	gtk_widget_set_events( window, GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
 	g_signal_connect( G_OBJECT( window ), "delete-event"      , G_CALLBACK( mainframe_delete     ), this );
 	g_signal_connect( G_OBJECT( window ), "destroy"           , G_CALLBACK( mainframe_destroy    ), this );
-	//g_signal_connect( G_OBJECT( window ), "key-press-event"   , G_CALLBACK( mainframe_keypress   ), this );
-	//g_signal_connect( G_OBJECT( window ), "key-release-event" , G_CALLBACK( mainframe_keyrelease ), this );
 
 	g_qeglobals_gui.d_main_window = window;
 
@@ -5420,159 +5418,201 @@ void MainFrame::OnSelectFuncGroup(){
 }
 
 void MainFrame::OnCameraForward( bool keydown ){
-	if ( g_PrefsDlg.m_bCamDiscrete && ( m_pCamWnd && !m_pCamWnd->m_bFreeMove ) ) {
-		if ( keydown ) {
-			VectorMA( m_pCamWnd->Camera()->origin, SPEED_MOVE, m_pCamWnd->Camera()->forward, m_pCamWnd->Camera()->origin );
-			int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-			Sys_UpdateWindows( nUpdate );
-		}
-	}
-	else {
-		if ( keydown ) {
-			m_pCamWnd->Camera()->movementflags |= MOVE_FORWARD;
-		}
-		else{
-			m_pCamWnd->Camera()->movementflags &= ~MOVE_FORWARD;
-		}
-	}
+	//if ( g_PrefsDlg.m_bCamDiscrete && ( m_pCamWnd && !m_pCamWnd->m_bFreeMove ) ) {
+	//	if ( keydown ) {
+	//		VectorMA( m_pCamWnd->Camera()->origin, SPEED_MOVE, m_pCamWnd->Camera()->forward, m_pCamWnd->Camera()->origin );
+	//		int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
+	//		Sys_UpdateWindows( nUpdate );
+	//	}
+	//}
+	//else {
+	//	if ( keydown ) {
+	//		m_pCamWnd->Camera()->movementflags |= MOVE_FORWARD;
+	//	}
+	//	else{
+	//		m_pCamWnd->Camera()->movementflags &= ~MOVE_FORWARD;
+	//	}
+	//}
+}
+
+CCALL camera_t *getCam() {
+	if (mainframe_intance == NULL)
+		return NULL;
+	CamWnd *camwnd = mainframe_intance->m_pCamWnd;
+	if (camwnd == NULL)
+		return NULL;
+	camera_t *cam = camwnd->Camera();
+	return cam;
+}
+
+CCALL float *camera_angles() {
+	auto cam = getCam();
+	if (cam == NULL)
+		return NULL;
+	return cam->angles;
+}
+
+CCALL float *camera_origin() {
+	auto cam = getCam();
+	if (cam == NULL)
+		return NULL;
+	return cam->origin;
+}
+
+CCALL float *camera_forward() {
+	auto cam = getCam();
+	if (cam == NULL)
+		return NULL;
+	return cam->forward;
+}
+
+CCALL float *camera_right() {
+	auto cam = getCam();
+	if (cam == NULL)
+		return NULL;
+	return cam->right;
+}
+
+CCALL void camera_update() {
+	Sys_UpdateWindows(  W_CAMERA | W_XY );
 }
 
 void MainFrame::OnCameraBack( bool keydown ){
-	if ( g_PrefsDlg.m_bCamDiscrete && ( m_pCamWnd && !m_pCamWnd->m_bFreeMove ) ) {
-		if ( keydown ) {
-			VectorMA( m_pCamWnd->Camera()->origin, -SPEED_MOVE, m_pCamWnd->Camera()->forward, m_pCamWnd->Camera()->origin );
-			int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-			Sys_UpdateWindows( nUpdate );
-		}
-	}
-	else {
-		if ( keydown ) {
-			m_pCamWnd->Camera()->movementflags |= MOVE_BACK;
-		}
-		else{
-			m_pCamWnd->Camera()->movementflags &= ~MOVE_BACK;
-		}
-	}
+	//if ( g_PrefsDlg.m_bCamDiscrete && ( m_pCamWnd && !m_pCamWnd->m_bFreeMove ) ) {
+	//	if ( keydown ) {
+	//		VectorMA( m_pCamWnd->Camera()->origin, -SPEED_MOVE, m_pCamWnd->Camera()->forward, m_pCamWnd->Camera()->origin );
+	//		int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
+	//		Sys_UpdateWindows( nUpdate );
+	//	}
+	//}
+	//else {
+	//	if ( keydown ) {
+	//		m_pCamWnd->Camera()->movementflags |= MOVE_BACK;
+	//	}
+	//	else{
+	//		m_pCamWnd->Camera()->movementflags &= ~MOVE_BACK;
+	//	}
+	//}
 }
 
 void MainFrame::OnCameraLeft( bool keydown ){
-	if ( m_pCamWnd ) {
-		if ( m_pCamWnd->m_bFreeMove ) {
-			OnCameraStrafeleft( keydown );
-			return;
-		}
-	}
-
-	if ( g_PrefsDlg.m_bCamDiscrete ) {
-		if ( keydown ) {
-			m_pCamWnd->Camera()->angles[1] += SPEED_TURN;
-			int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-			Sys_UpdateWindows( nUpdate );
-		}
-	}
-	else {
-		if ( keydown ) {
-			m_pCamWnd->Camera()->movementflags |= MOVE_ROTLEFT;
-		}
-		else{
-			m_pCamWnd->Camera()->movementflags &= ~MOVE_ROTLEFT;
-		}
-	}
+	//if ( m_pCamWnd ) {
+	//	if ( m_pCamWnd->m_bFreeMove ) {
+	//		OnCameraStrafeleft( keydown );
+	//		return;
+	//	}
+	//}
+	//
+	//if ( g_PrefsDlg.m_bCamDiscrete ) {
+	//	if ( keydown ) {
+	//		m_pCamWnd->Camera()->angles[1] += SPEED_TURN;
+	//		int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
+	//		Sys_UpdateWindows( nUpdate );
+	//	}
+	//}
+	//else {
+	//	if ( keydown ) {
+	//		m_pCamWnd->Camera()->movementflags |= MOVE_ROTLEFT;
+	//	}
+	//	else{
+	//		m_pCamWnd->Camera()->movementflags &= ~MOVE_ROTLEFT;
+	//	}
+	//}
 }
 
 void MainFrame::OnCameraRight( bool keydown ){
-	if ( m_pCamWnd ) {
-		if ( m_pCamWnd->m_bFreeMove ) {
-			OnCameraStraferight( keydown );
-			return;
-		}
-	}
-
-	if ( g_PrefsDlg.m_bCamDiscrete ) {
-		if ( keydown ) {
-			m_pCamWnd->Camera()->angles[1] -= SPEED_TURN;
-			int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-			Sys_UpdateWindows( nUpdate );
-		}
-	}
-	else {
-		if ( keydown ) {
-			m_pCamWnd->Camera()->movementflags |= MOVE_ROTRIGHT;
-		}
-		else{
-			m_pCamWnd->Camera()->movementflags &= ~MOVE_ROTRIGHT;
-		}
-	}
+	//if ( m_pCamWnd ) {
+	//	if ( m_pCamWnd->m_bFreeMove ) {
+	//		OnCameraStraferight( keydown );
+	//		return;
+	//	}
+	//}
+	//
+	//if ( g_PrefsDlg.m_bCamDiscrete ) {
+	//	if ( keydown ) {
+	//		m_pCamWnd->Camera()->angles[1] -= SPEED_TURN;
+	//		int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
+	//		Sys_UpdateWindows( nUpdate );
+	//	}
+	//}
+	//else {
+	//	if ( keydown ) {
+	//		m_pCamWnd->Camera()->movementflags |= MOVE_ROTRIGHT;
+	//	}
+	//	else{
+	//		m_pCamWnd->Camera()->movementflags &= ~MOVE_ROTRIGHT;
+	//	}
+	//}
 }
 
 void MainFrame::OnCameraUp(){
-	m_pCamWnd->Camera()->origin[2] += SPEED_MOVE;
-	int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY | W_Z ) : ( W_CAMERA );
-	Sys_UpdateWindows( nUpdate );
+	//m_pCamWnd->Camera()->origin[2] += SPEED_MOVE;
+	//int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY | W_Z ) : ( W_CAMERA );
+	//Sys_UpdateWindows( nUpdate );
 }
 
 void MainFrame::OnCameraDown(){
-	m_pCamWnd->Camera()->origin[2] -= SPEED_MOVE;
-	int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY | W_Z ) : ( W_CAMERA );
-	Sys_UpdateWindows( nUpdate );
+	//m_pCamWnd->Camera()->origin[2] -= SPEED_MOVE;
+	//int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY | W_Z ) : ( W_CAMERA );
+	//Sys_UpdateWindows( nUpdate );
 }
 
 void MainFrame::OnCameraAngleup(){
-	m_pCamWnd->Camera()->angles[0] += SPEED_TURN;
-	if ( m_pCamWnd->Camera()->angles[0] > 85 ) {
-		m_pCamWnd->Camera()->angles[0] = 85;
-	}
-	Sys_UpdateWindows( W_CAMERA | W_XY_OVERLAY );
+	//m_pCamWnd->Camera()->angles[0] += SPEED_TURN;
+	//if ( m_pCamWnd->Camera()->angles[0] > 85 ) {
+	//	m_pCamWnd->Camera()->angles[0] = 85;
+	//}
+	//Sys_UpdateWindows( W_CAMERA | W_XY_OVERLAY );
 }
 
 void MainFrame::OnCameraAngledown(){
-	m_pCamWnd->Camera()->angles[0] -= SPEED_TURN;
-	if ( m_pCamWnd->Camera()->angles[0] < -85 ) {
-		m_pCamWnd->Camera()->angles[0] = -85;
-	}
-	Sys_UpdateWindows( W_CAMERA | W_XY_OVERLAY );
+	//m_pCamWnd->Camera()->angles[0] -= SPEED_TURN;
+	//if ( m_pCamWnd->Camera()->angles[0] < -85 ) {
+	//	m_pCamWnd->Camera()->angles[0] = -85;
+	//}
+	//Sys_UpdateWindows( W_CAMERA | W_XY_OVERLAY );
 }
 
 void MainFrame::OnCameraStrafeleft( bool keydown ){
-	// FIXME: as soon as gtk supports proper keyup/down support, remove this bit
-	if ( m_pCamWnd ) {
-		if ( !m_pCamWnd->m_bFreeMove ) {
-			if ( keydown ) {
-				VectorMA( m_pCamWnd->Camera()->origin, -SPEED_MOVE, m_pCamWnd->Camera()->right, m_pCamWnd->Camera()->origin );
-				int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-				Sys_UpdateWindows( nUpdate );
-			}
-			return;
-		}
-	}
-
-	if ( keydown ) {
-		m_pCamWnd->Camera()->movementflags |= MOVE_STRAFELEFT;
-	}
-	else{
-		m_pCamWnd->Camera()->movementflags &= ~MOVE_STRAFELEFT;
-	}
+	//// FIXME: as soon as gtk supports proper keyup/down support, remove this bit
+	//if ( m_pCamWnd ) {
+	//	if ( !m_pCamWnd->m_bFreeMove ) {
+	//		if ( keydown ) {
+	//			VectorMA( m_pCamWnd->Camera()->origin, -SPEED_MOVE, m_pCamWnd->Camera()->right, m_pCamWnd->Camera()->origin );
+	//			int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
+	//			Sys_UpdateWindows( nUpdate );
+	//		}
+	//		return;
+	//	}
+	//}
+	//
+	//if ( keydown ) {
+	//	m_pCamWnd->Camera()->movementflags |= MOVE_STRAFELEFT;
+	//}
+	//else{
+	//	m_pCamWnd->Camera()->movementflags &= ~MOVE_STRAFELEFT;
+	//}
 }
 
 void MainFrame::OnCameraStraferight( bool keydown ){
-	// FIXME: as soon as gtk supports proper keyup/down support, remove this bit
-	if ( m_pCamWnd ) {
-		if ( !m_pCamWnd->m_bFreeMove ) {
-			if ( keydown ) {
-				VectorMA( m_pCamWnd->Camera()->origin, SPEED_MOVE, m_pCamWnd->Camera()->right, m_pCamWnd->Camera()->origin );
-				int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-				Sys_UpdateWindows( nUpdate );
-			}
-			return;
-		}
-	}
-
-	if ( keydown ) {
-		m_pCamWnd->Camera()->movementflags |= MOVE_STRAFERIGHT;
-	}
-	else{
-		m_pCamWnd->Camera()->movementflags &= ~MOVE_STRAFERIGHT;
-	}
+	//// FIXME: as soon as gtk supports proper keyup/down support, remove this bit
+	//if ( m_pCamWnd ) {
+	//	if ( !m_pCamWnd->m_bFreeMove ) {
+	//		if ( keydown ) {
+	//			VectorMA( m_pCamWnd->Camera()->origin, SPEED_MOVE, m_pCamWnd->Camera()->right, m_pCamWnd->Camera()->origin );
+	//			int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
+	//			Sys_UpdateWindows( nUpdate );
+	//		}
+	//		return;
+	//	}
+	//}
+	//
+	//if ( keydown ) {
+	//	m_pCamWnd->Camera()->movementflags |= MOVE_STRAFERIGHT;
+	//}
+	//else{
+	//	m_pCamWnd->Camera()->movementflags &= ~MOVE_STRAFERIGHT;
+	//}
 }
 
 void MainFrame::OnGridToggle(){

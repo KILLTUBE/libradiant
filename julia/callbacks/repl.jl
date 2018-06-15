@@ -16,11 +16,18 @@ CCALL void set_callback_player_damage(int (*cb)(int *targ, int *inflictor, int *
 =#
 
 function callback_repl(selection_from::Int, selection_to::Int, text::String)::Int
-        #log(console, "repl $selection_from $selection_to $text")
-        #println("repl $selection_from $selection_to $text")
-		# selection_from and selection_to is currently hardcoded to 2 and 4, was just for testing
-		eval_and_prettyprint(text)
-        zero(Int)
+	#log(console, "repl $selection_from $selection_to $text")
+	#log(console, "repl $selection_from $selection_to ")
+	if selection_to < selection_from
+		selection_to, selection_from = (selection_from, selection_to)
+	end
+	selectedCode = text[selection_from+1 : selection_to]
+	if selection_from == selection_to
+		selectedCode = text # execute everything then
+	end
+	#log(console, "Selected code: $selectedCode")
+	eval_and_prettyprint(selectedCode)
+	zero(Int)
 end
 
 function wrapper_callback_repl(selection_from::Int, selection_to::Int, text::Cstring)::Int
