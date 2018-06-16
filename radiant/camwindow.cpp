@@ -251,20 +251,6 @@ void CamWnd::Cam_ChangeFloor( qboolean up ){
 	Sys_UpdateWindows( W_CAMERA | W_Z_OVERLAY );
 }
 
-void CamWnd::Cam_PositionDrag(){
-	int x, y;
-
-	Sys_GetCursorPos( &x, &y );
-	if ( x != m_ptCursorX || y != m_ptCursorY ) {
-		x -= m_ptCursorX;
-		VectorMA( m_Camera.origin, x, m_Camera.vright, m_Camera.origin );
-		y -= m_ptCursorY;
-		m_Camera.origin[2] -= y;
-		Sys_SetCursorPos( m_ptCursorX, m_ptCursorY );
-		Sys_UpdateWindows( W_CAMERA | W_XY_OVERLAY );
-	}
-}
-
 #include "imgui/imgui.h"
 
 void CamWnd::Cam_MouseControl( float dtime ){
@@ -660,12 +646,6 @@ void CamWnd::Cam_MouseMoved( int x, int y, int buttons ){
 
 	m_ptButtonX = x;
 	m_ptButtonY = y;
-
-	if ( ( m_bFreeMove && ( buttons & MK_CONTROL ) && !( buttons & MK_SHIFT ) ) || ( !m_bFreeMove && ( buttons == ( MK_RBUTTON | MK_CONTROL ) ) ) ) {
-		Cam_PositionDrag();
-		Sys_UpdateWindows( W_XY | W_CAMERA | W_Z );
-		return;
-	}
 
 	Sys_GetCursorPos( &m_ptCursorX, &m_ptCursorY );
 

@@ -5,8 +5,8 @@ function getNewDir(camera::Camera)::Vec3
 	if keyPressed('S') newDir += backward(camera) end
 	if keyPressed('A') newDir += left(camera)     end
 	if keyPressed('D') newDir += right(camera)    end
-	if keyPressed('E') newDir += Vec3(0,0,1)      end
-	if keyPressed('Q') newDir += Vec3(0,0,-1)     end
+	if keyPressed('E') newDir += up(camera)       end
+	if keyPressed('Q') newDir += down(camera)     end
 	if iszero(newDir)
 		return newDir
 	end

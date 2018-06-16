@@ -108,9 +108,7 @@ class CamWnd : public GLWindow { public:
 	int m_nHeight;
 	int viewport_left;
 	int viewport_bottom;
-
 	void MatchViewAxes( const vec3_t P, const vec3_t vec, int &axis, float &sgn );
-	void ReInitGL();
 	void BenchMark();
 	CamWnd();
 	virtual ~CamWnd();
@@ -121,7 +119,6 @@ class CamWnd : public GLWindow { public:
 	bool m_bFreeMove;
 	void Cam_Init();
 	void Cam_BuildMatrix();
-	void Cam_PositionDrag();
 	void Cam_KeyControl( float dtime );
 	void Cam_MouseDown( int x, int y, int buttons );
 	void Cam_MouseUp( int x, int y, int buttons );

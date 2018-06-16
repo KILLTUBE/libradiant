@@ -5403,14 +5403,21 @@ CCALL float *camera_forward() {
 	auto cam = getCam();
 	if (cam == NULL)
 		return NULL;
-	return cam->forward;
+	return cam->vpn;
 }
 
 CCALL float *camera_right() {
 	auto cam = getCam();
 	if (cam == NULL)
 		return NULL;
-	return cam->right;
+	return cam->vright;
+}
+
+CCALL float *camera_up() {
+	auto cam = getCam();
+	if (cam == NULL)
+		return NULL;
+	return cam->vup;
 }
 
 CCALL void camera_update() {
