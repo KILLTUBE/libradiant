@@ -23,6 +23,7 @@ function includes()::Void
 	include(juliasources * "imgui.jl")
 	include(juliasources * "freefly.jl")
 	include(juliasources * "preferences.jl")
+	include(juliasources * "mouse.jl")
 	nothing
 end
 

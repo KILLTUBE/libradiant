@@ -1,5 +1,10 @@
 importall Base
 
+type Vec2
+	x::Float32
+	y::Float32
+end
+
 #using StaticArrays
 #const Vec3 = SVector{3,Float32}
 struct Vec3

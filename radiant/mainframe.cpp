@@ -5417,6 +5417,18 @@ CCALL void camera_update() {
 	Sys_UpdateWindows(  W_CAMERA | W_XY );
 }
 
+// ccall( (:pos_left_mouse, libradiant, Int, ())
+CCALL int pos_left_mouse() {
+	POINT pos;
+	GetCursorPos(&pos);
+	return pos.x;
+}
+CCALL int pos_top_mouse() {
+	POINT pos;
+	GetCursorPos(&pos);
+	return pos.y;
+}
+
 void MainFrame::OnCameraBack( bool keydown ){
 	//if ( g_PrefsDlg.m_bCamDiscrete && ( m_pCamWnd && !m_pCamWnd->m_bFreeMove ) ) {
 	//	if ( keydown ) {
