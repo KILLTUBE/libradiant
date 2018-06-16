@@ -9,6 +9,9 @@ struct Vec3
 	function Vec3()
 		new(0, 0, 0)
 	end
+	function Vec3(x, y, z)
+		new(x, y, z)
+	end
 end
 struct vec3
 	x::Float32
