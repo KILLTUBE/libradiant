@@ -3,6 +3,34 @@ importall Base
 type Vec2
 	x::Float32
 	y::Float32
+	function Vec2()
+		new(0, 0)
+	end
+	function Vec2(x, y)
+		new(x, y)
+	end
+end
+zero(::Type{Vec2}) = Vec2(0, 0)
+function (+)(a::Vec2, b::Vec2)::Vec2
+	return Vec2(
+		a.x + b.x,
+		a.y + b.y
+	)
+end
+function (-)(a::Vec2, b::Vec2)::Vec2
+	return Vec2(
+		a.x - b.x,
+		a.y - b.y
+	)
+end
+function (*)(a::Vec2, scalar)::Vec2
+	a * Float32(scalar)
+end
+function (*)(a::Vec2, scalar::Float32)::Vec2
+	return Vec2(
+		a.x * scalar,
+		a.y * scalar
+	)
 end
 
 #using StaticArrays
