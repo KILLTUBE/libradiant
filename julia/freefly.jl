@@ -15,6 +15,7 @@ end
 
 function thread_freeFlyCamera()
 	oldmousepos = pos(mouse)
+	hide(mouse)
 	while rightMousePressed()
 		#log(console, "dddwasd: ", keyPressed('W'), keyPressed('S'), keyPressed('A'), keyPressed('D'))
 		speed = cameraMoveSpeed
@@ -34,6 +35,7 @@ function thread_freeFlyCamera()
 		pos!(mouse, oldmousepos) # reset mouse pos
 		threadwait(0.01)
 	end
+	show(mouse)
 end
 
 # 
