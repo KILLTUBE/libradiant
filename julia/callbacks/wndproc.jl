@@ -40,7 +40,7 @@ function callback_wndproc(msg::UInt, wParam::UInt, lParam::Int)::Int
 		Base.invokelatest(mainloop)
 		
 		if msg == WM_SETCURSOR
-			log(console, "WM_SETCURSOR")
+			#log(console, "WM_SETCURSOR")
 			return 0
 		end
 		if msg == WM_RBUTTONDOWN
@@ -52,7 +52,7 @@ function callback_wndproc(msg::UInt, wParam::UInt, lParam::Int)::Int
 			#log(console, "WM_PARENTNOTIFY wLow=$wLow")
 			
 			if wLow == WM_RBUTTONDOWN
-				log(console, "WM_RBUTTONDOWN")
+				#log(console, "WM_RBUTTONDOWN")
 				startFreeFlyCamera()
 			end
 			

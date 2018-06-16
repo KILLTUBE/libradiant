@@ -106,6 +106,14 @@ void DockCam::OnKeyDown(int key) {
 	switch (key) {
 		case VK_ESCAPE:
 			mainframe_intance->OnSelectionDeselect();
+		case 'W': // forward
+		case 'S': // backward
+		case 'A': // left
+		case 'D': // right
+		case 'Q': // down
+		case 'E': // up
+			// noops in C++, so I can script these in Julia via keyPressed('W') etc.
+			break;
 		default:
 			mainframe_keypress(key);
 			//imgui_log("DockXY::OnKeyDown(int key=%d)\n", key);

@@ -148,11 +148,11 @@ void CamWnd::OnMButtonUp( guint32 nFlags, int pointx, int pointy ){
 }
 
 void CamWnd::OnRButtonDown( guint32 nFlags, int pointx, int pointy ){
-	OriginalMouseDown( nFlags, pointx, pointy );
+	//OriginalMouseDown( nFlags, pointx, pointy );
 }
 
 void CamWnd::OnRButtonUp( guint32 nFlags, int pointx, int pointy ){
-	OriginalMouseUp( nFlags, pointx, pointy );
+	//OriginalMouseUp( nFlags, pointx, pointy );
 }
 
 void CamWnd::OriginalMouseUp( guint32 nFlags, int pointx, int pointy ){

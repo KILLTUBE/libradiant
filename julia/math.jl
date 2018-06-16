@@ -6,6 +6,9 @@ struct Vec3
 	x::Float32
 	y::Float32
 	z::Float32
+	function Vec3()
+		new(0, 0, 0)
+	end
 end
 struct vec3
 	x::Float32
@@ -20,6 +23,8 @@ function normalize(this::Vec3)::Vec3
 	scale = 1 / length(this)
 	return this * scale
 end
+
+iszero(vec::Vec3) = (vec.x + vec.y + vec.z) == 0.0
 
 #lol this fucks up so much, because of the SVector stuff
 #Base.length(this::Vec3) = 3
