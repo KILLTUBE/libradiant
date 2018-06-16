@@ -2158,7 +2158,7 @@ LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			if (wParam > 0 && wParam < 0x10000)
 				io.AddInputCharacter((unsigned short)wParam);
 			goto stop_gtk_event_processing;
-		case WM_MOUSEWHEEL:
+		case WM_MOUSEWHEEL: {
 
 			// this isnt send atm, its deeper hacked in by gtk
 			// need to remove this then probably in mainframe.cpp:
@@ -2167,11 +2167,15 @@ LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			//io.
 			imgui_mouse_wheel(GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f);
 			//io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
+			bool mouseWheelUp = GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? true : false;
+
+			OnMouseWheel(mouseWheelUp, 0, 0);
 			goto stop_gtk_event_processing;
-		case WM_MOUSEHWHEEL:
-			imgui_mouse_wheel(GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f);
-			//io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
-			goto stop_gtk_event_processing;
+		}
+		//case WM_MOUSEHWHEEL:
+		//	imgui_mouse_wheel(GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f);
+		//	//io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
+		//	goto stop_gtk_event_processing;
 		case WM_PARENTNOTIFY:
 			int wLow = LOWORD(wParam);
 			int wHigh = HIWORD(wParam);
@@ -2290,6 +2294,20 @@ void TexWnd::FocusEdit() {
 }
 
 void TexWnd::OnMouseWheel( bool bUp, int pointx, int pointy ){
+
+
+	imgui_mouse_wheel(bUp ? 1.0f : -1.0f);
+
+	if (current_dock) {
+		auto screenPosMouse = ImVec2(pointx, pointy);
+		auto dockPosMouse = screenPosMouse - current_dock->screenpos;
+		if (bUp)
+			current_dock->OnMouseWheelUp(dockPosMouse);
+		else
+			current_dock->OnMouseWheelDown(dockPosMouse);
+	}
+
+
 	if ( bUp ) {
 		if ( g_qeglobals.d_texturewin.originy < 0 ) {
 			g_qeglobals.d_texturewin.originy += g_PrefsDlg.m_nWheelInc;

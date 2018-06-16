@@ -17,4 +17,6 @@ public:
 	virtual void OnMiddleMouseUp(ImVec2 posLeftTop);
 	virtual void OnMouseMove(ImVec2 posLeftTop);
 	virtual void OnKeyDown(int key);
+	virtual void OnMouseWheelUp(ImVec2 posLeftTop);
+	virtual void OnMouseWheelDown(ImVec2 posLeftTop);
 };

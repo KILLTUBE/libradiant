@@ -140,3 +140,15 @@ void DockXY::OnKeyDown(int key) {
 			//imgui_log("DockXY::OnKeyDown(int key=%d)\n", key);
 	}
 }
+
+void DockXY::OnMouseWheelUp(ImVec2 posLeftTop) {
+	if (mainframe_intance && mainframe_intance->m_pXYWnd) {
+		mainframe_intance->m_pXYWnd->OnMouseWheel(true, posLeftTop.x, posLeftTop.y);
+	}
+}
+
+void DockXY::OnMouseWheelDown(ImVec2 posLeftTop) {
+	if (mainframe_intance && mainframe_intance->m_pXYWnd) {
+		mainframe_intance->m_pXYWnd->OnMouseWheel(false, posLeftTop.x, posLeftTop.y);
+	}
+}

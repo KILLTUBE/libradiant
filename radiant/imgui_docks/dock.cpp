@@ -19,3 +19,5 @@ void Dock::OnMiddleMouseDown(ImVec2 posLeftTop) {}
 void Dock::OnMiddleMouseUp(ImVec2 posLeftTop) {}
 void Dock::OnMouseMove(ImVec2 posLeftTop) {}
 void Dock::OnKeyDown(int key) {}
+void Dock::OnMouseWheelUp(ImVec2 posLeftTop) {}
+void Dock::OnMouseWheelDown(ImVec2 posLeftTop) {}
