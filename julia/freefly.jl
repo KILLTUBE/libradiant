@@ -17,7 +17,14 @@ function thread_freeFlyCamera()
 	oldmousepos = pos(mouse)
 	while rightMousePressed()
 		#log(console, "dddwasd: ", keyPressed('W'), keyPressed('S'), keyPressed('A'), keyPressed('D'))
-		newDir = getNewDir(camera) * cameraMoveSpeed
+		speed = cameraMoveSpeed
+		if shiftButtonPressed()
+			speed *= 10
+		end
+		if controlButtonPressed()
+			speed /= 5
+		end
+		newDir = getNewDir(camera) * speed
 		pos!(camera, pos(camera) + newDir)
 		camangles = angles(camera)
 		deltaMousePos = pos(mouse) - oldmousepos

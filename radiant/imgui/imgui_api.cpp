@@ -477,4 +477,8 @@ CCALL bool middleMousePressed() { ImGuiIO& io = ImGui::GetIO(); return io.MouseD
 // keyPressed(key) = ccall( (:middleMousePressed, libradiant), Bool, (Int,), key)
 CCALL bool keyPressed(int user_key_index) { /*return ImGui::IsKeyPressed(user_key_index, true);*/ return ImGui::IsKeyDown(user_key_index); }
 
+CCALL bool shiftButtonPressed()   { ImGuiIO& io = ImGui::GetIO(); return io.KeyShift; }
+CCALL bool altButtonPressed()     { ImGuiIO& io = ImGui::GetIO(); return io.KeyAlt;   }
+CCALL bool controlButtonPressed() { ImGuiIO& io = ImGui::GetIO(); return io.KeyCtrl;  }
+
 #endif
