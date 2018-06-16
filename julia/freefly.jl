@@ -14,10 +14,17 @@ function getNewDir(camera::Camera)::Vec3
 end
 
 function thread_freeFlyCamera()
+	oldmousepos = pos(mouse)
 	while rightMousePressed()
 		#log(console, "dddwasd: ", keyPressed('W'), keyPressed('S'), keyPressed('A'), keyPressed('D'))
 		newDir = getNewDir(camera) * cameraMoveSpeed
 		pos!(camera, pos(camera) + newDir)
+		camangles = angles(camera)
+		deltaMousePos = pos(mouse) - oldmousepos
+		#log(console, "deltaMousePos:", deltaMousePos)
+		deltaMousePos *= 1/5.333 # 1920 / 360 = 5.333
+		angles!(camera, angles(camera) + Vec3( -deltaMousePos.y, -deltaMousePos.x, 0)) 
+		pos!(mouse, oldmousepos) # reset mouse pos
 		threadwait(0.01)
 	end
 end
