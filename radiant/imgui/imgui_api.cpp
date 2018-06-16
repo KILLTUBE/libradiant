@@ -467,4 +467,14 @@ CCALL void imgui_new_line() {
 	ImGui::NewLine();
 }
 
+
+// leftMousePressed()   = ccall( (:leftMousePressed  , libradiant), Bool, ())
+// rightMousePressed()  = ccall( (:rightMousePressed , libradiant), Bool, ())
+// middleMousePressed() = ccall( (:middleMousePressed, libradiant), Bool, ())
+CCALL bool leftMousePressed()   { ImGuiIO& io = ImGui::GetIO(); return io.MouseDown[0]; }
+CCALL bool rightMousePressed()  { ImGuiIO& io = ImGui::GetIO(); return io.MouseDown[1]; }
+CCALL bool middleMousePressed() { ImGuiIO& io = ImGui::GetIO(); return io.MouseDown[2]; }
+// keyPressed(key) = ccall( (:middleMousePressed, libradiant), Bool, (Int,), key)
+CCALL bool keyPressed(int user_key_index) { /*return ImGui::IsKeyPressed(user_key_index, true);*/ return ImGui::IsKeyDown(user_key_index); }
+
 #endif

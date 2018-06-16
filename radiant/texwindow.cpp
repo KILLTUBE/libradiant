@@ -2121,8 +2121,6 @@ LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     io.KeySuper = false;
 
 
-	if (callback_wndproc != NULL)
-		callback_wndproc(msg, wParam, lParam);
 
 	//if (io.KeyShift) {
 	//	imgui_log("io.KeyShift\n");
@@ -2177,13 +2175,24 @@ LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		case WM_PARENTNOTIFY:
 			int wLow = LOWORD(wParam);
 			int wHigh = HIWORD(wParam);
+
+			switch (wLow) {
+				case WM_RBUTTONDOWN: io.MouseDown[1] = true; break;
+				case WM_RBUTTONUP: io.MouseDown[0] = true; break;
+			}
+
 			//imgui_log("WM_PARENTNOTIFY: wLow=%d wHigh=%d lParam=%d\n", wLow, wHigh, lParam);
 			goto stop_gtk_event_processing;
 	}
 
+	
 	return 0; // 0 == keep processing
 
 stop_gtk_event_processing:
+
+	if (callback_wndproc != NULL)
+		callback_wndproc(msg, wParam, lParam);
+
 	RedrawWindow(); // only when we ran some custom code here atm
 	return 1; // 1 == stop gtk event processing
 }

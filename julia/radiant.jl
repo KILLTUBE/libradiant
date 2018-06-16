@@ -20,6 +20,8 @@ function includes()::Void
 	include(juliasources * "docks.jl")
 	include(juliasources * "mainloop.jl")
 	include(juliasources * "camera.jl")
+	include(juliasources * "imgui.jl")
+	include(juliasources * "freefly.jl")
 	nothing
 end
 
