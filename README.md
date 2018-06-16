@@ -3,7 +3,7 @@ Welcome to libradiant
 Random facts:
 * fork of GtkRadiant 1.6.5
 * this compiles to a libradiant.dll hence the name
-* libradiant.dll is started via [julia/radiant.jl](../blob/master/julia/radiant.jl)
+* libradiant.dll is started via [julia/radiant.jl](../master/julia/radiant.jl)
 * the GTK widgets (cam, tex, xy, z, console) are replaced with ImGui docks
 * lots of GTK code left, work-in-progress to remove/replace that
 * once all GTK code is gone, lets think about port this to WebGL
