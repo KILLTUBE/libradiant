@@ -382,42 +382,43 @@ bool wButtonPressed() { return GetAsyncKeyState('W') & 0x8000; }
 
 void CamWnd::Cam_KeyControl( float dtime ) {
 
-	// Update angles
-	if ( m_Camera.movementflags & MOVE_ROTLEFT ) {
-		m_Camera.angles[YAW] += 15 * dtime * g_PrefsDlg.m_nAngleSpeed;
-	}
-	if ( m_Camera.movementflags & MOVE_ROTRIGHT ) {
-		m_Camera.angles[YAW] -= 15 * dtime * g_PrefsDlg.m_nAngleSpeed;
-	}
-
-	// Update position
-	if ( m_Camera.movementflags & MOVE_FORWARD || wButtonPressed()) {
-		VectorMA( m_Camera.origin, dtime * g_PrefsDlg.m_nMoveSpeed, m_Camera.forward, m_Camera.origin );
-	}
-	if ( m_Camera.movementflags & MOVE_BACK ) {
-		VectorMA( m_Camera.origin, -dtime * g_PrefsDlg.m_nMoveSpeed, m_Camera.forward, m_Camera.origin );
-	}
-	if ( m_Camera.movementflags & MOVE_STRAFELEFT ) {
-		VectorMA( m_Camera.origin, -dtime * g_PrefsDlg.m_nMoveSpeed, m_Camera.right, m_Camera.origin );
-	}
-	if ( m_Camera.movementflags & MOVE_STRAFERIGHT ) {
-		VectorMA( m_Camera.origin, dtime * g_PrefsDlg.m_nMoveSpeed, m_Camera.right, m_Camera.origin );
-	}
-
-	// Save a screen update (when m_bFreeMove is enabled, mousecontrol does the update)
-	if ( !m_bFreeMove && m_Camera.movementflags ) {
-		int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-		Sys_UpdateWindows( nUpdate );
-		g_pParentWnd->OnTimer();
-	}
+	//// Update angles
+	//if ( m_Camera.movementflags & MOVE_ROTLEFT ) {
+	//	m_Camera.angles[YAW] += 15 * dtime * g_PrefsDlg.m_nAngleSpeed;
+	//}
+	//if ( m_Camera.movementflags & MOVE_ROTRIGHT ) {
+	//	m_Camera.angles[YAW] -= 15 * dtime * g_PrefsDlg.m_nAngleSpeed;
+	//}
+	//
+	//// Update position
+	//if ( m_Camera.movementflags & MOVE_FORWARD || wButtonPressed()) {
+	//	VectorMA( m_Camera.origin, dtime * g_PrefsDlg.m_nMoveSpeed, m_Camera.forward, m_Camera.origin );
+	//}
+	//if ( m_Camera.movementflags & MOVE_BACK ) {
+	//	VectorMA( m_Camera.origin, -dtime * g_PrefsDlg.m_nMoveSpeed, m_Camera.forward, m_Camera.origin );
+	//}
+	//if ( m_Camera.movementflags & MOVE_STRAFELEFT ) {
+	//	VectorMA( m_Camera.origin, -dtime * g_PrefsDlg.m_nMoveSpeed, m_Camera.right, m_Camera.origin );
+	//}
+	//if ( m_Camera.movementflags & MOVE_STRAFERIGHT ) {
+	//	VectorMA( m_Camera.origin, dtime * g_PrefsDlg.m_nMoveSpeed, m_Camera.right, m_Camera.origin );
+	//}
+	//
+	//// Save a screen update (when m_bFreeMove is enabled, mousecontrol does the update)
+	//if ( !m_bFreeMove && m_Camera.movementflags ) {
+	//	int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
+	//	Sys_UpdateWindows( nUpdate );
+	//	g_pParentWnd->OnTimer();
+	//}
 }
 
-// NOTE TTimo if there's an OS-level focus out of the application
-//   then we can release the camera cursor grab
-static gint camwindow_focusout( GtkWidget* widget, GdkEventKey* event, gpointer data ){
-	g_pParentWnd->GetCamWnd()->ToggleFreeMove();
-	return FALSE;
-}
+//// NOTE TTimo if there's an OS-level focus out of the application
+////   then we can release the camera cursor grab
+//static gint camwindow_focusout( GtkWidget* widget, GdkEventKey* event, gpointer data ){
+//	g_pParentWnd->GetCamWnd()->ToggleFreeMove();
+//	return FALSE;
+//}
+//
 
 void CamWnd::ToggleFreeMove(){
 	GdkWindow *window;

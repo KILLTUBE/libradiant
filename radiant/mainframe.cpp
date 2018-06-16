@@ -435,28 +435,7 @@ void WINAPI Sys_UpdateWindows( int nBits ){
 	g_nUpdateBits |= nBits;
 }
 
-// =============================================================================
-// Static functions
 
-// Gef: Separate handling for keyup events
-void HandleKeyUp( GtkWidget *widget, gpointer data ){
-	int id = GPOINTER_TO_INT( data );
-#ifdef DBG_KBD
-	Sys_Printf( "HandleKeyUp: %d\n", id );
-#endif
-
-	if ( g_bIgnoreCommands )
-		return;
-
-	switch ( id ) {
-		case ID_CAMERA_FORWARD    : g_pParentWnd->OnCameraForward(     FALSE ); break;
-		case ID_CAMERA_BACK       : g_pParentWnd->OnCameraBack(        FALSE ); break;
-		case ID_CAMERA_LEFT       : g_pParentWnd->OnCameraLeft(        FALSE ); break;
-		case ID_CAMERA_RIGHT      : g_pParentWnd->OnCameraRight(       FALSE ); break;
-		case ID_CAMERA_STRAFELEFT : g_pParentWnd->OnCameraStrafeleft(  FALSE ); break;
-		case ID_CAMERA_STRAFERIGHT: g_pParentWnd->OnCameraStraferight( FALSE ); break;
-	}
-}
 
 gint HandleCommand( GtkWidget *widget, gpointer data ){
 	int id = GPOINTER_TO_INT( data );
@@ -870,45 +849,6 @@ gint mainframe_keypress( int key ) {
 	}
 	return FALSE;
 }
-
-static gint mainframe_keyrelease( GtkWidget* widget, GdkEventKey* event, gpointer data ){
-
-	if ( ! are_global_hotkeys_activated())
-		return FALSE; // force GTK to send events to our Julia REPL
-
-	unsigned int code = gdk_keyval_to_upper( event->keyval );
-
-	if ( gtk_accelerator_valid( event->keyval, (GdkModifierType)0 ) ) {
-		return TRUE;
-	}
-
-	for ( int i = 0; i < g_nCommandCount; i++ )
-	{
-		if ( g_Commands[i].m_nKey == code ) { // find a match?
-			if ( !g_Commands[i].m_nModifiers ) {
-				// Gef: Only call the handler if it's a key that needs keyup events
-				switch ( g_Commands[i].m_nCommand )
-				{
-				case ID_CAMERA_FORWARD:
-				case ID_CAMERA_BACK:
-				case ID_CAMERA_LEFT:
-				case ID_CAMERA_RIGHT:
-				case ID_CAMERA_STRAFELEFT:
-				case ID_CAMERA_STRAFERIGHT:
-				{
-					HandleKeyUp( NULL, GINT_TO_POINTER( g_Commands[i].m_nCommand ) );
-					g_signal_stop_emission_by_name( G_OBJECT( widget ), "key-release-event" );
-				}
-
-				}
-				return FALSE;
-			}
-		}
-	}
-
-	return TRUE;
-}
-
 
 // =============================================================================
 // Window creation functions

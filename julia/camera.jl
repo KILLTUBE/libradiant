@@ -12,6 +12,8 @@ function forward!(camera::Camera, newForward::Vec3)
 	unsafe_store!( camera_pointer_forward(), newForward )
 end
 
+backward(camera) = forward(camera) * -1.0
+
 function pos(camera::Camera)
 	unsafe_load( camera_pointer_pos() )
 end
