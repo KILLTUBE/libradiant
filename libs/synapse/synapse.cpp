@@ -116,15 +116,15 @@ bool CSynapseServer::Initialize( const char* conf_file, PFN_SYN_PRINTF_VA pf ){
 
 	Set_Syn_Printf( pf );
 
-	if ( conf_file ) {
-		// if a config file is specified and we fail to load it, we fail
-		Syn_Printf( "loading synapse XML config file '%s'\n", conf_file );
-		mpDoc = xmlParseFile( conf_file );
-		if ( !mpDoc ) {
-			Syn_Printf( "'%s' invalid/not found\n", conf_file );
-			return false;
-		}
-	}
+	//if ( conf_file ) {
+	//	// if a config file is specified and we fail to load it, we fail
+	//	Syn_Printf( "loading synapse XML config file '%s'\n", conf_file );
+	//	mpDoc = xmlParseFile( conf_file );
+	//	if ( !mpDoc ) {
+	//		Syn_Printf( "'%s' invalid/not found\n", conf_file );
+	//		return false;
+	//	}
+	//}
 
 	for ( list<char *>::iterator iPath = mSearchPaths.begin(); iPath != mSearchPaths.end(); iPath++ )
 	{
@@ -680,33 +680,33 @@ void CSynapseServer::DumpActiveClients(){
 }
 
 bool CSynapseServer::SelectClientConfig( const char *client_name ){
-	if ( !mpDoc ) {
-		return false;
-	}
-	xmlNodePtr pNode = xmlDocGetRootElement( mpDoc );
-	if ( !pNode ) {
-		return false;
-	}
-	// look for the client
-	pNode = pNode->children;
-	while ( pNode )
-	{
-		if ( pNode->type == XML_ELEMENT_NODE ) {
-			xmlChar *prop = xmlGetProp( pNode, (const xmlChar *)"name" );
-			if ( !strcmp( (const char *)prop, client_name ) ) {
-				//xmlFree( prop );
-				break;
-			}
-			//xmlFree( prop );
-		}
-		pNode = pNode->next;
-	}
-	if ( !pNode ) {
-		return false; // config you asked for isn't there
-	}
-	// focus
-	mpFocusedNode = pNode->children;
-	mpCurrentClientConfig = pNode;
+	//if ( !mpDoc ) {
+	//	return false;
+	//}
+	//xmlNodePtr pNode = xmlDocGetRootElement( mpDoc );
+	//if ( !pNode ) {
+	//	return false;
+	//}
+	//// look for the client
+	//pNode = pNode->children;
+	//while ( pNode )
+	//{
+	//	if ( pNode->type == XML_ELEMENT_NODE ) {
+	//		xmlChar *prop = xmlGetProp( pNode, (const xmlChar *)"name" );
+	//		if ( !strcmp( (const char *)prop, client_name ) ) {
+	//			//xmlFree( prop );
+	//			break;
+	//		}
+	//		//xmlFree( prop );
+	//	}
+	//	pNode = pNode->next;
+	//}
+	//if ( !pNode ) {
+	//	return false; // config you asked for isn't there
+	//}
+	//// focus
+	//mpFocusedNode = pNode->children;
+	//mpCurrentClientConfig = pNode;
 	return true;
 }
 
