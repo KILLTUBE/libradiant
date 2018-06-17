@@ -1925,8 +1925,8 @@ void TexWnd::OnSize( int cx, int cy ){
 	m_bNeedRange = true;
 }
 
-
-
+#include "imgui_docks_radiant/dock_textures.h"
+extern DockTextures *dock_tex;
 
 void texwnd_imgui() {
 	float fullwidth = ImGui::GetWindowWidth();
@@ -1935,6 +1935,12 @@ void texwnd_imgui() {
 	float marginall = 5 * margin;
 	float spaceleft = fullwidth - marginall;
 	float spaceProImg = spaceleft / 4;
+	
+	//ImGui::Text("bla");
+	//ImGui::Text("bla");
+	//ImGui::Text("screenpos %d, %d", (int)dock_tex->screenpos.x, (int)dock_tex->screenpos.y);
+	//ImVec2 scrolling = ImVec2( ImGui::GetScrollX(), ImGui::GetScrollY() );
+	//ImGui::Text("scrolling %d, %d", (int)scrolling.x, (int)scrolling.y);
 
 	// _ == margin
 	// _IMG_IMG_IMG_IMG_

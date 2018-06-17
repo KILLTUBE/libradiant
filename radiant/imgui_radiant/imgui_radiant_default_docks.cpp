@@ -87,7 +87,9 @@ CCALL int imgui_radiant_default_docks() {
 		if (BeginDock(dock->label(), &closed, 0, dock->cdock)) {
 			if (dock->cdock == NULL)
 				dock->cdock = (CDock *)imgui_get_current_dock();
-			dock->screenpos = ImGui::GetCursorScreenPos();
+
+			ImVec2 scrolling = ImVec2( ImGui::GetScrollX(), ImGui::GetScrollY() );
+			dock->screenpos = ImGui::GetCursorScreenPos() + scrolling;
 			dock->size = ImGui::GetWindowSize();
 			dock->imgui();
 		}

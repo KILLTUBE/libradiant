@@ -30,7 +30,9 @@ namespace ImGui {
 
 void texwnd_imgui();
 
+DockTextures *dock_tex = NULL;
 void DockTextures::imgui() {
+	dock_tex = this;
 	texwnd_imgui();
 }
 
