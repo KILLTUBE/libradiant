@@ -4,6 +4,7 @@
 #include "../radiant/qe3.h"
 #include "../radiant/mainframe.h"
 //#include "../mainframe.h"
+#include <Windows.h> 
 
 DockCam::DockCam() {}
 
@@ -129,4 +130,17 @@ void DockCam::OnKeyDown(int key) {
 			mainframe_keypress(key);
 			//imgui_log("DockXY::OnKeyDown(int key=%d)\n", key);
 	}
+}
+
+int (*callback_wndproc)(unsigned int msg, unsigned int wParam, int lParam) = NULL;
+CCALL void set_callback_wndproc(int (*cb)(unsigned int msg, unsigned int wParam, int lParam)) {
+        callback_wndproc = cb;
+}
+
+LONG DockCam::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+	
+	if (callback_wndproc != NULL)
+		callback_wndproc(msg, wParam, lParam);
+
+	return 0;
 }

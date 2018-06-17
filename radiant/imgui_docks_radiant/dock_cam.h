@@ -3,6 +3,7 @@
 #include "../imgui_docks/dock.h"
 #include <string>
 #include "../imgui/imgui_dock.h"
+#include <Windows.h> 
 
 class DockCam : public Dock {
 public:
@@ -17,4 +18,5 @@ public:
 	virtual void OnMiddleMouseUp(ImVec2 posLeftTop);
 	virtual void OnMouseMove(ImVec2 posLeftTop);
 	virtual void OnKeyDown(int key);
+	virtual LONG WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 };

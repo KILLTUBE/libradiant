@@ -1,5 +1,6 @@
 #include "dock.h"
 #include "../imgui/include_imgui.h"
+#include <Windows.h>
 
 // creating a new dock: add it to imgui_api.cpp line 457, like: docks.push_back(new DockExplorer());
 
@@ -21,3 +22,4 @@ void Dock::OnMouseMove(ImVec2 posLeftTop) {}
 void Dock::OnKeyDown(int key) {}
 void Dock::OnMouseWheelUp(ImVec2 posLeftTop) {}
 void Dock::OnMouseWheelDown(ImVec2 posLeftTop) {}
+LONG Dock::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { return 0; }

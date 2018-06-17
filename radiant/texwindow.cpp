@@ -2100,10 +2100,7 @@ void TexWnd::OnMButtonDown( guint32 flags, int pointx, int pointy ){
 	//Texture_MouseDown( pointx, pointy - g_nTextureOffset, flags );
 }
 
-int (*callback_wndproc)(unsigned int msg, unsigned int wParam, int lParam) = NULL;
-CCALL void set_callback_wndproc(int (*cb)(unsigned int msg, unsigned int wParam, int lParam)) {
-        callback_wndproc = cb;
-}
+
 
 LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	ImGuiIO& io = ImGui::GetIO();
@@ -2113,7 +2110,6 @@ LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     io.KeyShift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
     io.KeyAlt = (GetKeyState(VK_MENU) & 0x8000) != 0;
     io.KeySuper = false;
-
 
 
 	//if (io.KeyShift) {
@@ -2187,9 +2183,14 @@ LONG TexWnd::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	return 0; // 0 == keep processing
 
 stop_gtk_event_processing:
+	if (current_dock) {
+		//imgui_log("current_dock: %s\n", typeid(*current_dock).name());
+		//auto screenPosMouse = ImVec2(pointx, pointy);
+		//auto dockPosMouse = screenPosMouse - current_dock->screenpos;
 
-	if (callback_wndproc != NULL)
-		callback_wndproc(msg, wParam, lParam);
+		current_dock->WndProc(hWnd, msg, wParam, lParam);
+	}
+
 
 	RedrawWindow(); // only when we ran some custom code here atm
 	return 1; // 1 == stop gtk event processing

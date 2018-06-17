@@ -2,6 +2,7 @@
 #define DOCK_H
 
 #include "../imgui/imgui_dock.h"
+#include <Windows.h>
 
 // creating a new dock: add it to imgui_api.cpp line 457, like: docks.push_back(new DockExplorer());
 #ifdef __cplusplus
@@ -23,7 +24,7 @@ public:
 	virtual void OnKeyDown(int key);
 	virtual void OnMouseWheelUp(ImVec2 posLeftTop);
 	virtual void OnMouseWheelDown(ImVec2 posLeftTop);
-
+	virtual LONG WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 };
 
 #endif
