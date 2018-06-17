@@ -13,6 +13,14 @@ const char *DockCam::label() {
 
 extern MainFrame *mainframe_intance;
 
+#include "dock_cam.h"
+extern DockCam *dock_cam;
+
+void rendercallback_cam(const ImDrawList* parent_list, const ImDrawCmd* cmd) {
+	if (dock_cam->cdock->active && mainframe_intance && mainframe_intance->m_pCamWnd)
+		mainframe_intance->m_pCamWnd->Render();
+}
+
 void DockCam::imgui() {
 	auto size = ImGui::GetWindowSize();
 	size -= ImVec2(16,16); // substract a bit so there is no overflow to right/bottom
@@ -27,6 +35,9 @@ void DockCam::imgui() {
 		mainframe_intance->m_pCamWnd->viewport_left = screenpos.x;
 		mainframe_intance->m_pCamWnd->viewport_bottom = fullsize.y - (screenpos.y + size.y);
 	}
+
+	ImDrawList *drawlist = ImGui::GetWindowDrawList();
+	drawlist->AddCallback(rendercallback_cam, NULL);
 }
 
 guint32 getMouseFlags();

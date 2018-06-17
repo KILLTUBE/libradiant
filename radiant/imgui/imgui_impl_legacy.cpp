@@ -110,6 +110,30 @@ void ImGui_ImplSdlGL2_RenderDrawData(ImDrawData* draw_data)
             if (pcmd->UserCallback)
             {
                 pcmd->UserCallback(cmd_list, pcmd);
+
+				// restore state when we had a callback, since it rekts all kind of stuff (viewport, scissor etc.)
+				// just copy/paste from above
+				qglPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
+				qglEnable(GL_BLEND);
+				qglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				qglDisable(GL_CULL_FACE);
+				qglDisable(GL_DEPTH_TEST);
+				qglEnable(GL_SCISSOR_TEST);
+				qglEnableClientState(GL_VERTEX_ARRAY);
+				qglEnableClientState(GL_TEXTURE_COORD_ARRAY);
+				qglEnableClientState(GL_COLOR_ARRAY);
+				qglEnable(GL_TEXTURE_2D);
+				qglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				// Setup viewport, orthographic projection matrix
+				qglViewport(0, 0, (GLsizei)fb_width, (GLsizei)fb_height);
+				qglMatrixMode(GL_PROJECTION);
+				qglPushMatrix();
+				qglLoadIdentity();
+				qglOrtho(0.0f, io.DisplaySize.x, io.DisplaySize.y, 0.0f, -1.0f, +1.0f);
+				qglMatrixMode(GL_MODELVIEW);
+				qglPushMatrix();
+				qglLoadIdentity();
+
             }
             else
             {

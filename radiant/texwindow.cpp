@@ -2035,14 +2035,8 @@ void TexWnd::OnExpose() {
 			if (callback_oninit)
 				callback_oninit();
 		}
-		
-		if (dock_xy->cdock->active && mainframe_intance && mainframe_intance->m_pXYWnd)
-			mainframe_intance->m_pXYWnd->Render();
-		if (dock_z->cdock->active && mainframe_intance && mainframe_intance->m_pZWnd)
-			mainframe_intance->m_pZWnd->Render();
-		if (dock_cam->cdock->active && mainframe_intance && mainframe_intance->m_pCamWnd)
-			mainframe_intance->m_pCamWnd->Render();
-
+		// here was the GLWindow::Render() stuff to simply render that over the scene, but caused Z render issues
+		// doing that in ImGui callbacks, works great
 		SwapBuffers();
 	}
 	//if ( g_PrefsDlg.m_bTextureScrollbar && ( m_bNeedRange || g_qeglobals.d_texturewin.m_nTotalHeight != nOld ) ) {

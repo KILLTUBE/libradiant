@@ -14,6 +14,14 @@ const char *DockXY::label() {
 
 extern MainFrame *mainframe_intance;
 
+#include "dock_xy.h"
+extern DockXY *dock_xy;
+
+void rendercallback_xy(const ImDrawList* parent_list, const ImDrawCmd* cmd) {
+	if (dock_xy->cdock->active && mainframe_intance && mainframe_intance->m_pXYWnd)
+		mainframe_intance->m_pXYWnd->Render();
+}
+
 void DockXY::imgui() {
 	//auto pos = ImGui::GetWindowPos();
 	
@@ -31,6 +39,9 @@ void DockXY::imgui() {
 		mainframe_intance->m_pXYWnd->viewport_left = screenpos.x;
 		mainframe_intance->m_pXYWnd->viewport_bottom = fullsize.y - (screenpos.y + size.y);
 	}
+
+	ImDrawList *drawlist = ImGui::GetWindowDrawList();
+	drawlist->AddCallback(rendercallback_xy, NULL);
 }
 
 guint32 getMouseFlags() {

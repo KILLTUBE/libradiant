@@ -13,6 +13,14 @@ const char *DockZ::label() {
 
 extern MainFrame *mainframe_intance;
 
+#include "dock_z.h"
+extern DockZ *dock_z;
+
+void rendercallback_z(const ImDrawList* parent_list, const ImDrawCmd* cmd) {
+	if (dock_z->cdock->active && mainframe_intance && mainframe_intance->m_pZWnd)
+		mainframe_intance->m_pZWnd->Render();
+}
+
 void DockZ::imgui() {
 	auto size = ImGui::GetWindowSize();
 	size -= ImVec2(16,16); // substract a bit so there is no overflow to right/bottom
@@ -25,6 +33,9 @@ void DockZ::imgui() {
 		mainframe_intance->m_pZWnd->viewport_left = screenpos.x;
 		mainframe_intance->m_pZWnd->viewport_bottom = fullsize.y - (screenpos.y + size.y);
 	}
+
+	ImDrawList *drawlist = ImGui::GetWindowDrawList();
+	drawlist->AddCallback(rendercallback_z, NULL);
 }
 
 guint32 getMouseFlags();
