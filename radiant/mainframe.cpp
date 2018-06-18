@@ -930,6 +930,92 @@ void radiant_menu() {
 		if (ImGui::MenuItem("Preferences..."               )) { execID( ID_PREFS                    ); }
 		ImGui::EndMenu();
 	}
+
+	if (ImGui::BeginMenu("_View")) {
+		
+		if (ImGui::BeginMenu("Toggle")) {
+			if (ImGui::MenuItem("Camera View"                         )) { execID( ID_TOGGLECAMERA                 ); }
+			if (ImGui::MenuItem("Console View"                        )) { execID( ID_TOGGLECONSOLE                ); }
+			if (ImGui::MenuItem("Entity View"                         )) { execID( ID_VIEW_ENTITY                  ); }
+			if (ImGui::MenuItem("Groups View"                         )) { execID( ID_VIEW_GROUPS                  ); }
+			if (ImGui::MenuItem("XY (Top)"                            )) { execID( ID_TOGGLEVIEW                   ); }
+			if (ImGui::MenuItem("YZ (Side)"                           )) { execID( ID_TOGGLEVIEW_YZ                ); }
+			if (ImGui::MenuItem("XZ (Front)"                          )) { execID( ID_TOGGLEVIEW_XZ                ); }
+			if (ImGui::MenuItem("Z View"                              )) { execID( ID_TOGGLEZ                      ); }
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Layout")) {
+			if (ImGui::MenuItem("XY (Top)"                 )) { execID( ID_VIEW_XY                 ); }
+			if (ImGui::MenuItem("YZ"                       )) { execID( ID_VIEW_SIDE               ); }
+			if (ImGui::MenuItem("XZ"                       )) { execID( ID_VIEW_FRONT              ); }
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Zoom")) {
+			if (ImGui::MenuItem("_XY 100%"                            )) { execID( ID_VIEW_100                 ); }
+			if (ImGui::MenuItem("XY Zoom _In"                         )) { execID( ID_VIEW_ZOOMIN              ); }
+			if (ImGui::MenuItem("XY Zoom _Out"                        )) { execID( ID_VIEW_ZOOMOUT             ); }
+			if (ImGui::MenuItem("_Z 100%"                             )) { execID( ID_VIEW_Z100                ); }
+			if (ImGui::MenuItem("Z Zoo_m In"                          )) { execID( ID_VIEW_ZZOOMIN             ); }
+			if (ImGui::MenuItem("Z Zoom O_ut"                         )) { execID( ID_VIEW_ZZOOMOUT            ); }
+			if (ImGui::MenuItem("Cubic Clip Zoom In"                  )) { execID( ID_VIEW_CUBEIN              ); }
+			if (ImGui::MenuItem("Cubic Clip Zoom Out"                 )) { execID( ID_VIEW_CUBEOUT             ); }
+			ImGui::EndMenu();
+		}
+
+		// todo: checkboxes
+		if (ImGui::BeginMenu("Show")) {
+			if (ImGui::MenuItem("Show _Angles"                        )) { execID( ID_VIEW_SHOWANGLES                 ); }
+			if (ImGui::MenuItem("Show _Names"                         )) { execID( ID_VIEW_SHOWNAMES                  ); }
+			if (ImGui::MenuItem("Show Blocks"                         )) { execID( ID_VIEW_SHOWBLOCKS                 ); }
+			if (ImGui::MenuItem("Show C_oordinates"                   )) { execID( ID_VIEW_SHOWCOORDINATES            ); }
+			if (ImGui::MenuItem("Show Window Outline"                 )) { execID( ID_VIEW_SHOWOUTLINE                ); }
+			if (ImGui::MenuItem("Show ZBuffered Outline"              )) { execID( ID_SELECTION_NOOUTLINE             ); }
+			if (ImGui::MenuItem("Show Axes"                           )) { execID( ID_VIEW_SHOWAXES                   ); }
+			if (ImGui::MenuItem("Show Workzone"                       )) { execID( ID_VIEW_SHOWWORKZONE               ); }
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Filter")) {
+			if (ImGui::MenuItem("World"                  )) { execID( ID_FILTER_WORLD                 ); }
+			if (ImGui::MenuItem("Entities"               )) { execID( ID_FILTER_ENTITIES              ); }
+			if (ImGui::MenuItem("Areaportals"            )) { execID( ID_FILTER_AREAPORTALS           ); }
+			if (ImGui::MenuItem("Translucent"            )) { execID( ID_FILTER_TRANSLUCENT           ); }
+			if (ImGui::MenuItem("Liquids"                )) { execID( ID_FILTER_LIQUIDS               ); }
+			if (ImGui::MenuItem("Caulk"                  )) { execID( ID_FILTER_CAULK                 ); }
+			if (ImGui::MenuItem("Clips"                  )) { execID( ID_FILTER_CLIPS                 ); }
+			if (ImGui::MenuItem("Paths"                  )) { execID( ID_FILTER_PATHS                 ); }
+			if (ImGui::MenuItem("Clusterportals"         )) { execID( ID_FILTER_CLUSTERPORTALS        ); }
+			if (ImGui::MenuItem("Lights"                 )) { execID( ID_FILTER_LIGHTS                ); }
+			if (ImGui::MenuItem("Structural"             )) { execID( ID_FILTER_STRUCTURAL            ); }
+			if (ImGui::MenuItem("Lightgrid"              )) { execID( ID_FILTER_LIGHTGRID             ); }
+			if (ImGui::MenuItem("Patches"                )) { execID( ID_FILTER_PATCHES               ); }
+			if (ImGui::MenuItem("Details"                )) { execID( ID_FILTER_DETAILS               ); }
+			if (ImGui::MenuItem("Hints"                  )) { execID( ID_FILTER_HINTSSKIPS            ); }
+			if (ImGui::MenuItem("Models"                 )) { execID( ID_FILTER_MODELS                ); }
+			if (ImGui::MenuItem("Triggers"               )) { execID( ID_FILTER_TRIGGERS              ); }
+			if (ImGui::MenuItem("Botclips"               )) { execID( ID_FILTER_BOTCLIPS              ); }
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Entities as")) {
+			if (ImGui::MenuItem("Bounding box"           )) { execID( ID_VIEW_ENTITIESAS_BOUNDINGBOX              ); }
+			if (ImGui::MenuItem("Wireframe"              )) { execID( ID_VIEW_ENTITIESAS_WIREFRAME                ); }
+			if (ImGui::MenuItem("Selected Wireframe"     )) { execID( ID_VIEW_ENTITIESAS_SELECTEDWIREFRAME        ); }
+			if (ImGui::MenuItem("Selected Skinned"       )) { execID( ID_VIEW_ENTITIESAS_SELECTEDSKINNED          ); }
+			if (ImGui::MenuItem("Skinned"                )) { execID( ID_VIEW_ENTITIESAS_SKINNED                  ); }
+			if (ImGui::MenuItem("Skinned and Boxed"      )) { execID( ID_VIEW_ENTITIESAS_SKINNEDANDBOXED          ); }
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::MenuItem("Cubic Clipping"               )) { execID( ID_VIEW_CUBICCLIPPING           ); } // todo: checkbox
+		if (ImGui::MenuItem("OpenGL Lighting"              )) { execID( ID_VIEW_OPENGLLIGHTING          ); } // todo: checkbox
+		if (ImGui::MenuItem("_Center"                      )) { execID( ID_VIEW_CENTER                  ); }
+		if (ImGui::MenuItem("_Center 2d"                   )) { execID( ID_VIEW_CENTERVIEW              ); }
+		if (ImGui::MenuItem("_Up Floor"                    )) { execID( ID_VIEW_UPFLOOR                 ); }
+		if (ImGui::MenuItem("_Down Floor"                  )) { execID( ID_VIEW_DOWNFLOOR               ); }
+		if (ImGui::MenuItem("_Next (XY, YZ, XY)"           )) { execID( ID_VIEW_NEXTVIEW                ); }
+		if (ImGui::MenuItem("Hide Selected"                )) { execID( ID_VIEW_HIDESHOW_HIDESELECTED   ); }
+		if (ImGui::MenuItem("Show Hidden"                  )) { execID( ID_VIEW_HIDESHOW_SHOWHIDDEN     ); }
+		ImGui::EndMenu();
+	}
 }
 
 void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
@@ -944,83 +1030,6 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	menu_bar = gtk_menu_bar_new();
 	gtk_box_pack_start( GTK_BOX( vbox ), menu_bar, FALSE, FALSE, 0 );
 	gtk_widget_show( menu_bar );
-
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_View" ) );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Toggle" ) );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Camera View"        ), ID_TOGGLECAMERA               );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Console View"       ), ID_TOGGLECONSOLE              );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Entity View"        ), ID_VIEW_ENTITY                ); g_object_set_data( G_OBJECT( window ), "menu_view_entity", item );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Groups View"        ), ID_VIEW_GROUPS                );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XY (Top)"           ), ID_TOGGLEVIEW                 );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "YZ (Side)"          ), ID_TOGGLEVIEW_YZ              );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XZ (Front)"         ), ID_TOGGLEVIEW_XZ              );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z View"             ), ID_TOGGLEZ                    );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Layout" ) );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XY (Top)" ), ID_VIEW_XY );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "YZ"       ), ID_VIEW_SIDE );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XZ"       ), ID_VIEW_FRONT );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Zoom" ) );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "_XY 100%"            ), ID_VIEW_100      );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XY Zoom _In"         ), ID_VIEW_ZOOMIN   );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "XY Zoom _Out"        ), ID_VIEW_ZOOMOUT  );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "_Z 100%"             ), ID_VIEW_Z100     );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z Zoo_m In"          ), ID_VIEW_ZZOOMIN  ); g_object_set_data( G_OBJECT( window ), "menu_view_zzoomin" , item );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Z Zoom O_ut"         ), ID_VIEW_ZZOOMOUT ); g_object_set_data( G_OBJECT( window ), "menu_view_zzoomout", item );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Cubic Clip Zoom In"  ), ID_VIEW_CUBEIN   );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Cubic Clip Zoom Out" ), ID_VIEW_CUBEOUT  );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Show" ) );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show _Angles"           ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWANGLES      , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_showangles"     , item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show _Names"            ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWNAMES       , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_view_shownames"      , item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Blocks"            ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWBLOCKS      , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_showblocks"     , item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show C_oordinates"      ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWCOORDINATES , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_view_showcoordinates", item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Window Outline"    ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWOUTLINE     , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_view_showoutline"    , item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show ZBuffered Outline" ), G_CALLBACK( HandleCommand ), ID_SELECTION_NOOUTLINE  , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_selection_nooutline" , item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Axes"              ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWAXES        , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_view_showaxes"       , item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Show Workzone"          ), G_CALLBACK( HandleCommand ), ID_VIEW_SHOWWORKZONE    , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_showworkzone"   , item );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Filter" ) );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "World"          ), G_CALLBACK( HandleCommand ), ID_FILTER_WORLD         , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Entities"       ), G_CALLBACK( HandleCommand ), ID_FILTER_ENTITIES      , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Areaportals"    ), G_CALLBACK( HandleCommand ), ID_FILTER_AREAPORTALS   , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Translucent"    ), G_CALLBACK( HandleCommand ), ID_FILTER_TRANSLUCENT   , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Liquids"        ), G_CALLBACK( HandleCommand ), ID_FILTER_LIQUIDS       , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Caulk"          ), G_CALLBACK( HandleCommand ), ID_FILTER_CAULK         , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Clips"          ), G_CALLBACK( HandleCommand ), ID_FILTER_CLIPS         , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Paths"          ), G_CALLBACK( HandleCommand ), ID_FILTER_PATHS         , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Clusterportals" ), G_CALLBACK( HandleCommand ), ID_FILTER_CLUSTERPORTALS, FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Lights"         ), G_CALLBACK( HandleCommand ), ID_FILTER_LIGHTS        , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Structural"     ), G_CALLBACK( HandleCommand ), ID_FILTER_STRUCTURAL    , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Lightgrid"      ), G_CALLBACK( HandleCommand ), ID_FILTER_LIGHTGRID     , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_filter_lightgrid", item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Patches"        ), G_CALLBACK( HandleCommand ), ID_FILTER_PATCHES       , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Details"        ), G_CALLBACK( HandleCommand ), ID_FILTER_DETAILS       , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Hints"          ), G_CALLBACK( HandleCommand ), ID_FILTER_HINTSSKIPS    , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Models"         ), G_CALLBACK( HandleCommand ), ID_FILTER_MODELS        , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Triggers"       ), G_CALLBACK( HandleCommand ), ID_FILTER_TRIGGERS      , FALSE );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Botclips"       ), G_CALLBACK( HandleCommand ), ID_FILTER_BOTCLIPS      , FALSE );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Entities as" ) ); g_object_set_data( G_OBJECT( window ), "view_entitiesas_menu", menu_in_menu );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, NULL, _( "Bounding box"       ), ID_VIEW_ENTITIESAS_BOUNDINGBOX      , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_boundingbox"      , item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Wireframe"          ), ID_VIEW_ENTITIESAS_WIREFRAME        , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_wireframe"        , item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Selected Wireframe" ), ID_VIEW_ENTITIESAS_SELECTEDWIREFRAME, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_selectedwireframe", item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Selected Skinned"   ), ID_VIEW_ENTITIESAS_SELECTEDSKINNED  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_selectedskinned"  , item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Skinned"            ), ID_VIEW_ENTITIESAS_SKINNED          , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_skinned"          , item );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Skinned and Boxed"  ), ID_VIEW_ENTITIESAS_SKINNEDANDBOXED  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_entitiesas_skinnedandboxed"  , item );
-
-	item = create_check_menu_item_with_mnemonic( menu,               _( "Cubic Clipping"     ), G_CALLBACK( HandleCommand ), ID_VIEW_CUBICCLIPPING               , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_view_cubicclipping"               , item );
-	item = create_check_menu_item_with_mnemonic( menu,               _( "OpenGL Lighting"    ), G_CALLBACK( HandleCommand ), ID_VIEW_OPENGLLIGHTING              , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_opengllighting"              , item );
-
-	item = create_menu_item_with_mnemonic( menu        , _( "_Center"            ), ID_VIEW_CENTER                );
-	item = create_menu_item_with_mnemonic( menu        , _( "_Center 2d"         ), ID_VIEW_CENTERVIEW            );
-	item = create_menu_item_with_mnemonic( menu        , _( "_Up Floor"          ), ID_VIEW_UPFLOOR               );
-	item = create_menu_item_with_mnemonic( menu        , _( "_Down Floor"        ), ID_VIEW_DOWNFLOOR             );
-	item = create_menu_item_with_mnemonic( menu        , _( "_Next (XY, YZ, XY)" ), ID_VIEW_NEXTVIEW              );
-	item = create_menu_item_with_mnemonic( menu        , _( "Hide Selected"      ), ID_VIEW_HIDESHOW_HIDESELECTED );
-	item = create_menu_item_with_mnemonic( menu        , _( "Show Hidden"        ), ID_VIEW_HIDESHOW_SHOWHIDDEN   );
-
 
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Selection" ) );
 
