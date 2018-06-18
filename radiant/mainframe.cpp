@@ -1016,6 +1016,71 @@ void radiant_menu() {
 		if (ImGui::MenuItem("Show Hidden"                  )) { execID( ID_VIEW_HIDESHOW_SHOWHIDDEN     ); }
 		ImGui::EndMenu();
 	}
+
+
+	if (ImGui::BeginMenu("_Selection" )) {
+
+		if (ImGui::BeginMenu("Rotate")) {
+			if (ImGui::MenuItem("Rotate X"              )) { execID(ID_BRUSH_ROTATEX               ); }
+			if (ImGui::MenuItem("Rotate Y"              )) { execID(ID_BRUSH_ROTATEY               ); }
+			if (ImGui::MenuItem("Rotate Z"              )) { execID(ID_BRUSH_ROTATEZ               ); }
+			if (ImGui::MenuItem("Arbitrary rotation..." )) { execID(ID_SELECTION_ARBITRARYROTATION ); }
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("CSG")) {
+			if (ImGui::MenuItem("Make _Hollow Overlap" )) { execID(ID_SELECTION_MAKEHOLLOW       );	}
+			if (ImGui::MenuItem("Make _Hollow Touch"   )) { execID(ID_SELECTION_MAKEHOLLOW_TOUCH );	}
+			if (ImGui::MenuItem("CSG _Subtract"        )) { execID(ID_SELECTION_CSGSUBTRACT      );	}
+			if (ImGui::MenuItem("CSG _Merge"           )) { execID(ID_SELECTION_CSGMERGE         );	}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Select")) {
+			if (ImGui::MenuItem("Select Complete _Tall" )) { execID(ID_SELECTION_SELECTCOMPLETETALL ); }
+			if (ImGui::MenuItem("Select T_ouching"      )) { execID(ID_SELECTION_SELECTTOUCHING     ); }
+			if (ImGui::MenuItem("Select _Partial Tall"  )) { execID(ID_SELECTION_SELECTPARTIALTALL  ); }
+			if (ImGui::MenuItem("Select _Inside"        )) { execID(ID_SELECTION_SELECTINSIDE       ); }
+			if (ImGui::MenuItem("Select Func _Group"    )) { execID(ID_SELECT_FUNC_GROUP            ); }
+			if (ImGui::MenuItem("Nudge Left"            )) { execID(ID_SELECTION_SELECT_NUDGELEFT   ); }
+			if (ImGui::MenuItem("Nudge Right"           )) { execID(ID_SELECTION_SELECT_NUDGERIGHT  ); }
+			if (ImGui::MenuItem("Nudge Up"              )) { execID(ID_SELECTION_SELECT_NUDGEUP     ); }
+			if (ImGui::MenuItem("Nudge Down"            )) { execID(ID_SELECTION_SELECT_NUDGEDOWN   ); }
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Clipper")) {
+			if (ImGui::MenuItem("Toggle Clipper"        )) { execID(ID_VIEW_CLIPPER   ); }
+			if (ImGui::MenuItem("Clip selection"        )) { execID(ID_CLIP_SELECTED  ); }
+			if (ImGui::MenuItem("Split selection"       )) { execID(ID_SPLIT_SELECTED ); }
+			if (ImGui::MenuItem("Flip Clip orientation" )) { execID(ID_FLIP_CLIP      ); }
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::MenuItem("Scale..."         )) { execID(ID_SELECT_SCALE              ); }
+		if (ImGui::MenuItem("Drag _Edges"      )) { execID(ID_SELECTION_DRAGEDGES       ); }
+		if (ImGui::MenuItem("Drag _Vertices"   )) { execID(ID_SELECTION_DRAGVERTECIES   ); }
+		if (ImGui::MenuItem("_Clone"           )) { execID(ID_SELECTION_CLONE           ); }
+		if (ImGui::MenuItem("Deselect"         )) { execID(ID_SELECTION_DESELECT        ); }
+		if (ImGui::MenuItem("Invert"           )) { execID(ID_SELECTION_INVERT          ); }
+		if (ImGui::MenuItem("_Delete"          )) { execID(ID_SELECTION_DELETE          ); }
+		if (ImGui::MenuItem("Flip _X"          )) { execID(ID_BRUSH_FLIPX               ); }
+		if (ImGui::MenuItem("Flip _Y"          )) { execID(ID_BRUSH_FLIPY               ); }
+		if (ImGui::MenuItem("Flip _Z"          )) { execID(ID_BRUSH_FLIPZ               ); }
+		if (ImGui::MenuItem("Connect entities" )) { execID(ID_SELECTION_CONNECT         ); }
+		if (ImGui::MenuItem("Ungroup entity"   )) { execID(ID_SELECTION_UNGROUPENTITY   ); }
+		if (ImGui::MenuItem("Make detail"      )) { execID(ID_SELECTION_MAKE_DETAIL     ); }
+		if (ImGui::MenuItem("Make structural"  )) { execID(ID_SELECTION_MAKE_STRUCTURAL ); }
+		ImGui::EndMenu();
+	}
+
+
+	if (ImGui::BeginMenu("BSP")) {
+		if (ImGui::MenuItem("X"              )) { /*execID(ID_BRUSH_ROTATEX               );*/ }
+		if (ImGui::MenuItem("Y"              )) { /*execID(ID_BRUSH_ROTATEY               );*/ }
+		if (ImGui::MenuItem("Z"              )) { /*execID(ID_BRUSH_ROTATEZ               );*/ }
+		ImGui::EndMenu();
+	}
 }
 
 void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
@@ -1031,57 +1096,6 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	gtk_box_pack_start( GTK_BOX( vbox ), menu_bar, FALSE, FALSE, 0 );
 	gtk_widget_show( menu_bar );
 
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Selection" ) );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Rotate" ) );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Rotate X"              ), ID_BRUSH_ROTATEX               );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Rotate Y"              ), ID_BRUSH_ROTATEY               );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Rotate Z"              ), ID_BRUSH_ROTATEZ               );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Arbitrary rotation..." ), ID_SELECTION_ARBITRARYROTATION );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "CSG" ) );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Make _Hollow Overlap" ), ID_SELECTION_MAKEHOLLOW       );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Make _Hollow Touch"   ), ID_SELECTION_MAKEHOLLOW_TOUCH );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "CSG _Subtract"        ), ID_SELECTION_CSGSUBTRACT      );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "CSG _Merge"           ), ID_SELECTION_CSGMERGE         );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Select" ) );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Select Complete _Tall" ), ID_SELECTION_SELECTCOMPLETETALL );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Select T_ouching"      ), ID_SELECTION_SELECTTOUCHING     );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Select _Partial Tall"  ), ID_SELECTION_SELECTPARTIALTALL  );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Select _Inside"        ), ID_SELECTION_SELECTINSIDE       );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Select Func _Group"    ), ID_SELECT_FUNC_GROUP            );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Left"            ), ID_SELECTION_SELECT_NUDGELEFT   );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Right"           ), ID_SELECTION_SELECT_NUDGERIGHT  );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Up"              ), ID_SELECTION_SELECT_NUDGEUP     );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Nudge Down"            ), ID_SELECTION_SELECT_NUDGEDOWN   );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Clipper" ) );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Toggle Clipper"        ), ID_VIEW_CLIPPER   );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Clip selection"        ), ID_CLIP_SELECTED  );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Split selection"       ), ID_SPLIT_SELECTED );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Flip Clip orientation" ), ID_FLIP_CLIP      );
-
-	item = create_menu_item_with_mnemonic( menu, _( "Scale..."         ), ID_SELECT_SCALE              );
-	item = create_menu_item_with_mnemonic( menu, _( "Drag _Edges"      ), ID_SELECTION_DRAGEDGES       );
-	item = create_menu_item_with_mnemonic( menu, _( "Drag _Vertices"   ), ID_SELECTION_DRAGVERTECIES   );
-	item = create_menu_item_with_mnemonic( menu, _( "_Clone"           ), ID_SELECTION_CLONE           );
-	item = create_menu_item_with_mnemonic( menu, _( "Deselect"         ), ID_SELECTION_DESELECT        );
-	item = create_menu_item_with_mnemonic( menu, _( "Invert"           ), ID_SELECTION_INVERT          );
-	item = create_menu_item_with_mnemonic( menu, _( "_Delete"          ), ID_SELECTION_DELETE          );
-	item = create_menu_item_with_mnemonic( menu, _( "Flip _X"          ), ID_BRUSH_FLIPX               );
-	item = create_menu_item_with_mnemonic( menu, _( "Flip _Y"          ), ID_BRUSH_FLIPY               );
-	item = create_menu_item_with_mnemonic( menu, _( "Flip _Z"          ), ID_BRUSH_FLIPZ               );
-	item = create_menu_item_with_mnemonic( menu, _( "Connect entities" ), ID_SELECTION_CONNECT         );
-	item = create_menu_item_with_mnemonic( menu, _( "Ungroup entity"   ), ID_SELECTION_UNGROUPENTITY   );
-	item = create_menu_item_with_mnemonic( menu, _( "Make detail"      ), ID_SELECTION_MAKE_DETAIL     );
-	item = create_menu_item_with_mnemonic( menu, _( "Make structural"  ), ID_SELECTION_MAKE_STRUCTURAL );
-
-	// BSP menu
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Bsp" ) );
-
-	menu_separator( menu );
-	g_object_set_data( G_OBJECT( window ), "menu_bsp", menu );
 
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Grid" ) );
 
