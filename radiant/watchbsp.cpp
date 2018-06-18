@@ -336,6 +336,7 @@ void CWatchBSP::RunQuake() {
 }
 
 void CWatchBSP::Reset(){
+#if 0
 	if ( m_pInSocket ) {
 		Net_Disconnect( m_pInSocket );
 		m_pInSocket = NULL;
@@ -354,6 +355,7 @@ void CWatchBSP::Reset(){
 	}
 
 	m_eState = EIdle;
+#endif
 }
 
 bool CWatchBSP::SetupListening(){
@@ -378,7 +380,7 @@ bool CWatchBSP::SetupListening(){
 }
 
 void CWatchBSP::DoEBeginStep() {
-
+#if 0
 	if ( !SetupListening() ) {
 		CString msg;
 		msg = _( "Failed to get a listening socket on port 39000.\nTry running with BSP monitoring disabled if you can't fix this.\n" );
@@ -414,9 +416,11 @@ void CWatchBSP::DoEBeginStep() {
 	}
 
 	m_eState = EBeginStep;
+#endif
 }
 
 void CWatchBSP::RoutineProcessing(){
+#if 0
 	// used for select()
 #ifdef _WIN32
 	TIMEVAL tout = { 0, 0 };
@@ -541,9 +545,11 @@ void CWatchBSP::RoutineProcessing(){
 	default:
 		break;
 	}
+#endif
 }
 
 void CWatchBSP::DoMonitoringLoop( GPtrArray *pCmd, char *sBSPName ){
+#if 0
 	guint i;
 
 	if ( m_eState != EIdle ) {
@@ -582,6 +588,7 @@ void CWatchBSP::DoMonitoringLoop( GPtrArray *pCmd, char *sBSPName ){
 	m_sBSPName = g_strdup(sBSPName);
 
 	DoEBeginStep();
+#endif
 }
 
 void CWatchBSP::ExternalListen(){
