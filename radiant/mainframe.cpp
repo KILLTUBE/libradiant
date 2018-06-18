@@ -1081,6 +1081,63 @@ void radiant_menu() {
 		if (ImGui::MenuItem("Z"              )) { /*execID(ID_BRUSH_ROTATEZ               );*/ }
 		ImGui::EndMenu();
 	}
+
+
+
+	if (ImGui::BeginMenu("_Grid")) {
+		if (ImGui::MenuItem("Grid0.25"    )) { execID(ID_GRID_025  ); }
+		if (ImGui::MenuItem("Grid0.5"     )) { execID(ID_GRID_05   ); }
+		if (ImGui::MenuItem("Grid1"       )) { execID(ID_GRID_1    ); }
+		if (ImGui::MenuItem("Grid2"       )) { execID(ID_GRID_2    ); }
+		if (ImGui::MenuItem("Grid4"       )) { execID(ID_GRID_4    ); }
+		if (ImGui::MenuItem("Grid8"       )) { execID(ID_GRID_8    ); }
+		if (ImGui::MenuItem("Grid16"      )) { execID(ID_GRID_16   ); }
+		if (ImGui::MenuItem("Grid32"      )) { execID(ID_GRID_32   ); }
+		if (ImGui::MenuItem("Grid64"      )) { execID(ID_GRID_64   ); }
+		if (ImGui::MenuItem("Grid128"     )) { execID(ID_GRID_128  ); }
+		if (ImGui::MenuItem("Grid256"     )) { execID(ID_GRID_256  ); }
+		if (ImGui::MenuItem("Snap to grid")) { execID(ID_SNAPTOGRID); }
+		ImGui::EndMenu();
+	}
+
+
+	if (ImGui::BeginMenu("_Textures")) {
+
+		if (ImGui::BeginMenu("Render Quality")) {
+			if (ImGui::MenuItem("_Wireframe"       )) { execID(ID_TEXTURES_WIREFRAME ); }
+			if (ImGui::MenuItem("_Flat shade"      )) { execID(ID_TEXTURES_FLATSHADE ); }
+			if (ImGui::MenuItem("_Nearest"         )) { execID(ID_VIEW_NEAREST       ); }
+			if (ImGui::MenuItem("Nearest _Mipmap"  )) { execID(ID_VIEW_NEARESTMIPMAP ); }
+			if (ImGui::MenuItem("_Linear"          )) { execID(ID_VIEW_LINEAR        ); }
+			if (ImGui::MenuItem("_Bilinear"        )) { execID(ID_VIEW_BILINEAR      ); }
+			if (ImGui::MenuItem("B_ilinear Mipmap" )) { execID(ID_VIEW_BILINEARMIPMAP); }
+			if (ImGui::MenuItem("T_rilinear"       )) { execID(ID_VIEW_TRILINEAR     ); }
+			ImGui::EndMenu();
+		}
+	
+		if (ImGui::BeginMenu("Texture Lock")) {
+			if (ImGui::MenuItem("Moves"     )) { execID(ID_TOGGLE_LOCK      ); }
+			if (ImGui::MenuItem("Rotations" )) { execID(ID_TOGGLE_ROTATELOCK); }
+			ImGui::EndMenu();
+		}
+	
+		if (ImGui::BeginMenu("Texture Directories")) {
+			// todo: fill dynamically
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::MenuItem("Show In _Use"           )) { execID(ID_TEXTURES_SHOWINUSE      ); } // todo: checkbox
+		if (ImGui::MenuItem("Show _All"              )) { execID(ID_TEXTURES_SHOWALL        ); } // todo: checkbox
+		if (ImGui::MenuItem("Show shaders"           )) { execID(ID_TEXTURES_SHADERS_SHOW   ); } // todo: checkbox
+		if (ImGui::MenuItem("Flush & Reload Shaders" )) { execID(ID_TEXTURES_RELOADSHADERS  ); }
+		if (ImGui::MenuItem("Load directory..."      )) { execID(ID_TEXTURES_LOAD           ); }
+		if (ImGui::MenuItem("Directory list..."      )) { execID(ID_TEXTURES_LOADLIST       ); }
+		if (ImGui::MenuItem("_Surface Inspector"     )) { execID(ID_TEXTURES_INSPECTOR      ); }
+		if (ImGui::MenuItem("Find / Replace..."      )) { execID(ID_TEXTURE_REPLACEALL      ); }
+		if (ImGui::MenuItem("shaderlist.txt only"    )) { execID(ID_TEXTURES_SHADERLISTONLY ); }
+
+		ImGui::EndMenu();
+	}
 }
 
 void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
@@ -1096,51 +1153,7 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	gtk_box_pack_start( GTK_BOX( vbox ), menu_bar, FALSE, FALSE, 0 );
 	gtk_widget_show( menu_bar );
 
-
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Grid" ) );
-
-	item = create_radio_menu_item_with_mnemonic( menu, NULL, _( "Grid0.25" ), ID_GRID_025  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_025"  , item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid0.5"  ), ID_GRID_05   , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_05"   , item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid1"    ), ID_GRID_1    , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_1"    , item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid2"    ), ID_GRID_2    , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_2"    , item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid4"    ), ID_GRID_4    , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_4"    , item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid8"    ), ID_GRID_8    , TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_grid_8"    , item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid16"   ), ID_GRID_16   , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_16"   , item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid32"   ), ID_GRID_32   , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_32"   , item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid64"   ), ID_GRID_64   , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_64"   , item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid128"  ), ID_GRID_128  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_128"  , item );
-	item = create_radio_menu_item_with_mnemonic( menu, item, _( "Grid256"  ), ID_GRID_256  , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_grid_256"  , item );
-	item = create_check_menu_item_with_mnemonic( menu, _( "Snap to grid"   ), G_CALLBACK( HandleCommand ), ID_SNAPTOGRID, TRUE  ); g_object_set_data( G_OBJECT( window ), "menu_snaptogrid", item );
-
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Textures" ) );
-
-	item = create_check_menu_item_with_mnemonic( menu, _( "Show In _Use"            ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHOWINUSE, FALSE    ); g_object_set_data( G_OBJECT( window ), "menu_textures_showinuse"    , item );
-	item = create_check_menu_item_with_mnemonic( menu, _( "Show _All"               ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHOWALL, FALSE      ); g_object_set_data( G_OBJECT( window ), "menu_textures_showall"      , item );
-	item = create_check_menu_item_with_mnemonic( menu, _( "Show shaders"            ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHADERS_SHOW, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_shaders_show" , item );
-	item = create_menu_item_with_mnemonic(       menu, _( "Flush & Reload Shaders"  ),                              ID_TEXTURES_RELOADSHADERS       ); g_object_set_data( G_OBJECT( window ), "menu_textures_reloadshaders", item );
-	item = create_menu_item_with_mnemonic(       menu, _( "Load directory..."       ),                              ID_TEXTURES_LOAD                ); g_object_set_data( G_OBJECT( window ), "menu_textures_load"         , item );
-	item = create_menu_item_with_mnemonic(       menu, _( "Directory list..."       ),                              ID_TEXTURES_LOADLIST            );
 	
-	item = create_menu_item_with_mnemonic( menu, _( "_Surface Inspector" ), ID_TEXTURES_INSPECTOR );
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu,          _( "Render Quality" ) );                                  g_object_set_data( G_OBJECT( window ), "render_quality_menu"     , menu_in_menu );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, NULL, _( "_Wireframe"       ), ID_TEXTURES_WIREFRAME , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_wireframe" , item         );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Flat shade"      ), ID_TEXTURES_FLATSHADE , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_flatshade" , item         );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Nearest"         ), ID_VIEW_NEAREST       , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_nearest"       , item         );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "Nearest _Mipmap"  ), ID_VIEW_NEARESTMIPMAP , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_nearestmipmap" , item         );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Linear"          ), ID_VIEW_LINEAR        , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_linear"        , item         );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "_Bilinear"        ), ID_VIEW_BILINEAR      , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_bilinear"      , item         );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "B_ilinear Mipmap" ), ID_VIEW_BILINEARMIPMAP, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_bilinearmipmap", item         );
-	item = create_radio_menu_item_with_mnemonic( menu_in_menu, item, _( "T_rilinear"       ), ID_VIEW_TRILINEAR     , FALSE ); g_object_set_data( G_OBJECT( window ), "menu_view_trilinear"     , item         );
-	create_menu_item_with_mnemonic( menu, _( "Find / Replace..." ), ID_TEXTURE_REPLACEALL );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Texture Lock" ) );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Moves"     ), G_CALLBACK( HandleCommand ), ID_TOGGLE_LOCK      , TRUE ); g_object_set_data( G_OBJECT( window ), "menu_toggle_lock"      , item );
-	item = create_check_menu_item_with_mnemonic( menu_in_menu, _( "Rotations" ), G_CALLBACK( HandleCommand ), ID_TOGGLE_ROTATELOCK, TRUE ); g_object_set_data( G_OBJECT( window ), "menu_toggle_rotatelock", item );
-	item = create_check_menu_item_with_mnemonic( menu, _( "shaderlist.txt only" ), G_CALLBACK( HandleCommand ), ID_TEXTURES_SHADERLISTONLY, FALSE ); g_object_set_data( G_OBJECT( window ), "menu_textures_shaderlistonly", item );
-	
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Texture Directories" ) );
-	g_object_set_data( G_OBJECT( window ), "menu_texture_dirs", menu_in_menu );
-
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Misc" ) );
 
 	create_menu_item_with_mnemonic( menu, _( "_Benchmark" ), ID_MISC_BENCHMARK );
