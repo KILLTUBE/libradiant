@@ -1249,6 +1249,19 @@ void radiant_menu() {
 		if (ImGui::MenuItem("Thicken..."        )) { execID(ID_CURVE_THICKEN       ); }
 		ImGui::EndMenu();
 	}
+	
+	if (ImGui::BeginMenu("_Plugins")) {
+		// todo... iterate each plugin and its menus... but tbh i rather get rid of synapse plugin system alltogether
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu("_Help")) {
+		if (ImGui::MenuItem("Help"              )) { execID(ID_HELP             ); }
+		if (ImGui::MenuItem("Report a Bug"      )) { execID(ID_HELP_BUGREPORT   ); }
+		if (ImGui::MenuItem("View Shortcuts"    )) { execID(ID_HELP_COMMANDLIST ); }
+		if (ImGui::MenuItem("_About libradiant" )) { execID(ID_HELP_ABOUT       ); }
+		ImGui::EndMenu();
+	}
 }
 
 void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
@@ -1264,9 +1277,6 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	gtk_box_pack_start( GTK_BOX( vbox ), menu_bar, FALSE, FALSE, 0 );
 	gtk_widget_show( menu_bar );
 
-	
-
-
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Plugins" ) );
 
 	/*
@@ -1276,81 +1286,6 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	item = menu_separator( menu );
 	g_object_set_data( G_OBJECT( window ), "menu_plugin_separator", item );
 	g_object_set_data( G_OBJECT( window ), "menu_plugin"          , menu );
-
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Help" ) );
-
-
-	item = create_menu_item_with_mnemonic( menu, _( "Help" ), ID_HELP );
-	// does not work, using g_Commands for the key binding
-	//gtk_widget_add_accelerator( item, "activate", accel, GDK_F1, (GdkModifierType)0, GTK_ACCEL_VISIBLE );
-
-	// TTimo: this is in global.xlink now
-	//create_menu_item_with_mnemonic (menu, "Links", G_CALLBACK (HandleCommand), ID_HELP_LINKS);
-	create_menu_item_with_mnemonic( menu, _( "Report a Bug"      ), ID_HELP_BUGREPORT   );
-	create_menu_item_with_mnemonic( menu, _( "View Shortcuts"    ), ID_HELP_COMMANDLIST );
-	create_menu_item_with_mnemonic( menu, _( "_About libradiant" ), ID_HELP_ABOUT       );
-
-
-	// leo: Hidden menu to make the accelerators work,
-	// this is a hack that needs to be changed later if someone has a better idea.
-	// NOTE TTimo
-	// maybe the better idea would be NOT to use any such accelerator scheme and do all key listening and interpret ourselves
-	menu = create_sub_menu_with_mnemonic( menu_bar, "Hidden" );
-
-
-	gtk_widget_hide( gtk_menu_get_attach_widget( GTK_MENU( menu ) ) );
-
-	create_menu_item_with_mnemonic( menu, "BendMode"              , ID_PATCH_BEND );
-	create_menu_item_with_mnemonic( menu, "FitTexture"            , IDC_BTN_FACEFIT );
-	create_menu_item_with_mnemonic( menu, "ViewTextures"          , ID_VIEW_TEXTURE );
-	create_menu_item_with_mnemonic( menu, "InvertCurveTextureX"   , ID_CURVE_NEGATIVETEXTUREY );
-	create_menu_item_with_mnemonic( menu, "InvertCurveTextureY"   , ID_CURVE_NEGATIVETEXTUREX );
-	create_menu_item_with_mnemonic( menu, "IncPatchColumn"        , ID_CURVE_INSERTCOLUMN );
-	create_menu_item_with_mnemonic( menu, "IncPatchRow"           , ID_CURVE_INSERTROW );
-	create_menu_item_with_mnemonic( menu, "DecPatchColumn"        , ID_CURVE_DELETECOLUMN );
-	create_menu_item_with_mnemonic( menu, "DecPatchRow"           , ID_CURVE_DELETEROW );
-	create_menu_item_with_mnemonic( menu, "Patch TAB"             , ID_PATCH_TAB );
-	create_menu_item_with_mnemonic( menu, "Patch TAB"             , ID_PATCH_TAB );
-	create_menu_item_with_mnemonic( menu, "SelectNudgeDown"       , ID_SELECTION_SELECT_NUDGEDOWN );
-	create_menu_item_with_mnemonic( menu, "CameraForward"         , ID_CAMERA_FORWARD );
-	create_menu_item_with_mnemonic( menu, "CameraBack"            , ID_CAMERA_BACK );
-	create_menu_item_with_mnemonic( menu, "CameraLeft"            , ID_CAMERA_LEFT );
-	create_menu_item_with_mnemonic( menu, "CameraRight"           , ID_CAMERA_RIGHT );
-	create_menu_item_with_mnemonic( menu, "CameraUp"              , ID_CAMERA_UP );
-	create_menu_item_with_mnemonic( menu, "CameraDown"            , ID_CAMERA_DOWN );
-	create_menu_item_with_mnemonic( menu, "CameraAngleUp"         , ID_CAMERA_ANGLEUP );
-	create_menu_item_with_mnemonic( menu, "CameraAngleDown"       , ID_CAMERA_ANGLEDOWN );
-	create_menu_item_with_mnemonic( menu, "CameraStrafeRight"     , ID_CAMERA_STRAFERIGHT );
-	create_menu_item_with_mnemonic( menu, "CameraStrafeLeft"      , ID_CAMERA_STRAFELEFT );
-	create_menu_item_with_mnemonic( menu, "ToggleGrid"            , ID_GRID_TOGGLE );
-	create_menu_item_with_mnemonic( menu, "ToggleCrosshairs"      , ID_VIEW_CROSSHAIR );
-	create_menu_item_with_mnemonic( menu, "ToggleRealtime"        , ID_VIEW_CAMERAUPDATE );
-	create_menu_item_with_mnemonic( menu, "MouseRotate"           , ID_SELECT_MOUSEROTATE );
-	create_menu_item_with_mnemonic( menu, "TexRotateClock"        , ID_SELECTION_TEXTURE_ROTATECLOCK );
-	create_menu_item_with_mnemonic( menu, "TexRotateCounter"      , ID_SELECTION_TEXTURE_ROTATECOUNTER );
-	create_menu_item_with_mnemonic( menu, "TexScaleUp"            , ID_SELECTION_TEXTURE_SCALEUP );
-	create_menu_item_with_mnemonic( menu, "TexScaleDown"          , ID_SELECTION_TEXTURE_SCALEDOWN );
-	create_menu_item_with_mnemonic( menu, "TexShiftLeft"          , ID_SELECTION_TEXTURE_SHIFTLEFT );
-	create_menu_item_with_mnemonic( menu, "TexShiftRight"         , ID_SELECTION_TEXTURE_SHIFTRIGHT );
-	create_menu_item_with_mnemonic( menu, "TexShiftUp"            , ID_SELECTION_TEXTURE_SHIFTUP );
-	create_menu_item_with_mnemonic( menu, "TexShiftDown"          , ID_SELECTION_TEXTURE_SHIFTDOWN );
-	create_menu_item_with_mnemonic( menu, "GridDown"              , ID_GRID_PREV );
-	create_menu_item_with_mnemonic( menu, "GridUp"                , ID_GRID_NEXT );
-	create_menu_item_with_mnemonic( menu, "TexScaleLeft"          , ID_SELECTION_TEXTURE_SCALELEFT );
-	create_menu_item_with_mnemonic( menu, "TexScaleRight"         , ID_SELECTION_TEXTURE_SCALERIGHT );
-	create_menu_item_with_mnemonic( menu, "MoveSelectionDOWN"     , ID_SELECTION_MOVEDOWN );
-	create_menu_item_with_mnemonic( menu, "MoveSelectionUP"       , ID_SELECTION_MOVEUP );
-	create_menu_item_with_mnemonic( menu, "DumpSelectedBrush"     , ID_SELECTION_PRINT );
-	create_menu_item_with_mnemonic( menu, "ToggleSizePaint"       , ID_SELECTION_TOGGLESIZEPAINT );
-	create_menu_item_with_mnemonic( menu, "SelectNudgeLeft"       , ID_SELECTION_SELECT_NUDGELEFT );
-	create_menu_item_with_mnemonic( menu, "SelectNudgeRight"      , ID_SELECTION_SELECT_NUDGERIGHT );
-	create_menu_item_with_mnemonic( menu, "SelectNudgeUp"         , ID_SELECTION_SELECT_NUDGEUP );
-	create_menu_item_with_mnemonic( menu, "NaturalizePatch"       , ID_PATCH_NATURALIZE );
-	create_menu_item_with_mnemonic( menu, "SnapPatchToGrid"       , ID_SELECT_SNAPTOGRID );
-	create_menu_item_with_mnemonic( menu, "SelectAllOfType"       , ID_SELECT_ALL );
-	create_menu_item_with_mnemonic( menu, "CycleOutlineStyle"     , ID_SELECTION_OUTLINESTYLE );
-	create_menu_item_with_mnemonic( menu, "TextureWindowScaleup"  , ID_TEXTUREWINDOW_SCALEUP );
-	create_menu_item_with_mnemonic( menu, "TextureWindowScaledown", ID_TEXTUREWINDOW_SCALEDOWN );
 
 	g_bIgnoreCommands--;
 }
