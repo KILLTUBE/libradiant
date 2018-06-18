@@ -892,6 +892,9 @@ void execID(int id) {
 
 char* MRU_GetText( int index );
 
+
+extern CRadiantPluginManager g_PluginsManager;
+
 void radiant_menu() {
 	if (ImGui::BeginMenu("_File")) {
 		if (ImGui::MenuItem("_New Map"            )) { execID(ID_FILE_NEW               ); }
@@ -1251,7 +1254,9 @@ void radiant_menu() {
 	}
 	
 	if (ImGui::BeginMenu("_Plugins")) {
+		g_PluginsManager.PopulateMenu();
 		// todo... iterate each plugin and its menus... but tbh i rather get rid of synapse plugin system alltogether
+
 		ImGui::EndMenu();
 	}
 
@@ -1264,31 +1269,7 @@ void radiant_menu() {
 	}
 }
 
-void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
-	GtkWidget *menu_bar, *menu, *menu_in_menu, *menu_3, *item;
-	GtkAccelGroup *accel;
-
-	g_bIgnoreCommands++;
-	accel = gtk_accel_group_new();
-	global_accel = accel;
-	gtk_window_add_accel_group( GTK_WINDOW( window ), accel );
-
-	menu_bar = gtk_menu_bar_new();
-	gtk_box_pack_start( GTK_BOX( vbox ), menu_bar, FALSE, FALSE, 0 );
-	gtk_widget_show( menu_bar );
-
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Plugins" ) );
-
-	/*
-	   create_menu_item_with_mnemonic (menu, "Refresh", G_CALLBACK (HandleCommand), ID_PLUGINS_REFRESH);
-	 */
-	// NOTE: the seperator is used when doing a refresh of the list, everything past the seperator is removed
-	item = menu_separator( menu );
-	g_object_set_data( G_OBJECT( window ), "menu_plugin_separator", item );
-	g_object_set_data( G_OBJECT( window ), "menu_plugin"          , menu );
-
-	g_bIgnoreCommands--;
-}
+void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ) {}
 
 void toolbar_append_item( GtkToolbar *toolbar, const gchar *tooltip_text, const char *icon, int id, GtkWidget *window, const char *keyInWindow ) {
 	GtkToolItem *item = gtk_tool_button_new( new_image_icon(icon), "" );
@@ -1613,7 +1594,7 @@ void MainFrame::Create(){
 	g_pParentWnd->OnEntitiesSetViewAs( 0 );
 
 	LoadCommandMap();
-	ShowMenuItemKeyBindings( window );
+	//ShowMenuItemKeyBindings( window );
 
 	if ( g_qeglobals_gui.d_edit != NULL ) {
 		console_construct( g_qeglobals_gui.d_edit );
@@ -2448,61 +2429,8 @@ void MainFrame::DoWatchBSP(){
 	}
 }
 
-void MainFrame::CleanPlugInMenu(){
-	GtkWidget *menu, *sep;
-	GList *children, *seplst, *lst;
-
-	// delete everything after the separator
-	menu = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_plugin" ) );
-	sep = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_plugin_separator" ) );
-	m_nNextPlugInID = ID_PLUGIN_START;
-
-	children = gtk_container_get_children( GTK_CONTAINER( menu ) );
-	if( children ) {
-		seplst = g_list_find( children, sep );
-		if( seplst ) {
-			for ( lst = g_list_next( seplst ); lst != NULL; lst = g_list_next( lst ) )
-			{
-				gtk_container_remove( GTK_CONTAINER( menu ), GTK_WIDGET( lst->data ) );
-			}
-		}
-		g_list_free( children );
-	}
-}
-
-void MainFrame::AddPlugInMenuItem( IPlugIn* pPlugIn ){
-	GtkWidget *menu, *item, *parent;
-	const char *menuText;
-
-	parent = gtk_menu_item_new_with_label( pPlugIn->getMenuName() );
-	gtk_widget_show( parent );
-	gtk_container_add( GTK_CONTAINER( g_object_get_data( G_OBJECT( m_pWidget ), "menu_plugin" ) ), parent );
-
-	int nCount = pPlugIn->getCommandCount();
-	if ( nCount > 0 ) {
-		menu = gtk_menu_new();
-		while ( nCount > 0 )
-		{
-			menuText = pPlugIn->getCommand( --nCount );
-			if ( menuText != NULL && strlen( menuText ) > 0 ) {
-				if ( !strcmp( menuText, "-" ) ) {
-					item = gtk_menu_item_new();
-					gtk_widget_set_sensitive( item, FALSE );
-				}
-				else
-				{
-					item = gtk_menu_item_new_with_label( menuText );
-					g_signal_connect( G_OBJECT( item ), "activate",
-										G_CALLBACK( HandleCommand ), GINT_TO_POINTER( m_nNextPlugInID ) );
-				}
-				gtk_widget_show( item );
-				gtk_container_add( GTK_CONTAINER( menu ), item );
-				pPlugIn->addMenuID( m_nNextPlugInID++ );
-			}
-		}
-		gtk_menu_item_set_submenu( GTK_MENU_ITEM( parent ), menu );
-	}
-}
+void MainFrame::CleanPlugInMenu() {}
+void MainFrame::AddPlugInMenuItem( IPlugIn* pPlugIn ) {}
 
 void MainFrame::OnPlugIn( unsigned int nID, const char* str ){
 	m_PlugInMgr.Dispatch( nID, str );

@@ -459,12 +459,36 @@ APIDescriptor_t* CRadiantPluginManager::BuildRequireAPI( APIDescriptor_t *pAPI )
 	mSlots.push_front( pSlot );
 	return pSlot->GetDescriptor();
 }
+#include "imgui/imgui.h"
 
 void CRadiantPluginManager::PopulateMenu(){
 	list<CPluginSlot *>::iterator iPlug;
-	for ( iPlug = mSlots.begin(); iPlug != mSlots.end(); iPlug++ )
-	{
-		g_pParentWnd->AddPlugInMenuItem( *iPlug );
+	for (CPluginSlot *plugin : mSlots) {
+		const char *menuname = plugin->getMenuName();
+		if (ImGui::BeginMenu(menuname)) {
+			
+			int nCount = plugin->getCommandCount();
+			if ( nCount > 0 ) {
+				while ( nCount > 0 ) {
+					const char *menuText = plugin->getCommand( --nCount );
+					if ( menuText != NULL && strlen( menuText ) > 0 ) {
+						if ( !strcmp( menuText, "-" ) ) {
+						}
+						else
+						{
+							
+							//g_signal_connect( G_OBJECT( item ), "activate", G_CALLBACK( HandleCommand ), GINT_TO_POINTER( m_nNextPlugInID ) );
+						}
+						
+						//plugin->addMenuID( m_nNextPlugInID++ );
+						
+					}
+					ImGui::Button(menuText);
+				}
+			}
+
+			ImGui::EndMenu();
+		}
 	}
 }
 
@@ -707,7 +731,6 @@ void CPlugInManager::Init(){
 	if ( !server.Resolve( client ) ) {
 		Error( "synapse initialization fail (see console) > if ( !g_pParentWnd->GetSynapseServer().Resolve( &g_pParentWnd->GetSynapseClient() ) ) { " );
 	}
-	g_PluginsManager.PopulateMenu();
 	g_ToolbarModuleManager.ConstructToolbar();
 	InitFileTypes();
 }
