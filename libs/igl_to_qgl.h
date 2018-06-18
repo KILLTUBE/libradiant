@@ -31,7 +31,7 @@
 #include <wtypes.h>
 #endif
 
-enum VIEWTYPE {YZ, XZ, XY};
+//enum VIEWTYPE {YZ, XZ, XY};
 
 #include "igl.h"
 

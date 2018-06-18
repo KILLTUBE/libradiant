@@ -88,28 +88,6 @@ struct _QEREntityTable
 	PFN_SETENTITYKEYVALLIST m_pfnSetEntityKeyValList;
 };
 
-#ifdef USE_ENTITYTABLE_DEFINE
-#ifndef __ENTITYTABLENAME
-#define __ENTITYTABLENAME g_EntityTable
-#endif
-#define Entity_Alloc __ENTITYTABLENAME.m_pfnEntity_Alloc
-#define Entity_Free __ENTITYTABLENAME.m_pfnEntity_Free
-#define Entity_Clone __ENTITYTABLENAME.m_pfnEntity_Clone
-#define SetKeyValue __ENTITYTABLENAME.m_pfnSetKeyValue
-#define DeleteKey __ENTITYTABLENAME.m_pfnDeleteKey
-#define ValueForKey __ENTITYTABLENAME.m_pfnValueForKey
-#define FloatForKey __ENTITYTABLENAME.m_pfnFloatForKey
-#define IntForKey __ENTITYTABLENAME.m_pfnIntForKey
-#define GetVectorForKey __ENTITYTABLENAME.m_pfnGetVectorForKey
-#define Entity_AddToList __ENTITYTABLENAME.m_pfnEntity_AddToList
-#define Entity_RemoveFromList __ENTITYTABLENAME.m_pfnEntity_RemoveFromList
-#define Entity_LinkBrush __ENTITYTABLENAME.m_pfnEntity_LinkBrush
-#define Entity_UnlinkBrush __ENTITYTABLENAME.m_pfnEntity_UnlinkBrush
-#define DrawLight __ENTITYTABLENAME.m_pfnDrawLight
-#define Entity_MemorySize __ENTITYTABLENAME.m_pfnEntity_MemorySize
-#define Entity_AllocateEpair __ENTITYTABLENAME.m_pfnAllocateEpair
-#define Entity_GetKeyValList __ENTITYTABLENAME.m_pfnGetEntityKeyValList
-#define Entity_SetKeyValList __ENTITYTABLENAME.m_pfnSetEntityKeyValList
-#endif
+#include "../plugins/entity/entity.h"
 
 #endif

@@ -22,6 +22,7 @@
 #include <stdlib.h>
 
 #include "entity_entitymodel.h"
+#include "../radiant/qgl.h"
 
 void Entity_UpdateClass( entity_t *e, const char* value ){
 	if ( strcmp( value, "misc_model" ) == 0
@@ -85,29 +86,29 @@ void pivot_draw( const vec3_t pivot ){
 	vec3_t vCenter, vMin, vMax;
 	VectorCopy( pivot, vCenter );
 
-	g_QglTable.m_pfn_qglPointSize( 4 );
+	qglPointSize( 4 );
 
-	g_QglTable.m_pfn_qglBegin( GL_POINTS );
-	g_QglTable.m_pfn_qglVertex3fv( vCenter );
-	g_QglTable.m_pfn_qglEnd();
+	qglBegin( GL_POINTS );
+	qglVertex3fv( vCenter );
+	qglEnd();
 
-	g_QglTable.m_pfn_qglBegin( GL_LINES );
+	qglBegin( GL_LINES );
 	vCenter[0] -= 8;
-	g_QglTable.m_pfn_qglVertex3fv( vCenter );
+	qglVertex3fv( vCenter );
 	vCenter[0] += 16;
-	g_QglTable.m_pfn_qglVertex3fv( vCenter );
+	qglVertex3fv( vCenter );
 	vCenter[0] -= 8;
 	vCenter[1] -= 8;
-	g_QglTable.m_pfn_qglVertex3fv( vCenter );
+	qglVertex3fv( vCenter );
 	vCenter[1] += 16;
-	g_QglTable.m_pfn_qglVertex3fv( vCenter );
+	qglVertex3fv( vCenter );
 	vCenter[1] -= 8;
 	vCenter[2] -= 8;
-	g_QglTable.m_pfn_qglVertex3fv( vCenter );
+	qglVertex3fv( vCenter );
 	vCenter[2] += 16;
-	g_QglTable.m_pfn_qglVertex3fv( vCenter );
+	qglVertex3fv( vCenter );
 	vCenter[2] -= 8;
-	g_QglTable.m_pfn_qglEnd();
+	qglEnd();
 
 	VectorCopy( vCenter, vMin );
 	VectorCopy( vCenter, vMax );
@@ -118,28 +119,28 @@ void pivot_draw( const vec3_t pivot ){
 	vMax[1] += 4;
 	vMax[2] += 4;
 
-	g_QglTable.m_pfn_qglBegin( GL_LINE_LOOP );
-	g_QglTable.m_pfn_qglVertex3f( vMin[0],vMin[1],vMin[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMax[0],vMin[1],vMin[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMax[0],vMax[1],vMin[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMin[0],vMax[1],vMin[2] );
-	g_QglTable.m_pfn_qglEnd();
+	qglBegin( GL_LINE_LOOP );
+	qglVertex3f( vMin[0],vMin[1],vMin[2] );
+	qglVertex3f( vMax[0],vMin[1],vMin[2] );
+	qglVertex3f( vMax[0],vMax[1],vMin[2] );
+	qglVertex3f( vMin[0],vMax[1],vMin[2] );
+	qglEnd();
 
-	g_QglTable.m_pfn_qglBegin( GL_LINE_LOOP );
-	g_QglTable.m_pfn_qglVertex3f( vMin[0],vMin[1],vMax[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMax[0],vMin[1],vMax[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMax[0],vMax[1],vMax[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMin[0],vMax[1],vMax[2] );
-	g_QglTable.m_pfn_qglEnd();
+	qglBegin( GL_LINE_LOOP );
+	qglVertex3f( vMin[0],vMin[1],vMax[2] );
+	qglVertex3f( vMax[0],vMin[1],vMax[2] );
+	qglVertex3f( vMax[0],vMax[1],vMax[2] );
+	qglVertex3f( vMin[0],vMax[1],vMax[2] );
+	qglEnd();
 
-	g_QglTable.m_pfn_qglBegin( GL_LINES );
-	g_QglTable.m_pfn_qglVertex3f( vMin[0],vMin[1],vMin[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMin[0],vMin[1],vMax[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMin[0],vMax[1],vMax[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMin[0],vMax[1],vMin[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMax[0],vMin[1],vMin[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMax[0],vMin[1],vMax[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMax[0],vMax[1],vMax[2] );
-	g_QglTable.m_pfn_qglVertex3f( vMax[0],vMax[1],vMin[2] );
-	g_QglTable.m_pfn_qglEnd();
+	qglBegin( GL_LINES );
+	qglVertex3f( vMin[0],vMin[1],vMin[2] );
+	qglVertex3f( vMin[0],vMin[1],vMax[2] );
+	qglVertex3f( vMin[0],vMax[1],vMax[2] );
+	qglVertex3f( vMin[0],vMax[1],vMin[2] );
+	qglVertex3f( vMax[0],vMin[1],vMin[2] );
+	qglVertex3f( vMax[0],vMin[1],vMax[2] );
+	qglVertex3f( vMax[0],vMax[1],vMax[2] );
+	qglVertex3f( vMax[0],vMax[1],vMin[2] );
+	qglEnd();
 }

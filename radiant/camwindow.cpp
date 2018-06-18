@@ -816,6 +816,8 @@ extern void Brush_DrawModel( brush_t *b, bool bTextured = false );
 extern void DrawModelOrigin( brush_t *b );
 extern void DrawModelBBox( brush_t *b );
 
+void DrawLight( entity_t* e, int nGLState, int pref, int nViewType );
+
 void CamWnd::Cam_DrawBrush( brush_t *b, int mode ){
 	int nGLState = m_Camera.draw_glstate;
 	int nModelMode = g_PrefsDlg.m_nEntityShowState;

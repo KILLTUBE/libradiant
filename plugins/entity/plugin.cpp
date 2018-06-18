@@ -27,7 +27,7 @@
 #include "entity.h"
 #include "entity_entitymodel.h"
 #include "light.h"
-
+#if 0
 // =============================================================================
 // Globals
 
@@ -115,3 +115,4 @@ bool CSynapseClientEntity::RequestAPI( APIDescriptor_t *pAPI ){
 const char* CSynapseClientEntity::GetInfo(){
 	return "Entity module built " __DATE__ " " RADIANT_VERSION;
 }
+#endif

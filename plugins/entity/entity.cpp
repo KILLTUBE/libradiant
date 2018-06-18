@@ -341,6 +341,8 @@ void Entity_SetKeyValList( entity_t *e, epair_t* ep ){
    \todo FIXME TTimo
    this is meant to raise messages instead of calling the IEdit directly
  */
+eclass_t *Eclass_ForName( const char *name, qboolean has_brushes );
+
 static void Entity_OnKeyValueChanged( entity_t *e, const char *key, const char* value ){
 	if ( strcmp( key,"classname" ) == 0 ) {
 		e->eclass = Eclass_ForName( value, false );

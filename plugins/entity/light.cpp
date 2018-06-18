@@ -22,6 +22,7 @@
 #include "plugin.h"
 #include "entity.h"
 #include "light.h"
+#include "../radiant/qgl.h"
 
 void DrawSphere( vec3_t center, float radius, int sides, int nGLState ){
 	int i, j;
@@ -34,7 +35,7 @@ void DrawSphere( vec3_t center, float radius, int sides, int nGLState ){
 		return;
 	}
 
-	g_QglTable.m_pfn_qglBegin( GL_TRIANGLES );
+	qglBegin( GL_TRIANGLES );
 	for ( i = 0; i <= sides - 1; i++ ) {
 		for ( j = 0; j <= sides - 2; j++ ) {
 			t = i * dt;
@@ -42,27 +43,27 @@ void DrawSphere( vec3_t center, float radius, int sides, int nGLState ){
 
 			VectorPolar( v, radius, t, p );
 			VectorAdd( v, center, v );
-			g_QglTable.m_pfn_qglVertex3fv( v );
+			qglVertex3fv( v );
 
 			VectorPolar( v, radius, t, p + dp );
 			VectorAdd( v, center, v );
-			g_QglTable.m_pfn_qglVertex3fv( v );
+			qglVertex3fv( v );
 
 			VectorPolar( v, radius, t + dt, p + dp );
 			VectorAdd( v, center, v );
-			g_QglTable.m_pfn_qglVertex3fv( v );
+			qglVertex3fv( v );
 
 			VectorPolar( v, radius, t, p );
 			VectorAdd( v, center, v );
-			g_QglTable.m_pfn_qglVertex3fv( v );
+			qglVertex3fv( v );
 
 			VectorPolar( v, radius, t + dt, p + dp );
 			VectorAdd( v, center, v );
-			g_QglTable.m_pfn_qglVertex3fv( v );
+			qglVertex3fv( v );
 
 			VectorPolar( v, radius, t + dt, p );
 			VectorAdd( v, center, v );
-			g_QglTable.m_pfn_qglVertex3fv( v );
+			qglVertex3fv( v );
 		}
 	}
 
@@ -72,17 +73,17 @@ void DrawSphere( vec3_t center, float radius, int sides, int nGLState ){
 
 		VectorPolar( v, radius, t, p );
 		VectorAdd( v, center, v );
-		g_QglTable.m_pfn_qglVertex3fv( v );
+		qglVertex3fv( v );
 
 		VectorPolar( v, radius, t + dt, p + dp );
 		VectorAdd( v, center, v );
-		g_QglTable.m_pfn_qglVertex3fv( v );
+		qglVertex3fv( v );
 
 		VectorPolar( v, radius, t + dt, p );
 		VectorAdd( v, center, v );
-		g_QglTable.m_pfn_qglVertex3fv( v );
+		qglVertex3fv( v );
 	}
-	g_QglTable.m_pfn_qglEnd();
+	qglEnd();
 }
 
 #define LIGHT_ATTEN_LINEAR  1
@@ -99,7 +100,7 @@ float CalculateEnvelopeForLight( entity_t * e, float fFalloffTolerance ){
 	float fFade = 1.f;
 	float fIntensity, fPhotons;
 	float fScale;
-	const char *gameFile = g_FuncTable.m_pfnGetGameFile();
+	const char *gameFile = QERApp_GetGameFile();
 
 	// These variables are tweakable on the q3map2 console, setting to q3map2
 	// default here as there is no way to find out what the user actually uses
@@ -196,7 +197,7 @@ float CalculateLightRadius( entity_t * e, bool outer ){
 	int iSpawnFlags = atoi( ValueForKey( e, "spawnflags" ) );
 	float fIntensity;
 	float fScale;
-	const char *gameFile = g_FuncTable.m_pfnGetGameFile();
+	const char *gameFile = QERApp_GetGameFile();
 
 	fIntensity = FloatForKey( e, "light" );
 	if ( fIntensity == 0.f ) {
@@ -275,17 +276,17 @@ static void DrawLightSphere( entity_t * e, int nGLState, int pref ){
 	//!\todo Write an API for modules to register preference settings, and make this preference module-specific.
 	// int nPasses = pref == 1 ? 3 : 2;
 
-	g_QglTable.m_pfn_qglPushAttrib( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
-	g_QglTable.m_pfn_qglDepthMask( GL_FALSE );
-	g_QglTable.m_pfn_qglEnable( GL_BLEND );
-	g_QglTable.m_pfn_qglBlendFunc( GL_ONE, GL_ONE );
+	qglPushAttrib( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
+	qglDepthMask( GL_FALSE );
+	qglEnable( GL_BLEND );
+	qglBlendFunc( GL_ONE, GL_ONE );
 
 	// Arnout: TODO: spotlight rendering
 	if ( !( bIsSpotLight ) ) {
 		switch ( pref )
 		{
 		case 1:
-			g_QglTable.m_pfn_qglColor3f( e->color[0] * .05f,
+			qglColor3f( e->color[0] * .05f,
 										 e->color[1] * .05f,
 										 e->color[2] * .05f );
 			DrawSphere( e->origin, e->fLightEnvelope1[0], 16, nGLState );
@@ -293,7 +294,7 @@ static void DrawLightSphere( entity_t * e, int nGLState, int pref ){
 			DrawSphere( e->origin, e->fLightEnvelope1[2], 16, nGLState );
 			break;
 		case 2:
-			g_QglTable.m_pfn_qglColor3f( e->color[0] * .15f * .95f,
+			qglColor3f( e->color[0] * .15f * .95f,
 										 e->color[1] * .15f * .95f,
 										 e->color[2] * .15f * .95f );
 			DrawSphere( e->origin, e->fLightEnvelope2[0], 16, nGLState );
@@ -303,7 +304,7 @@ static void DrawLightSphere( entity_t * e, int nGLState, int pref ){
 		}
 	}
 
-	g_QglTable.m_pfn_qglPopAttrib();
+	qglPopAttrib();
 }
 
 float F = 0.70710678f;
@@ -333,52 +334,52 @@ void DrawLight( entity_t* e, int nGLState, int pref, int nViewType ){
 	VectorSet( points[5], vMin[0], vMin[1], vMid[2] );
 
 	if ( nGLState & DRAW_GL_LIGHTING ) { // && g_PrefsDlg.m_bGLLighting)
-		g_QglTable.m_pfn_qglBegin( GL_TRIANGLES ); // NOTE: comment to use gl_triangle_fan instead
-		//g_QglTable.m_pfn_qglBegin(GL_TRIANGLE_FAN);
-		g_QglTable.m_pfn_qglVertex3fv( points[0] );
-		g_QglTable.m_pfn_qglVertex3fv( points[2] );
-		g_QglTable.m_pfn_qglNormal3fv( normals[0] );
-		g_QglTable.m_pfn_qglVertex3fv( points[3] );
+		qglBegin( GL_TRIANGLES ); // NOTE: comment to use gl_triangle_fan instead
+		//qglBegin(GL_TRIANGLE_FAN);
+		qglVertex3fv( points[0] );
+		qglVertex3fv( points[2] );
+		qglNormal3fv( normals[0] );
+		qglVertex3fv( points[3] );
 
-		g_QglTable.m_pfn_qglVertex3fv( points[0] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[3] ); //
-		g_QglTable.m_pfn_qglNormal3fv( normals[1] );
-		g_QglTable.m_pfn_qglVertex3fv( points[4] );
+		qglVertex3fv( points[0] ); //
+		qglVertex3fv( points[3] ); //
+		qglNormal3fv( normals[1] );
+		qglVertex3fv( points[4] );
 
-		g_QglTable.m_pfn_qglVertex3fv( points[0] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[4] ); //
-		g_QglTable.m_pfn_qglNormal3fv( normals[2] );
-		g_QglTable.m_pfn_qglVertex3fv( points[5] );
+		qglVertex3fv( points[0] ); //
+		qglVertex3fv( points[4] ); //
+		qglNormal3fv( normals[2] );
+		qglVertex3fv( points[5] );
 
-		g_QglTable.m_pfn_qglVertex3fv( points[0] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[5] ); //
-		g_QglTable.m_pfn_qglNormal3fv( normals[3] );
-		g_QglTable.m_pfn_qglVertex3fv( points[2] );
+		qglVertex3fv( points[0] ); //
+		qglVertex3fv( points[5] ); //
+		qglNormal3fv( normals[3] );
+		qglVertex3fv( points[2] );
 
-		//g_QglTable.m_pfn_qglEnd();
-		//g_QglTable.m_pfn_qglBegin(GL_TRIANGLE_FAN);
+		//qglEnd();
+		//qglBegin(GL_TRIANGLE_FAN);
 
-		g_QglTable.m_pfn_qglVertex3fv( points[1] );
-		g_QglTable.m_pfn_qglVertex3fv( points[2] );
-		g_QglTable.m_pfn_qglNormal3fv( normals[7] );
-		g_QglTable.m_pfn_qglVertex3fv( points[5] );
+		qglVertex3fv( points[1] );
+		qglVertex3fv( points[2] );
+		qglNormal3fv( normals[7] );
+		qglVertex3fv( points[5] );
 
-		g_QglTable.m_pfn_qglVertex3fv( points[1] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[5] ); //
-		g_QglTable.m_pfn_qglNormal3fv( normals[6] );
-		g_QglTable.m_pfn_qglVertex3fv( points[4] );
+		qglVertex3fv( points[1] ); //
+		qglVertex3fv( points[5] ); //
+		qglNormal3fv( normals[6] );
+		qglVertex3fv( points[4] );
 
-		g_QglTable.m_pfn_qglVertex3fv( points[1] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[4] ); //
-		g_QglTable.m_pfn_qglNormal3fv( normals[5] );
-		g_QglTable.m_pfn_qglVertex3fv( points[3] );
+		qglVertex3fv( points[1] ); //
+		qglVertex3fv( points[4] ); //
+		qglNormal3fv( normals[5] );
+		qglVertex3fv( points[3] );
 
-		g_QglTable.m_pfn_qglVertex3fv( points[1] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[3] ); //
-		g_QglTable.m_pfn_qglNormal3fv( normals[4] );
-		g_QglTable.m_pfn_qglVertex3fv( points[2] );
+		qglVertex3fv( points[1] ); //
+		qglVertex3fv( points[3] ); //
+		qglNormal3fv( normals[4] );
+		qglVertex3fv( points[2] );
 
-		g_QglTable.m_pfn_qglEnd();
+		qglEnd();
 	}
 	else if ( nGLState & DRAW_GL_FILL ) {
 		vec3_t colors[4];
@@ -386,57 +387,57 @@ void DrawLight( entity_t* e, int nGLState, int pref, int nViewType ){
 		VectorScale( colors[0], 0.95, colors[1] );
 		VectorScale( colors[1], 0.95, colors[2] );
 		VectorScale( colors[2], 0.95, colors[3] );
-		g_QglTable.m_pfn_qglBegin( GL_TRIANGLES ); // NOTE: comment to use gl_triangle_fan instead
-		//g_QglTable.m_pfn_qglBegin(GL_TRIANGLE_FAN);
-		g_QglTable.m_pfn_qglColor3fv( colors[0] );
-		g_QglTable.m_pfn_qglVertex3fv( points[0] );
-		g_QglTable.m_pfn_qglVertex3fv( points[2] );
-		g_QglTable.m_pfn_qglVertex3fv( points[3] );
+		qglBegin( GL_TRIANGLES ); // NOTE: comment to use gl_triangle_fan instead
+		//qglBegin(GL_TRIANGLE_FAN);
+		qglColor3fv( colors[0] );
+		qglVertex3fv( points[0] );
+		qglVertex3fv( points[2] );
+		qglVertex3fv( points[3] );
 
-		g_QglTable.m_pfn_qglColor3fv( colors[1] );
-		g_QglTable.m_pfn_qglVertex3fv( points[0] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[3] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[4] );
+		qglColor3fv( colors[1] );
+		qglVertex3fv( points[0] ); //
+		qglVertex3fv( points[3] ); //
+		qglVertex3fv( points[4] );
 
-		g_QglTable.m_pfn_qglColor3fv( colors[2] );
-		g_QglTable.m_pfn_qglVertex3fv( points[0] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[4] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[5] );
+		qglColor3fv( colors[2] );
+		qglVertex3fv( points[0] ); //
+		qglVertex3fv( points[4] ); //
+		qglVertex3fv( points[5] );
 
-		g_QglTable.m_pfn_qglColor3fv( colors[3] );
-		g_QglTable.m_pfn_qglVertex3fv( points[0] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[5] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[2] );
+		qglColor3fv( colors[3] );
+		qglVertex3fv( points[0] ); //
+		qglVertex3fv( points[5] ); //
+		qglVertex3fv( points[2] );
 
-		//g_QglTable.m_pfn_qglEnd();
-		//g_QglTable.m_pfn_qglBegin(GL_TRIANGLE_FAN);
+		//qglEnd();
+		//qglBegin(GL_TRIANGLE_FAN);
 
-		g_QglTable.m_pfn_qglColor3fv( colors[0] );
-		g_QglTable.m_pfn_qglVertex3fv( points[1] );
-		g_QglTable.m_pfn_qglVertex3fv( points[2] );
-		g_QglTable.m_pfn_qglVertex3fv( points[5] );
+		qglColor3fv( colors[0] );
+		qglVertex3fv( points[1] );
+		qglVertex3fv( points[2] );
+		qglVertex3fv( points[5] );
 
-		g_QglTable.m_pfn_qglColor3fv( colors[1] );
-		g_QglTable.m_pfn_qglVertex3fv( points[1] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[5] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[4] );
+		qglColor3fv( colors[1] );
+		qglVertex3fv( points[1] ); //
+		qglVertex3fv( points[5] ); //
+		qglVertex3fv( points[4] );
 
-		g_QglTable.m_pfn_qglColor3fv( colors[2] );
-		g_QglTable.m_pfn_qglVertex3fv( points[1] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[4] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[3] );
+		qglColor3fv( colors[2] );
+		qglVertex3fv( points[1] ); //
+		qglVertex3fv( points[4] ); //
+		qglVertex3fv( points[3] );
 
-		g_QglTable.m_pfn_qglColor3fv( colors[3] );
-		g_QglTable.m_pfn_qglVertex3fv( points[1] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[3] ); //
-		g_QglTable.m_pfn_qglVertex3fv( points[2] );
+		qglColor3fv( colors[3] );
+		qglVertex3fv( points[1] ); //
+		qglVertex3fv( points[3] ); //
+		qglVertex3fv( points[2] );
 
-		g_QglTable.m_pfn_qglEnd();
+		qglEnd();
 	}
 	else
 	{
-		g_QglTable.m_pfn_qglVertexPointer( 3, GL_FLOAT, 0, points );
-		g_QglTable.m_pfn_qglDrawElements( GL_TRIANGLES, 24, GL_UNSIGNED_SHORT, indices );
+		qglVertexPointer( 3, GL_FLOAT, 0, points );
+		qglDrawElements( GL_TRIANGLES, 24, GL_UNSIGNED_SHORT, indices );
 	}
 
 
@@ -448,29 +449,29 @@ void DrawLight( entity_t* e, int nGLState, int pref, int nViewType ){
 		GetVectorForKey( e, "light_up", vUp );
 		GetVectorForKey( e, "light_target", vTarget );
 
-		g_QglTable.m_pfn_qglColor3f( 0, 1, 0 );
-		g_QglTable.m_pfn_qglBegin( GL_LINE_LOOP );
+		qglColor3f( 0, 1, 0 );
+		qglBegin( GL_LINE_LOOP );
 		VectorAdd( vTarget, e->origin, vTemp );
 		VectorAdd( vTemp, vRight, vTemp );
 		VectorAdd( vTemp, vUp, vTemp );
-		g_QglTable.m_pfn_qglVertex3fv( e->origin );
-		g_QglTable.m_pfn_qglVertex3fv( vTemp );
+		qglVertex3fv( e->origin );
+		qglVertex3fv( vTemp );
 		VectorAdd( vTarget, e->origin, vTemp );
 		VectorAdd( vTemp, vUp, vTemp );
 		VectorSubtract( vTemp, vRight, vTemp );
-		g_QglTable.m_pfn_qglVertex3fv( e->origin );
-		g_QglTable.m_pfn_qglVertex3fv( vTemp );
+		qglVertex3fv( e->origin );
+		qglVertex3fv( vTemp );
 		VectorAdd( vTarget, e->origin, vTemp );
 		VectorAdd( vTemp, vRight, vTemp );
 		VectorSubtract( vTemp, vUp, vTemp );
-		g_QglTable.m_pfn_qglVertex3fv( e->origin );
-		g_QglTable.m_pfn_qglVertex3fv( vTemp );
+		qglVertex3fv( e->origin );
+		qglVertex3fv( vTemp );
 		VectorAdd( vTarget, e->origin, vTemp );
 		VectorSubtract( vTemp, vUp, vTemp );
 		VectorSubtract( vTemp, vRight, vTemp );
-		g_QglTable.m_pfn_qglVertex3fv( e->origin );
-		g_QglTable.m_pfn_qglVertex3fv( vTemp );
-		g_QglTable.m_pfn_qglEnd();
+		qglVertex3fv( e->origin );
+		qglVertex3fv( vTemp );
+		qglEnd();
 
 	}
 
@@ -499,16 +500,16 @@ void DrawLight( entity_t* e, int nGLState, int pref, int nViewType ){
 			   }
 			 */
 
-			g_QglTable.m_pfn_qglPushAttrib( GL_LINE_BIT );
-			g_QglTable.m_pfn_qglLineStipple( 8, 0xAAAA );
-			g_QglTable.m_pfn_qglEnable( GL_LINE_STIPPLE );
+			qglPushAttrib( GL_LINE_BIT );
+			qglLineStipple( 8, 0xAAAA );
+			qglEnable( GL_LINE_STIPPLE );
 
 			float* envelope = ( pref == 1 ) ? e->fLightEnvelope1 : e->fLightEnvelope2;
 			for ( int iPass = 0; iPass < nPasses; iPass++ )
 			{
 				float fRadius = envelope[iPass];
 
-				g_QglTable.m_pfn_qglBegin( GL_LINE_LOOP );
+				qglBegin( GL_LINE_LOOP );
 
 				if ( bIsSpotLight ) {
 					if ( bDrawSpotlightArc ) {
@@ -529,17 +530,17 @@ void DrawLight( entity_t* e, int nGLState, int pref, int nViewType ){
 							switch ( nViewType )
 							{
 							case 2:
-								g_QglTable.m_pfn_qglVertex3f( e->origin[0] + fRadius * dc,
+								qglVertex3f( e->origin[0] + fRadius * dc,
 															  e->origin[1] + fRadius * ds,
 															  e->origin[2] );
 								break;
 							case 1:
-								g_QglTable.m_pfn_qglVertex3f( e->origin[0] + fRadius * dc,
+								qglVertex3f( e->origin[0] + fRadius * dc,
 															  e->origin[1],
 															  e->origin[2] + fRadius * ds );
 								break;
 							case 0:
-								g_QglTable.m_pfn_qglVertex3f( e->origin[0],
+								qglVertex3f( e->origin[0],
 															  e->origin[1] + fRadius * dc,
 															  e->origin[2] + fRadius * ds );
 								break;
@@ -547,9 +548,9 @@ void DrawLight( entity_t* e, int nGLState, int pref, int nViewType ){
 						}
 					}
 				}
-				g_QglTable.m_pfn_qglEnd();
+				qglEnd();
 			}
-			g_QglTable.m_pfn_qglPopAttrib();
+			qglPopAttrib();
 		}
 	}
 }

@@ -27,6 +27,9 @@
     <Filter Include="src\imgui_radiant">
       <UniqueIdentifier>{13404e24-a758-4434-8bbd-ec52ae9f1997}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\entity">
+      <UniqueIdentifier>{f59c20d2-5dea-47f9-ae20-9552b30936c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bp_dlg.cpp">
@@ -275,6 +278,24 @@
     <ClCompile Include="imgui_docks_radiant\dock_cam.cpp">
       <Filter>src\imgui_docks_radiant</Filter>
     </ClCompile>
+    <ClCompile Include="..\plugins\entity\eclassmodel.cpp">
+      <Filter>src\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\entity\entity.cpp">
+      <Filter>src\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\entity\entity_entitymodel.cpp">
+      <Filter>src\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\entity\light.cpp">
+      <Filter>src\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\entity\miscmodel.cpp">
+      <Filter>src\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\entity\plugin.cpp">
+      <Filter>src\entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="radiant.ico">
@@ -502,6 +523,18 @@
     </ClInclude>
     <ClInclude Include="imgui_docks_radiant\dock_cam.h">
       <Filter>src\imgui_docks_radiant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\entity\entity.h">
+      <Filter>src\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\entity\entity_entitymodel.h">
+      <Filter>src\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\entity\light.h">
+      <Filter>src\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\entity\plugin.h">
+      <Filter>src\entity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

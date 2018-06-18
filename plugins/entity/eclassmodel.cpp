@@ -22,7 +22,7 @@
 #include <stdlib.h>
 
 #include "entity_entitymodel.h"
-
+#include "../radiant/qgl.h"
 //
 // CEntityEclassModel implementation
 //
@@ -53,16 +53,16 @@ void CEntityEclassModel::Draw( int state, int rflags ) const {
 	// push the current modelview matrix
 	// FIXME: put in a check for stack recursion depth..
 	// or avoid recursion of opengl matrix stack
-	g_QglTable.m_pfn_qglPushMatrix();
+	qglPushMatrix();
 	// apply the parent-to-local transform
-	g_QglTable.m_pfn_qglMultMatrixf( m_transform );
+	qglMultMatrixf( m_transform );
 
 	// draw children
 	if ( m_model && m_model->pRender ) {
 		m_model->pRender->Draw( state, rflags );
 	}
 
-	g_QglTable.m_pfn_qglPopMatrix();
+	qglPopMatrix();
 }
 
 // ISelect

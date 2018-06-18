@@ -24,6 +24,7 @@
 
 #include "entity_entitymodel.h"
 #include "entity.h"
+#include "igl_to_qgl.h"
 
 //
 // CEntityMiscModel implementation
@@ -55,9 +56,9 @@ void CEntityMiscModel::Draw( int state, int rflags ) const {
 	// push the current modelview matrix
 	// FIXME: put in a check for stack recursion depth..
 	// or avoid recursion of opengl matrix stack
-	g_QglTable.m_pfn_qglPushMatrix();
+	qglPushMatrix();
 	// apply the parent-to-local transform
-	g_QglTable.m_pfn_qglMultMatrixf( m_transform );
+	qglMultMatrixf( m_transform );
 
 	pivot_draw( m_pivot );
 
@@ -66,7 +67,7 @@ void CEntityMiscModel::Draw( int state, int rflags ) const {
 		m_model->pRender->Draw(state, rflags);
 	}
 
-	g_QglTable.m_pfn_qglPopMatrix();
+	qglPopMatrix();
 }
 
 // ISelect

@@ -3236,6 +3236,8 @@ entity_t *FindEntity( const char *pszKey, const char *pszValue ){
 	return NULL;
 }
 
+void DrawLight( entity_t* e, int nGLState, int pref, int nViewType );
+
 void Brush_DrawXY( brush_t *b, int nViewType ){
 	face_t *face;
 	int order;

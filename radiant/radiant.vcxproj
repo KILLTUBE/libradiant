@@ -162,6 +162,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\plugins\entity\eclassmodel.cpp" />
+    <ClCompile Include="..\plugins\entity\entity.cpp" />
+    <ClCompile Include="..\plugins\entity\entity_entitymodel.cpp" />
+    <ClCompile Include="..\plugins\entity\light.cpp" />
+    <ClCompile Include="..\plugins\entity\miscmodel.cpp" />
+    <ClCompile Include="..\plugins\entity\plugin.cpp" />
     <ClCompile Include="bp_dlg.cpp" />
     <ClCompile Include="brush.cpp" />
     <ClCompile Include="brush_primit.cpp" />
@@ -270,6 +276,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\plugins\entity\entity.h" />
+    <ClInclude Include="..\plugins\entity\entity_entitymodel.h" />
+    <ClInclude Include="..\plugins\entity\light.h" />
+    <ClInclude Include="..\plugins\entity\plugin.h" />
     <ClInclude Include="brush.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="camwindow.h" />

@@ -715,8 +715,8 @@ void CPlugInManager::Init(){
 	g_pParentWnd->GetSynapseClient().AddManager( &g_ImageManager );
 
 	// SYN_REQUIRE entries which are still hardcoded
-	g_pParentWnd->GetSynapseClient().AddAPI( MAP_MAJOR, "mapxml", sizeof( g_MapTable2 ), SYN_REQUIRE, &g_MapTable2 );
-	g_pParentWnd->GetSynapseClient().AddAPI( ENTITY_MAJOR, NULL, sizeof( g_EntityTable ), SYN_REQUIRE, &g_EntityTable );
+	//g_pParentWnd->GetSynapseClient().AddAPI( MAP_MAJOR, "mapxml", sizeof( g_MapTable2 ), SYN_REQUIRE, &g_MapTable2 );
+	//g_pParentWnd->GetSynapseClient().AddAPI( ENTITY_MAJOR, NULL, sizeof( g_EntityTable ), SYN_REQUIRE, &g_EntityTable );
 
 	// plugins: load anything that claims to be a plugin
 	// minor becomes some kind of matching pattern
@@ -728,6 +728,7 @@ void CPlugInManager::Init(){
 	g_pParentWnd->GetSynapseClient().AddManager( &g_ModelManager );
 	auto client = &g_pParentWnd->GetSynapseClient();
 	auto server = g_pParentWnd->GetSynapseServer();
+	return;
 	if ( !server.Resolve( client ) ) {
 		Error( "synapse initialization fail (see console) > if ( !g_pParentWnd->GetSynapseServer().Resolve( &g_pParentWnd->GetSynapseClient() ) ) { " );
 	}

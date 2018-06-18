@@ -33,26 +33,25 @@
  */
 
 #include <stdio.h>
-
 #include "synapse.h"
-#define USE_QERTABLE_DEFINE
 #include "qerplugin.h"
 #include "ientity.h"
-#define USE_ECLASSMANAGER_DEFINE
 #include "ieclass.h"
-#define USE_BRUSHTABLE_DEFINE
 #include "ibrush.h"
-#define USE_UNDOTABLE_DEFINE
 #include "iundo.h"
 #include "imodel.h"
 #include "igl.h"
 
-extern _QERFuncTable_1 g_FuncTable;
-extern _QERQglTable g_QglTable;
-extern _QERBrushTable __BRUSHTABLENAME;
-extern _QERUndoTable __UNDOTABLENAME;
-extern _EClassManagerTable __ECLASSMANAGERTABLENAME;
+IModelCache* GetModelCache();
+extern "C" void Sys_FPrintf( int level, const char *text, ... );
 
-#define Error g_FuncTable.m_pfnError
+#include "isurfaceplugin.h"
+#include "../radiant/brush.h"
+
+#include "../ccall/ccall.h"
+CCALL int imgui_log(char *format, ...);
+#define Error imgui_log
+
+const char* WINAPI QERApp_GetGameFile();
 
 #endif // _PLUGIN_H_
