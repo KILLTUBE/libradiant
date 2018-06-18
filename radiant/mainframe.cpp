@@ -896,45 +896,45 @@ char* MRU_GetText( int index );
 extern CRadiantPluginManager g_PluginsManager;
 
 void radiant_menu() {
-	if (ImGui::BeginMenu("_File")) {
-		if (ImGui::MenuItem("_New Map"            )) { execID(ID_FILE_NEW               ); }
-		if (ImGui::MenuItem("_Sleep"              )) { execID(ID_FILE_SLEEP             ); }
-		if (ImGui::MenuItem("_Open..."            )) { execID(ID_FILE_OPEN              ); }
-		if (ImGui::MenuItem("_Import..."          )) { execID(ID_FILE_IMPORTMAP         ); }
-		if (ImGui::MenuItem("_Save"               )) { execID(ID_FILE_SAVE              ); }
-		if (ImGui::MenuItem("Save _as..."         )) { execID(ID_FILE_SAVEAS            ); }
-		if (ImGui::MenuItem("Save s_elected..."   )) { execID(ID_FILE_EXPORTMAP         ); }
-		if (ImGui::MenuItem("Save re_gion..."     )) { execID(ID_FILE_SAVEREGION        ); }
-		if (ImGui::MenuItem("New p_roject..."     )) { execID(ID_FILE_NEWPROJECT        ); }
-		if (ImGui::MenuItem("Load _project..."    )) { execID(ID_FILE_LOADPROJECT       ); }
-		if (ImGui::MenuItem("Pro_ject settings...")) { execID(ID_FILE_PROJECTSETTINGS   ); }
-		if (ImGui::MenuItem("_Pointfile..."       )) { execID(ID_FILE_POINTFILE         ); }
+	if (ImGui::BeginMenu("File")) {
+		if (ImGui::MenuItem("New Map"             )) { execID(ID_FILE_NEW               ); }
+		if (ImGui::MenuItem("Sleep"               )) { execID(ID_FILE_SLEEP             ); }
+		if (ImGui::MenuItem("Open..."             )) { execID(ID_FILE_OPEN              ); }
+		if (ImGui::MenuItem("Import..."           )) { execID(ID_FILE_IMPORTMAP         ); }
+		if (ImGui::MenuItem("Save"                )) { execID(ID_FILE_SAVE              ); }
+		if (ImGui::MenuItem("Save as..."          )) { execID(ID_FILE_SAVEAS            ); }
+		if (ImGui::MenuItem("Save selected..."    )) { execID(ID_FILE_EXPORTMAP         ); }
+		if (ImGui::MenuItem("Save region..."      )) { execID(ID_FILE_SAVEREGION        ); }
+		if (ImGui::MenuItem("New project..."      )) { execID(ID_FILE_NEWPROJECT        ); }
+		if (ImGui::MenuItem("Load project..."     )) { execID(ID_FILE_LOADPROJECT       ); }
+		if (ImGui::MenuItem("Project settings..." )) { execID(ID_FILE_PROJECTSETTINGS   ); }
+		if (ImGui::MenuItem("Pointfile..."        )) { execID(ID_FILE_POINTFILE         ); }
 		if (ImGui::MenuItem(MRU_GetText(0)        )) { execID(ID_FILE_RECENT1           ); }
 		if (ImGui::MenuItem(MRU_GetText(1)        )) { execID(ID_FILE_RECENT2           ); }
 		if (ImGui::MenuItem(MRU_GetText(2)        )) { execID(ID_FILE_RECENT3           ); }
 		if (ImGui::MenuItem(MRU_GetText(3)        )) { execID(ID_FILE_RECENT4           ); }
 		if (ImGui::MenuItem("Check Updates"       )) { execID(ID_FILE_CHECKUPDATE       ); }
-		if (ImGui::MenuItem("E_xit"               )) { execID(ID_FILE_EXIT              ); }
+		if (ImGui::MenuItem("Exit"                )) { execID(ID_FILE_EXIT              ); }
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu("_Edit")) {
-		if (ImGui::MenuItem("_Undo"                        )) { execID( ID_EDIT_UNDO                ); }
-		if (ImGui::MenuItem("_Redo"                        )) { execID( ID_EDIT_REDO                ); }
-		if (ImGui::MenuItem("_Copy"                        )) { execID( ID_EDIT_COPYBRUSH           ); }
-		if (ImGui::MenuItem("_Paste"                       )) { execID( ID_EDIT_PASTEBRUSH          ); }
-		if (ImGui::MenuItem("P_aste To Camera"             )) { execID( ID_EDIT_PASTEBRUSHTOCAMERA  ); }
-		if (ImGui::MenuItem("_Delete"                      )) { execID( ID_SELECTION_DELETE         ); }
+	if (ImGui::BeginMenu("Edit")) {
+		if (ImGui::MenuItem("Undo"                         )) { execID( ID_EDIT_UNDO                ); }
+		if (ImGui::MenuItem("Redo"                         )) { execID( ID_EDIT_REDO                ); }
+		if (ImGui::MenuItem("Copy"                         )) { execID( ID_EDIT_COPYBRUSH           ); }
+		if (ImGui::MenuItem("Paste"                        )) { execID( ID_EDIT_PASTEBRUSH          ); }
+		if (ImGui::MenuItem("Paste To Camera"              )) { execID( ID_EDIT_PASTEBRUSHTOCAMERA  ); }
+		if (ImGui::MenuItem("Delete"                       )) { execID( ID_SELECTION_DELETE         ); }
 		if (ImGui::MenuItem("Map Info..."                  )) { execID( ID_EDIT_MAPINFO             ); }
 		if (ImGui::MenuItem("Entity Info..."               )) { execID( ID_EDIT_ENTITYINFO          ); }
 		if (ImGui::MenuItem("Brush Scripts..."             )) { execID( ID_BRUSH_SCRIPTS            ); }
-		if (ImGui::MenuItem("Load Pre_fab..."              )) { execID( ID_EDIT_LOADPREFAB          ); }
+		if (ImGui::MenuItem("Load Prefab..."               )) { execID( ID_EDIT_LOADPREFAB          ); }
 		if (ImGui::MenuItem("Save Selection as Prefab..."  )) { execID( ID_EDIT_SAVEPREFAB          ); }
 		if (ImGui::MenuItem("Preferences..."               )) { execID( ID_PREFS                    ); }
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu("_View")) {
+	if (ImGui::BeginMenu("View")) {
 		
 		if (ImGui::BeginMenu("Toggle")) {
 			if (ImGui::MenuItem("Camera View"                         )) { execID( ID_TOGGLECAMERA                 ); }
@@ -948,29 +948,29 @@ void radiant_menu() {
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Layout")) {
-			if (ImGui::MenuItem("XY (Top)"                 )) { execID( ID_VIEW_XY                 ); }
-			if (ImGui::MenuItem("YZ"                       )) { execID( ID_VIEW_SIDE               ); }
-			if (ImGui::MenuItem("XZ"                       )) { execID( ID_VIEW_FRONT              ); }
+			if (ImGui::MenuItem("XY (Top)"  )) { execID( ID_VIEW_XY     ); }
+			if (ImGui::MenuItem("YZ"        )) { execID( ID_VIEW_SIDE   ); }
+			if (ImGui::MenuItem("XZ"        )) { execID( ID_VIEW_FRONT  ); }
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Zoom")) {
-			if (ImGui::MenuItem("_XY 100%"                            )) { execID( ID_VIEW_100                 ); }
-			if (ImGui::MenuItem("XY Zoom _In"                         )) { execID( ID_VIEW_ZOOMIN              ); }
-			if (ImGui::MenuItem("XY Zoom _Out"                        )) { execID( ID_VIEW_ZOOMOUT             ); }
-			if (ImGui::MenuItem("_Z 100%"                             )) { execID( ID_VIEW_Z100                ); }
-			if (ImGui::MenuItem("Z Zoo_m In"                          )) { execID( ID_VIEW_ZZOOMIN             ); }
-			if (ImGui::MenuItem("Z Zoom O_ut"                         )) { execID( ID_VIEW_ZZOOMOUT            ); }
-			if (ImGui::MenuItem("Cubic Clip Zoom In"                  )) { execID( ID_VIEW_CUBEIN              ); }
-			if (ImGui::MenuItem("Cubic Clip Zoom Out"                 )) { execID( ID_VIEW_CUBEOUT             ); }
+			if (ImGui::MenuItem("XY 100%"              )) { execID( ID_VIEW_100        ); }
+			if (ImGui::MenuItem("XY Zoom In"           )) { execID( ID_VIEW_ZOOMIN     ); }
+			if (ImGui::MenuItem("XY Zoom Out"          )) { execID( ID_VIEW_ZOOMOUT    ); }
+			if (ImGui::MenuItem("Z 100%"               )) { execID( ID_VIEW_Z100       ); }
+			if (ImGui::MenuItem("Z Zoom In"            )) { execID( ID_VIEW_ZZOOMIN    ); }
+			if (ImGui::MenuItem("Z Zoom Out"           )) { execID( ID_VIEW_ZZOOMOUT   ); }
+			if (ImGui::MenuItem("Cubic Clip Zoom In"   )) { execID( ID_VIEW_CUBEIN     ); }
+			if (ImGui::MenuItem("Cubic Clip Zoom Out"  )) { execID( ID_VIEW_CUBEOUT    ); }
 			ImGui::EndMenu();
 		}
 
 		// todo: checkboxes
 		if (ImGui::BeginMenu("Show")) {
-			if (ImGui::MenuItem("Show _Angles"                        )) { execID( ID_VIEW_SHOWANGLES                 ); }
-			if (ImGui::MenuItem("Show _Names"                         )) { execID( ID_VIEW_SHOWNAMES                  ); }
+			if (ImGui::MenuItem("Show Angles"                         )) { execID( ID_VIEW_SHOWANGLES                 ); }
+			if (ImGui::MenuItem("Show Names"                          )) { execID( ID_VIEW_SHOWNAMES                  ); }
 			if (ImGui::MenuItem("Show Blocks"                         )) { execID( ID_VIEW_SHOWBLOCKS                 ); }
-			if (ImGui::MenuItem("Show C_oordinates"                   )) { execID( ID_VIEW_SHOWCOORDINATES            ); }
+			if (ImGui::MenuItem("Show Coordinates"                    )) { execID( ID_VIEW_SHOWCOORDINATES            ); }
 			if (ImGui::MenuItem("Show Window Outline"                 )) { execID( ID_VIEW_SHOWOUTLINE                ); }
 			if (ImGui::MenuItem("Show ZBuffered Outline"              )) { execID( ID_SELECTION_NOOUTLINE             ); }
 			if (ImGui::MenuItem("Show Axes"                           )) { execID( ID_VIEW_SHOWAXES                   ); }
@@ -1010,18 +1010,17 @@ void radiant_menu() {
 
 		if (ImGui::MenuItem("Cubic Clipping"               )) { execID( ID_VIEW_CUBICCLIPPING           ); } // todo: checkbox
 		if (ImGui::MenuItem("OpenGL Lighting"              )) { execID( ID_VIEW_OPENGLLIGHTING          ); } // todo: checkbox
-		if (ImGui::MenuItem("_Center"                      )) { execID( ID_VIEW_CENTER                  ); }
-		if (ImGui::MenuItem("_Center 2d"                   )) { execID( ID_VIEW_CENTERVIEW              ); }
-		if (ImGui::MenuItem("_Up Floor"                    )) { execID( ID_VIEW_UPFLOOR                 ); }
-		if (ImGui::MenuItem("_Down Floor"                  )) { execID( ID_VIEW_DOWNFLOOR               ); }
-		if (ImGui::MenuItem("_Next (XY, YZ, XY)"           )) { execID( ID_VIEW_NEXTVIEW                ); }
+		if (ImGui::MenuItem("Center"                       )) { execID( ID_VIEW_CENTER                  ); }
+		if (ImGui::MenuItem("Center 2d"                    )) { execID( ID_VIEW_CENTERVIEW              ); }
+		if (ImGui::MenuItem("Up Floor"                     )) { execID( ID_VIEW_UPFLOOR                 ); }
+		if (ImGui::MenuItem("Down Floor"                   )) { execID( ID_VIEW_DOWNFLOOR               ); }
+		if (ImGui::MenuItem("Next (XY, YZ, XY)"            )) { execID( ID_VIEW_NEXTVIEW                ); }
 		if (ImGui::MenuItem("Hide Selected"                )) { execID( ID_VIEW_HIDESHOW_HIDESELECTED   ); }
 		if (ImGui::MenuItem("Show Hidden"                  )) { execID( ID_VIEW_HIDESHOW_SHOWHIDDEN     ); }
 		ImGui::EndMenu();
 	}
 
-
-	if (ImGui::BeginMenu("_Selection" )) {
+	if (ImGui::BeginMenu("Selection" )) {
 
 		if (ImGui::BeginMenu("Rotate")) {
 			if (ImGui::MenuItem("Rotate X"              )) { execID(ID_BRUSH_ROTATEX               ); }
@@ -1030,28 +1029,25 @@ void radiant_menu() {
 			if (ImGui::MenuItem("Arbitrary rotation..." )) { execID(ID_SELECTION_ARBITRARYROTATION ); }
 			ImGui::EndMenu();
 		}
-
 		if (ImGui::BeginMenu("CSG")) {
-			if (ImGui::MenuItem("Make _Hollow Overlap" )) { execID(ID_SELECTION_MAKEHOLLOW       );	}
-			if (ImGui::MenuItem("Make _Hollow Touch"   )) { execID(ID_SELECTION_MAKEHOLLOW_TOUCH );	}
-			if (ImGui::MenuItem("CSG _Subtract"        )) { execID(ID_SELECTION_CSGSUBTRACT      );	}
-			if (ImGui::MenuItem("CSG _Merge"           )) { execID(ID_SELECTION_CSGMERGE         );	}
+			if (ImGui::MenuItem("Make Hollow Overlap" )) { execID(ID_SELECTION_MAKEHOLLOW       );	}
+			if (ImGui::MenuItem("Make Hollow Touch"   )) { execID(ID_SELECTION_MAKEHOLLOW_TOUCH );	}
+			if (ImGui::MenuItem("CSG Subtract"        )) { execID(ID_SELECTION_CSGSUBTRACT      );	}
+			if (ImGui::MenuItem("CSG Merge"           )) { execID(ID_SELECTION_CSGMERGE         );	}
 			ImGui::EndMenu();
 		}
-
 		if (ImGui::BeginMenu("Select")) {
-			if (ImGui::MenuItem("Select Complete _Tall" )) { execID(ID_SELECTION_SELECTCOMPLETETALL ); }
-			if (ImGui::MenuItem("Select T_ouching"      )) { execID(ID_SELECTION_SELECTTOUCHING     ); }
-			if (ImGui::MenuItem("Select _Partial Tall"  )) { execID(ID_SELECTION_SELECTPARTIALTALL  ); }
-			if (ImGui::MenuItem("Select _Inside"        )) { execID(ID_SELECTION_SELECTINSIDE       ); }
-			if (ImGui::MenuItem("Select Func _Group"    )) { execID(ID_SELECT_FUNC_GROUP            ); }
+			if (ImGui::MenuItem("Select Complete Tall"  )) { execID(ID_SELECTION_SELECTCOMPLETETALL ); }
+			if (ImGui::MenuItem("Select Touching"       )) { execID(ID_SELECTION_SELECTTOUCHING     ); }
+			if (ImGui::MenuItem("Select Partial Tall"   )) { execID(ID_SELECTION_SELECTPARTIALTALL  ); }
+			if (ImGui::MenuItem("Select Inside"         )) { execID(ID_SELECTION_SELECTINSIDE       ); }
+			if (ImGui::MenuItem("Select Func Group"     )) { execID(ID_SELECT_FUNC_GROUP            ); }
 			if (ImGui::MenuItem("Nudge Left"            )) { execID(ID_SELECTION_SELECT_NUDGELEFT   ); }
 			if (ImGui::MenuItem("Nudge Right"           )) { execID(ID_SELECTION_SELECT_NUDGERIGHT  ); }
 			if (ImGui::MenuItem("Nudge Up"              )) { execID(ID_SELECTION_SELECT_NUDGEUP     ); }
 			if (ImGui::MenuItem("Nudge Down"            )) { execID(ID_SELECTION_SELECT_NUDGEDOWN   ); }
 			ImGui::EndMenu();
 		}
-
 		if (ImGui::BeginMenu("Clipper")) {
 			if (ImGui::MenuItem("Toggle Clipper"        )) { execID(ID_VIEW_CLIPPER   ); }
 			if (ImGui::MenuItem("Clip selection"        )) { execID(ID_CLIP_SELECTED  ); }
@@ -1059,17 +1055,16 @@ void radiant_menu() {
 			if (ImGui::MenuItem("Flip Clip orientation" )) { execID(ID_FLIP_CLIP      ); }
 			ImGui::EndMenu();
 		}
-
 		if (ImGui::MenuItem("Scale..."         )) { execID(ID_SELECT_SCALE              ); }
-		if (ImGui::MenuItem("Drag _Edges"      )) { execID(ID_SELECTION_DRAGEDGES       ); }
-		if (ImGui::MenuItem("Drag _Vertices"   )) { execID(ID_SELECTION_DRAGVERTECIES   ); }
-		if (ImGui::MenuItem("_Clone"           )) { execID(ID_SELECTION_CLONE           ); }
+		if (ImGui::MenuItem("Drag Edges"       )) { execID(ID_SELECTION_DRAGEDGES       ); }
+		if (ImGui::MenuItem("Drag Vertices"    )) { execID(ID_SELECTION_DRAGVERTECIES   ); }
+		if (ImGui::MenuItem("Clone"            )) { execID(ID_SELECTION_CLONE           ); }
 		if (ImGui::MenuItem("Deselect"         )) { execID(ID_SELECTION_DESELECT        ); }
 		if (ImGui::MenuItem("Invert"           )) { execID(ID_SELECTION_INVERT          ); }
-		if (ImGui::MenuItem("_Delete"          )) { execID(ID_SELECTION_DELETE          ); }
-		if (ImGui::MenuItem("Flip _X"          )) { execID(ID_BRUSH_FLIPX               ); }
-		if (ImGui::MenuItem("Flip _Y"          )) { execID(ID_BRUSH_FLIPY               ); }
-		if (ImGui::MenuItem("Flip _Z"          )) { execID(ID_BRUSH_FLIPZ               ); }
+		if (ImGui::MenuItem("Delete"           )) { execID(ID_SELECTION_DELETE          ); }
+		if (ImGui::MenuItem("Flip X"           )) { execID(ID_BRUSH_FLIPX               ); }
+		if (ImGui::MenuItem("Flip Y"           )) { execID(ID_BRUSH_FLIPY               ); }
+		if (ImGui::MenuItem("Flip Z"           )) { execID(ID_BRUSH_FLIPZ               ); }
 		if (ImGui::MenuItem("Connect entities" )) { execID(ID_SELECTION_CONNECT         ); }
 		if (ImGui::MenuItem("Ungroup entity"   )) { execID(ID_SELECTION_UNGROUPENTITY   ); }
 		if (ImGui::MenuItem("Make detail"      )) { execID(ID_SELECTION_MAKE_DETAIL     ); }
@@ -1087,7 +1082,7 @@ void radiant_menu() {
 
 
 
-	if (ImGui::BeginMenu("_Grid")) {
+	if (ImGui::BeginMenu("Grid")) {
 		if (ImGui::MenuItem("Grid0.25"    )) { execID(ID_GRID_025  ); }
 		if (ImGui::MenuItem("Grid0.5"     )) { execID(ID_GRID_05   ); }
 		if (ImGui::MenuItem("Grid1"       )) { execID(ID_GRID_1    ); }
@@ -1104,17 +1099,17 @@ void radiant_menu() {
 	}
 
 
-	if (ImGui::BeginMenu("_Textures")) {
+	if (ImGui::BeginMenu("Textures")) {
 
 		if (ImGui::BeginMenu("Render Quality")) {
-			if (ImGui::MenuItem("_Wireframe"       )) { execID(ID_TEXTURES_WIREFRAME ); }
-			if (ImGui::MenuItem("_Flat shade"      )) { execID(ID_TEXTURES_FLATSHADE ); }
-			if (ImGui::MenuItem("_Nearest"         )) { execID(ID_VIEW_NEAREST       ); }
-			if (ImGui::MenuItem("Nearest _Mipmap"  )) { execID(ID_VIEW_NEARESTMIPMAP ); }
-			if (ImGui::MenuItem("_Linear"          )) { execID(ID_VIEW_LINEAR        ); }
-			if (ImGui::MenuItem("_Bilinear"        )) { execID(ID_VIEW_BILINEAR      ); }
-			if (ImGui::MenuItem("B_ilinear Mipmap" )) { execID(ID_VIEW_BILINEARMIPMAP); }
-			if (ImGui::MenuItem("T_rilinear"       )) { execID(ID_VIEW_TRILINEAR     ); }
+			if (ImGui::MenuItem("Wireframe"       )) { execID(ID_TEXTURES_WIREFRAME ); }
+			if (ImGui::MenuItem("Flat shade"      )) { execID(ID_TEXTURES_FLATSHADE ); }
+			if (ImGui::MenuItem("Nearest"         )) { execID(ID_VIEW_NEAREST       ); }
+			if (ImGui::MenuItem("Nearest Mipmap"  )) { execID(ID_VIEW_NEARESTMIPMAP ); }
+			if (ImGui::MenuItem("Linear"          )) { execID(ID_VIEW_LINEAR        ); }
+			if (ImGui::MenuItem("Bilinear"        )) { execID(ID_VIEW_BILINEAR      ); }
+			if (ImGui::MenuItem("Bilinear Mipmap" )) { execID(ID_VIEW_BILINEARMIPMAP); }
+			if (ImGui::MenuItem("Trilinear"       )) { execID(ID_VIEW_TRILINEAR     ); }
 			ImGui::EndMenu();
 		}
 	
@@ -1129,20 +1124,20 @@ void radiant_menu() {
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::MenuItem("Show In _Use"           )) { execID(ID_TEXTURES_SHOWINUSE      ); } // todo: checkbox
-		if (ImGui::MenuItem("Show _All"              )) { execID(ID_TEXTURES_SHOWALL        ); } // todo: checkbox
+		if (ImGui::MenuItem("Show In Use"            )) { execID(ID_TEXTURES_SHOWINUSE      ); } // todo: checkbox
+		if (ImGui::MenuItem("Show All"               )) { execID(ID_TEXTURES_SHOWALL        ); } // todo: checkbox
 		if (ImGui::MenuItem("Show shaders"           )) { execID(ID_TEXTURES_SHADERS_SHOW   ); } // todo: checkbox
 		if (ImGui::MenuItem("Flush & Reload Shaders" )) { execID(ID_TEXTURES_RELOADSHADERS  ); }
 		if (ImGui::MenuItem("Load directory..."      )) { execID(ID_TEXTURES_LOAD           ); }
 		if (ImGui::MenuItem("Directory list..."      )) { execID(ID_TEXTURES_LOADLIST       ); }
-		if (ImGui::MenuItem("_Surface Inspector"     )) { execID(ID_TEXTURES_INSPECTOR      ); }
+		if (ImGui::MenuItem("Surface Inspector"      )) { execID(ID_TEXTURES_INSPECTOR      ); }
 		if (ImGui::MenuItem("Find / Replace..."      )) { execID(ID_TEXTURE_REPLACEALL      ); }
 		if (ImGui::MenuItem("shaderlist.txt only"    )) { execID(ID_TEXTURES_SHADERLISTONLY ); }
 
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu("_Misc")) {
+	if (ImGui::BeginMenu("Misc")) {
 		if (ImGui::BeginMenu("Colors" )) {
 			if (ImGui::BeginMenu("Themes" )) {
 				if (ImGui::MenuItem("QE4 Original"                 )) { execID(ID_COLOR_SETORIGINAL      ); }
@@ -1151,7 +1146,7 @@ void radiant_menu() {
 				if (ImGui::MenuItem("Maya/Max/Lightwave Emulation" )) { execID(ID_COLOR_SETYDNAR         ); }
 				ImGui::EndMenu();
 			}
-			if (ImGui::MenuItem("_Texture Background..."       )) { execID(ID_TEXTUREBK              );	}
+			if (ImGui::MenuItem("Texture Background..."        )) { execID(ID_TEXTUREBK              );	}
 			if (ImGui::MenuItem("Grid Background..."           )) { execID(ID_COLORS_XYBK            );	}
 			if (ImGui::MenuItem("Grid Major..."                )) { execID(ID_COLORS_MAJOR           );	}
 			if (ImGui::MenuItem("Grid Minor..."                )) { execID(ID_COLORS_MINOR           );	}
@@ -1168,26 +1163,26 @@ void radiant_menu() {
 			if (ImGui::MenuItem("Detail Brush..."              )) { execID(ID_COLORS_DETAIL          );	}
 			ImGui::EndMenu();
 		}
-		if (ImGui::MenuItem("_Benchmark"                   )) { execID(ID_MISC_BENCHMARK         ); }
-		if (ImGui::MenuItem("_Gamma..."                    )) { execID(ID_MISC_GAMMA             );	}
+		if (ImGui::MenuItem("Benchmark"                    )) { execID(ID_MISC_BENCHMARK         ); }
+		if (ImGui::MenuItem("Gamma..."                     )) { execID(ID_MISC_GAMMA             );	}
 		if (ImGui::MenuItem("Find brush..."                )) { execID(ID_MISC_FINDBRUSH         );	}
 		if (ImGui::MenuItem("Next leak spot"               )) { execID(ID_MISC_NEXTLEAKSPOT      );	}
 		if (ImGui::MenuItem("Previous leak spot"           )) { execID(ID_MISC_PREVIOUSLEAKSPOT  );	}
-		if (ImGui::MenuItem("_Print XY View"               )) { execID(ID_MISC_PRINTXY           );	}
-		if (ImGui::MenuItem("_Select Entity Color..."      )) { execID(ID_MISC_SELECTENTITYCOLOR ); }
+		if (ImGui::MenuItem("Print XY View"                )) { execID(ID_MISC_PRINTXY           );	}
+		if (ImGui::MenuItem("Select Entity Color..."       )) { execID(ID_MISC_SELECTENTITYCOLOR ); }
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu("_Region" )) {
-		if (ImGui::MenuItem("_Off"                  )) { execID(ID_REGION_OFF          ); }
-		if (ImGui::MenuItem("_Set XY"               )) { execID(ID_REGION_SETXY        ); }
-		if (ImGui::MenuItem("Set _Tall Brush"       )) { execID(ID_REGION_SETTALLBRUSH ); }
-		if (ImGui::MenuItem("Set _Brush"            )) { execID(ID_REGION_SETBRUSH     ); }
-		if (ImGui::MenuItem("Set Se_lected Brushes" )) { execID(ID_REGION_SETSELECTION ); }
+	if (ImGui::BeginMenu("Region" )) {
+		if (ImGui::MenuItem("Off"                  )) { execID(ID_REGION_OFF          ); }
+		if (ImGui::MenuItem("Set XY"               )) { execID(ID_REGION_SETXY        ); }
+		if (ImGui::MenuItem("Set Tall Brush"       )) { execID(ID_REGION_SETTALLBRUSH ); }
+		if (ImGui::MenuItem("Set Brush"            )) { execID(ID_REGION_SETBRUSH     ); }
+		if (ImGui::MenuItem("Set Selected Brushes" )) { execID(ID_REGION_SETSELECTION ); }
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu("_Brush" )) {
+	if (ImGui::BeginMenu("Brush" )) {
 		if (ImGui::MenuItem("3 sided"            )) { execID(ID_BRUSH_3SIDED            ); }
 		if (ImGui::MenuItem("4 sided"            )) { execID(ID_BRUSH_4SIDED            ); }
 		if (ImGui::MenuItem("5 sided"            )) { execID(ID_BRUSH_5SIDED            ); }
@@ -1201,7 +1196,7 @@ void radiant_menu() {
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu("_Curve" )) {
+	if (ImGui::BeginMenu("Curve" )) {
 		if (ImGui::BeginMenu("More Cylinders" )) {
 			if (ImGui::MenuItem("Dense Cylinder"      )) { execID(ID_CURVE_PATCHDENSETUBE     ); }
 			if (ImGui::MenuItem("Very Dense Cylinder" )) { execID(ID_CURVE_PATCHVERYDENSETUBE ); }
@@ -1253,18 +1248,16 @@ void radiant_menu() {
 		ImGui::EndMenu();
 	}
 	
-	if (ImGui::BeginMenu("_Plugins")) {
+	if (ImGui::BeginMenu("Plugins")) {
 		g_PluginsManager.PopulateMenu();
-		// todo... iterate each plugin and its menus... but tbh i rather get rid of synapse plugin system alltogether
-
 		ImGui::EndMenu();
 	}
 
-	if (ImGui::BeginMenu("_Help")) {
+	if (ImGui::BeginMenu("Help")) {
 		if (ImGui::MenuItem("Help"              )) { execID(ID_HELP             ); }
 		if (ImGui::MenuItem("Report a Bug"      )) { execID(ID_HELP_BUGREPORT   ); }
 		if (ImGui::MenuItem("View Shortcuts"    )) { execID(ID_HELP_COMMANDLIST ); }
-		if (ImGui::MenuItem("_About libradiant" )) { execID(ID_HELP_ABOUT       ); }
+		if (ImGui::MenuItem("About libradiant"  )) { execID(ID_HELP_ABOUT       ); }
 		ImGui::EndMenu();
 	}
 }

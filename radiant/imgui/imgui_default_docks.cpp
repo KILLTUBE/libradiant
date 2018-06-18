@@ -25,6 +25,7 @@ int main_menu_GUIasd() {
     int menu_height = 0;
     if (ImGui::BeginMainMenuBar())
     {
+		/*
         if (ImGui::BeginMenu("File"))
         {
             if (ImGui::MenuItem("New")) {}
@@ -85,6 +86,7 @@ int main_menu_GUIasd() {
             ImGui::EndMenu();
            
         }
+		*/
 		radiant_menu();
 
         menu_height = ImGui::GetWindowSize().y;
