@@ -1138,6 +1138,117 @@ void radiant_menu() {
 
 		ImGui::EndMenu();
 	}
+
+	if (ImGui::BeginMenu("_Misc")) {
+		if (ImGui::BeginMenu("Colors" )) {
+			if (ImGui::BeginMenu("Themes" )) {
+				if (ImGui::MenuItem("QE4 Original"                 )) { execID(ID_COLOR_SETORIGINAL      ); }
+				if (ImGui::MenuItem("Q3Radiant Original"           )) { execID(ID_COLOR_SETQER           ); }
+				if (ImGui::MenuItem("Black and Green"              )) { execID(ID_COLOR_SETBLACK         ); }
+				if (ImGui::MenuItem("Maya/Max/Lightwave Emulation" )) { execID(ID_COLOR_SETYDNAR         ); }
+				ImGui::EndMenu();
+			}
+			if (ImGui::MenuItem("_Texture Background..."       )) { execID(ID_TEXTUREBK              );	}
+			if (ImGui::MenuItem("Grid Background..."           )) { execID(ID_COLORS_XYBK            );	}
+			if (ImGui::MenuItem("Grid Major..."                )) { execID(ID_COLORS_MAJOR           );	}
+			if (ImGui::MenuItem("Grid Minor..."                )) { execID(ID_COLORS_MINOR           );	}
+			if (ImGui::MenuItem("Grid Major Small..."          )) { execID(ID_COLORS_MAJOR_ALT       );	}
+			if (ImGui::MenuItem("Grid Minor Small..."          )) { execID(ID_COLORS_MINOR_ALT       );	}
+			if (ImGui::MenuItem("Grid Text..."                 )) { execID(ID_COLORS_GRIDTEXT        );	}
+			if (ImGui::MenuItem("Grid Block..."                )) { execID(ID_COLORS_GRIDBLOCK       );	}
+			if (ImGui::MenuItem("Default Brush..."             )) { execID(ID_COLORS_BRUSH           );	}
+			if (ImGui::MenuItem("Camera Background..."         )) { execID(ID_COLORS_CAMERABACK      );	}
+			if (ImGui::MenuItem("Selected Brush..."            )) { execID(ID_COLORS_SELECTEDBRUSH   );	}
+			if (ImGui::MenuItem("Selected Brush (Camera)..."   )) { execID(ID_COLORS_SELECTEDBRUSH3D );	}
+			if (ImGui::MenuItem("Clipper..."                   )) { execID(ID_COLORS_CLIPPER         );	}
+			if (ImGui::MenuItem("Active View name..."          )) { execID(ID_COLORS_VIEWNAME        );	}
+			if (ImGui::MenuItem("Detail Brush..."              )) { execID(ID_COLORS_DETAIL          );	}
+			ImGui::EndMenu();
+		}
+		if (ImGui::MenuItem("_Benchmark"                   )) { execID(ID_MISC_BENCHMARK         ); }
+		if (ImGui::MenuItem("_Gamma..."                    )) { execID(ID_MISC_GAMMA             );	}
+		if (ImGui::MenuItem("Find brush..."                )) { execID(ID_MISC_FINDBRUSH         );	}
+		if (ImGui::MenuItem("Next leak spot"               )) { execID(ID_MISC_NEXTLEAKSPOT      );	}
+		if (ImGui::MenuItem("Previous leak spot"           )) { execID(ID_MISC_PREVIOUSLEAKSPOT  );	}
+		if (ImGui::MenuItem("_Print XY View"               )) { execID(ID_MISC_PRINTXY           );	}
+		if (ImGui::MenuItem("_Select Entity Color..."      )) { execID(ID_MISC_SELECTENTITYCOLOR ); }
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu("_Region" )) {
+		if (ImGui::MenuItem("_Off"                  )) { execID(ID_REGION_OFF          ); }
+		if (ImGui::MenuItem("_Set XY"               )) { execID(ID_REGION_SETXY        ); }
+		if (ImGui::MenuItem("Set _Tall Brush"       )) { execID(ID_REGION_SETTALLBRUSH ); }
+		if (ImGui::MenuItem("Set _Brush"            )) { execID(ID_REGION_SETBRUSH     ); }
+		if (ImGui::MenuItem("Set Se_lected Brushes" )) { execID(ID_REGION_SETSELECTION ); }
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu("_Brush" )) {
+		if (ImGui::MenuItem("3 sided"            )) { execID(ID_BRUSH_3SIDED            ); }
+		if (ImGui::MenuItem("4 sided"            )) { execID(ID_BRUSH_4SIDED            ); }
+		if (ImGui::MenuItem("5 sided"            )) { execID(ID_BRUSH_5SIDED            ); }
+		if (ImGui::MenuItem("6 sided"            )) { execID(ID_BRUSH_6SIDED            ); }
+		if (ImGui::MenuItem("7 sided"            )) { execID(ID_BRUSH_7SIDED            ); }
+		if (ImGui::MenuItem("8 sided"            )) { execID(ID_BRUSH_8SIDED            ); }
+		if (ImGui::MenuItem("9 sided"            )) { execID(ID_BRUSH_9SIDED            ); }
+		if (ImGui::MenuItem("Arbitrary sided..." )) { execID(ID_BRUSH_ARBITRARYSIDED    ); }
+		if (ImGui::MenuItem("Make Cone..."       )) { execID(ID_BRUSH_MAKECONE          ); }
+		if (ImGui::MenuItem("Make Sphere..."     )) { execID(ID_BRUSH_PRIMITIVES_SPHERE ); }
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu("_Curve" )) {
+		if (ImGui::BeginMenu("More Cylinders" )) {
+			if (ImGui::MenuItem("Dense Cylinder"      )) { execID(ID_CURVE_PATCHDENSETUBE     ); }
+			if (ImGui::MenuItem("Very Dense Cylinder" )) { execID(ID_CURVE_PATCHVERYDENSETUBE ); }
+			if (ImGui::MenuItem("Square Cylinder"     )) { execID(ID_CURVE_PATCHSQUARE        ); }
+			ImGui::EndMenu();
+		}
+		if (ImGui::MenuItem("Cylinder"            )) { execID(ID_CURVE_PATCHTUBE          ); }
+		if (ImGui::MenuItem("End cap"             )) { execID(ID_CURVE_PATCHENDCAP        ); }
+		if (ImGui::MenuItem("Bevel"               )) { execID(ID_CURVE_PATCHBEVEL         ); }
+		if (ImGui::BeginMenu("More End caps, Bevels" )) {
+			if (ImGui::MenuItem("Square Endcap")) { execID(ID_CURVE_MOREENDCAPSBEVELS_SQUAREBEVEL  ); }
+			if (ImGui::MenuItem("Square Bevel" )) { execID(ID_CURVE_MOREENDCAPSBEVELS_SQUAREENDCAP ); }
+			ImGui::EndMenu();
+		}
+		if (ImGui::MenuItem("Cone"                 )) { execID(ID_CURVE_PATCHCONE             ); }
+		if (ImGui::MenuItem("Sphere"               )) { execID(ID_CURVE_PRIMITIVES_SPHERE     ); }
+		if (ImGui::MenuItem("Simple Patch Mesh..." )) { execID(ID_CURVE_SIMPLEPATCHMESH       ); }
+		if (ImGui::MenuItem("Patch Inspector..."   )) { execID(ID_PATCH_INSPECTOR             ); }
+		if (ImGui::BeginMenu("Insert")) {
+			if (ImGui::MenuItem("Insert (2) Columns" )) { execID(ID_CURVE_INSERT_INSERTCOLUMN ); }
+			if (ImGui::MenuItem("Add (2) Columns"    )) { execID(ID_CURVE_INSERT_ADDCOLUMN    ); }
+			if (ImGui::MenuItem("Insert (2) Rows"    )) { execID(ID_CURVE_INSERT_INSERTROW    ); }
+			if (ImGui::MenuItem("Add (2) Rows"       )) { execID(ID_CURVE_INSERT_ADDROW       ); }
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Delete")) {
+			if (ImGui::MenuItem("First (2) Columns" )) { execID(ID_CURVE_DELETE_FIRSTCOLUMN ); }
+			if (ImGui::MenuItem("Last (2) Columns"  )) { execID(ID_CURVE_DELETE_LASTCOLUMN  ); }
+			if (ImGui::MenuItem("First (2) Rows"    )) { execID(ID_CURVE_DELETE_FIRSTROW    ); }
+			if (ImGui::MenuItem("Last (2) Rows"     )) { execID(ID_CURVE_DELETE_LASTROW     ); }
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Matrix")) {
+			if (ImGui::MenuItem("Invert"     )) { execID(ID_CURVE_NEGATIVE           ); }
+			if (ImGui::MenuItem("Transpose"  )) { execID(ID_CURVE_MATRIX_TRANSPOSE   ); }
+			if (ImGui::BeginMenu("Re-disperse" )) {
+				if (ImGui::MenuItem("Rows"                 )) { execID( ID_CURVE_REDISPERSE_ROWS              ); }
+				if (ImGui::MenuItem("Cols (Intermediate)"  )) { execID( ID_CURVE_REDISPERSE_INTERMEDIATE_COLS ); }
+				if (ImGui::MenuItem("Rows (Intermediate)"  )) { execID( ID_CURVE_REDISPERSE_INTERMEDIATE_ROWS ); }
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::MenuItem("Cap Selection"     )) { execID(ID_CURVE_CAP           ); }
+		if (ImGui::MenuItem("Cycle Cap Texture" )) { execID(ID_CURVE_CYCLECAP      ); }
+		if (ImGui::MenuItem("Overlay Set"       )) { execID(ID_CURVE_OVERLAY_SET   ); }
+		if (ImGui::MenuItem("Overlay Clear"     )) { execID(ID_CURVE_OVERLAY_CLEAR ); }
+		if (ImGui::MenuItem("Thicken..."        )) { execID(ID_CURVE_THICKEN       ); }
+		ImGui::EndMenu();
+	}
 }
 
 void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
@@ -1154,104 +1265,7 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	gtk_widget_show( menu_bar );
 
 	
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Misc" ) );
 
-	create_menu_item_with_mnemonic( menu, _( "_Benchmark" ), ID_MISC_BENCHMARK );
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Colors" ) );
-	menu_3 = create_menu_in_menu_with_mnemonic( menu_in_menu, _( "Themes" ) );
-	create_menu_item_with_mnemonic( menu_3,       _( "QE4 Original"                 ), ID_COLOR_SETORIGINAL      );
-	create_menu_item_with_mnemonic( menu_3,       _( "Q3Radiant Original"           ), ID_COLOR_SETQER           );
-	create_menu_item_with_mnemonic( menu_3,       _( "Black and Green"              ), ID_COLOR_SETBLACK         );
-	create_menu_item_with_mnemonic( menu_3,       _( "Maya/Max/Lightwave Emulation" ), ID_COLOR_SETYDNAR         );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "_Texture Background..."       ), ID_TEXTUREBK              );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Background..."           ), ID_COLORS_XYBK            );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Major..."                ), ID_COLORS_MAJOR           );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Minor..."                ), ID_COLORS_MINOR           );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Major Small..."          ), ID_COLORS_MAJOR_ALT       );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Minor Small..."          ), ID_COLORS_MINOR_ALT       );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Text..."                 ), ID_COLORS_GRIDTEXT        );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Grid Block..."                ), ID_COLORS_GRIDBLOCK       );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Default Brush..."             ), ID_COLORS_BRUSH           );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Camera Background..."         ), ID_COLORS_CAMERABACK      );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Selected Brush..."            ), ID_COLORS_SELECTEDBRUSH   );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Selected Brush (Camera)..."   ), ID_COLORS_SELECTEDBRUSH3D );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Clipper..."                   ), ID_COLORS_CLIPPER         );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Active View name..."          ), ID_COLORS_VIEWNAME        );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Detail Brush..."              ), ID_COLORS_DETAIL          );
-
-	item = create_menu_item_with_mnemonic( menu, _( "_Gamma..."                ), ID_MISC_GAMMA             );
-	item = create_menu_item_with_mnemonic( menu, _( "Find brush..."            ), ID_MISC_FINDBRUSH         );
-	item = create_menu_item_with_mnemonic( menu, _( "Next leak spot"           ), ID_MISC_NEXTLEAKSPOT      );
-	item = create_menu_item_with_mnemonic( menu, _( "Previous leak spot"       ), ID_MISC_PREVIOUSLEAKSPOT  );
-	item = create_menu_item_with_mnemonic( menu, _( "_Print XY View"           ), ID_MISC_PRINTXY           );
-	item = create_menu_item_with_mnemonic( menu, _( "_Select Entity Color..."  ), ID_MISC_SELECTENTITYCOLOR ); g_object_set_data( G_OBJECT( window ), "menu_misc_selectentitycolor", item );
-
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Region" ) );
-
-	create_menu_item_with_mnemonic( menu, _( "_Off"                  ), ID_REGION_OFF          );
-	create_menu_item_with_mnemonic( menu, _( "_Set XY"               ), ID_REGION_SETXY        );
-	create_menu_item_with_mnemonic( menu, _( "Set _Tall Brush"       ), ID_REGION_SETTALLBRUSH );
-	create_menu_item_with_mnemonic( menu, _( "Set _Brush"            ), ID_REGION_SETBRUSH     );
-	create_menu_item_with_mnemonic( menu, _( "Set Se_lected Brushes" ), ID_REGION_SETSELECTION );
-
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Brush" ) );
-
-	item = create_menu_item_with_mnemonic( menu, _( "3 sided"            ), ID_BRUSH_3SIDED         );
-	item = create_menu_item_with_mnemonic( menu, _( "4 sided"            ), ID_BRUSH_4SIDED         );
-	item = create_menu_item_with_mnemonic( menu, _( "5 sided"            ), ID_BRUSH_5SIDED         );
-	item = create_menu_item_with_mnemonic( menu, _( "6 sided"            ), ID_BRUSH_6SIDED         );
-	item = create_menu_item_with_mnemonic( menu, _( "7 sided"            ), ID_BRUSH_7SIDED         );
-	item = create_menu_item_with_mnemonic( menu, _( "8 sided"            ), ID_BRUSH_8SIDED         );
-	item = create_menu_item_with_mnemonic( menu, _( "9 sided"            ), ID_BRUSH_9SIDED         );
-	item = create_menu_item_with_mnemonic( menu, _( "Arbitrary sided..." ), ID_BRUSH_ARBITRARYSIDED );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Primitives" ) );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Cone..."   ), ID_BRUSH_MAKECONE          );
-	item = create_menu_item_with_mnemonic( menu_in_menu, _( "Sphere..." ), ID_BRUSH_PRIMITIVES_SPHERE );
-
-
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Curve" ) );
-
-	create_menu_item_with_mnemonic( menu, _( "Cylinder" ), ID_CURVE_PATCHTUBE );
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "More Cylinders" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Dense Cylinder"      ), ID_CURVE_PATCHDENSETUBE     );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Very Dense Cylinder" ), ID_CURVE_PATCHVERYDENSETUBE );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Square Cylinder"     ), ID_CURVE_PATCHSQUARE        );
-	create_menu_item_with_mnemonic( menu        , _( "End cap"             ), ID_CURVE_PATCHENDCAP        );
-	create_menu_item_with_mnemonic( menu        , _( "Bevel"               ), ID_CURVE_PATCHBEVEL         );
-
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "More End caps, Bevels" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Square Endcap" ), ID_CURVE_MOREENDCAPSBEVELS_SQUAREBEVEL  );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Square Bevel"  ), ID_CURVE_MOREENDCAPSBEVELS_SQUAREENDCAP );
-	create_menu_item_with_mnemonic( menu        , _( "Cone"          ), ID_CURVE_PATCHCONE                      );
-	item = create_menu_item_with_mnemonic( menu, _( "Sphere" ), ID_CURVE_PRIMITIVES_SPHERE );
-	gtk_widget_set_sensitive( item, FALSE );
-	item = create_menu_item_with_mnemonic( menu, _( "Simple Patch Mesh..." ), ID_CURVE_SIMPLEPATCHMESH );
-	g_object_set_data( G_OBJECT( window ), "menu_simplepatchmesh", item );
-	create_menu_item_with_mnemonic( menu, _( "Patch Inspector..." ), ID_PATCH_INSPECTOR );
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Insert" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Insert (2) Columns" ), ID_CURVE_INSERT_INSERTCOLUMN );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Add (2) Columns"    ), ID_CURVE_INSERT_ADDCOLUMN    );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Insert (2) Rows"    ), ID_CURVE_INSERT_INSERTROW    );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Add (2) Rows"       ), ID_CURVE_INSERT_ADDROW       );
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Delete" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "First (2) Columns" ), ID_CURVE_DELETE_FIRSTCOLUMN );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Last (2) Columns"  ), ID_CURVE_DELETE_LASTCOLUMN  );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "First (2) Rows"    ), ID_CURVE_DELETE_FIRSTROW    );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Last (2) Rows"     ), ID_CURVE_DELETE_LASTROW     );
-	menu_in_menu = create_menu_in_menu_with_mnemonic( menu, _( "Matrix" ) );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Invert" ), ID_CURVE_NEGATIVE );
-	menu_3 = create_menu_in_menu_with_mnemonic( menu_in_menu, _( "Re-disperse" ) );
-	create_menu_item_with_mnemonic( menu_3, _( "Rows" ), ID_CURVE_REDISPERSE_ROWS );
-	create_menu_item_with_mnemonic( menu_3, _( "Cols (Intermediate)" ), ID_CURVE_REDISPERSE_INTERMEDIATE_COLS );
-	create_menu_item_with_mnemonic( menu_3, _( "Rows (Intermediate)" ), ID_CURVE_REDISPERSE_INTERMEDIATE_ROWS );
-	create_menu_item_with_mnemonic( menu_in_menu, _( "Transpose"     ), ID_CURVE_MATRIX_TRANSPOSE             );
-
-	create_menu_item_with_mnemonic( menu, _( "Cap Selection"     ), ID_CURVE_CAP           );
-	create_menu_item_with_mnemonic( menu, _( "Cycle Cap Texture" ), ID_CURVE_CYCLECAP      );
-	create_menu_item_with_mnemonic( menu, _( "Overlay Set"       ), ID_CURVE_OVERLAY_SET   );
-	create_menu_item_with_mnemonic( menu, _( "Overlay Clear"     ), ID_CURVE_OVERLAY_CLEAR );
-	create_menu_item_with_mnemonic( menu, _( "Thicken..."        ), ID_CURVE_THICKEN       );
 
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Plugins" ) );
 
