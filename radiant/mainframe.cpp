@@ -914,6 +914,22 @@ void radiant_menu() {
 		if (ImGui::MenuItem("E_xit"               )) { execID(ID_FILE_EXIT              ); }
 		ImGui::EndMenu();
 	}
+
+	if (ImGui::BeginMenu("_Edit")) {
+		if (ImGui::MenuItem("_Undo"                        )) { execID( ID_EDIT_UNDO                ); }
+		if (ImGui::MenuItem("_Redo"                        )) { execID( ID_EDIT_REDO                ); }
+		if (ImGui::MenuItem("_Copy"                        )) { execID( ID_EDIT_COPYBRUSH           ); }
+		if (ImGui::MenuItem("_Paste"                       )) { execID( ID_EDIT_PASTEBRUSH          ); }
+		if (ImGui::MenuItem("P_aste To Camera"             )) { execID( ID_EDIT_PASTEBRUSHTOCAMERA  ); }
+		if (ImGui::MenuItem("_Delete"                      )) { execID( ID_SELECTION_DELETE         ); }
+		if (ImGui::MenuItem("Map Info..."                  )) { execID( ID_EDIT_MAPINFO             ); }
+		if (ImGui::MenuItem("Entity Info..."               )) { execID( ID_EDIT_ENTITYINFO          ); }
+		if (ImGui::MenuItem("Brush Scripts..."             )) { execID( ID_BRUSH_SCRIPTS            ); }
+		if (ImGui::MenuItem("Load Pre_fab..."              )) { execID( ID_EDIT_LOADPREFAB          ); }
+		if (ImGui::MenuItem("Save Selection as Prefab..."  )) { execID( ID_EDIT_SAVEPREFAB          ); }
+		if (ImGui::MenuItem("Preferences..."               )) { execID( ID_PREFS                    ); }
+		ImGui::EndMenu();
+	}
 }
 
 void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
@@ -928,21 +944,6 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	menu_bar = gtk_menu_bar_new();
 	gtk_box_pack_start( GTK_BOX( vbox ), menu_bar, FALSE, FALSE, 0 );
 	gtk_widget_show( menu_bar );
-
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Edit" ) );
-
-	item = create_menu_item_with_mnemonic( menu, _( "_Undo"                ), ID_EDIT_UNDO               ); g_object_set_data( G_OBJECT( window ), "menu_edit_undo", item );
-	item = create_menu_item_with_mnemonic( menu, _( "_Redo"                ), ID_EDIT_REDO               ); g_object_set_data( G_OBJECT( window ), "menu_edit_redo", item );
-	item = create_menu_item_with_mnemonic( menu, _( "_Copy"                ), ID_EDIT_COPYBRUSH          );
-	item = create_menu_item_with_mnemonic( menu, _( "_Paste"               ), ID_EDIT_PASTEBRUSH         );
-	item = create_menu_item_with_mnemonic( menu, _( "P_aste To Camera"     ), ID_EDIT_PASTEBRUSHTOCAMERA );
-	item = create_menu_item_with_mnemonic( menu, _( "_Delete"              ), ID_SELECTION_DELETE        ); g_object_set_data( G_OBJECT( window ), "menu_selection_delete", item );
-	create_menu_item_with_mnemonic( menu, _( "Map Info..."                 ), ID_EDIT_MAPINFO            );
-	create_menu_item_with_mnemonic( menu, _( "Entity Info..."              ), ID_EDIT_ENTITYINFO         );
-	create_menu_item_with_mnemonic( menu, _( "Brush Scripts..."            ), ID_BRUSH_SCRIPTS           );
-	create_menu_item_with_mnemonic( menu, _( "Load Pre_fab..."             ), ID_EDIT_LOADPREFAB         );
-	create_menu_item_with_mnemonic( menu, _( "Save Selection as Prefab..." ), ID_EDIT_SAVEPREFAB         );
-	create_menu_item_with_mnemonic( menu, _( "Preferences..."              ), ID_PREFS                   );
 
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_View" ) );
 
