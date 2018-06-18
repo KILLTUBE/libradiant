@@ -886,6 +886,36 @@ void HandleHelpCommand( GtkWidget *widget, gpointer data ){
 void MainFrame::process_xlink( Str &FileName, const char *menu_name, const char *base_url, GtkWidget *menu, GtkAccelGroup *accel ) {}
 void MainFrame::create_game_help_menu( GtkWidget *menu, GtkAccelGroup *accel ) {}
 
+void execID(int id) {
+	HandleCommand(NULL, GINT_TO_POINTER(id));
+}
+
+char* MRU_GetText( int index );
+
+void radiant_menu() {
+	if (ImGui::BeginMenu("_File")) {
+		if (ImGui::MenuItem("_New Map"            )) { execID(ID_FILE_NEW               ); }
+		if (ImGui::MenuItem("_Sleep"              )) { execID(ID_FILE_SLEEP             ); }
+		if (ImGui::MenuItem("_Open..."            )) { execID(ID_FILE_OPEN              ); }
+		if (ImGui::MenuItem("_Import..."          )) { execID(ID_FILE_IMPORTMAP         ); }
+		if (ImGui::MenuItem("_Save"               )) { execID(ID_FILE_SAVE              ); }
+		if (ImGui::MenuItem("Save _as..."         )) { execID(ID_FILE_SAVEAS            ); }
+		if (ImGui::MenuItem("Save s_elected..."   )) { execID(ID_FILE_EXPORTMAP         ); }
+		if (ImGui::MenuItem("Save re_gion..."     )) { execID(ID_FILE_SAVEREGION        ); }
+		if (ImGui::MenuItem("New p_roject..."     )) { execID(ID_FILE_NEWPROJECT        ); }
+		if (ImGui::MenuItem("Load _project..."    )) { execID(ID_FILE_LOADPROJECT       ); }
+		if (ImGui::MenuItem("Pro_ject settings...")) { execID(ID_FILE_PROJECTSETTINGS   ); }
+		if (ImGui::MenuItem("_Pointfile..."       )) { execID(ID_FILE_POINTFILE         ); }
+		if (ImGui::MenuItem(MRU_GetText(0)        )) { execID(ID_FILE_RECENT1           ); }
+		if (ImGui::MenuItem(MRU_GetText(1)        )) { execID(ID_FILE_RECENT2           ); }
+		if (ImGui::MenuItem(MRU_GetText(2)        )) { execID(ID_FILE_RECENT3           ); }
+		if (ImGui::MenuItem(MRU_GetText(3)        )) { execID(ID_FILE_RECENT4           ); }
+		if (ImGui::MenuItem("Check Updates"       )) { execID(ID_FILE_CHECKUPDATE       ); }
+		if (ImGui::MenuItem("E_xit"               )) { execID(ID_FILE_EXIT              ); }
+		ImGui::EndMenu();
+	}
+}
+
 void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	GtkWidget *menu_bar, *menu, *menu_in_menu, *menu_3, *item;
 	GtkAccelGroup *accel;
@@ -898,46 +928,6 @@ void MainFrame::create_main_menu( GtkWidget *window, GtkWidget *vbox ){
 	menu_bar = gtk_menu_bar_new();
 	gtk_box_pack_start( GTK_BOX( vbox ), menu_bar, FALSE, FALSE, 0 );
 	gtk_widget_show( menu_bar );
-
-	// File menu
-	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_File" ) );
-	if ( g_PrefsDlg.m_bDetachableMenus ) {
-		menu_tearoff( menu );
-	}
-
-	create_menu_item_with_mnemonic( menu, _( "_New Map" ), ID_FILE_NEW );
-
-	item = create_menu_item_with_mnemonic( menu, _( "_Sleep"            ), ID_FILE_SLEEP      ); g_object_set_data( G_OBJECT( window ), "menu_file_sleep"     , item );
-	item = create_menu_item_with_mnemonic( menu, _( "_Open..."          ), ID_FILE_OPEN       ); g_object_set_data( G_OBJECT( window ), "menu_file_open"      , item );
-	item = create_menu_item_with_mnemonic( menu, _( "_Import..."        ), ID_FILE_IMPORTMAP  );
-	item = create_menu_item_with_mnemonic( menu, _( "_Save"             ), ID_FILE_SAVE       ); g_object_set_data( G_OBJECT( window ), "menu_file_save"      , item );
-	item = create_menu_item_with_mnemonic( menu, _( "Save _as..."       ), ID_FILE_SAVEAS     );
-	item = create_menu_item_with_mnemonic( menu, _( "Save s_elected..." ), ID_FILE_EXPORTMAP  );
-	item = create_menu_item_with_mnemonic( menu, _( "Save re_gion..."   ), ID_FILE_SAVEREGION ); g_object_set_data( G_OBJECT( window ), "menu_file_saveregion", item );
-
-	item = create_menu_item_with_mnemonic( menu, _( "New p_roject..."      ), ID_FILE_NEWPROJECT      );
-	item = create_menu_item_with_mnemonic( menu, _( "Load _project..."     ), ID_FILE_LOADPROJECT     );
-	item = create_menu_item_with_mnemonic( menu, _( "Pro_ject settings..." ), ID_FILE_PROJECTSETTINGS );
-	item = create_menu_item_with_mnemonic( menu, _( "_Pointfile..."        ), ID_FILE_POINTFILE       );
-	item = create_menu_item_with_mnemonic( menu, _( "Recent Files"         ), ID_FILE_RECENT1         );
-	g_object_set_data( G_OBJECT( item ), "accel", accel );
-	gtk_widget_set_sensitive( item, FALSE );
-	MRU_AddWidget( item, 0 );
-	item = create_menu_item_with_mnemonic( menu, "2", ID_FILE_RECENT2 );
-	gtk_widget_hide( item );
-	MRU_AddWidget( item, 1 );
-	item = create_menu_item_with_mnemonic( menu, "3", ID_FILE_RECENT3 );
-	gtk_widget_hide( item );
-	MRU_AddWidget( item, 2 );
-	item = create_menu_item_with_mnemonic( menu, "4", ID_FILE_RECENT4 );
-	gtk_widget_hide( item );
-	MRU_AddWidget( item, 3 );
-	menu_separator( menu );
-	item = create_menu_item_with_mnemonic( menu, _( "Check for GtkRadiant update (web)" ), ID_FILE_CHECKUPDATE );
-	// disable, the functionality is no longer available
-	gtk_widget_set_sensitive( item, FALSE );
-
-	create_menu_item_with_mnemonic( menu, _( "E_xit" ), ID_FILE_EXIT );
 
 	menu = create_sub_menu_with_mnemonic( menu_bar, _( "_Edit" ) );
 

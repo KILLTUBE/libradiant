@@ -16,6 +16,8 @@ bool show_another_window = true;
 bool show_demo_window = false;
 ImVec4 clear_color_2 = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+void radiant_menu();
+
 int main_menu_GUIasd() {
     //////////////////////
     // Placeholder menu //
@@ -83,6 +85,7 @@ int main_menu_GUIasd() {
             ImGui::EndMenu();
            
         }
+		radiant_menu();
 
         menu_height = ImGui::GetWindowSize().y;
 

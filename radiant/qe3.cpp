@@ -1152,7 +1152,7 @@ static int MRU_used;
 typedef char MRU_filename_t[PATH_MAX];
 MRU_filename_t MRU_filenames[MRU_MAX];
 
-static char* MRU_GetText( int index ){
+char* MRU_GetText( int index ) {
 	return MRU_filenames[index];
 }
 
@@ -1245,22 +1245,6 @@ void MRU_Activate( int index ){
 		MRU_AddFile( text );
 		Map_LoadFile( text );
 		free( text );
-	}
-	else
-	{
-		MRU_used--;
-
-		for ( int i = index; i < MRU_used; i++ )
-			MRU_SetText( i, MRU_GetText( i + 1 ) );
-
-		if ( MRU_used == 0 ) {
-			gtk_menu_item_set_label( GTK_MENU_ITEM( MRU_items[0] ), _( "Recent Files" ) );
-			gtk_widget_set_sensitive( MRU_items[0], FALSE );
-		}
-		else
-		{
-			gtk_widget_hide( MRU_items[MRU_used] );
-		}
 	}
 }
 
