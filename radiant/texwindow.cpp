@@ -326,8 +326,14 @@ void ResampleGamma( float fGamma ){
 //#include "plugin.h"
 //#include "mathlib.h"
 //#include "missing.h" //++timo FIXME: this one is intended to go away some day, it's MFC compatibility classes
-//#include "shaders.h"
+#include "../plugins/shaders/shaders.h"
 
+extern CShader *shaders[1024];
+extern int nextShaderID;
+
+
+qtexture_t *textures[1024] = {NULL};
+int nextTextureID = 0;
 
 // ccall( (:ffi_qtextures, libradiant), Ptr{Void}, ())
 CCALL qtexture_t **ffi_qtextures() {
@@ -337,6 +343,7 @@ qtexture_t** WINAPI QERApp_QTextures(); // return &g_qeglobals.d_qtextures;
 GHashTable* WINAPI QERApp_QTexmap(); // return g_qeglobals.d_qtexmap;
 /*
 qtex = ccall( (:ffi_load_texture, libradiant), Ptr{Void}, ())
+qtex = ccall( (:ffi_load_jpg, libradiant), Ptr{Void}, (Cstring,), "textures/concrete/asphalt.jpg")
 next(getSelectedBrushes())[:brush_faces][:d_texture] = qtex
 */
 CCALL void *ffi_load_texture() {
@@ -356,6 +363,61 @@ CCALL void *ffi_load_texture() {
 	*d_qtextures = qtex;
 	// push it in the map
 	g_hash_table_insert( QERApp_QTexmap(), qtex->name, qtex );
+
+	int id = nextShaderID++;
+	// shader and texture ids are same all the time atm
+	textures[id] = qtex;
+
+	CShader *shader = new CShader;
+	shader->id = id;
+	shaders[id] = shader;
+	//IShader *shader = QERApp_CreateShader_ForTextureName("concrete/asphalt");
+	shader->setName("concrete/red");
+	shader->setTexture(qtex);
+	shader->IncRef();
+	shader->IncRef();
+	shader->IncRef();
+
+	return qtex;
+}
+
+#include "../plugins/image/image.h"
+
+CCALL void *ffi_load_jpg(char *filename) {
+	int width = 0;
+	int height = 0;
+	unsigned char *data = NULL;
+
+
+	LoadJPG(filename, &data, &width, &height);
+	
+	if (data == NULL)
+		return NULL;
+
+
+	qtexture_t *qtex = QERApp_LoadTextureRGBA(data, width, height);
+	strcpy(qtex->name, filename);
+	// below copy-pasted and fixed from https://github.com/TTimo/GtkRadiant/blob/master/plugins/shaders/shaders.cpp#L800
+	// hook into the main qtexture_t list
+	qtexture_t **d_qtextures = QERApp_QTextures();
+	qtex->next = *d_qtextures;
+	*d_qtextures = qtex;
+	// push it in the map
+	g_hash_table_insert( QERApp_QTexmap(), qtex->name, qtex );
+	textures[nextTextureID++] = qtex;
+
+	int id = nextShaderID++;
+	// shader and texture ids are same all the time atm
+	textures[id] = qtex;
+	CShader *shader = new CShader;
+	shaders[id] = shader;
+	shader->id = id;
+	//IShader *shader = QERApp_CreateShader_ForTextureName("concrete/asphalt");
+	shader->setTexture(qtex);
+	shader->setName("concrete/asphalt");
+	shader->IncRef();
+	shader->IncRef();
+	shader->IncRef();
 	return qtex;
 }
 
@@ -856,14 +918,14 @@ void Texture_ShowDirectory(){
 
 	sprintf( dirstring, "textures/%s", texture_directory );
 
-	/*
-	g_ImageManager.BeginExtensionsScan();
+	
+	//g_ImageManager.BeginExtensionsScan();
 	const char* ext;
-	while ( ( ext = g_ImageManager.GetNextExtension() ) != NULL )
+	//while ( ( ext = g_ImageManager.GetNextExtension() ) != NULL )
 	{
-		files = g_slist_concat( files, vfsGetFileList( dirstring, ext ) );
+		files = g_slist_concat( files, vfsGetFileList( dirstring, "jpg" ) );
 	}
-	*/
+	//*/
 
 	for ( temp = files; temp; temp = temp->next )
 	{
@@ -1325,6 +1387,12 @@ static int textures_cursorx, textures_cursory;
 //++timo NOTE: this is a mix of Shader module stuff and texture explorer
 // it might need to be split in parts or moved out .. dunno
 void WINAPI Texture_SetTexture( texdef_t *texdef, brushprimit_texdef_t *brushprimit_texdef, bool bFitScale, IPluginTexdef *pTexdef, bool bSetSelection ){
+
+	if (pCurrentShader == NULL) {
+		imgui_log("Texture_SetTexture, pCurrentShader == NULL\n");
+		return;
+	}
+
 	if ( texdef->GetName()[0] == '(' ) {
 		Sys_Status( "Can't select an entity texture", 0 );
 		return;
@@ -1335,7 +1403,8 @@ void WINAPI Texture_SetTexture( texdef_t *texdef, brushprimit_texdef_t *brushpri
 	// store the shader pointer
 	// NOTE: maybe passing the shader pointer would help?
 	g_qeglobals.d_texturewin.pShader->DecRef();
-	g_qeglobals.d_texturewin.pShader = QERApp_Shader_ForName( texdef->GetName() );
+	//g_qeglobals.d_texturewin.pShader = QERApp_Shader_ForName( texdef->GetName() );
+	g_qeglobals.d_texturewin.pShader = pCurrentShader;
 	g_qeglobals.d_texturewin.pShader->IncRef();
 	// set this shader as in use
 	g_qeglobals.d_texturewin.pShader->SetInUse( true );
@@ -1363,14 +1432,14 @@ void ViewShader( const char *pFile, const char *pName ){
 	// (i.e. the first one found)
 	char *fullName = vfsGetFullPath( pFile,0,0 );
 	if ( fullName == NULL ) {
-		Sys_FPrintf( SYS_ERR, "Couldn't get a full path to the shader file: %s\n", pFile );
+		Sys_Printf("Couldn't get a full path to the shader file: %s\n", pFile );
 		return;
 	}
 
 	char* pBuff = NULL;
 	int nSize = vfsLoadFullPathFile( fullName, reinterpret_cast<void**>( &pBuff ) );
 	if ( nSize <= 0 ) {
-		Sys_FPrintf( SYS_ERR, "Failed to load shader file %s\n", fullName );
+		Sys_Printf("ViewShader> Failed to load shader file %s\n", fullName );
 		return;
 	}
 	// look for the shader declaration
@@ -1414,6 +1483,10 @@ void assign_shader_to_selection(IShader *ishader) {
 	brushprimit_texdef_t brushprimit_tex;
 
 	qtexture_t *q = ishader->getTexture();
+	if (q == NULL) {
+		imgui_log("assign_shader_to_selection> q == NULL\n");
+		return;
+	}
 
 	bool bFitScale = false; // todo: depend on shift key
 
@@ -1949,12 +2022,16 @@ void texwnd_imgui() {
 	// _IMG_IMG_IMG_IMG_
 	// [   e.g. 800px  ]
 	// 
-	return;
 
-	for (int i=0; i<nActiveShadersCount; i++) {
-		pCurrentShader = QERApp_ActiveShader_ForIndex( i );
-		current_texture = pCurrentShader->getTexture();
+	for (int i=0; i<sizeof(textures); i++) {
+		pCurrentShader = shaders[i];
+		//current_texture = pCurrentShader->getTexture();
 			
+		current_texture  = textures[i];
+
+		if (current_texture == NULL)
+			break;
+
 		int w = current_texture->width;
 		int h = current_texture->height;
 		//ImGui::Text("tex %s %d %d", current_texture->name, w, h);

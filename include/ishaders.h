@@ -61,7 +61,7 @@ virtual void IncRef() = 0;
 // Decrement the reference count
 virtual void DecRef() = 0;
 // get/set the qtexture_t* Radiant uses to represent this shader object
-virtual qtexture_t* getTexture() const = 0;
+virtual qtexture_t* getTexture() = 0;
 virtual void setTexture( qtexture_t *pTex ) = 0;
 // get shader name
 virtual const char* getName() const = 0;

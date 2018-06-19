@@ -102,6 +102,11 @@ IShader *WINAPI QERApp_ActiveShader_ForIndex( int i ){
 	return static_cast < CShader * >( g_ActiveShaders.GetAt( i ) );
 }
 
+extern qtexture_t *textures[1024];
+qtexture_t* CShader::getTexture() {
+	return textures[id];
+}
+
 void CShaderArray::SortShaders(){
 	CPtrArray aux;
 	int i, icount;
@@ -134,18 +139,33 @@ void WINAPI QERApp_SortActiveShaders(){
 	g_ActiveShaders.SortShaders();
 }
 
+
+CShader *shaders[1024] = {NULL};
+int nextShaderID = 0;
+
+
 // NOTE: case sensitivity
 // although we store shader names with case information, Radiant does case insensitive searches
 // (we assume there's no case conflict with the names)
 CShader *CShaderArray::Shader_ForName( const char *name ) const {
 	int i;
-	for ( i = 0; i < CPtrArray::GetSize(); i++ )
-	{
-		CShader *pShader = static_cast < CShader * >( CPtrArray::GetAt( i ) );
-		if ( stricmp( pShader->getName(), name ) == 0 ) {
-			return pShader;
-		}
+	//for ( i = 0; i < CPtrArray::GetSize(); i++ )
+	//{
+	//	CShader *pShader = static_cast < CShader * >( CPtrArray::GetAt( i ) );
+	//	if ( stricmp( pShader->getName(), name ) == 0 ) {
+	//		return pShader;
+	//	}
+	//}
+
+	for (i=0; i<1024; i++) {
+		CShader *shader = shaders[i];
+		if (shader == NULL)
+			continue;
+		
+		if ( stricmp(shader->getName(), name) == 0)
+			return shader;
 	}
+
 	return NULL;
 }
 
@@ -600,11 +620,11 @@ void CShader::Try_Activate(){
 // the shader is still activated in all cases.
 bool CShader::Activate(){
 	Try_Activate();
-	if ( !m_pTexture ) {
-		m_pTexture = QERApp_Texture_ForName2( SHADER_NOTEX );
-		RegisterActivate();
-		return false;
-	}
+	//if ( !m_pTexture ) {
+	//	m_pTexture = QERApp_Texture_ForName2( SHADER_NOTEX );
+	//	RegisterActivate();
+	//	return false;
+	//}
 	return true;
 }
 

@@ -397,7 +397,7 @@ static int LoadJPGBuff( void *src_buffer, int src_size, unsigned char **pic, int
 	return 0;
 }
 
-// ccall( (:test_jpg, libradiant), Void, (Cstring,), "bla.jpg")
+// ccall( (:test_jpg, libradiant), Void, (Cstring,), "textures/concrete/asphalt.jpg")
 CCALL void test_jpg(char *filename) {
 	unsigned char *pic = NULL;
 	int width = 0;

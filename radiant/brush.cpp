@@ -3183,7 +3183,9 @@ void Brush_Draw( brush_t *b ){
 		else if ( ( nGLState & DRAW_GL_TEXTURE_2D ) && ( nDrawMode == cd_texture || nDrawMode == cd_light ) && face->d_texture != prev ) {
 			// set the texture for this face
 			prev = face->d_texture;
-			qglBindTexture( GL_TEXTURE_2D, face->d_texture->texture_number );
+
+			if (face->d_texture)
+				qglBindTexture( GL_TEXTURE_2D, face->d_texture->texture_number );
 		}
 
 		if ( ( nGLState & DRAW_GL_LIGHTING ) && !g_PrefsDlg.m_bGLLighting ) {
