@@ -110,7 +110,7 @@ CCALL int imgui_default_docks() {
 		auto size = ImGui::GetIO().DisplaySize;
 		size.y -= pos.y;
 
-		int statusbar = 1;
+		int statusbar = 0;
 
 		if (statusbar)
 			RootDock(pos, ImVec2(size.x, size.y - 25.0f));

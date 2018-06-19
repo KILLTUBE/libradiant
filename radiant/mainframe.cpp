@@ -1281,6 +1281,7 @@ void toolbar_append_element( GtkToolbar *toolbar, const gchar *tooltip_text, con
 }
 
 void MainFrame::create_main_toolbar( GtkWidget *window, GtkWidget *vbox ){
+#if 0
 	GtkToolbar *toolbar = GTK_TOOLBAR(gtk_toolbar_new());
 	gtk_orientable_set_orientation( GTK_ORIENTABLE( toolbar ), GTK_ORIENTATION_HORIZONTAL );
 	gtk_toolbar_set_style( GTK_TOOLBAR( toolbar ), GTK_TOOLBAR_ICONS );
@@ -1324,14 +1325,17 @@ void MainFrame::create_main_toolbar( GtkWidget *window, GtkWidget *vbox ){
 	toolbar_append_element( toolbar, _( "Welds equal patch points during moves"  ), "patch_weld.png"           , ID_PATCH_WELD           , window, "ttb_patch_weld"            );
 	toolbar_append_element( toolbar, _( "Selects drill down rows and columns"    ), "patch_drilldown.png"      , ID_PATCH_DRILLDOWN      , window, "ttb_patch_drilldown"       );
 
-	m_bCamPreview = true;
-	g_nScaleHow = ( SCALE_X | SCALE_Y | SCALE_Z );
 	gtk_widget_show( (GtkWidget *)toolbar );
+#endif
+
+	//m_bCamPreview = false;
+	//g_nScaleHow = ( SCALE_X | SCALE_Y | SCALE_Z );
 }
 
 void MainFrame::create_plugin_toolbar( GtkWidget *window, GtkWidget *vbox ) {}
 
 void MainFrame::create_main_statusbar( GtkWidget *window, GtkWidget *vbox ){
+#if 0
 	GtkWidget *hbox, *hbox1;
 	GtkWidget *frame;
 	GtkWidget *label;
@@ -1371,6 +1375,7 @@ void MainFrame::create_main_statusbar( GtkWidget *window, GtkWidget *vbox ){
 		gtk_widget_show( label );
 		m_pStatusLabel[i] = label;
 	}
+#endif
 }
 
 guint s_idle_id;
