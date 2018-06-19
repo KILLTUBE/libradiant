@@ -168,233 +168,22 @@ typedef list<APIDescriptor_t*> APIDescriptorList;
 
 APIDescriptorList mAPIs;
 public:
-CRadiantModelModuleManager(){
-	SetMatchAPI( MODEL_MAJOR, "*" );
-}
-virtual ~CRadiantModelModuleManager(){
-	APIDescriptorList::iterator i;
-	for ( i = mAPIs.begin(); i != mAPIs.end(); i++ )
-	{
-		delete (_QERPlugModelTable*)( *i )->mpTable;
-		delete *i;
-		*i = NULL;
-	}
-	mAPIs.clear();
-}
+CRadiantModelModuleManager() {}
+virtual ~CRadiantModelModuleManager() {}
 
-// CSynapseAPIManager interface -------------------
-APIDescriptor_t* BuildRequireAPI( APIDescriptor_t* pAPI ){
-	APIDescriptor_t* pRequireAPI = CSynapseAPIManager::PrepareRequireAPI( pAPI );
-	pRequireAPI->mpTable = new _QERPlugModelTable;
-	( (_QERPlugModelTable*)pRequireAPI->mpTable )->m_nSize = sizeof( _QERPlugModelTable );
-	pRequireAPI->mSize = sizeof( _QERPlugModelTable );
-	mAPIs.push_front( pRequireAPI );
-	return pRequireAPI;
-}
-
-// Model Manager specific
-const _QERPlugModelTable* GetModelTable( const char* version ){
-	APIDescriptorList::iterator i;
-	for ( i = mAPIs.begin(); i != mAPIs.end(); i++ )
-		if ( strcmp( version, ( *i )->minor_name ) == 0 ) {
-			return ( (_QERPlugModelTable*)( *i )->mpTable );
-		}
-	return NULL;
-}
+APIDescriptor_t* BuildRequireAPI( APIDescriptor_t* pAPI ) { return NULL; }
+const _QERPlugModelTable* GetModelTable( const char* version ) { return NULL; }
 };
 
-CRadiantModelModuleManager g_ModelManager;
 
-/*! One of these exists for each unique model ID in use */
-class CModelWrapper
-{
-friend class CModelManager;
-public:
-CModelWrapper ( const char *id, const char* version ) : refcount( 1 ){
-	copy( id, version );
-	construct();
-}
-void Refresh(){
-	destroy();
-	construct();
-}
-~CModelWrapper (){
-	destroy();
-}
-private:
-void copy( const char* id, const char* version ){
-	m_id = id;
-	m_version = version;
-}
-void construct(){
-	m_model.pRender = NULL;
-	m_model.pSelect = NULL;
-	m_model.pEdit = NULL;
-
-	const _QERPlugModelTable* pTable = g_ModelManager.GetModelTable( m_version.c_str() );
-
-	if ( pTable != NULL ) {
-		pTable->m_pfnLoadModel( &m_model, m_id.c_str() );
-	}
-}
-void destroy(){
-	if ( m_model.pRender ) {
-		m_model.pRender->DecRef();
-	}
-	if ( m_model.pSelect ) {
-		m_model.pSelect->DecRef();
-	}
-	if ( m_model.pEdit ) {
-		m_model.pEdit->DecRef();
-	}
-}
-string_t m_id;
-string_t m_version;
-entity_interfaces_t m_model;
-int refcount;
-};
-
-/*! Creates and tracks CModelWrapper instances.
-   Creates a new instance for each unique ID requested, keeps count of the number of
-   times an ID is being referenced, and destroys any instance that is no longer in use */
-class CModelManager : public IModelCache
-{
-	public:
-	CModelManager(){
-		m_ptrs = g_ptr_array_new();
-	}
-	virtual ~CModelManager(){
-		g_ptr_array_free( m_ptrs, FALSE );
-	}
-
-	virtual void DeleteByID( const char *id, const char* version ){
-		unsigned int i;
-		CModelWrapper *elem;
-		for ( i = 0; i < m_ptrs->len; i++ )
-		{
-			elem = (CModelWrapper*)m_ptrs->pdata[i];
-			if (strcmp(elem->m_version.c_str(), version) == 0
-				&& strcmp(elem->m_id.c_str(), id) == 0) {
-				elem->refcount--;
-				if (elem->refcount == 0) {
-					g_ptr_array_remove_index_fast(m_ptrs, i);
-					delete elem;
-				}
-				return;
-			}
-		}
-	}
-
-	virtual entity_interfaces_t *GetByID( const char *id, const char* version ){
-		unsigned int i;
-		CModelWrapper *elem;
-		for ( i = 0; i < m_ptrs->len; i++ )
-		{
-			elem = (CModelWrapper*)m_ptrs->pdata[i];
-			if ( strcmp( elem->m_version.c_str(), version ) == 0
-				 && strcmp( elem->m_id.c_str(), id ) == 0 ) {
-				elem->refcount++;
-				return &elem->m_model;
-			}
-		}
-
-		elem = new CModelWrapper( id, version );
-		g_ptr_array_add( m_ptrs, elem );
-
-		return &elem->m_model;
-	}
-
-	virtual void RefreshAll(){
-		for ( unsigned int i = 0; i < m_ptrs->len; ++i )
-			( (CModelWrapper*)m_ptrs->pdata[i] )->Refresh();
-	}
-	private:
-	GPtrArray *m_ptrs;   // array of CModelWrapper*
-};
-
-CModelManager g_model_cache;
 
 IModelCache* GetModelCache(){
-	return &g_model_cache;
+	return NULL;
 }
 
-// toolbar manager
-class CRadiantToolbarModuleManager : public CSynapseAPIManager
-{
-typedef list<APIDescriptor_t*> APIDescriptorList;
-
-APIDescriptorList mAPIs;
-public:
-CRadiantToolbarModuleManager(){
-	SetMatchAPI( TOOLBAR_MAJOR, "*" );
-}
-virtual ~CRadiantToolbarModuleManager(){
-	APIDescriptorList::iterator i;
-	for ( i = mAPIs.begin(); i != mAPIs.end(); i++ )
-	{
-		delete (_QERPlugToolbarTable*)( *i )->mpTable;
-		delete *i;
-		*i = NULL;
-	}
-	mAPIs.clear();
-}
-
-// CSynapseAPIManager interface -------------------
-APIDescriptor_t* BuildRequireAPI( APIDescriptor_t* pAPI ){
-	APIDescriptor_t* pRequireAPI = CSynapseAPIManager::PrepareRequireAPI( pAPI );
-	pRequireAPI->mpTable = new _QERPlugToolbarTable;
-	( (_QERPlugToolbarTable*)pRequireAPI->mpTable )->m_nSize = sizeof( _QERPlugToolbarTable );
-	pRequireAPI->mSize = sizeof( _QERPlugToolbarTable );
-	mAPIs.push_front( pRequireAPI );
-	return pRequireAPI;
-}
-
-// Toolbar Manager specific
-void ConstructToolbar(){
-	APIDescriptorList::iterator i;
-	for ( i = mAPIs.begin(); i != mAPIs.end(); i++ )
-		AddItem( (_QERPlugToolbarTable*)( *i )->mpTable );
-}
-
-private:
-
-void AddItem( _QERPlugToolbarTable* pTable ){
-	const unsigned int count = pTable->m_pfnToolbarButtonCount();
-	for ( unsigned int i = 0; i < count; ++i )
-	{
-		const IToolbarButton* button = pTable->m_pfnGetToolbarButton( i );
-		g_pParentWnd->AddPlugInToolbarButton( button );
-	}
-}
-};
-
-CRadiantToolbarModuleManager g_ToolbarModuleManager;
-
-
-/* image manager ---------------------------------------- */
-
-CRadiantImageManager::~CRadiantImageManager(){
-	list<CImageTableSlot *>::iterator iSlot;
-	for ( iSlot = mSlots.begin(); iSlot != mSlots.end(); iSlot++ )
-	{
-		delete *iSlot;
-		*iSlot = NULL;
-	}
-}
-
-void CImageTableSlot::InitForFillAPITable( APIDescriptor_t *pAPI ){
-	mpAPI = pAPI;
-	mpTable = new _QERPlugImageTable;
-	mpTable->m_nSize = sizeof( _QERPlugImageTable );
-	mpAPI->mSize = sizeof( _QERPlugImageTable );
-	mpAPI->mpTable = mpTable;
-}
-
-void CRadiantImageManager::FillAPITable( APIDescriptor_t *pAPI ){
-	CImageTableSlot *pSlot = new CImageTableSlot();
-	pSlot->InitForFillAPITable( pAPI );
-	mSlots.push_front( pSlot );
-}
+CRadiantImageManager::~CRadiantImageManager() {}
+void CImageTableSlot::InitForFillAPITable( APIDescriptor_t *pAPI ) {}
+void CRadiantImageManager::FillAPITable( APIDescriptor_t *pAPI ) {}
 
 /*!
    Loads an image by calling the module that handles the extension extracted from the filename
@@ -442,57 +231,14 @@ void CRadiantImageManager::LoadImage( const char *name, byte **pic, int *width, 
 	Sys_FPrintf( SYS_WRN, "WARNING: no image table for extension '%s'\n", ext );
 }
 
-void CRadiantImageManager::BeginExtensionsScan(){
-	mExtScanSlot = mSlots.begin();
-}
+void CRadiantImageManager::BeginExtensionsScan() {}
 
-const char* CRadiantImageManager::GetNextExtension(){
-	if ( mExtScanSlot != mSlots.end() ) {
-		char *ext = ( *mExtScanSlot )->GetDescriptor()->minor_name;
-		mExtScanSlot++;
-		return ext;
-	}
-	return NULL;
-}
+const char* CRadiantImageManager::GetNextExtension() { return NULL; }
 
-/* plugin manager --------------------------------------- */
-APIDescriptor_t* CRadiantPluginManager::BuildRequireAPI( APIDescriptor_t *pAPI ){
-	CPluginSlot *pSlot = new CPluginSlot( pAPI );
-	mSlots.push_front( pSlot );
-	return pSlot->GetDescriptor();
-}
+APIDescriptor_t* CRadiantPluginManager::BuildRequireAPI( APIDescriptor_t *pAPI ) { return NULL; }
 #include "imgui/imgui.h"
 
-void CRadiantPluginManager::PopulateMenu(){
-	list<CPluginSlot *>::iterator iPlug;
-	for (CPluginSlot *plugin : mSlots) {
-		const char *menuname = plugin->getMenuName();
-		if (ImGui::BeginMenu(menuname)) {
-			
-			int nCount = plugin->getCommandCount();
-			if ( nCount > 0 ) {
-				while ( nCount > 0 ) {
-					const char *menuText = plugin->getCommand( --nCount );
-					if ( menuText != NULL && strlen( menuText ) > 0 ) {
-						if ( !strcmp( menuText, "-" ) ) {
-						}
-						else
-						{
-							
-							//g_signal_connect( G_OBJECT( item ), "activate", G_CALLBACK( HandleCommand ), GINT_TO_POINTER( m_nNextPlugInID ) );
-						}
-						
-						//plugin->addMenuID( m_nNextPlugInID++ );
-						
-					}
-					ImGui::Button(menuText);
-				}
-			}
-
-			ImGui::EndMenu();
-		}
-	}
-}
+void CRadiantPluginManager::PopulateMenu() {}
 
 void CSynapseClientRadiant::ImportMap( IDataStream *in, CPtrArray *ents, const char *type ){
 	if ( strcmp( type,"map" ) == 0 ) {
@@ -540,56 +286,22 @@ CPluginSlot::~CPluginSlot(){
 }
 
 void CPluginSlot::Init(){
-	CString str =   mpTable->m_pfnQERPlug_GetCommandList();
-	char cTemp[1024];
-	strcpy( cTemp, str );
-	char* token = strtok( cTemp, ",;" );
-	if ( token && *token == ' ' ) {
-		while ( *token == ' ' )
-			token++;
-	}
-	while ( token != NULL )
-	{
-		m_CommandStrings = g_slist_append( m_CommandStrings, strdup( token ) );
-		token = strtok( NULL, ",;" );
-	}
-	mpTable->m_pfnQERPlug_Init( NULL, (void*)g_pParentWnd->m_pWidget );
-	m_bReady = true;
+	
 }
 
 const char* CPluginSlot::getMenuName(){
 	return mpAPI->minor_name;
 }
 
-int CPluginSlot::getCommandCount(){
-	if ( !m_bReady ) {
-		Init();
-	}
-	return g_slist_length( m_CommandStrings );
-}
+int CPluginSlot::getCommandCount() { return 0; }
 
-const char* CPluginSlot::getCommand( int n ){
-	if ( !m_bReady ) {
-		Init();
-	}
-	return (char*)g_slist_nth_data( m_CommandStrings, n );
-}
+const char* CPluginSlot::getCommand( int n ) { return "asd"; }
 
 void CPluginSlot::addMenuID( int n ){
 	m_CommandIDs = g_slist_append( m_CommandIDs, GINT_TO_POINTER( n ) );
 }
 
-bool CPluginSlot::ownsCommandID( int n ){
-	GSList* lst;
-
-	for ( lst = m_CommandIDs; lst != NULL; lst = g_slist_next( lst ) )
-	{
-		if ( GPOINTER_TO_INT( lst->data ) == n ) {
-			return true;
-		}
-	}
-	return false;
-}
+bool CPluginSlot::ownsCommandID( int n ){ return false; }
 
 void CPluginSlot::Dispatch( const char *p ){
 	vec3_t vMin, vMax;
@@ -604,31 +316,8 @@ void CPluginSlot::Dispatch( const char *p ){
 	mpTable->m_pfnQERPlug_Dispatch( p, vMin, vMax, QE_SingleBrush( true ) );
 }
 
-CRadiantPluginManager::~CRadiantPluginManager(){
-	list<CPluginSlot *>::iterator iSlot;
-	for ( iSlot = mSlots.begin(); iSlot != mSlots.end(); iSlot++ )
-	{
-		delete *iSlot;
-		*iSlot = NULL;
-	}
-}
-
-bool CRadiantPluginManager::Dispatch( int n, const char* p ){
-	list<CPluginSlot *>::iterator iPlug;
-	for ( iPlug = mSlots.begin(); iPlug != mSlots.end(); iPlug++ )
-	{
-		CPluginSlot *pPlug = *iPlug;
-		if ( pPlug->ownsCommandID( n ) ) {
-			pPlug->Dispatch( p );
-			return true;
-		}
-	}
-	return false;
-}
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+CRadiantPluginManager::~CRadiantPluginManager() {}
+bool CRadiantPluginManager::Dispatch( int n, const char* p ) { return false; }
 
 CPlugInManager::CPlugInManager(){
 	PatchesMode = EActivePatches;
@@ -639,108 +328,16 @@ CPlugInManager::~CPlugInManager(){
 	Cleanup();
 }
 
-void CPlugInManager::InitForDir( const Str &dir ){
-	Str path;
-
-	path = dir;
-	path += g_strPluginsDir;
-	// SYNAPSE
-	g_pParentWnd->GetSynapseServer().AddSearchPath( path );
-
-	if ( strcmp( g_strPluginsDir.GetBuffer(), g_strModulesDir.GetBuffer() ) != 0 ) {
-		path = dir;
-		path += g_strModulesDir;
-		// SYNAPSE
-		g_pParentWnd->GetSynapseServer().AddSearchPath( path );
-	}
-}
-
-static const XMLConfigEntry_t manager_entries[] =
-{
-	{ VFS_MAJOR,            SYN_REQUIRE, sizeof( g_FileSystemTable ), &g_FileSystemTable },
-	{ SHADERS_MAJOR,        SYN_REQUIRE, sizeof( g_ShadersTable ),    &g_ShadersTable },
-	{ MAP_MAJOR,            SYN_REQUIRE, sizeof( g_MapTable ),        &g_MapTable },
-	{ ECLASS_MAJOR,         SYN_REQUIRE, sizeof( g_EClassDefTable ),  &g_EClassDefTable },
-	{ SURFACEDIALOG_MAJOR,  SYN_REQUIRE, sizeof( g_SurfaceTable ),    &g_SurfaceTable },
-	{ NULL, SYN_UNKNOWN, 0, NULL }
-};
+void CPlugInManager::InitForDir( const Str &dir ){}
 
 void CPlugInManager::Init(){
 	Str synapse_config;
-
 	Cleanup();
-
-	// set some globals
-	g_qeglobals.bBSPFrontendPlugin = false;
-
-	InitForDir( g_strGameToolsPath );
-	InitForDir( g_strAppPath );
-
-	synapse_config = g_strGameToolsPath;
-	synapse_config += "synapse.config";
-	if ( !g_pParentWnd->GetSynapseServer().Initialize( synapse_config.GetBuffer(), &Sys_Printf_VA ) ) {
-		Error( "Synpase server initialization failed (see console)\n" );
-	}
-
-	// builtin modules
-	g_pParentWnd->GetSynapseServer().EnumerateBuiltinModule( &eclass_def );
-
-	// APIs we provide
-	g_pParentWnd->GetSynapseClient().AddAPI( RADIANT_MAJOR, NULL, sizeof( _QERFuncTable_1 ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( SCRIPLIB_MAJOR, NULL, sizeof( _QERScripLibTable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( BRUSH_MAJOR, NULL, sizeof( _QERBrushTable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( APPSHADERS_MAJOR, NULL, sizeof( _QERAppShadersTable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( QGL_MAJOR, NULL, sizeof( _QERQglTable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( DATA_MAJOR, NULL, sizeof( _QERAppDataTable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( PATCH_MAJOR, NULL, sizeof( _QERPatchTable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( ECLASSMANAGER_MAJOR, NULL, sizeof( _EClassManagerTable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( SELECTEDFACE_MAJOR, NULL, sizeof( _QERSelectedFaceTable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( APPSURFACEDIALOG_MAJOR, NULL, sizeof( _QERAppSurfaceTable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( UNDO_MAJOR, NULL, sizeof( _QERUndoTable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( UI_MAJOR, NULL, sizeof( _QERUITable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( UIGTK_MAJOR, NULL, sizeof( _QERUIGtkTable ) );
-	g_pParentWnd->GetSynapseClient().AddAPI( CAMERA_MAJOR, NULL, sizeof( _QERCameraTable ) );
-
-	// modules configured by XML
-	if ( !g_pParentWnd->GetSynapseClient().ConfigXML( &g_pParentWnd->GetSynapseServer(), "core", manager_entries ) ) {
-		Error( "Synapse server initialization failed (see console)> modules configured by XML\n" );
-	}
-
-	// adding a manager is a special case that ConfigXML doesn't take care of
-	g_pParentWnd->GetSynapseServer().SelectClientConfig( "core" );
-	char *minor;
-	if ( !g_pParentWnd->GetSynapseServer().GetConfigForAPI( IMAGE_MAJOR, &minor ) ) {
-		Syn_Printf( "GetConfigForAPI '%s' failed - invalid XML config file?\n", IMAGE_MAJOR );
-		Error( "Synapse server initialization failed (see console)\n" );
-	}
-	g_ImageManager.SetMatchAPI( IMAGE_MAJOR, minor );
-	g_pParentWnd->GetSynapseClient().AddManager( &g_ImageManager );
-
-	// SYN_REQUIRE entries which are still hardcoded
-	//g_pParentWnd->GetSynapseClient().AddAPI( MAP_MAJOR, "mapxml", sizeof( g_MapTable2 ), SYN_REQUIRE, &g_MapTable2 );
-	//g_pParentWnd->GetSynapseClient().AddAPI( ENTITY_MAJOR, NULL, sizeof( g_EntityTable ), SYN_REQUIRE, &g_EntityTable );
-
-	// plugins: load anything that claims to be a plugin
-	// minor becomes some kind of matching pattern
-	// g_PluginsManager is an API any class, it receives several function tables as needed
-	// you can't do a SYN_PROVIDE with that, has to be a SYN_REQUIRE ?
-	g_PluginsManager.SetMatchAPI( PLUGIN_MAJOR, "*" );
-	g_pParentWnd->GetSynapseClient().AddManager( &g_PluginsManager );
-	g_pParentWnd->GetSynapseClient().AddManager( &g_ToolbarModuleManager );
-	g_pParentWnd->GetSynapseClient().AddManager( &g_ModelManager );
-	auto client = &g_pParentWnd->GetSynapseClient();
-	auto server = g_pParentWnd->GetSynapseServer();
-	return;
-	if ( !server.Resolve( client ) ) {
-		Error( "synapse initialization fail (see console) > if ( !g_pParentWnd->GetSynapseServer().Resolve( &g_pParentWnd->GetSynapseClient() ) ) { " );
-	}
-	g_ToolbarModuleManager.ConstructToolbar();
+	g_qeglobals.bBSPFrontendPlugin = false; 
 	InitFileTypes();
 }
 
-void CPlugInManager::Shutdown(){
-	//g_pParentWnd->GetSynapseServer().Shutdown();
-}
+void CPlugInManager::Shutdown() {}
 
 void CPlugInManager::Cleanup(){
 	int i;
@@ -2407,10 +2004,5 @@ bool CSynapseClientRadiant::RequestAPI( APIDescriptor_t *pAPI ){
 	return false;
 }
 
-const char* CSynapseClientRadiant::GetInfo(){
-	return "Radiant - synapse core built " __DATE__ " " RADIANT_VERSION;
-}
-
-const char* CSynapseClientRadiant::GetName(){
-	return "core";
-}
+const char* CSynapseClientRadiant::GetInfo() { return NULL; }
+const char* CSynapseClientRadiant::GetName() { return NULL; }

@@ -106,62 +106,10 @@ CSynapseServer::~CSynapseServer(){
 }
 
 void CSynapseServer::AddSearchPath( char* path ){
-	char *pLocalPath = new char[strlen( path ) + 1];
-	strcpy( pLocalPath, path );
-	mSearchPaths.push_front( pLocalPath );
+
 }
 
 bool CSynapseServer::Initialize( const char* conf_file, PFN_SYN_PRINTF_VA pf ){
-	// browse the paths to locate all potential modules
-
-	Set_Syn_Printf( pf );
-
-	//if ( conf_file ) {
-	//	// if a config file is specified and we fail to load it, we fail
-	//	Syn_Printf( "loading synapse XML config file '%s'\n", conf_file );
-	//	mpDoc = xmlParseFile( conf_file );
-	//	if ( !mpDoc ) {
-	//		Syn_Printf( "'%s' invalid/not found\n", conf_file );
-	//		return false;
-	//	}
-	//}
-
-	for ( list<char *>::iterator iPath = mSearchPaths.begin(); iPath != mSearchPaths.end(); iPath++ )
-	{
-		const char* path = *iPath;
-
-		Syn_Printf( "Synapse Scanning modules path: %s\n", path );
-
-		GDir* dir = g_dir_open( path, 0, NULL );
-
-		if ( dir != NULL ) {
-			while ( 1 )
-			{
-				const gchar* name = g_dir_read_name( dir );
-				if ( name == NULL ) {
-					break;
-				}
-
-				// too small to be isolated in win32/ and linux/ directories..
-#if defined( _WIN32 )
-				const char* ext_so = ".dll";
-#elif defined ( __linux__ ) || defined ( __APPLE__ )
-				const char* ext_so = ".so";
-#endif
-				const char* ext = strrchr( name, '.' );
-				if ( ( ext == NULL ) || ( stricmp( ext, ext_so ) != 0 ) ) {
-					continue;
-				}
-
-				Str newModule;
-				newModule.Format( "%s%s", path, name );
-				Syn_Printf( "Found '%s'\n", newModule.GetBuffer() );
-				EnumerateInterfaces( newModule );
-			}
-
-			g_dir_close( dir );
-		}
-	}
 	return true;
 }
 
