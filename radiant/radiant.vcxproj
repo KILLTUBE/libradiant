@@ -112,7 +112,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/STACK:8388608 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>Ws2_32.lib;libglib-2.0-0.lib;libgobject-2.0-0.lib;libintl-8.lib;libgtk-win32-2.0-0.lib;libgdk-win32-2.0-0.lib;libgdk_pixbuf-2.0-0.lib;libpango-1.0-0.lib;libpangoft2-1.0-0.lib;libgdkglext-win32-1.0-0.lib;libgtkglext-win32-1.0-0.lib;C:\GtkRadiant\x64\Debug\mathlib.lib;C:\GtkRadiant\x64\Debug\synapse.lib;C:\GtkRadiant\x64\Debug\l_net.lib;C:\GtkRadiant\x64\Debug\cmdlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;libglib-2.0-0.lib;libgobject-2.0-0.lib;libintl-8.lib;libgtk-win32-2.0-0.lib;libgdk-win32-2.0-0.lib;libgdk_pixbuf-2.0-0.lib;libpango-1.0-0.lib;libpangoft2-1.0-0.lib;libgdkglext-win32-1.0-0.lib;libgtkglext-win32-1.0-0.lib;C:\GtkRadiant\x64\Debug\mathlib.lib;C:\GtkRadiant\x64\Debug\l_net.lib;C:\GtkRadiant\x64\Debug\cmdlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\x64\Debug;$(SolutionDir)\..\gtk-2.24.10\lib;$(SolutionDir)\..\libxml2-2.9.2/win32/bin.msvc;$(SolutionDir)\..\gtkglext-1.2.0\lib;$(SolutionDir)\build\$(Configuration)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -169,7 +169,7 @@
     <ClCompile Include="..\plugins\entity\miscmodel.cpp" />
     <ClCompile Include="..\plugins\entity\plugin.cpp" />
     <ClCompile Include="..\plugins\shaders\shaders.cpp" />
-    <ClCompile Include="..\plugins\surface\surfacedialog.cpp" />
+    <ClCompile Include="..\plugins\surface\surfacedialog_idtech3.cpp" />
     <ClCompile Include="..\plugins\vfspk3\unzip.cpp" />
     <ClCompile Include="..\plugins\vfspk3\vfs.cpp" />
     <ClCompile Include="..\plugins\vfspk3\vfspk3.cpp" />
@@ -275,10 +275,6 @@
       <Project>{14734ebb-b167-48d9-9b93-2277f645925f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\libs\synapse\synapse.vcxproj">
-      <Project>{e13ccfb0-a366-4ef3-a66f-c374b563e4df}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\plugins\entity\entity.h" />
@@ -286,7 +282,7 @@
     <ClInclude Include="..\plugins\entity\light.h" />
     <ClInclude Include="..\plugins\entity\plugin.h" />
     <ClInclude Include="..\plugins\shaders\shaders.h" />
-    <ClInclude Include="..\plugins\surface\surfacedialog.h" />
+    <ClInclude Include="..\plugins\surface\surfacedialog_idtech3.h" />
     <ClInclude Include="..\plugins\vfspk3\unzip-vfspk3.h" />
     <ClInclude Include="..\plugins\vfspk3\vfs.h" />
     <ClInclude Include="..\plugins\vfspk3\vfspk3.h" />

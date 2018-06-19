@@ -426,16 +426,6 @@ struct SKeyInfo
 
 #define ID_TOGGLE_DETAIL				40323
 
-class CSynapseClientRadiant : public CSynapseClient { public:
-	bool RequestAPI( APIDescriptor_t *pAPI );
-	const char* GetInfo();
-	const char* GetName();
-	void ImportMap( IDataStream *in, CPtrArray *ents, const char *type );
-	void ExportMap( CPtrArray *ents, IDataStream *out, const char *type );
-	CSynapseClientRadiant() { }
-	virtual ~CSynapseClientRadiant() { }
-};
-
 class MainFrame { public:
 	enum EViewStyle {
 		eRegular,
@@ -474,9 +464,6 @@ class MainFrame { public:
 	bool m_bSleeping;
 	CString m_strStatus[15];
 	bool m_bNeedStatusUpdate;
-	CSynapseServer m_SynapseServer; // deals with dynamically loading the modules, initializing them, requesting the APIs
-	CSynapseClientRadiant m_SynapseClient; // we are also a synapse client in that we provide and require some APIs as well
-
 	void DoWatchBSP(); // BSP window, trigger network listen
 	bool IsSleeping() { return m_bSleeping; }
 	void UpdatePatchToolbarButtons();
@@ -521,8 +508,6 @@ class MainFrame { public:
 	void Paste();
 	void Nudge( int nDim, float fNudge );
 	CPlugInManager &GetPlugInMgr() {return m_PlugInMgr; };
-	CSynapseServer &GetSynapseServer() {return m_SynapseServer; };
-	CSynapseClientRadiant &GetSynapseClient() {return m_SynapseClient; };
 	void AddPlugInToolbarButton( const IToolbarButton* button );
 	void AddPlugInMenuItem( IPlugIn* pPlugIn );
 	void CleanPlugInMenu();

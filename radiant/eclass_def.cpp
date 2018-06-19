@@ -47,8 +47,6 @@ _EClassManagerTable g_EClassManagerTable;
 _QERFuncTable_1 g_FuncTable;
 _QERFileSystemTable g_FileSystemTable_def;
 
-CSynapseBuiltinClientDef eclass_def;
-
 // forward declare, I'm cheap
 void Eclass_ScanFile( char *filename );
 
@@ -56,36 +54,7 @@ const char* EClass_GetExtension(){
 	return "def";
 }
 
-void CSynapseBuiltinClientDef::EnumerateInterfaces( CSynapseServer *server ){
-	AddAPI( SCRIPLIB_MAJOR, NULL, sizeof( g_ScripLibTable ), SYN_REQUIRE, &g_ScripLibTable );
-	AddAPI( RADIANT_MAJOR, NULL, sizeof( g_FuncTable ), SYN_REQUIRE, &g_FuncTable );
-	AddAPI( ECLASSMANAGER_MAJOR, NULL, sizeof( g_EClassManagerTable ), SYN_REQUIRE, &g_EClassManagerTable );
-	// hardcode the minor for now, we can still add it to the synapse.config at some point
-	AddAPI( VFS_MAJOR, "*", sizeof( g_FileSystemTable_def ), SYN_REQUIRE, &g_FileSystemTable_def );
-
-	AddAPI( ECLASS_MAJOR, "def", sizeof( _EClassTable ) );
-}
-
-bool CSynapseBuiltinClientDef::RequestAPI( APIDescriptor_t *pAPI ){
-	if ( !strcmp( pAPI->major_name, ECLASS_MAJOR ) ) {
-		_EClassTable* pTable = static_cast<_EClassTable*>( pAPI->mpTable );
-		pTable->m_pfnScanFile = &Eclass_ScanFile;
-		pTable->m_pfnGetExtension = &EClass_GetExtension;
-
-		return true;
-	}
-
-	Syn_Printf( "ERROR: RequestAPI( '%s' ) not found in '%s'\n", pAPI->major_name, GetInfo() );
-	return false;
-}
-
 #include "version.h"
-
-const char* CSynapseBuiltinClientDef::GetInfo(){
-	return "Builtin .def module built " __DATE__ " " RADIANT_VERSION;
-}
-
-// ------------------------------------------------------------------------------------------------
 
 qboolean eclass_found;
 char *debugname;

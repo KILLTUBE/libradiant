@@ -603,7 +603,6 @@ qboolean Get_Parsing_Single();
 
 // .def loading, builtin module
 #include "eclass_def.h"
-extern CSynapseBuiltinClientDef eclass_def;
 
 /*!
    global table to .def entity class description

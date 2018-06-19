@@ -84,7 +84,7 @@ int m_nUndoId;
 
 
 texturewin_t *texturewin;
-texdef_t *l_pIncrement;
+extern texdef_t *l_pIncrement;
 texdef_t texdef_offset;
 texdef_t texdef_SI_values;
 
@@ -92,15 +92,15 @@ texdef_t texdef_SI_values;
 char old_texture_entry[128];
 
 // the texdef to switch back to when the OnCancel is called
-texdef_t g_old_texdef;
+extern texdef_t g_old_texdef;
 
 // when TRUE, this thing means the surface inspector is currently being displayed
 bool g_surfwin = FALSE;
 // turn on/off processing of the "changed" "value-changed" messages
 // (need to turn off when we are feeding data in)
-bool g_bListenChanged = true;
+extern bool g_bListenChanged;
 // turn on/off listening of the update messages
-bool g_bListenUpdate = true;
+extern bool g_bListenUpdate;
 
 void *g_pMainWidget = NULL;
 
@@ -415,24 +415,26 @@ texdef_t* QERApp_QeglobalsSavedinfo_SIInc();
 extern "C" void Sys_Printf( const char *text, ... );
 float QERApp_QeglobalsGetGridSize();
 
-void DoSnapTToGrid( float hscale, float vscale ){
-	l_pIncrement = QERApp_QeglobalsSavedinfo_SIInc();
+//void DoSnapTToGrid( float hscale, float vscale ){
+//	l_pIncrement = QERApp_QeglobalsSavedinfo_SIInc();
+//
+//	if ( hscale == 0.0f ) {
+//		hscale = 0.5f;
+//	}
+//	if ( vscale == 0.0f ) {
+//		vscale = 0.5f;
+//	}
+//#ifdef _DEBUG
+//	Sys_Printf( "DoSnapTToGrid: hscale %g vscale %g\n", hscale, vscale );
+//#endif
+//	l_pIncrement->shift[0] = QERApp_QeglobalsGetGridSize() / hscale;
+//	l_pIncrement->shift[1] = QERApp_QeglobalsGetGridSize() / vscale;
+//	// now some update work
+//	// FIXME: doesn't look good here, seems to be called several times
+//	SetTexMods();
+//}
 
-	if ( hscale == 0.0f ) {
-		hscale = 0.5f;
-	}
-	if ( vscale == 0.0f ) {
-		vscale = 0.5f;
-	}
-#ifdef _DEBUG
-	Sys_Printf( "DoSnapTToGrid: hscale %g vscale %g\n", hscale, vscale );
-#endif
-	l_pIncrement->shift[0] = QERApp_QeglobalsGetGridSize() / hscale;
-	l_pIncrement->shift[1] = QERApp_QeglobalsGetGridSize() / vscale;
-	// now some update work
-	// FIXME: doesn't look good here, seems to be called several times
-	SetTexMods();
-}
+#include "../ccall/ccall.h"
 
 void UpdateSurfaceDialog(){
 	if ( !g_bListenUpdate ) {

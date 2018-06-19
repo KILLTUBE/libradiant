@@ -58,6 +58,8 @@ static const char *PLUGIN_ABOUT = "Camera v1.0 for GtkRadiant\n"
 
 #include "iplugin.h"
 
+IFileTypeRegistry* GetFileTypeRegistry();
+
 const char* QERPlug_Init( void* hApp, void* pMainWidget ){
 	g_pRadiantWnd = (GtkWidget*)pMainWidget;
 

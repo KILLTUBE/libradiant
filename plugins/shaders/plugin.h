@@ -40,16 +40,4 @@
 #include "iscriplib.h"
 #include "ibrush.h"
 
-class CSynapseClientShaders : public CSynapseClient
-{
-public:
-// CSynapseClient API
-bool RequestAPI( APIDescriptor_t *pAPI );
-const char* GetInfo();
-const char* GetName();
-
-CSynapseClientShaders() { }
-virtual ~CSynapseClientShaders() { }
-};
-
 #endif // _PLUGIN_H_

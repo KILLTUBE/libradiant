@@ -30,7 +30,8 @@
 
 #include <gdk/gdkkeysyms.h>
 #include "stdafx.h"
-#include "surfacedialog.h"
+//#include "surfacedialog_idtech3.h"
+#include "../plugins/surface/surfacedialog_idtech3.h"
 #include <glib/gi18n.h>
 
 SurfaceDlg g_dlgSurface;
@@ -381,8 +382,6 @@ static void OnBtnMatchGrid( GtkWidget *widget, gpointer data ){
 	DoSnapTToGrid( hscale, vscale );
 }
 
-void UpdateSurfaceDialog();
-
 // DoSurface will always try to show the surface inspector
 // or update it because something new has been selected
 void DoSurface( void );
@@ -467,9 +466,9 @@ void SurfaceDlg::HideDlg(){
 	Dialog::HideDlg();
 }
 
-GtkWidget *Get_SI_Module_Widget();
+extern GtkWidget *SurfaceInspector;
 GtkWidget* SurfaceDlg::GetWidget(){
-	return Get_SI_Module_Widget();
+	return SurfaceInspector;
 }
 
 // set default values for increments (shift scale and rot)

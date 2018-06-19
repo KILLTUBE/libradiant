@@ -952,7 +952,7 @@ void WINAPI QERApp_ActiveShaders_SetInUse( bool b ){
 
 // =============================================================================
 // SYNAPSE
-
+#if 0
 bool CSynapseClientShaders::RequestAPI( APIDescriptor_t *pAPI ){
 	if ( !strcmp( pAPI->major_name, SHADERS_MAJOR ) ) {
 		_QERShadersTable* pTable = static_cast<_QERShadersTable*>( pAPI->mpTable );
@@ -984,3 +984,4 @@ bool CSynapseClientShaders::RequestAPI( APIDescriptor_t *pAPI ){
 	Syn_Printf( "ERROR: RequestAPI( '%s' ) not found in '%s'\n", pAPI->major_name, GetInfo() );
 	return false;
 }
+#endif

@@ -170,12 +170,6 @@
   <ItemGroup>
     <None Include="imagewal.def" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\libs\synapse\synapse.vcxproj">
-      <Project>{e13ccfb0-a366-4ef3-a66f-c374b563e4df}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -515,7 +515,8 @@ void Map_ImportEntities( CPtrArray *ents, bool bAddSelected = false ){
 void Map_Import( IDataStream *in, const char *type, bool bAddSelected ){
 	CPtrArray ents;
 
-	g_pParentWnd->GetSynapseClient().ImportMap( in, &ents, type );
+	//g_pParentWnd->GetSynapseClient().ImportMap( in, &ents, type );
+	Sys_Printf("todo: map.cpp void Map_Import( IDataStream *in, const char *type, bool bAddSelected )\n");
 	Map_ImportEntities( &ents, bAddSelected );
 }
 
@@ -740,8 +741,8 @@ void Map_Export( IDataStream *out, const char *type, bool bRegionOnly, bool bSel
 		e->pData = new CPtrArray();
 
 	Map_ExportEntities( &ents, bRegionOnly, bSelectedOnly );
-
-	g_pParentWnd->GetSynapseClient().ExportMap( &ents, out, type );
+	Sys_Printf("todo map.cpp void Map_Export( IDataStream *out, const char *type, bool bRegionOnly, bool bSelectedOnly )");
+	//g_pParentWnd->GetSynapseClient().ExportMap( &ents, out, type );
 
 	// cleanup the filters
 	CleanFilter( world_entity );

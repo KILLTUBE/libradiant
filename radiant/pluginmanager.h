@@ -74,8 +74,8 @@ void LoadImage( const char *name, unsigned char **pic, int *width, int *height )
 void ImportMap( IDataStream *in, CPtrArray *ents, const char *type );
 void ExportMap( CPtrArray *ents, IDataStream *out, const char *type );
 void Shutdown();   ///< shutdown all the plugins/module subsystem
-CPlugInManager();
-virtual ~CPlugInManager();
+//CPlugInManager();
+//virtual ~CPlugInManager();
 
 /*!
    the texture manager front ends the single load
@@ -100,113 +100,6 @@ void LoadFromPath( const char *path ); ///< load all modules/plugins in specifie
 void RegisterInterfaces();
 };
 
-class CPluginSlot : public IPlugIn
-{
-APIDescriptor_t *mpAPI;
-_QERPluginTable *mpTable;
-/*!
-   is false until Init() happened
- */
-bool m_bReady;
-/*!
-   below is valid only if m_bReady = true
- */
-GSList *m_CommandStrings;
-GSList *m_CommandIDs;
 
-public:
-/*!
-   build directly from a SYN_PROVIDE interface
- */
-CPluginSlot( APIDescriptor_t *pAPI );
-virtual ~CPluginSlot();
-
-APIDescriptor_t* GetDescriptor() { return mpAPI; }
-/*!
-   initialize some management data after the synapse interfaces have been hooked up
- */
-void Init();
-/*!
-   dispatching a command by name to the plugin
- */
-void Dispatch( const char *p );
-
-// IPlugIn ------------------------------------------------------------
-const char* getMenuName();
-int getCommandCount();
-const char* getCommand( int n );
-void addMenuID( int n );
-bool ownsCommandID( int n );
-
-};
-
-class CRadiantPluginManager : public CSynapseAPIManager
-{
-list<CPluginSlot *> mSlots;
-public:
-CRadiantPluginManager() {}
-virtual ~CRadiantPluginManager();
-
-// CSynapseAPIManager interface -------------------
-APIDescriptor_t *BuildRequireAPI( APIDescriptor_t *pAPI );
-
-// CRadiantPluginManager --------------------------
-void PopulateMenu();
-bool Dispatch( int n, const char* p );
-};
-
-class CImageTableSlot
-{
-/*!
-   \todo this is a duplicate from the APIDescriptor_t* list that privately stored inside CSynapseAPIManager
-   this is probably useless to us in here?
- */
-APIDescriptor_t *mpAPI;
-/*!
-   shortcut to mpAPI->mpTable, with correct typing
-   this is what we allocate and should free locally
- */
-_QERPlugImageTable *mpTable;
-public:
-CImageTableSlot() { }
-virtual ~CImageTableSlot() { }   ///\ \todo need to correctly free and release still..
-
-APIDescriptor_t* GetDescriptor() { return mpAPI; }
-_QERPlugImageTable* GetTable() { return mpTable; }
-
-/*!
-   don't go through PrepareRequireAPI for init, just get this API and add the table info
- */
-void InitForFillAPITable( APIDescriptor_t *pAPI );
-};
-
-class CRadiantImageManager : public CSynapseAPIManager
-{
-list<CImageTableSlot *> mSlots;
-
-list<CImageTableSlot *>::iterator mExtScanSlot;
-public:
-CRadiantImageManager() {}
-virtual ~CRadiantImageManager();
-
-// CSynapseAPIManager interface --------------------
-void FillAPITable( APIDescriptor_t *pAPI );
-
-// CRadiantImageManager ----------------------------
-/*!
-   extract the extension, go through the list of image interfaces, and load
- */
-void LoadImage( const char *name, byte **pic, int *width, int *height );
-
-/*!
-   we often need to walk through the extensions
-   this used to be hardcoded in texwindow.cpp
-   the two functions are related, they use a static to go through the list
- */
-void BeginExtensionsScan();
-const char* GetNextExtension();   ///< \return NULL when the list has been completely scanned
-};
-
-extern CRadiantImageManager g_ImageManager;
 
 #endif // _PLUGINMANAGER_H_

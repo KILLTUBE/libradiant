@@ -317,7 +317,7 @@
     <ClCompile Include="..\plugins\shaders\shaders.cpp">
       <Filter>src\shaders</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\surface\surfacedialog.cpp">
+    <ClCompile Include="..\plugins\surface\surfacedialog_idtech3.cpp">
       <Filter>src\surface</Filter>
     </ClCompile>
   </ItemGroup>
@@ -572,7 +572,7 @@
     <ClInclude Include="..\plugins\shaders\shaders.h">
       <Filter>src\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="..\plugins\surface\surfacedialog.h">
+    <ClInclude Include="..\plugins\surface\surfacedialog_idtech3.h">
       <Filter>src\surface</Filter>
     </ClInclude>
   </ItemGroup>

@@ -175,10 +175,6 @@
       <Project>{14734ebb-b167-48d9-9b93-2277f645925f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\..\libs\synapse\synapse.vcxproj">
-      <Project>{e13ccfb0-a366-4ef3-a66f-c374b563e4df}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

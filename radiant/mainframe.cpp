@@ -894,9 +894,6 @@ void execID(int id) {
 
 char* MRU_GetText( int index );
 
-
-extern CRadiantPluginManager g_PluginsManager;
-
 void radiant_menu() {
 	if (ImGui::BeginMenu("File")) {
 		if (ImGui::MenuItem("New Map"             )) { execID(ID_FILE_NEW               ); }
@@ -1247,11 +1244,6 @@ void radiant_menu() {
 		if (ImGui::MenuItem("Overlay Set"       )) { execID(ID_CURVE_OVERLAY_SET   ); }
 		if (ImGui::MenuItem("Overlay Clear"     )) { execID(ID_CURVE_OVERLAY_CLEAR ); }
 		if (ImGui::MenuItem("Thicken..."        )) { execID(ID_CURVE_THICKEN       ); }
-		ImGui::EndMenu();
-	}
-	
-	if (ImGui::BeginMenu("Plugins")) {
-		g_PluginsManager.PopulateMenu();
 		ImGui::EndMenu();
 	}
 

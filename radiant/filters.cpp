@@ -101,7 +101,7 @@ bfilter_t *FilterAdd( bfilter_t *pFilter, int type, int bmask, const char *str, 
 
 bfilter_t *FilterCreate( int type, int bmask, const char *str, int exclude ){
 	g_qeglobals.d_savedinfo.filters = FilterAdd( g_qeglobals.d_savedinfo.filters, type, bmask, str, exclude );
-	Syn_Printf( "Added filter %s (type: %i, bmask: %i, exclude: %i)\n", str, type, bmask, exclude );
+	Sys_Printf( "Added filter %s (type: %i, bmask: %i, exclude: %i)\n", str, type, bmask, exclude );
 	return g_qeglobals.d_savedinfo.filters;
 }
 

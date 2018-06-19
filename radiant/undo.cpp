@@ -609,7 +609,11 @@ void Undo_End( void ){
    =============
    Undo_Undo
    =============
+
  */
+
+void UpdateSurfaceDialog();
+
 void Undo_Undo( qboolean bSilent ){
 	// spog - disable undo if undo levels = 0
 	if ( g_PrefsDlg.m_nUndoLevels == 0 ) {

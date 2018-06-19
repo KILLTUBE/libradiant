@@ -9,8 +9,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "q3map2", "tools\quake3\q3ma
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "quake3-common", "tools\quake3\common\quake3-common.vcxproj", "{B99A58B4-E5AB-42F6-A28F-D7ACB80E0B06}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "synapse", "libs\synapse\synapse.vcxproj", "{E13CCFB0-A366-4EF3-A66F-C374B563E4DF}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cmdlib", "libs\cmdlib\cmdlib.vcxproj", "{0B522841-BDCC-493A-BA5C-604AE2CD5756}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ddslib", "libs\ddslib\ddslib.vcxproj", "{DDE81BE7-D457-47F3-9762-A838EFA2672E}"
@@ -116,13 +114,6 @@ Global
 		{B99A58B4-E5AB-42F6-A28F-D7ACB80E0B06}.Release|Win32.Build.0 = Release|Win32
 		{B99A58B4-E5AB-42F6-A28F-D7ACB80E0B06}.Release|x64.ActiveCfg = Release|x64
 		{B99A58B4-E5AB-42F6-A28F-D7ACB80E0B06}.Release|x64.Build.0 = Release|x64
-		{E13CCFB0-A366-4EF3-A66F-C374B563E4DF}.Debug|Win32.ActiveCfg = Debug|Win32
-		{E13CCFB0-A366-4EF3-A66F-C374B563E4DF}.Debug|Win32.Build.0 = Debug|Win32
-		{E13CCFB0-A366-4EF3-A66F-C374B563E4DF}.Debug|x64.ActiveCfg = Debug|x64
-		{E13CCFB0-A366-4EF3-A66F-C374B563E4DF}.Release|Win32.ActiveCfg = Release|Win32
-		{E13CCFB0-A366-4EF3-A66F-C374B563E4DF}.Release|Win32.Build.0 = Release|Win32
-		{E13CCFB0-A366-4EF3-A66F-C374B563E4DF}.Release|x64.ActiveCfg = Release|x64
-		{E13CCFB0-A366-4EF3-A66F-C374B563E4DF}.Release|x64.Build.0 = Release|x64
 		{0B522841-BDCC-493A-BA5C-604AE2CD5756}.Debug|Win32.ActiveCfg = Debug|Win32
 		{0B522841-BDCC-493A-BA5C-604AE2CD5756}.Debug|Win32.Build.0 = Debug|Win32
 		{0B522841-BDCC-493A-BA5C-604AE2CD5756}.Debug|x64.ActiveCfg = Debug|x64

@@ -44,20 +44,8 @@ typedef char* LPCSTR;
 #include "ifilesystem.h"
 
 extern _QERFuncTable_1 g_FuncTable;
-extern CSynapseServer* g_pSynapseServer;
 
 extern "C" void Sys_Printf( const char *text, ... );
 extern "C" void Sys_FPrintf( int level, const char *text, ... );
-
-class CSynapseClientVFS : public CSynapseClient
-{
-public:
-// CSynapseClient API
-bool RequestAPI( APIDescriptor_t *pAPI );
-const char* GetInfo();
-
-CSynapseClientVFS() { }
-virtual ~CSynapseClientVFS() { }
-};
 
 #endif // _VFSPK3_H_

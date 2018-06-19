@@ -51,9 +51,6 @@ extern "C" {
 
 #include "../plugins/vfspk3/vfs.h"
 
-CRadiantImageManager g_ImageManager;
-CRadiantPluginManager g_PluginsManager;
-
 _QERPlugSurfaceTable g_SurfaceTable;
 _QERFileSystemTable g_FileSystemTable;
 _QERShadersTable g_ShadersTable;
@@ -161,29 +158,9 @@ void InitFileTypes(){
         GetFileTypeRegistry()->addType( "sound", g_pattern_all );
 }
 
-
-class CRadiantModelModuleManager : public CSynapseAPIManager
-{
-typedef list<APIDescriptor_t*> APIDescriptorList;
-
-APIDescriptorList mAPIs;
-public:
-CRadiantModelModuleManager() {}
-virtual ~CRadiantModelModuleManager() {}
-
-APIDescriptor_t* BuildRequireAPI( APIDescriptor_t* pAPI ) { return NULL; }
-const _QERPlugModelTable* GetModelTable( const char* version ) { return NULL; }
-};
-
-
-
 IModelCache* GetModelCache(){
 	return NULL;
 }
-
-CRadiantImageManager::~CRadiantImageManager() {}
-void CImageTableSlot::InitForFillAPITable( APIDescriptor_t *pAPI ) {}
-void CRadiantImageManager::FillAPITable( APIDescriptor_t *pAPI ) {}
 
 /*!
    Loads an image by calling the module that handles the extension extracted from the filename
@@ -192,6 +169,7 @@ void CRadiantImageManager::FillAPITable( APIDescriptor_t *pAPI ) {}
    \param width The returned width of the image
    \param height The returned height of the image
  */
+#if 0
 void CRadiantImageManager::LoadImage( const char *name, byte **pic, int *width, int *height ){
 	const char *ext = NULL;
 	int len;
@@ -230,16 +208,11 @@ void CRadiantImageManager::LoadImage( const char *name, byte **pic, int *width, 
 	}
 	Sys_FPrintf( SYS_WRN, "WARNING: no image table for extension '%s'\n", ext );
 }
+#endif
 
-void CRadiantImageManager::BeginExtensionsScan() {}
-
-const char* CRadiantImageManager::GetNextExtension() { return NULL; }
-
-APIDescriptor_t* CRadiantPluginManager::BuildRequireAPI( APIDescriptor_t *pAPI ) { return NULL; }
 #include "imgui/imgui.h"
 
-void CRadiantPluginManager::PopulateMenu() {}
-
+#if 0
 void CSynapseClientRadiant::ImportMap( IDataStream *in, CPtrArray *ents, const char *type ){
 	if ( strcmp( type,"map" ) == 0 ) {
 		g_MapTable.m_pfnMap_Read( in, ents );
@@ -263,45 +236,9 @@ void CSynapseClientRadiant::ExportMap( CPtrArray *ents, IDataStream *out, const 
 		Sys_FPrintf( SYS_WRN, "WARNING: no module found for map interface type '%s'\n", type );
 	}
 }
+#endif
 
-CPluginSlot::CPluginSlot( APIDescriptor_t *pAPI ){
-	mpAPI = CSynapseAPIManager::PrepareRequireAPI( pAPI );
-	mpTable = new _QERPluginTable;
-	mpTable->m_nSize = sizeof( _QERPluginTable );
-	mpAPI->mSize = sizeof( _QERPluginTable );
-	mpAPI->mpTable = mpTable;
-	m_CommandStrings = NULL;
-	m_CommandIDs = NULL;
-	m_bReady = false;
-}
-
-CPluginSlot::~CPluginSlot(){
-	delete mpAPI;
-	delete mpTable;
-	while ( m_CommandStrings )
-	{
-		::free( m_CommandStrings->data );
-		m_CommandStrings = g_slist_remove( m_CommandStrings, m_CommandStrings->data );
-	}
-}
-
-void CPluginSlot::Init(){
-	
-}
-
-const char* CPluginSlot::getMenuName(){
-	return mpAPI->minor_name;
-}
-
-int CPluginSlot::getCommandCount() { return 0; }
-
-const char* CPluginSlot::getCommand( int n ) { return "asd"; }
-
-void CPluginSlot::addMenuID( int n ){
-	m_CommandIDs = g_slist_append( m_CommandIDs, GINT_TO_POINTER( n ) );
-}
-
-bool CPluginSlot::ownsCommandID( int n ){ return false; }
+#if 0
 
 void CPluginSlot::Dispatch( const char *p ){
 	vec3_t vMin, vMax;
@@ -315,20 +252,8 @@ void CPluginSlot::Dispatch( const char *p ){
 	}
 	mpTable->m_pfnQERPlug_Dispatch( p, vMin, vMax, QE_SingleBrush( true ) );
 }
+#endif
 
-CRadiantPluginManager::~CRadiantPluginManager() {}
-bool CRadiantPluginManager::Dispatch( int n, const char* p ) { return false; }
-
-CPlugInManager::CPlugInManager(){
-	PatchesMode = EActivePatches;
-	m_PlugIns = NULL;
-}
-
-CPlugInManager::~CPlugInManager(){
-	Cleanup();
-}
-
-void CPlugInManager::InitForDir( const Str &dir ){}
 
 void CPlugInManager::Init(){
 	Str synapse_config;
@@ -380,9 +305,7 @@ void CPlugInManager::Cleanup(){
    m_PluginPatches.RemoveAll(); */
 }
 
-void CPlugInManager::Dispatch( int n, const char * p ){
-	g_PluginsManager.Dispatch( n, p );
-}
+void CPlugInManager::Dispatch( int n, const char * p ) {}
 
 void WINAPI QERApp_GetDispatchParams( vec3_t vMin, vec3_t vMax, bool *bSingleBrush ){
 	if ( selected_brushes.next == &selected_brushes ) {
@@ -1611,7 +1534,7 @@ void WINAPI QERApp_Texture_SetTexture( texdef_t *texdef, brushprimit_texdef_t *b
 }
 
 void QERApp_LoadImage( const char *name, unsigned char **pic, int *width, int *height ){
-	g_ImageManager.LoadImage( name, pic, width, height );
+	//g_ImageManager.LoadImage( name, pic, width, height );
 }
 
 unsigned long QERApp_GetTickCount(){
@@ -1630,6 +1553,7 @@ unsigned long QERApp_GetTickCount(){
 #endif
 }
 
+#if 0
 bool CSynapseClientRadiant::RequestAPI( APIDescriptor_t *pAPI ){
 	if ( !strcmp( pAPI->major_name, RADIANT_MAJOR ) ) {
 		_QERFuncTable_1* pTable = static_cast<_QERFuncTable_1*>( pAPI->mpTable );
@@ -2004,5 +1928,4 @@ bool CSynapseClientRadiant::RequestAPI( APIDescriptor_t *pAPI ){
 	return false;
 }
 
-const char* CSynapseClientRadiant::GetInfo() { return NULL; }
-const char* CSynapseClientRadiant::GetName() { return NULL; }
+#endif

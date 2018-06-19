@@ -855,12 +855,15 @@ void Texture_ShowDirectory(){
 	// need this function "GSList *lst SynapseServer::GetMinorList(char *major_name);"
 
 	sprintf( dirstring, "textures/%s", texture_directory );
+
+	/*
 	g_ImageManager.BeginExtensionsScan();
 	const char* ext;
 	while ( ( ext = g_ImageManager.GetNextExtension() ) != NULL )
 	{
 		files = g_slist_concat( files, vfsGetFileList( dirstring, ext ) );
 	}
+	*/
 
 	for ( temp = files; temp; temp = temp->next )
 	{
