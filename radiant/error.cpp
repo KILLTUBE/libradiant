@@ -125,7 +125,7 @@ void Error( const char *error, ... ){
 	QGL_Shutdown();
 
 	g_PrefsDlg.Destroy();
-	g_dlgSurface.Destroy();
+	//g_dlgSurface.Destroy();
 	g_dlgFind.Destroy();
 
 	// force close logging if necessary

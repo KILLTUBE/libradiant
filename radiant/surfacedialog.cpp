@@ -381,34 +381,16 @@ static void OnBtnMatchGrid( GtkWidget *widget, gpointer data ){
 	DoSnapTToGrid( hscale, vscale );
 }
 
-void UpdateSurfaceDialog(){
-	if ( !g_bListenUpdate ) {
-		return;
-	}
-
-	g_SurfaceTable.m_pfnUpdateSurfaceDialog();
-}
+void UpdateSurfaceDialog();
 
 // DoSurface will always try to show the surface inspector
 // or update it because something new has been selected
-void DoSurface( void ){
-#ifdef DBG_SI
-	Sys_Printf( "DoSurface\n" );
-#endif
-	g_SurfaceTable.m_pfnDoSurface();
-	return;
-}
+void DoSurface( void );
 
-void ToggleSurface(){
-	g_SurfaceTable.m_pfnToggleSurface();
-	return;
-}
+void ToggleSurface();
 
 // NOTE: will raise and show the Surface inspector and exec fit for patches and brushes
-void SurfaceDlgFitAll(){
-	g_SurfaceTable.m_pfnSurfaceDlgFitAll();
-	return;
-}
+void SurfaceDlgFitAll();
 
 static void OnBtnPatchdetails( GtkWidget *widget, gpointer data ){
 	Patch_NaturalizeSelected( true );
@@ -485,8 +467,9 @@ void SurfaceDlg::HideDlg(){
 	Dialog::HideDlg();
 }
 
+GtkWidget *Get_SI_Module_Widget();
 GtkWidget* SurfaceDlg::GetWidget(){
-	return g_SurfaceTable.m_pfnGet_SI_Module_Widget();
+	return Get_SI_Module_Widget();
 }
 
 // set default values for increments (shift scale and rot)

@@ -818,7 +818,7 @@ static void mainframe_destroy( GtkWidget *widget, gpointer data ){
 
 	QGL_Shutdown();
 	g_PrefsDlg.Destroy();
-	g_dlgSurface.Destroy();
+	//g_dlgSurface.Destroy();
 	g_dlgFind.Destroy();
 	g_PatchDialog.Destroy();
 

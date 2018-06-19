@@ -75,10 +75,10 @@ typedef GtkWidget* ( *PFN_GET_SI_MODULE_WIDGET )();
 struct _QERPlugSurfaceTable
 {
 	int m_nSize;
-	PFN_QERPLUG_TOGGLESURFACE m_pfnToggleSurface;
-	PFN_QERPLUG_DOSURFACE m_pfnDoSurface;
-	PFN_QERPLUG_UPDATESURFACEDIALOG m_pfnUpdateSurfaceDialog;
-	PFN_QERPLUG_SURFACEDLGFITALL m_pfnSurfaceDlgFitAll;
+	PFN_QERPLUG_TOGGLESURFACE m_pfnToggleSurface_;
+	PFN_QERPLUG_DOSURFACE m_pfnDoSurface_;
+	PFN_QERPLUG_UPDATESURFACEDIALOG m_pfnUpdateSurfaceDialog_;
+	PFN_QERPLUG_SURFACEDLGFITALL m_pfnSurfaceDlgFitAll_;
 	PFN_GET_SI_MODULE_WIDGET m_pfnGet_SI_Module_Widget;
 };
 

@@ -169,6 +169,7 @@
     <ClCompile Include="..\plugins\entity\miscmodel.cpp" />
     <ClCompile Include="..\plugins\entity\plugin.cpp" />
     <ClCompile Include="..\plugins\shaders\shaders.cpp" />
+    <ClCompile Include="..\plugins\surface\surfacedialog.cpp" />
     <ClCompile Include="..\plugins\vfspk3\unzip.cpp" />
     <ClCompile Include="..\plugins\vfspk3\vfs.cpp" />
     <ClCompile Include="..\plugins\vfspk3\vfspk3.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="..\plugins\entity\light.h" />
     <ClInclude Include="..\plugins\entity\plugin.h" />
     <ClInclude Include="..\plugins\shaders\shaders.h" />
+    <ClInclude Include="..\plugins\surface\surfacedialog.h" />
     <ClInclude Include="..\plugins\vfspk3\unzip-vfspk3.h" />
     <ClInclude Include="..\plugins\vfspk3\vfs.h" />
     <ClInclude Include="..\plugins\vfspk3\vfspk3.h" />

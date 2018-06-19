@@ -304,8 +304,10 @@ void Face_MoveTexture( face_t *f, vec3_t delta ){
 		f->texdef.shift[1] -= vShift[1] / f->texdef.scale[1];
 
 		// clamp the shifts
-		Clamp( f->texdef.shift[0], f->d_texture->width );
-		Clamp( f->texdef.shift[1], f->d_texture->height );
+		if (f->d_texture) {
+			Clamp( f->texdef.shift[0], f->d_texture->width );
+			Clamp( f->texdef.shift[1], f->d_texture->height );
+		}
 	}
 }
 
@@ -318,9 +320,12 @@ void Face_MoveTexture( face_t *f, vec3_t delta ){
 void Face_SetColor( brush_t *b, face_t *f, float fCurveColor ){
 	// set shading for face
 	f->d_shade = SetShadeForPlane( &f->plane );
-	f->d_color[0] = f->pShader->getTexture()->color[0] * f->d_shade;
-	f->d_color[1] = f->pShader->getTexture()->color[1] * f->d_shade;
-	f->d_color[2] = f->pShader->getTexture()->color[2] * f->d_shade;
+	qtexture_t *texture = f->pShader->getTexture();
+	if (texture == NULL)
+		return;
+	f->d_color[0] = texture->color[0] * f->d_shade;
+	f->d_color[1] = texture->color[1] * f->d_shade;
+	f->d_color[2] = texture->color[2] * f->d_shade;
 }
 
 /*
@@ -415,9 +420,17 @@ void Face_TextureVectors( face_t *f, float STfromXYZ[2][4] ){
 	STfromXYZ[0][3] = td->shift[0];
 	STfromXYZ[1][3] = td->shift[1];
 
+	int tex_width = 512;
+	int tex_height = 512;
+	// handle case of q == NULL, if q exists, use the actual values
+	if (q) {
+		tex_width = q->width;
+		tex_height = q->height;
+	}
+
 	for ( j = 0 ; j < 4 ; j++ ) {
-		STfromXYZ[0][j] /= q->width;
-		STfromXYZ[1][j] /= q->height;
+		STfromXYZ[0][j] /= tex_width;
+		STfromXYZ[1][j] /= tex_height;
 	}
 }
 
@@ -3163,7 +3176,7 @@ void Brush_Draw( brush_t *b ){
 			}
 		}
 
-		if ( ( nGLState & DRAW_GL_TEXTURE_2D ) && face->d_texture->name[0] == '(' ) {
+		if ( ( nGLState & DRAW_GL_TEXTURE_2D ) && face->d_texture && face->d_texture->name[0] == '(' ) {
 			prev = NULL;
 			qglDisable( GL_TEXTURE_2D );
 		}

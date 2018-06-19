@@ -75,25 +75,25 @@ extern _QERShadersTable g_ShadersTable;
 extern _QERAppShadersTable g_AppShadersTable;
 extern _QERAppDataTable g_AppDataTable;
 
-#define GetSelectedFaceCount g_SelectedFaceTable.m_pfnGetSelectedFaceCount
-
-#define Undo_Undo g_UndoTable.m_pfnUndo_Undo
-#define Undo_GetUndoId g_UndoTable.m_pfnUndo_GetUndoId
-
-#define Sys_Printf g_FuncTable.m_pfnSysPrintf
-#define Sys_FPrintf g_FuncTable.m_pfnSysFPrintf
-#define Sys_UpdateWindows g_FuncTable.m_pfnSysUpdateWindows
-
-#define Select_FitTexture g_AppSurfaceTable.m_pfnSelect_FitTexture
-#define Get_SI_Inc g_AppSurfaceTable.m_pfnQERApp_QeglobalsSavedinfo_SIInc
-#define GridSize g_AppSurfaceTable.m_pfnQeglobalsGetGridSize
-#define FaceList_FitTexture g_AppSurfaceTable.m_pfnFaceList_FitTexture
-#define GetMainWindow g_AppSurfaceTable.m_pfnGetMainWindow
-#define GetSelectedFaceCountfromBrushes g_AppSurfaceTable.m_pfnGetSelectedFaceCountfromBrushes
-#define GetSelFacesTexdef g_AppSurfaceTable.m_pfnGetSelFacesTexdef
-#define SetTexdef_FaceList g_AppSurfaceTable.m_pfnSetTexdef_FaceList
-#define SetWinPos_from_Prefs g_AppSurfaceTable.m_pfnSetWinPos_From_Prefs
-
-#define Texturewin g_AppShadersTable.m_pfnQeglobalsTexturewin
+//#define GetSelectedFaceCount g_SelectedFaceTable.m_pfnGetSelectedFaceCount
+//
+//#define Undo_Undo g_UndoTable.m_pfnUndo_Undo
+//#define Undo_GetUndoId g_UndoTable.m_pfnUndo_GetUndoId
+//
+//#define Sys_Printf g_FuncTable.m_pfnSysPrintf
+//#define Sys_FPrintf g_FuncTable.m_pfnSysFPrintf
+//#define Sys_UpdateWindows g_FuncTable.m_pfnSysUpdateWindows
+//
+//#define Select_FitTexture g_AppSurfaceTable.m_pfnSelect_FitTexture
+//#define Get_SI_Inc g_AppSurfaceTable.m_pfnQERApp_QeglobalsSavedinfo_SIInc
+//#define GridSize g_AppSurfaceTable.m_pfnQeglobalsGetGridSize
+//#define FaceList_FitTexture g_AppSurfaceTable.m_pfnFaceList_FitTexture
+//#define GetMainWindow g_AppSurfaceTable.m_pfnGetMainWindow
+//#define GetSelectedFaceCountfromBrushes g_AppSurfaceTable.m_pfnGetSelectedFaceCountfromBrushes
+//#define GetSelFacesTexdef g_AppSurfaceTable.m_pfnGetSelFacesTexdef
+//#define SetTexdef_FaceList g_AppSurfaceTable.m_pfnSetTexdef_FaceList
+//#define SetWinPos_from_Prefs g_AppSurfaceTable.m_pfnSetWinPos_From_Prefs
+//
+//#define Texturewin g_AppShadersTable.m_pfnQeglobalsTexturewin
 
 #endif // _SURFDLG_PLUGIN_H_

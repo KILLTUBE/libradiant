@@ -102,7 +102,7 @@ bool g_bListenChanged = true;
 // turn on/off listening of the update messages
 bool g_bListenUpdate = true;
 
-extern void *g_pMainWidget;
+void *g_pMainWidget = NULL;
 
 GtkWidget* create_SurfaceInspector( void );
 GtkWidget *SurfaceInspector = NULL;
@@ -354,20 +354,26 @@ static void ZeroOffsetValues(){
 	texdef_offset.scale[1] = 0.0;
 	texdef_offset.rotate = 0.0;
 }
+int SI_GetSelectedFaceCountfromBrushes( void );
 
+int WINAPI QERApp_GetSelectedFaceCount();
+face_t* WINAPI QERApp_GetSelectedFace( int iface );
+brush_t* WINAPI QERApp_GetSelectedFaceBrush( int iface );
+int WINAPI QERApp_GetFaceInfo( int iface, _QERFaceData *pFaceData, winding_t *pWinding );
+void SI_GetSelFacesTexdef( texdef_to_face_t *allocd_block_texdef );
 static void GetTexdefInfo_from_Radiant(){
 	g_texdef_face_vector.clear();
 
-	unsigned int count = GetSelectedFaceCountfromBrushes();
+	unsigned int count = SI_GetSelectedFaceCountfromBrushes();
 	if ( count == 0 ) {
-		count = GetSelectedFaceCount();
+		count = QERApp_GetSelectedFaceCount();
 	}
 
 	g_texdef_face_vector.resize( count );
 
 	if ( !texdef_face_list_empty() ) {
 //    texdef_to_face_t* p = get_texdef_face_list();
-		GetSelFacesTexdef( get_texdef_face_list() );
+		SI_GetSelFacesTexdef( get_texdef_face_list() );
 	}
 
 	IsFaceConflicting();
@@ -375,6 +381,7 @@ static void GetTexdefInfo_from_Radiant(){
 	ZeroOffsetValues();
 }
 
+void WINAPI Sys_UpdateWindows( int nBits );
 static gint apply_and_hide( GtkWidget *widget, GdkEvent *event, gpointer data ) {
   if ( !texdef_face_list_empty() ) {
     GetTexMods( TRUE );
@@ -404,8 +411,12 @@ static gint surface_dialog_key_press( GtkWidget *widget, GdkEventKey *event, gpo
 // NOTE: the default scale depends if you are using BP mode or regular.
 // For regular it's 0.5f (128 pixels cover 64 world units), for BP it's simply 1.0f
 // see fenris #2810
+texdef_t* QERApp_QeglobalsSavedinfo_SIInc();
+extern "C" void Sys_Printf( const char *text, ... );
+float QERApp_QeglobalsGetGridSize();
+
 void DoSnapTToGrid( float hscale, float vscale ){
-	l_pIncrement = Get_SI_Inc();
+	l_pIncrement = QERApp_QeglobalsSavedinfo_SIInc();
 
 	if ( hscale == 0.0f ) {
 		hscale = 0.5f;
@@ -416,8 +427,8 @@ void DoSnapTToGrid( float hscale, float vscale ){
 #ifdef _DEBUG
 	Sys_Printf( "DoSnapTToGrid: hscale %g vscale %g\n", hscale, vscale );
 #endif
-	l_pIncrement->shift[0] = GridSize() / hscale;
-	l_pIncrement->shift[1] = GridSize() / vscale;
+	l_pIncrement->shift[0] = QERApp_QeglobalsGetGridSize() / hscale;
+	l_pIncrement->shift[1] = QERApp_QeglobalsGetGridSize() / vscale;
 	// now some update work
 	// FIXME: doesn't look good here, seems to be called several times
 	SetTexMods();
@@ -498,8 +509,12 @@ void HideDlg() {
   gtk_widget_hide( SurfaceInspector );
 }
 
+texturewin_t* QERApp_QeglobalsTexturewin();
+int Undo_GetUndoId( void );
+void Undo_Undo( qboolean bSilent );
+
 void CancelDlg() {
-  texturewin = Texturewin();
+  texturewin = QERApp_QeglobalsTexturewin();
   texturewin->texdef = g_old_texdef;
   // cancel the last do if we own it
   if ( ( m_nUndoId == Undo_GetUndoId() ) && ( m_nUndoId != 0 ) ) {
@@ -538,6 +553,8 @@ void BuildDialog(){
    Set the fields to the current texdef (i.e. map/texdef -> dialog widgets)
    ===============
  */
+#define Texturewin QERApp_QeglobalsTexturewin
+#define Get_SI_Inc QERApp_QeglobalsSavedinfo_SIInc
 
 void SetTexMods(){
 	texdef_t *pt;
@@ -606,6 +623,9 @@ void SetTexMods(){
    Shows any changes to the main Radiant windows
    ===============
  */
+void SI_SetTexdef_FaceList( texdef_to_face_t* texdef_face_list, bool b_SetUndoPoint, bool bFit_to_Scale );
+#define SetTexdef_FaceList SI_SetTexdef_FaceList
+
 void GetTexMods( bool b_SetUndoPoint ) {
 
 #ifdef DBG_SI
@@ -633,7 +653,8 @@ void FitAll(){
 //  GUI Section
 //
 ////////////////////////////////////////////////////////////////////
-
+void SI_SetWinPos_from_Prefs( GtkWidget *win );
+#define SetWinPos_from_Prefs SI_SetWinPos_from_Prefs
 GtkWidget* create_SurfaceInspector( void ){
 
 	GtkWidget *label;
@@ -1260,6 +1281,7 @@ gboolean on_texture_combo_entry_key_press_event( GtkWidget *widget, GdkEventKey 
 
 	return FALSE;
 }
+extern "C" void Sys_FPrintf( int level, const char *text, ... );
 
 void on_texture_combo_entry_activate( GtkEntry *entry, gpointer user_data ){
 	texdef_t* tmp_texdef;
@@ -1515,9 +1537,9 @@ static void on_fit_width_spinbutton_value_changed( GtkSpinButton *spinbutton, gp
 static void on_fit_height_spinbutton_value_changed( GtkSpinButton *spinbutton, gpointer user_data ){
 	m_nHeight = gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON( fit_height_spinbutton ) );
 }
-
+void SI_FaceList_FitTexture( texdef_to_face_t* si_texdef_face_list, int nHeight, int nWidth );
 static void on_fit_button_clicked( GtkButton *button, gpointer user_data ){
-	FaceList_FitTexture( get_texdef_face_list(), m_nHeight, m_nWidth );
+	SI_FaceList_FitTexture( get_texdef_face_list(), m_nHeight, m_nWidth );
 	Sys_UpdateWindows( W_ALL );
 }
 

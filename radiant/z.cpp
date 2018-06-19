@@ -394,7 +394,8 @@ void Z_Draw( void ){
 		bottom = org_bottom[2] + bottom;
 
 		q = brush->brush_faces->pShader->getTexture();
-		qglColor3f( q->color[0], q->color[1], q->color[2] );
+		if (q != NULL)
+			qglColor3f( q->color[0], q->color[1], q->color[2] );
 		qglBegin( GL_QUADS );
 		qglVertex2f( -xCam, bottom );
 		qglVertex2f( xCam, bottom );
@@ -426,7 +427,8 @@ void Z_Draw( void ){
 					bottom = org_bottom[2] + bottom;
 
 					q = brush->brush_faces->pShader->getTexture();
-					qglColor3f( q->color[0], q->color[1], q->color[2] );
+					if (q)
+						qglColor3f( q->color[0], q->color[1], q->color[2] );
 					qglBegin( GL_QUADS );
 					qglVertex2f( -xCam, bottom );
 					qglVertex2f( xCam, bottom );
