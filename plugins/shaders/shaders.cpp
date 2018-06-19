@@ -742,6 +742,8 @@ qtexture_t *WINAPI QERApp_Try_Texture_ForName( const char *name ){
 	}
 #endif
 
+	return NULL;
+
 	QERApp_LoadImage( name, &pPixels, &nWidth, &nHeight );
 
 	if ( !pPixels ) {

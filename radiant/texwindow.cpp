@@ -2066,7 +2066,7 @@ void TexWnd::OnExpose() {
 
 void TexWnd::OnLButtonDown( guint32 flags, int pointx, int pointy ) {
 	imgui_mouse_set_button(0, true);
-	Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
+	//Sys_Printf("mouse down at %d:%d\n", pointx, pointy);
 
 
 	// pointx/pointy is relative to the (atm) gtk widget, so we need to recalculate it into dock space

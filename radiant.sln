@@ -25,8 +25,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "splines", "libs\splines\spl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "camera", "contrib\camera\camera.vcxproj", "{A43B5811-4BCC-483A-BDAC-F5721DCF9B4A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "image", "plugins\image\image.vcxproj", "{1F9977F6-216F-4AE1-9928-59B72CF31C46}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imagepng", "plugins\imagepng\imagepng.vcxproj", "{43C01E60-21CC-49F5-8A11-F460BC866A31}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "map", "plugins\map\map.vcxproj", "{1B0E70B0-ED20-4021-9BBE-5168CB8DAE90}"
@@ -175,13 +173,6 @@ Global
 		{A43B5811-4BCC-483A-BDAC-F5721DCF9B4A}.Release|Win32.Build.0 = Release|Win32
 		{A43B5811-4BCC-483A-BDAC-F5721DCF9B4A}.Release|x64.ActiveCfg = Release|x64
 		{A43B5811-4BCC-483A-BDAC-F5721DCF9B4A}.Release|x64.Build.0 = Release|x64
-		{1F9977F6-216F-4AE1-9928-59B72CF31C46}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1F9977F6-216F-4AE1-9928-59B72CF31C46}.Debug|Win32.Build.0 = Debug|Win32
-		{1F9977F6-216F-4AE1-9928-59B72CF31C46}.Debug|x64.ActiveCfg = Debug|x64
-		{1F9977F6-216F-4AE1-9928-59B72CF31C46}.Release|Win32.ActiveCfg = Release|Win32
-		{1F9977F6-216F-4AE1-9928-59B72CF31C46}.Release|Win32.Build.0 = Release|Win32
-		{1F9977F6-216F-4AE1-9928-59B72CF31C46}.Release|x64.ActiveCfg = Release|x64
-		{1F9977F6-216F-4AE1-9928-59B72CF31C46}.Release|x64.Build.0 = Release|x64
 		{43C01E60-21CC-49F5-8A11-F460BC866A31}.Debug|Win32.ActiveCfg = Debug|Win32
 		{43C01E60-21CC-49F5-8A11-F460BC866A31}.Debug|Win32.Build.0 = Debug|Win32
 		{43C01E60-21CC-49F5-8A11-F460BC866A31}.Debug|x64.ActiveCfg = Debug|x64

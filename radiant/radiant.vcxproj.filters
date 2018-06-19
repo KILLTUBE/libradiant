@@ -39,6 +39,9 @@
     <Filter Include="src\surface">
       <UniqueIdentifier>{73330402-0c14-4c79-b870-87f729b6924c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\image">
+      <UniqueIdentifier>{44036f0f-8b18-494f-b2a4-8cc11c9caf9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bp_dlg.cpp">
@@ -320,6 +323,18 @@
     <ClCompile Include="..\plugins\surface\surfacedialog_idtech3.cpp">
       <Filter>src\surface</Filter>
     </ClCompile>
+    <ClCompile Include="..\plugins\image\bmp.cpp">
+      <Filter>src\image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\image\image.cpp">
+      <Filter>src\image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\image\jpeg.cpp">
+      <Filter>src\image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\image\lbmlib.cpp">
+      <Filter>src\image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="radiant.ico">
@@ -574,6 +589,15 @@
     </ClInclude>
     <ClInclude Include="..\plugins\surface\surfacedialog_idtech3.h">
       <Filter>src\surface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\image\bmp.h">
+      <Filter>src\image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\image\image.h">
+      <Filter>src\image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\image\lbmlib.h">
+      <Filter>src\image</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

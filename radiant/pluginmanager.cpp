@@ -1533,8 +1533,11 @@ void WINAPI QERApp_Texture_SetTexture( texdef_t *texdef, brushprimit_texdef_t *b
 	Texture_SetTexture( texdef, brushprimit_texdef );
 }
 
+void LoadJPG( const char *filename, unsigned char **pic, int *width, int *height );
+
 void QERApp_LoadImage( const char *name, unsigned char **pic, int *width, int *height ){
 	//g_ImageManager.LoadImage( name, pic, width, height );
+	LoadJPG( name, pic, width, height);
 }
 
 unsigned long QERApp_GetTickCount(){

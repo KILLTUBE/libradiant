@@ -48,22 +48,19 @@ extern _QERFuncTable_1 g_FuncTable;
 extern _QERFileSystemTable g_FileSystemTable;
 void LoadJPG( const char *filename, unsigned char **pic, int *width, int *height );
 
-#define Error g_FuncTable.m_pfnError
-#define vfsGetFileCount g_FileSystemTable.m_pfnGetFileCount
-#define vfsLoadFile g_FileSystemTable.m_pfnLoadFile
-#define vfsFreeFile g_FileSystemTable.m_pfnFreeFile
+//#define Error g_FuncTable.m_pfnError
+//#define vfsGetFileCount g_FileSystemTable.m_pfnGetFileCount
+//#define vfsLoadFile g_FileSystemTable.m_pfnLoadFile
+//#define vfsFreeFile g_FileSystemTable.m_pfnFreeFile
 
-class CSynapseClientImage : public CSynapseClient
-{
-public:
-// CSynapseClient API
-bool RequestAPI( APIDescriptor_t *pAPI );
-const char* GetInfo();
-bool OnActivate();
-const char* GetName() { return "image"; }
 
-CSynapseClientImage() { }
-virtual ~CSynapseClientImage() { }
-};
+#include "../ccall/ccall.h"
+CCALL int imgui_log(char *format, ...);
+#define Error imgui_log
+
+
+void vfsFreeFile( void *p );
+int vfsLoadFile( const char *filename, void **bufferptr, int index );
+int vfsGetFileCount( const char *filename, int flag );
 
 #endif // _IMAGE_H_

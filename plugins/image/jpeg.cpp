@@ -397,6 +397,7 @@ static int LoadJPGBuff( void *src_buffer, int src_size, unsigned char **pic, int
 	return 0;
 }
 
+
 void LoadJPG( const char *filename, unsigned char **pic, int *width, int *height ) {
 	unsigned char *fbuffer = NULL;
 	int nLen = vfsLoadFile( (char *)filename, (void **)&fbuffer, 0 );
