@@ -33,8 +33,7 @@
 
 #include <stdio.h>
 
-#define Sys_Printf g_FuncTable.m_pfnSysPrintf
-#define Sys_FPrintf g_FuncTable.m_pfnSysFPrintf
+#define Sys_Printf imgui_log
 
 /*
    ============================================================================
@@ -558,7 +557,7 @@ void LoadTGA( const char *name, byte ** pic, int *width, int *height ){
 
 		if ( !bAlphaOK ) {
 			if ( targa_header.pixel_size == 32 ) {
-				Sys_FPrintf( SYS_WRN, "WARNING: %s has empty alpha channel\n", name );
+				Sys_Printf( "WARNING: %s has empty alpha channel\n", name );
 			}
 			// disable the alpha value
 			for ( row = rows - 1; row >= 0; row-- )
@@ -707,7 +706,7 @@ breakOut:;
 
 		if ( !bAlphaOK ) {
 			if ( targa_header.pixel_size == 32 ) {
-				Sys_FPrintf( SYS_WRN, "WARNING: %s has empty alpha channel\n", name );
+				Sys_Printf( "WARNING: %s has empty alpha channel\n", name );
 			}
 			// disable the alpha value
 			for ( row = rows - 1; row >= 0; row-- )

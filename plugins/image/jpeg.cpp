@@ -397,6 +397,14 @@ static int LoadJPGBuff( void *src_buffer, int src_size, unsigned char **pic, int
 	return 0;
 }
 
+// ccall( (:test_jpg, libradiant), Void, (Cstring,), "bla.jpg")
+CCALL void test_jpg(char *filename) {
+	unsigned char *pic = NULL;
+	int width = 0;
+	int height = 0;
+	LoadJPG(filename, &pic, &width, &height);
+	imgui_log("filename=%s pic=%d width=%d height=%d\n", filename, pic, width, height);
+}
 
 void LoadJPG( const char *filename, unsigned char **pic, int *width, int *height ) {
 	unsigned char *fbuffer = NULL;
@@ -406,7 +414,7 @@ void LoadJPG( const char *filename, unsigned char **pic, int *width, int *height
 	}
 
 	if ( LoadJPGBuff( fbuffer, nLen, pic, width, height ) != 0 ) {
-		g_FuncTable.m_pfnSysPrintf( "WARNING: JPEG library failed to load %s because %s\n", filename, *pic );
+		//Sys_Printf( "WARNING: JPEG library failed to load %s because %s\n", filename, *pic );
 		*pic = NULL;
 	}
 

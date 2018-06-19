@@ -1537,7 +1537,7 @@ void LoadJPG( const char *filename, unsigned char **pic, int *width, int *height
 
 void QERApp_LoadImage( const char *name, unsigned char **pic, int *width, int *height ){
 	//g_ImageManager.LoadImage( name, pic, width, height );
-	LoadJPG( name, pic, width, height);
+	//LoadJPG( name, pic, width, height);
 }
 
 unsigned long QERApp_GetTickCount(){

@@ -35,30 +35,17 @@
 #include "qerplugin.h"
 #include "ifilesystem.h"
 #include "iimage.h"
+#include "../ccall/ccall.h"
 
 #ifdef __linux__
+	typedef void* HMODULE;
+	typedef void* LPVOID;
+	typedef char* LPCSTR;
+#endif
 
-typedef void* HMODULE;
-typedef void* LPVOID;
-typedef char* LPCSTR;
-
-#endif // __linux__
-
-extern _QERFuncTable_1 g_FuncTable;
-extern _QERFileSystemTable g_FileSystemTable;
-void LoadJPG( const char *filename, unsigned char **pic, int *width, int *height );
-
-//#define Error g_FuncTable.m_pfnError
-//#define vfsGetFileCount g_FileSystemTable.m_pfnGetFileCount
-//#define vfsLoadFile g_FileSystemTable.m_pfnLoadFile
-//#define vfsFreeFile g_FileSystemTable.m_pfnFreeFile
-
-
-#include "../ccall/ccall.h"
+CCALL void LoadJPG( const char *filename, unsigned char **pic, int *width, int *height );
 CCALL int imgui_log(char *format, ...);
 #define Error imgui_log
-
-
 void vfsFreeFile( void *p );
 int vfsLoadFile( const char *filename, void **bufferptr, int index );
 int vfsGetFileCount( const char *filename, int flag );
