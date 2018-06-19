@@ -15,7 +15,9 @@ CCALL void set_callback_oninit(int (*cb)()) {
 function callback_oninit()::Int
         log(console, "oninit...")
 		setupDocks()
-		textures()
+		#textures()
+		load_shaders()
+		
         zero(Int)
 end
 

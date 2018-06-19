@@ -343,7 +343,6 @@ qtexture_t** WINAPI QERApp_QTextures(); // return &g_qeglobals.d_qtextures;
 GHashTable* WINAPI QERApp_QTexmap(); // return g_qeglobals.d_qtexmap;
 /*
 qtex = ccall( (:ffi_load_texture, libradiant), Ptr{Void}, ())
-qtex = ccall( (:ffi_load_jpg, libradiant), Ptr{Void}, (Cstring,), "textures/concrete/asphalt.jpg")
 next(getSelectedBrushes())[:brush_faces][:d_texture] = qtex
 */
 CCALL void *ffi_load_texture() {
@@ -383,20 +382,33 @@ CCALL void *ffi_load_texture() {
 
 #include "../plugins/image/image.h"
 
-CCALL void *ffi_load_jpg(char *filename) {
+/*
+
+ shadername: textures/conrete/asphalt
+texturename: textures/concrete/asphalt.jpg
+load_shader(shadername, texturename) = ccall( (:ffi_load_shader, libradiant), Ptr{Void}, (Cstring, Cstring), shadername, texturename)
+
+
+load_shader("textures/concrete/asphalt", "textures/concrete/asphalt.jpg")
+load_shader("textures/concrete/desertish", "textures/concrete/desertish.jpg")
+
+load_shader
+
+*/
+CCALL void *ffi_load_shader(char *shadername, char *texturename) {
 	int width = 0;
 	int height = 0;
 	unsigned char *data = NULL;
 
 
-	LoadJPG(filename, &data, &width, &height);
+	LoadJPG(texturename, &data, &width, &height);
 	
 	if (data == NULL)
 		return NULL;
 
 
 	qtexture_t *qtex = QERApp_LoadTextureRGBA(data, width, height);
-	strcpy(qtex->name, filename);
+	strcpy(qtex->name, texturename);
 	// below copy-pasted and fixed from https://github.com/TTimo/GtkRadiant/blob/master/plugins/shaders/shaders.cpp#L800
 	// hook into the main qtexture_t list
 	qtexture_t **d_qtextures = QERApp_QTextures();
@@ -414,10 +426,7 @@ CCALL void *ffi_load_jpg(char *filename) {
 	shader->id = id;
 	//IShader *shader = QERApp_CreateShader_ForTextureName("concrete/asphalt");
 	shader->setTexture(qtex);
-	shader->setName("concrete/asphalt");
-	shader->IncRef();
-	shader->IncRef();
-	shader->IncRef();
+	shader->setName(shadername);
 	return qtex;
 }
 

@@ -24,6 +24,8 @@ function includes()::Void
 	include(juliasources * "freefly.jl")
 	include(juliasources * "preferences.jl")
 	include(juliasources * "mouse.jl")
+	include(juliasources * "shader.jl")
+	include(juliasources * "fs.jl")
 	nothing
 end
 
