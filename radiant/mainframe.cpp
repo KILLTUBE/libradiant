@@ -470,9 +470,7 @@ gint HandleCommand( GtkWidget *widget, gpointer data ){
 		g_pParentWnd->OnGrid( id );
 	}
 	else if ( id >= ID_PLUGIN_START && id <= ID_PLUGIN_END ) {
-		const char *str;
-		str = gtk_menu_item_get_label( GTK_MENU_ITEM( widget ) );
-		g_pParentWnd->OnPlugIn( id, str );
+
 	}
 	else if ( id >= ID_ENTITY_START && id <= ID_ENTITY_END ) {
 		const char *str;
@@ -808,11 +806,6 @@ static void mainframe_destroy( GtkWidget *widget, gpointer data ){
 	g_PrefsDlg.SavePrefs();
 
 	wnd->OnDestroy();
-
-	// shutdown modules
-	// NOTE: I've decided to do this before SavePrefs in case we broadcast some shutdown info
-	// and modules / plugins decide to save some stuff
-	g_pParentWnd->GetPlugInMgr().Shutdown();
 
 	delete wnd;
 
@@ -1336,19 +1329,7 @@ void MainFrame::create_main_toolbar( GtkWidget *window, GtkWidget *vbox ){
 	gtk_widget_show( (GtkWidget *)toolbar );
 }
 
-void MainFrame::create_plugin_toolbar( GtkWidget *window, GtkWidget *vbox ){
-	GtkWidget *toolbar;
-
-	toolbar = gtk_toolbar_new();
-	gtk_orientable_set_orientation( GTK_ORIENTABLE( toolbar ), GTK_ORIENTATION_HORIZONTAL );
-	gtk_toolbar_set_style( GTK_TOOLBAR( toolbar ), GTK_TOOLBAR_ICONS );
-	//  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), user_rc.toolbar_style);
-	gtk_box_pack_start( GTK_BOX( vbox ), toolbar, FALSE, FALSE, 0 );
-	g_object_set_data( G_OBJECT( window ), "toolbar_plugin", toolbar );
-	if ( g_PrefsDlg.m_bPluginToolbar ) {
-		gtk_widget_show( toolbar );
-	}
-}
+void MainFrame::create_plugin_toolbar( GtkWidget *window, GtkWidget *vbox ) {}
 
 void MainFrame::create_main_statusbar( GtkWidget *window, GtkWidget *vbox ){
 	GtkWidget *hbox, *hbox1;
@@ -1533,18 +1514,13 @@ void MainFrame::Create(){
 	create_main_menu( window, vbox );
 	MRU_Load();
 	create_main_toolbar( window, vbox );
-	create_plugin_toolbar( window,vbox );
 	create_main_statusbar( window, vbox );
 
 	m_nCurrentStyle = g_PrefsDlg.m_nView;
 
 	g_pGroupDlg->Create();
-	OnPluginsRefresh();
-
 	CreateQEChildren();
-
 	gtk_widget_show( window );
-
 
 	m_pCamWnd = new CamWnd();
 	m_pXYWnd = new XYWnd();
@@ -2418,52 +2394,9 @@ void MainFrame::DoWatchBSP(){
 
 void MainFrame::CleanPlugInMenu() {}
 void MainFrame::AddPlugInMenuItem( IPlugIn* pPlugIn ) {}
-
-void MainFrame::OnPlugIn( unsigned int nID, const char* str ){
-	m_PlugInMgr.Dispatch( nID, str );
-}
-
-void toolbar_insert( GtkWidget *toolbar, const char* image, const char* text, const char* tooltip, IToolbarButton::EType type, GCallback callback, gpointer data ){
-	GtkToolItem *item;
-	
-	switch ( type )
-	{
-	case IToolbarButton::eSpace:
-		item = gtk_separator_tool_item_new();
-		break;
-	case IToolbarButton::eButton:
-		item = gtk_tool_button_new( new_plugin_image_icon( image ), text );
-		break;
-	case IToolbarButton::eToggleButton:
-		item = gtk_toggle_tool_button_new();
-		gtk_tool_button_set_icon_widget( GTK_TOOL_BUTTON( item ), new_plugin_image_icon( image ) );
-		gtk_tool_button_set_label( GTK_TOOL_BUTTON( item ), text );
-		break;
-	case IToolbarButton::eRadioButton:
-		item = gtk_radio_tool_button_new( NULL );
-		gtk_tool_button_set_icon_widget( GTK_TOOL_BUTTON( item ), new_plugin_image_icon( image ) );
-		break;
-	default:
-		Error( "invalid toolbar button type" );
-		break;
-	}
-	
-	gtk_widget_set_tooltip_text( GTK_WIDGET( item ), tooltip );
-	g_signal_connect( item, "clicked", callback, data );
-
-	gtk_toolbar_insert( GTK_TOOLBAR( toolbar ), item, -1 );
-	gtk_widget_show( GTK_WIDGET( item ) );
-
-}
-
-void SignalToolbarButton( GtkWidget *widget, gpointer data ){
-	const_cast<const IToolbarButton*>( reinterpret_cast<IToolbarButton*>( data ) )->activate();
-}
-
-void MainFrame::AddPlugInToolbarButton( const IToolbarButton* button ){
-	GtkWidget*const toolbar = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "toolbar_plugin" ) );
-	toolbar_insert( toolbar, button->getImage(), button->getText(), button->getTooltip(), button->getType(), G_CALLBACK( SignalToolbarButton ), reinterpret_cast<gpointer>( const_cast<IToolbarButton*>( button ) ) );
-}
+void MainFrame::OnPlugIn( unsigned int nID, const char* str ) {}
+void SignalToolbarButton( GtkWidget *widget, gpointer data ) {}
+void MainFrame::AddPlugInToolbarButton( const IToolbarButton* button ) {}
 
 void MainFrame::OnSelectionSelectNudgedown(){
 	NudgeSelection( 3, g_qeglobals.d_gridsize );
@@ -4843,16 +4776,8 @@ void MainFrame::OnCurveThicken(){
 	Undo_End();
 }
 
-/*!
-   this can no longer be trigger manually from the menu
-   happens only once at startup
- */
-void MainFrame::OnPluginsRefresh(){
-	CleanPlugInMenu();
-	m_PlugInMgr.Init();
-}
+void MainFrame::OnPluginsRefresh() {}
 
-// open the Q3Rad manual
 void MainFrame::OnHelp(){
 	OpenURL( m_pWidget, "http://icculus.org/gtkradiant/documentation/q3radiant_manual/index.htm" );
 }
@@ -4866,7 +4791,7 @@ void MainFrame::OnHelpLinks(){
 }
 
 void MainFrame::OnHelpBugreport(){
-	OpenURL( m_pWidget, "https://github.com/TTimo/GtkRadiant/issues" );
+	OpenURL( m_pWidget, "https://github.com/KILLTUBE/libradiant/issues" );
 }
 
 void MainFrame::OnHelpCommandlist(){

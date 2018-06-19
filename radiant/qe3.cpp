@@ -312,115 +312,9 @@ int BuildShortPathName( const char* pPath, char* pBuffer, int nBufferLen ){
 }
 #endif
 
-/*
-   const char *g_pPathFixups[]=
-   {
-   "basepath",
-   "autosave",
-   };
-
-   const int g_nPathFixupCount = sizeof(g_pPathFixups) / sizeof(const char*);
-
-   void QE_CheckProjectEntity()
-   {
-   char *pFile;
-   char pBuff[PATH_MAX];
-   char pNewPath[PATH_MAX];
-   for (int i = 0; i < g_nPathFixupCount; i++)
-   {
-    char *pPath = ValueForKey (g_qeglobals.d_project_entity, g_pPathFixups[i]);
-
-    strcpy (pNewPath, pPath);
-    if (pPath[0] != '\\' && pPath[0] != '/')
-      if (GetFullPathName(pPath, PATH_MAX, pBuff, &pFile))
-          strcpy (pNewPath, pBuff);
-
-    BuildShortPathName (pNewPath, pBuff, PATH_MAX);
-
-    // check it's not ending with a filename seperator
-    if (pBuff[strlen(pBuff)-1] == '/' || pBuff[strlen(pBuff)-1] == '\\')
-    {
-      Sys_FPrintf(SYS_WRN, "WARNING: \"%s\" path in the project file has an ending file seperator, fixing.\n", g_pPathFixups[i]);
-      pBuff[strlen(pBuff)-1]=0;
-    }
-
-    SetKeyValue(g_qeglobals.d_project_entity, g_pPathFixups[i], pBuff);
-   }
-   }
- */
-
-
 // copy a string r to a buffer w
 // replace $string as appropriate
-static void ReplaceTemplates( char* w, const char* r ){
-	const char *p;
-	const char *__ENGINEPATH = "TEMPLATEenginepath";
-	const char *__USERHOMEPATH = "TEMPLATEuserhomepath";
-	const char *__TOOLSPATH = "TEMPLATEtoolspath";
-	const char *__EXECPATH = "TEMPLATEexecpath";
-	const char *__BASEDIR = "TEMPLATEbasedir";
-	const char *__APPPATH = "TEMPLATEapppath";
-	const char *__Q3MAP2 = "TEMPLATEq3map2";
-
-	// iterate through string r
-	while ( *r != '\0' )
-	{
-		// check for special character
-		if ( *r == '$' ) {
-			if ( strncmp( r + 1, __ENGINEPATH, strlen( __ENGINEPATH ) ) == 0 ) {
-				r += strlen( __ENGINEPATH ) + 1;
-				p = g_pGameDescription->mEnginePath.GetBuffer();
-			}
-			else if ( strncmp( r + 1, __USERHOMEPATH, strlen( __USERHOMEPATH ) ) == 0 ) {
-				r += strlen( __USERHOMEPATH ) + 1;
-				p = g_qeglobals.m_strHomeGame.GetBuffer();
-			}
-			else if ( strncmp( r + 1, __BASEDIR, strlen( __BASEDIR ) ) == 0 ) {
-				r += strlen( __BASEDIR ) + 1;
-				p = g_pGameDescription->mBaseGame;
-			}
-			else if ( strncmp( r + 1, __TOOLSPATH, strlen( __TOOLSPATH ) ) == 0 ) {
-				r += strlen( __TOOLSPATH ) + 1;
-				p = g_strGameToolsPath.GetBuffer();
-			}
-			else if ( strncmp( r + 1, __EXECPATH, strlen( __EXECPATH ) ) == 0 ) {
-				r += strlen( __EXECPATH ) + 1;
-				p = g_strExecutablesPath.GetBuffer();
-			}
-			else if ( strncmp( r + 1, __APPPATH, strlen( __APPPATH ) ) == 0 ) {
-				r += strlen( __APPPATH ) + 1;
-				p = g_strAppPath.GetBuffer();
-			}
-			else if ( strncmp( r + 1, __Q3MAP2, strlen( __Q3MAP2 ) ) == 0 ) {
-				r += strlen( __Q3MAP2 ) + 1;
-				// see https://github.com/TTimo/GtkRadiant/issues/116
-#ifdef _WIN32
-				if ( g_PrefsDlg.m_bx64q3map2 ) {
-				  p = "x64/q3map2";
-				} else
-#endif
-				{
-				  p = "q3map2";
-				}
-			}
-			else
-			{
-				r++;
-				p = "$";
-			}
-
-			while ( *p != '\0' ) *w++ = *p++;
-		}
-		else{ *w++ = *r++; }
-	}
-	*w = '\0';
-}
-
-//extern "C" GDir    *                g_dir_open           (const gchar  *path,
-//					       guint         flags,
-//	GError      **error) {
-//	return NULL;
-//}
+static void ReplaceTemplates( char* w, const char* r ) {}
 
 /*
    ===========
@@ -605,42 +499,42 @@ void QE_InitVFS( void ){
 	Str directory,prefabs;
 
 	// TTimo: let's leave this to HL mode for now
-	if ( g_pGameDescription->mGameFile == "hl.game" ) {
-		// Hydra: we search the "gametools" path first so that we can provide editor
-		// specific pk3's wads and misc files for use by the editor.
-		// the relevant map compiler tools will NOT use this directory, so this helps
-		// to ensure that editor files are not used/required in release versions of maps
-		// it also helps keep your editor files all in once place, with the editor modules,
-		// plugins, scripts and config files.
-		// it also helps when testing maps, as you'll know your files won't/can't be used
-		// by the game engine itself.
-
-		// <gametools>
-		directory = g_pGameDescription->mGameToolsPath;
-		vfsInitDirectory( directory.GetBuffer() );
-	}
+	//if ( g_pGameDescription->mGameFile == "hl.game" ) {
+	//	// Hydra: we search the "gametools" path first so that we can provide editor
+	//	// specific pk3's wads and misc files for use by the editor.
+	//	// the relevant map compiler tools will NOT use this directory, so this helps
+	//	// to ensure that editor files are not used/required in release versions of maps
+	//	// it also helps keep your editor files all in once place, with the editor modules,
+	//	// plugins, scripts and config files.
+	//	// it also helps when testing maps, as you'll know your files won't/can't be used
+	//	// by the game engine itself.
+	//
+	//	// <gametools>
+	//	directory = g_pGameDescription->mGameToolsPath;
+	//	vfsInitDirectory( directory.GetBuffer() );
+	//}
 
 	// NOTE TTimo about the mymkdir calls .. this is a bit dirty, but a safe thing on *nix
 
 	// if we have a mod dir
 	if ( *ValueForKey( g_qeglobals.d_project_entity, "gamename" ) != '\0' ) {
 
-		// ~/.<gameprefix>/<fs_game>
-		if ( g_qeglobals.m_strHomeGame.GetLength() ) {
-			directory = g_qeglobals.m_strHomeGame.GetBuffer();
-			Q_mkdir( directory.GetBuffer(), 0775 );
-			directory += ValueForKey( g_qeglobals.d_project_entity, "gamename" );
-			Q_mkdir( directory.GetBuffer(), 0775 );
-			vfsInitDirectory( directory.GetBuffer() );
-			AddSlash( directory );
-			prefabs = directory;
-			// also create the maps dir, it will be used as prompt for load/save
-			directory += "maps";
-			Q_mkdir( directory, 0775 );
-			// and the prefabs dir
-			prefabs += "prefabs";
-			Q_mkdir( prefabs, 0775 );
-		}
+		//// ~/.<gameprefix>/<fs_game>
+		//if ( g_qeglobals.m_strHomeGame.GetLength() ) {
+		//	directory = g_qeglobals.m_strHomeGame.GetBuffer();
+		//	Q_mkdir( directory.GetBuffer(), 0775 );
+		//	directory += ValueForKey( g_qeglobals.d_project_entity, "gamename" );
+		//	Q_mkdir( directory.GetBuffer(), 0775 );
+		//	vfsInitDirectory( directory.GetBuffer() );
+		//	AddSlash( directory );
+		//	prefabs = directory;
+		//	// also create the maps dir, it will be used as prompt for load/save
+		//	directory += "maps";
+		//	Q_mkdir( directory, 0775 );
+		//	// and the prefabs dir
+		//	prefabs += "prefabs";
+		//	Q_mkdir( prefabs, 0775 );
+		//}
 
 		// <fs_basepath>/<fs_game>
 		directory = g_pGameDescription->mEnginePath;
@@ -657,17 +551,17 @@ void QE_InitVFS( void ){
 		Q_mkdir( prefabs, 0775 );
 	}
 
-	// ~/.<gameprefix>/<fs_main>
-	if ( g_qeglobals.m_strHomeGame.GetLength() ) {
-		directory = g_qeglobals.m_strHomeGame.GetBuffer();
-		directory += g_pGameDescription->mBaseGame;
-		vfsInitDirectory( directory.GetBuffer() );
-	}
-
-	// <fs_basepath>/<fs_main>
-	directory = g_pGameDescription->mEnginePath;
-	directory += g_pGameDescription->mBaseGame;
-	vfsInitDirectory( directory.GetBuffer() );
+	//// ~/.<gameprefix>/<fs_main>
+	//if ( g_qeglobals.m_strHomeGame.GetLength() ) {
+	//	directory = g_qeglobals.m_strHomeGame.GetBuffer();
+	//	directory += g_pGameDescription->mBaseGame;
+	//	vfsInitDirectory( directory.GetBuffer() );
+	//}
+	//
+	//// <fs_basepath>/<fs_main>
+	//directory = g_pGameDescription->mEnginePath;
+	//directory += g_pGameDescription->mBaseGame;
+	//vfsInitDirectory( directory.GetBuffer() );
 }
 
 void QE_Init( void ){
@@ -1109,13 +1003,7 @@ void Sys_SetCursorPos( int x, int y ){
 	gdk_display_warp_pointer( display, gdk_display_get_default_screen( display ), x, y );
 }
 
-void Sys_Beep( void ){
-#if defined ( __linux__ ) || defined ( __APPLE__ )
-	gdk_beep();
-#else
-	MessageBeep( MB_ICONASTERISK );
-#endif
-}
+void Sys_Beep( void ) {}
 
 double Sys_DoubleTime( void ){
 	return clock() / 1000.0;
@@ -1283,127 +1171,11 @@ qboolean ConfirmModified() {
 }
 
 void ProjectDialog(){
-	const char *filename;
-	char buffer[NAME_MAX];
 
-	/*
-	 * Obtain the system directory name and
-	 * store it in buffer.
-	 */
-
-	strcpy( buffer, g_qeglobals.m_strHomeGame.GetBuffer() );
-	strcat( buffer, g_pGameDescription->mBaseGame.GetBuffer() );
-	strcat( buffer, "/scripts/" );
-
-	// Display the Open dialog box
-	filename = file_dialog( NULL, TRUE, _( "Open File" ), buffer, "project" );
-
-	if ( filename == NULL ) {
-		return; // canceled
-
-	}
-	// Open the file.
-	// NOTE: QE_LoadProject takes care of saving prefs with new path to the project file
-	if ( !QE_LoadProject( filename ) ) {
-		Sys_Printf( "Failed to load project from file: %s\n", filename );
-	}
-	else{
-		// FIXME TTimo QE_Init is probably broken if you don't call it during startup right now ..
-		QE_Init();
-	}
 }
 
-/*
-   =======================================================
-
-   Menu modifications
-
-   =======================================================
- */
-
-/*
-   ==================
-   FillBSPMenu
-
-   ==================
- */
 char *bsp_commands[256];
-
-void FillBSPMenu(){
-	GtkWidget *item, *menu; // menu points to a GtkMenu (not an item)
-	epair_t *ep;
-	GList *children, *lst;
-	int i;
-
-	menu = GTK_WIDGET( g_object_get_data( G_OBJECT( g_qeglobals_gui.d_main_window ), "menu_bsp" ) );
-
-	children = gtk_container_get_children( GTK_CONTAINER( menu ) );
-	if( children ) {
-		for ( lst = children; lst != NULL; lst = g_list_next( lst ) )
-		{
-			gtk_container_remove( GTK_CONTAINER( menu ), GTK_WIDGET( lst->data ) );
-		}
-		g_list_free( children );
-	}
-
-	if ( g_PrefsDlg.m_bDetachableMenus ) {
-		item = gtk_tearoff_menu_item_new();
-		gtk_menu_shell_append( GTK_MENU_SHELL( menu ), item );
-		gtk_widget_set_sensitive( item, TRUE );
-		gtk_widget_show( item );
-	}
-
-	if ( g_qeglobals.bBSPFrontendPlugin ) {
-		CString str = g_BSPFrontendTable.m_pfnGetBSPMenu();
-		char cTemp[1024];
-		strcpy( cTemp, str );
-		char* token = strtok( cTemp, ",;" );
-		if ( token && *token == ' ' ) {
-			while ( *token == ' ' )
-				token++;
-		}
-		i = 0;
-
-		// first token is menu name
-		children = gtk_container_get_children( GTK_CONTAINER( menu ) );
-		if( children ) {
-			if( g_list_first( children ) ) {
-				gtk_label_set_text( GTK_LABEL( g_list_first( children )->data ), token );
-			}
-			g_list_free( children );
-		}
-		token = strtok( NULL, ",;" );
-		while ( token != NULL )
-		{
-			g_BSPFrontendCommands = g_slist_append( g_BSPFrontendCommands, g_strdup( token ) );
-			item = gtk_menu_item_new_with_label( token );
-			gtk_widget_show( item );
-			gtk_container_add( GTK_CONTAINER( menu ), item );
-			g_signal_connect( G_OBJECT( item ), "activate",
-								G_CALLBACK( HandleCommand ), GINT_TO_POINTER( CMD_BSPCOMMAND + i ) );
-			token = strtok( NULL, ",;" );
-			i++;
-		}
-	}
-	else
-	{
-		i = 0;
-		for ( ep = g_qeglobals.d_project_entity->epairs; ep; ep = ep->next )
-		{
-			if ( strncmp( ep->key, "bsp_", 4 ) == 0 ) {
-				bsp_commands[i] = ep->key;
-				item = gtk_menu_item_new_with_label( ep->key + 4 );
-				gtk_widget_show( item );
-				gtk_container_add( GTK_CONTAINER( menu ), item );
-				g_signal_connect( G_OBJECT( item ), "activate",
-									G_CALLBACK( HandleCommand ), GINT_TO_POINTER( CMD_BSPCOMMAND + i ) );
-				i++;
-			}
-		}
-	}
-}
-
-//==============================================
+void FillBSPMenu() {}
 
 void AddSlash( CString& strPath ){
 	if ( strPath.GetLength() > 0 ) {
@@ -1432,79 +1204,8 @@ bool ExtractPath_and_Filename( const char* pPath, CString& strPath, CString& str
 	return true;
 }
 
-//===========================================
-
-//++timo FIXME: no longer used .. remove!
-char *TranslateString( char *buf ){
-	static char buf2[32768];
-	int i, l;
-	char          *out;
-
-	l = strlen( buf );
-	out = buf2;
-	for ( i = 0 ; i < l ; i++ )
-	{
-		if ( buf[i] == '\n' ) {
-			*out++ = '\r';
-			*out++ = '\n';
-		}
-		else{
-			*out++ = buf[i];
-		}
-	}
-	*out++ = 0;
-
-	return buf2;
-}
-
-// called whenever we need to open/close/check the console log file
-void Sys_LogFile( void ){
-	if ( g_PrefsDlg.mGamesDialog.m_bLogConsole && !g_qeglobals.hLogFile ) {
-		// settings say we should be logging and we don't have a log file .. so create it
-		// open a file to log the console (if user prefs say so)
-		// the file handle is g_qeglobals.hLogFile
-		// the log file is erased
-		Str name;
-		name = g_strTempPath;
-		name += "radiant.log";
-#if defined ( __linux__ ) || defined ( __APPLE__ )
-		g_qeglobals.hLogFile = open( name.GetBuffer(), O_TRUNC | O_CREAT | O_WRONLY, S_IREAD | S_IWRITE );
-#endif
-#ifdef _WIN32
-		g_qeglobals.hLogFile = _open( name.GetBuffer(), _O_TRUNC | _O_CREAT | _O_WRONLY, _S_IREAD | _S_IWRITE );
-#endif
-		if ( g_qeglobals.hLogFile ) {
-			Sys_Printf( "Started logging to %s\n", name.GetBuffer() );
-			time_t localtime;
-			time( &localtime );
-			Sys_Printf( "Today is: %s", ctime( &localtime ) );
-			Sys_Printf( "This is radiant '" RADIANT_VERSION "' compiled " __DATE__ "\n" );
-			Sys_Printf( RADIANT_ABOUTMSG "\n" );
-		}
-		else{
-			gtk_MessageBox( NULL, _( "Failed to create log file, check write permissions in Radiant directory.\n" ),
-							_( "Console logging" ), MB_OK );
-		}
-	}
-	else if ( !g_PrefsDlg.mGamesDialog.m_bLogConsole && g_qeglobals.hLogFile ) {
-		// settings say we should not be logging but still we have an active logfile .. close it
-		time_t localtime;
-		time( &localtime );
-		Sys_Printf( "Closing log file at %s\n", ctime( &localtime ) );
-		#ifdef _WIN32
-		_close( g_qeglobals.hLogFile );
-		#endif
-		#if defined ( __linux__ ) || defined ( __APPLE__ )
-		close( g_qeglobals.hLogFile );
-		#endif
-		g_qeglobals.hLogFile = 0;
-	}
-}
-
-void Sys_ClearPrintf( void ){
-	GtkTextBuffer* buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW( g_qeglobals_gui.d_edit ) );
-	gtk_text_buffer_set_text( buffer, "", -1 );
-}
+void Sys_LogFile( void ) {}
+void Sys_ClearPrintf( void ) {}
 
 // used to be around 32000, that should be way enough already
 #define BUFFER_SIZE 4096
