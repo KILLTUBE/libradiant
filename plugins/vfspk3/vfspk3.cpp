@@ -42,7 +42,7 @@
 #include <errno.h>
 #include "vfspk3.h"
 #include "vfs.h"
-
+#if 0
 // =============================================================================
 // SYNAPSE
 
@@ -100,3 +100,4 @@ bool CSynapseClientVFS::RequestAPI( APIDescriptor_t *pAPI ){
 const char* CSynapseClientVFS::GetInfo(){
 	return "PK3 VFS module built " __DATE__ " " RADIANT_VERSION;
 }
+#endif

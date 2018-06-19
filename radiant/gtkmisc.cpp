@@ -1249,6 +1249,8 @@ DWORD WINAPI win32_native_file_dialog_thread_func( LPVOID lpParam ){
 
 #endif
 
+IFileTypeRegistry* GetFileTypeRegistry();
+
 /**
  * @param[in] baseSubDir should have a trailing slash if not @c NULL
  */

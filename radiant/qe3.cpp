@@ -39,7 +39,7 @@
 // for the logging part
 #include <fcntl.h>
 #include <sys/types.h>
-
+#include "../plugins/vfspk3/vfs.h"
 QEGlobals_t g_qeglobals;
 QEGlobals_GUI_t g_qeglobals_gui;
 

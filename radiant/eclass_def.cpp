@@ -29,12 +29,11 @@
 #define USE_SCRIPLIBTABLE_DEFINE
 #include "iscriplib.h"
 
-#define __VFSTABLENAME g_FileSystemTable_def
-#define USE_VFSTABLE_DEFINE
 #include "ifilesystem.h"
-
+#include "../plugins/vfspk3/vfs.h"
 
 #include "eclass_def.h"
+#include "qe3.h"
 
 /*! \file eclass_def.cpp
     \brief .def entity description format
@@ -299,7 +298,7 @@ void Eclass_ScanFile( char *filename ){
 			}
 
 			// single ?
-			*Get_Eclass_E() = e;
+			*Get_EClass_E() = e;
 			Set_Eclass_Found( true );
 			if ( Get_Parsing_Single() ) {
 				break;

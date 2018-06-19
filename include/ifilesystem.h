@@ -120,22 +120,4 @@ struct _QERFileSystemTable
 	PFN_VFSBASEPROMPTPATH m_pfnBasePromptPath;
 };
 
-#ifdef USE_VFSTABLE_DEFINE
-#ifndef __VFSTABLENAME
-#define __VFSTABLENAME g_FileSystemTable
-#endif
-#define vfsInitDirectory __VFSTABLENAME.m_pfnInitDirectory
-#define vfsShutdown __VFSTABLENAME.m_pfnShutdown
-#define vfsFreeFile __VFSTABLENAME.m_pfnFreeFile
-#define vfsGetDirList __VFSTABLENAME.m_pfnGetDirList
-#define vfsGetFileList __VFSTABLENAME.m_pfnGetFileList
-#define vfsClearFileDirList __VFSTABLENAME.m_pfnClearFileDirList
-#define vfsGetFileCount __VFSTABLENAME.m_pfnGetFileCount
-#define vfsLoadFile __VFSTABLENAME.m_pfnLoadFile
-#define vfsLoadFullPathFile __VFSTABLENAME.m_pfnLoadFullPathFile
-#define vfsExtractRelativePath __VFSTABLENAME.m_pfnExtractRelativePath
-#define vfsGetFullPath __VFSTABLENAME.m_pfnGetFullPath
-#define vfsBasePromptPath __VFSTABLENAME.m_pfnBasePromptPath
-#endif
-
 #endif // _IFILESYSTEM_H_

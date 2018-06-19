@@ -43,7 +43,7 @@
 #include "str.h"
 #include "missing.h"
 #include "texmanip.h"
-
+#include "../plugins/vfspk3/vfs.h"
 
 
 #define TYP_MIPTEX  68
@@ -1946,7 +1946,7 @@ void texwnd_imgui() {
 	// _IMG_IMG_IMG_IMG_
 	// [   e.g. 800px  ]
 	// 
-
+	return;
 
 	for (int i=0; i<nActiveShadersCount; i++) {
 		pCurrentShader = QERApp_ActiveShader_ForIndex( i );

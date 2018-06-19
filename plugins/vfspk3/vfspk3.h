@@ -46,8 +46,8 @@ typedef char* LPCSTR;
 extern _QERFuncTable_1 g_FuncTable;
 extern CSynapseServer* g_pSynapseServer;
 
-#define Sys_Printf g_FuncTable.m_pfnSysPrintf
-#define Sys_FPrintf g_FuncTable.m_pfnSysFPrintf
+extern "C" void Sys_Printf( const char *text, ... );
+extern "C" void Sys_FPrintf( int level, const char *text, ... );
 
 class CSynapseClientVFS : public CSynapseClient
 {

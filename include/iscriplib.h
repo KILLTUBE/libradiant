@@ -68,19 +68,19 @@ struct _QERScripLibTable
 	PFN_GET_COM_TOKEN m_pfnGet_COM_Token;
 };
 
-#ifdef USE_SCRIPLIBTABLE_DEFINE
-#ifndef __SCRIPLIBTABLENAME
-#define __SCRIPLIBTABLENAME g_ScripLibTable
-#endif
-#define GetToken __SCRIPLIBTABLENAME.m_pfnGetToken
-#define Token __SCRIPLIBTABLENAME.m_pfnToken
-#define UnGetToken __SCRIPLIBTABLENAME.m_pfnUnGetToken
-#define StartTokenParsing __SCRIPLIBTABLENAME.m_pfnStartTokenParsing
-#define ScriptLine __SCRIPLIBTABLENAME.m_pfnScriptLine
-#define TokenAvailable __SCRIPLIBTABLENAME.m_pfnTokenAvailable
-#define COM_Parse __SCRIPLIBTABLENAME.m_pfnCOM_Parse
-#define Get_COM_Token __SCRIPLIBTABLENAME.m_pfnGet_COM_Token
-#define GetTokenExtra __SCRIPLIBTABLENAME.m_pfnGetTokenExtra // Hydra: added support for GetTokenExtra()
-#endif
+//#ifdef USE_SCRIPLIBTABLE_DEFINE
+//#ifndef __SCRIPLIBTABLENAME
+//#define __SCRIPLIBTABLENAME g_ScripLibTable
+//#endif
+//#define GetToken __SCRIPLIBTABLENAME.m_pfnGetToken
+//#define Token __SCRIPLIBTABLENAME.m_pfnToken
+//#define UnGetToken __SCRIPLIBTABLENAME.m_pfnUnGetToken
+//#define StartTokenParsing __SCRIPLIBTABLENAME.m_pfnStartTokenParsing
+//#define ScriptLine __SCRIPLIBTABLENAME.m_pfnScriptLine
+//#define TokenAvailable __SCRIPLIBTABLENAME.m_pfnTokenAvailable
+//#define COM_Parse __SCRIPLIBTABLENAME.m_pfnCOM_Parse
+//#define Get_COM_Token __SCRIPLIBTABLENAME.m_pfnGet_COM_Token
+//#define GetTokenExtra __SCRIPLIBTABLENAME.m_pfnGetTokenExtra // Hydra: added support for GetTokenExtra()
+//#endif
 
 #endif

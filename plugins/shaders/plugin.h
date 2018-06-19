@@ -38,22 +38,7 @@
 #include "idata.h"
 #include "ifilesystem.h"
 #include "iscriplib.h"
-#define USE_BRUSHTABLE_DEFINE
 #include "ibrush.h"
-
-extern _QERFuncTable_1 g_FuncTable;
-extern _QERAppDataTable g_DataTable;
-extern _QERQglTable g_QglTable;
-extern _QERAppShadersTable g_ShadersTable;
-extern _QERFileSystemTable g_VFSTable;
-extern _QERScripLibTable g_ScripLibTable;
-extern _QERBrushTable g_BrushTable;
-
-#define vfsGetFileCount g_VFSTable.m_pfnGetFileCount
-#define vfsLoadFile g_VFSTable.m_pfnLoadFile
-#define vfsFreeFile g_VFSTable.m_pfnFreeFile
-#define Sys_Printf g_FuncTable.m_pfnSysPrintf
-#define Sys_FPrintf g_FuncTable.m_pfnSysFPrintf
 
 class CSynapseClientShaders : public CSynapseClient
 {

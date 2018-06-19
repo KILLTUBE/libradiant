@@ -49,6 +49,14 @@ qtexture_t *WINAPI QERApp_Texture_ForName2( const char *filename );
 IShader *WINAPI QERApp_ColorShader_ForName( const char *name );
 void WINAPI QERApp_LoadShaderFile( const char *filename );
 
+brush_t* WINAPI QERApp_ActiveBrushes();
+brush_t* WINAPI QERApp_SelectedBrushes();
+brush_t* WINAPI QERApp_FilteredBrushes();
+
+extern "C" void Sys_FPrintf( int level, const char *text, ... );
+void WINAPI QE_ConvertDOSToUnixName( char *dst, const char *src );
+
+
 //++timo TODO: use stl::map !! (I tried having a look to CMap but it obviously sucks)
 CShaderArray g_Shaders;
 // whenever a shader gets activated / deactivated this list is updated
@@ -63,16 +71,16 @@ CShaderArray g_ActiveShaders;
 // information as well. but we assume there won't be any case conflict and so when doing lookups based on shader name,
 // we compare as case insensitive. That is Radiant is case insensitive, but knows that the engine is case sensitive.
 //++timo FIXME: we need to put code somewhere to detect when two shaders that are case insensitive equal are present
-const char *WINAPI QERApp_CleanTextureName( const char *name, bool bAddTexture = false ){
+const char *WINAPI QERApp_CleanTextureName( const char *name, bool bAddTexture){
 	static char stdName[QER_MAX_NAMELEN];
 #ifdef _DEBUG
 	if ( strlen( name ) > QER_MAX_NAMELEN ) {
-		g_FuncTable.m_pfnSysFPrintf( SYS_WRN, "WARNING: name exceeds QER_MAX_NAMELEN in CleanTextureName\n" );
+		Sys_FPrintf( SYS_WRN, "WARNING: name exceeds QER_MAX_NAMELEN in CleanTextureName\n" );
 	}
 #endif
 
 	strcpy( stdName, name );
-	g_FuncTable.m_pfnQE_ConvertDOSToUnixName( stdName, stdName );
+	QE_ConvertDOSToUnixName( stdName, stdName );
 	if ( stdName[strlen( name ) - 4] == '.' ) {
 		// strip extension
 		stdName[strlen( stdName ) - 4] = '\0';
@@ -146,6 +154,8 @@ void CShader::CreateDefault( const char *name ){
 	m_strTextureName = stdName;
 	setName( name );
 }
+
+extern "C" void Sys_Printf( const char *text, ... );
 
 CShader *CShaderArray::Shader_ForTextureName( const char *name ) const {
 #ifdef _DEBUG
@@ -244,6 +254,12 @@ char *ShaderNameLookup( patchMesh_t * patch ){
 }
 //++timo end clean
 
+qtexture_t** WINAPI QERApp_QTextures();
+GHashTable* WINAPI QERApp_QTexmap();
+void WINAPI QE_CheckOpenGLForErrors( void );
+#include "../radiant/qgl.h"
+
+
 // will free all GL binded qtextures and shaders
 // NOTE: doesn't make much sense out of Radiant exit or called during a reload
 void WINAPI QERApp_FreeShaders(){
@@ -254,10 +270,10 @@ void WINAPI QERApp_FreeShaders(){
 	brush_t *filtered_brushes;
 	qtexture_t **d_qtextures;
 
-	active_brushes = g_DataTable.m_pfnActiveBrushes();
-	selected_brushes = g_DataTable.m_pfnSelectedBrushes();
-	filtered_brushes = g_DataTable.m_pfnFilteredBrushes();
-	d_qtextures = g_ShadersTable.m_pfnQTextures();
+	active_brushes = QERApp_ActiveBrushes();
+	selected_brushes = QERApp_SelectedBrushes();
+	filtered_brushes = QERApp_FilteredBrushes();
+	d_qtextures = QERApp_QTextures();
 
 	// store the shader names used by the patches
 	for ( i = 0; i < PatchShaders.GetSize(); i++ )
@@ -298,7 +314,7 @@ void WINAPI QERApp_FreeShaders(){
 #endif
 
 	//GtkWidget *widget = g_QglTable.m_pfn_GetQeglobalsGLWidget ();
-	GHashTable *texmap = g_ShadersTable.m_pfnQTexmap();
+	GHashTable *texmap = QERApp_QTexmap();
 
 	// NOTE: maybe before we'd like to set all qtexture_t in the shaders list to notex?
 	// NOTE: maybe there are some qtexture_t we don't want to erase? For plain color faces maybe?
@@ -308,7 +324,7 @@ void WINAPI QERApp_FreeShaders(){
 		qtexture_t *pNextTex = pTex->next;
 
 		//if (widget != NULL)
-		g_QglTable.m_pfn_qglDeleteTextures( 1, &pTex->texture_number );
+		qglDeleteTextures( 1, &pTex->texture_number );
 
 		g_hash_table_remove( texmap, pTex->name );
 
@@ -317,7 +333,7 @@ void WINAPI QERApp_FreeShaders(){
 		*d_qtextures = pNextTex;
 	}
 
-	g_QglTable.m_pfn_QE_CheckOpenGLForErrors();
+	QE_CheckOpenGLForErrors();
 }
 
 // those functions are only used during a shader reload phase
@@ -365,6 +381,10 @@ void Brush_RefreshShader( brush_t *b ){
 	}
 }
 
+CPtrArray* WINAPI QERApp_LstSkinCache();
+void BuildShaderList();
+void PreloadShaders();
+
 void WINAPI QERApp_ReloadShaders(){
 	brush_t *b;
 	brush_t *active_brushes;
@@ -373,15 +393,15 @@ void WINAPI QERApp_ReloadShaders(){
 
 	QERApp_FreeShaders();
 
-	g_DataTable.m_pfnLstSkinCache()->RemoveAll(); //md3 skins
+	QERApp_LstSkinCache()->RemoveAll(); //md3 skins
 
-	active_brushes = g_DataTable.m_pfnActiveBrushes();
-	selected_brushes = g_DataTable.m_pfnSelectedBrushes();
-	filtered_brushes = g_DataTable.m_pfnFilteredBrushes();
+	active_brushes = QERApp_ActiveBrushes();
+	selected_brushes = QERApp_SelectedBrushes();
+	filtered_brushes = QERApp_FilteredBrushes();
 
 	// now we must reload the shader information from shaderfiles
-	g_ShadersTable.m_pfnBuildShaderList();
-	g_ShadersTable.m_pfnPreloadShaders();
+	BuildShaderList();
+	PreloadShaders();
 
 	// refresh the map visuals: replace our old shader objects by the new ones
 	// on brush faces we have the shader name in texdef.name
@@ -430,8 +450,11 @@ int WINAPI QERApp_LoadShadersFromDir( const char *path ){
 	return count;
 }
 
+char* QERApp_Token();
+qboolean GetToken( qboolean crossline );
+
 bool CShader::Parse(){
-	char *token = g_ScripLibTable.m_pfnToken();
+	char *token = QERApp_Token();
 
 	// the parsing needs to be taken out in another module
 //  Sys_Printf("TODO: CShader::Parse\n");
@@ -444,7 +467,7 @@ bool CShader::Parse(){
 	// name of the qtexture_t we'll use to represent this shader (this one has the "textures\" before)
 	const char *stdName = QERApp_CleanTextureName( token );
 	m_strTextureName = stdName; // FIXME: BC reports stdName is uninitialised?
-	g_ScripLibTable.m_pfnGetToken( true );
+	GetToken( true );
 	if ( strcmp( token, "{" ) ) {
 		return false;
 	}
@@ -452,7 +475,7 @@ bool CShader::Parse(){
 	{
 		// we need to read until we hit a balanced }
 		int nMatch = 1;
-		while ( nMatch > 0 && g_ScripLibTable.m_pfnGetToken( true ) )
+		while ( nMatch > 0 && GetToken( true ) )
 		{
 			if ( strcmp( token, "{" ) == 0 ) {
 				nMatch++;
@@ -469,19 +492,19 @@ bool CShader::Parse(){
 				m_nFlags |= QER_NOCARVE;
 			}
 			else if ( strcmpi( token, "qer_trans" ) == 0 ) {
-				if ( g_ScripLibTable.m_pfnGetToken( true ) ) {
+				if ( GetToken( true ) ) {
 					m_fTrans = (float) atof( token );
 				}
 				m_nFlags |= QER_TRANS;
 			}
 			else if ( strcmpi( token, "qer_editorimage" ) == 0 ) {
-				if ( g_ScripLibTable.m_pfnGetToken( true ) ) {
+				if ( GetToken( true ) ) {
 					// bAddTexture changed to false to allow editorimages in other locations than "textures/"
 					m_strTextureName = QERApp_CleanTextureName( token, false );
 				}
 			}
 			else if ( strcmpi( token, "qer_alphafunc" ) == 0 ) {
-				if ( g_ScripLibTable.m_pfnGetToken( true ) ) {
+				if ( GetToken( true ) ) {
 
 					if ( stricmp( token, "greater" ) == 0 ) {
 						m_nAlphaFunc = GL_GREATER;
@@ -497,12 +520,12 @@ bool CShader::Parse(){
 						m_nFlags |= QER_ALPHAFUNC;
 					}
 				}
-				if ( g_ScripLibTable.m_pfnGetToken( true ) ) {
+				if ( GetToken( true ) ) {
 					m_fAlphaRef = (float) atof( token );
 				}
 			}
 			else if ( strcmpi( token, "cull" ) == 0 ) {
-				if ( g_ScripLibTable.m_pfnGetToken( true ) ) {
+				if ( GetToken( true ) ) {
 					if ( stricmp( token, "none" ) == 0 || stricmp( token, "twosided" ) == 0 || stricmp( token, "disable" ) == 0 ) {
 						m_nCull = 2;
 					}
@@ -516,7 +539,7 @@ bool CShader::Parse(){
 				}
 			}
 			else if ( strcmpi( token, "surfaceparm" ) == 0 ) {
-				if ( g_ScripLibTable.m_pfnGetToken( true ) ) {
+				if ( GetToken( true ) ) {
 					if ( strcmpi( token, "fog" ) == 0 ) {
 						m_nFlags |= QER_FOG;
 						if ( m_fTrans == 1.0f ) { // has not been explicitly set by qer_trans
@@ -585,19 +608,23 @@ bool CShader::Activate(){
 	return true;
 }
 
+#include "../plugins/vfspk3/vfs.h"
+
+void StartTokenParsing( char *data );
+
 void WINAPI QERApp_LoadShaderFile( const char *filename ){
 	char *pBuff;
 	int nSize = vfsLoadFile( filename, reinterpret_cast < void **>( &pBuff ), 0 );
 	if ( nSize > 0 ) {
 		Sys_Printf( "Parsing shaderfile %s\n", filename );
-		g_ScripLibTable.m_pfnStartTokenParsing( pBuff );
-		while ( g_ScripLibTable.m_pfnGetToken( true ) )
+		StartTokenParsing( pBuff );
+		while ( GetToken( true ) )
 		{
 			// first token should be the path + name.. (from base)
 			CShader *pShader = new CShader();
 			// we want the relative filename only, it's easier for later lookup .. see QERApp_ReloadShaderFile
 			char cTmp[1024];
-			g_FuncTable.m_pfnQE_ConvertDOSToUnixName( cTmp, filename );
+			QE_ConvertDOSToUnixName( cTmp, filename );
 			// given the vfs, we should not store the full path
 			//pShader->setShaderFileName( filename + strlen(ValueForKey(g_qeglobals.d_project_entity, "basepath")));
 			pShader->setShaderFileName( filename );
@@ -670,7 +697,7 @@ IShader *WINAPI QERApp_Shader_ForName( const char *name ){
 		// Hydra: This error can occur if the user loaded a map with/dropped an entity that
 		// did not set a texture name "(r g b)" - check the entity definition loader
 
-		g_FuncTable.m_pfnSysFPrintf( SYS_ERR, "FIXME: name == NULL || strlen(name) == 0 in QERApp_Shader_ForName\n" );
+		Sys_FPrintf( SYS_ERR, "FIXME: name == NULL || strlen(name) == 0 in QERApp_Shader_ForName\n" );
 		return QERApp_Shader_ForName( SHADER_NOT_FOUND );
 	}
 	// entities that should be represented with plain colors instead of textures
@@ -687,6 +714,9 @@ IShader *WINAPI QERApp_Shader_ForName( const char *name ){
 	return QERApp_CreateShader_ForTextureName( name );
 }
 
+void QERApp_LoadImage( const char *name, unsigned char **pic, int *width, int *height );
+qtexture_t *QERApp_LoadTextureRGBA( unsigned char* pPixels, int nWidth, int nHeight );
+
 qtexture_t *WINAPI QERApp_Try_Texture_ForName( const char *name ){
 	qtexture_t *q;
 //  char f1[1024], f2[1024];
@@ -697,7 +727,7 @@ qtexture_t *WINAPI QERApp_Try_Texture_ForName( const char *name ){
 	const char *stdName = QERApp_CleanTextureName( name );
 
 	// use the hash table
-	q = (qtexture_t*)g_hash_table_lookup( g_ShadersTable.m_pfnQTexmap(), stdName );
+	q = (qtexture_t*)g_hash_table_lookup( QERApp_QTexmap(), stdName );
 	if ( q ) {
 		return q;
 	}
@@ -712,7 +742,7 @@ qtexture_t *WINAPI QERApp_Try_Texture_ForName( const char *name ){
 	}
 #endif
 
-	g_FuncTable.m_pfnLoadImage( name, &pPixels, &nWidth, &nHeight );
+	QERApp_LoadImage( name, &pPixels, &nWidth, &nHeight );
 
 	if ( !pPixels ) {
 		return NULL; // we failed
@@ -728,7 +758,7 @@ qtexture_t *WINAPI QERApp_Try_Texture_ForName( const char *name ){
 	// need to check we are using a right GL context
 	// with GL plugins that have their own window, the GL context may be the plugin's, in which case loading textures will bug
 	//  g_QglTable.m_pfn_glwidget_make_current (g_QglTable.m_pfn_GetQeglobalsGLWidget ());
-	q = g_FuncTable.m_pfnLoadTextureRGBA( pPixels, nWidth, nHeight );
+	q = QERApp_LoadTextureRGBA( pPixels, nWidth, nHeight );
 	if ( !q ) {
 		return NULL;
 	}
@@ -740,11 +770,11 @@ qtexture_t *WINAPI QERApp_Try_Texture_ForName( const char *name ){
 		q->name[strlen( q->name ) - 4] = '\0';
 	}
 	// hook into the main qtexture_t list
-	qtexture_t **d_qtextures = g_ShadersTable.m_pfnQTextures();
+	qtexture_t **d_qtextures = QERApp_QTextures();
 	q->next = *d_qtextures;
 	*d_qtextures = q;
 	// push it in the map
-	g_hash_table_insert( g_ShadersTable.m_pfnQTexmap(), q->name, q );
+	g_hash_table_insert( QERApp_QTexmap(), q->name, q );
 	return q;
 }
 
@@ -762,6 +792,8 @@ IShader *WINAPI QERApp_Shader_ForName_NoLoad( const char *pName ){
 	return pShader;
 }
 
+#include "../../radiant/imgui_docks/dock_console.h"
+
 /*!
    This should NEVER return NULL, it is the last-chance call in the load cascade
  */
@@ -778,7 +810,7 @@ qtexture_t *WINAPI QERApp_Texture_ForName2( const char *filename ){
 	}
 
 	// still not found? this is a fatal error
-	g_FuncTable.m_pfnError( "Failed to load " SHADER_NOT_FOUND ". Looks like your installation is broken / missing some essential elements." );
+	imgui_log( "Failed to load " SHADER_NOT_FOUND ". Looks like your installation is broken / missing some essential elements." );
 	return NULL;
 }
 
@@ -820,6 +852,10 @@ void CShaderArray::ReleaseForShaderFile( const char *name ){
 	}
 }
 
+
+void Texture_ShowInuse();
+void WINAPI Sys_UpdateWindows( int nBits );
+
 void WINAPI QERApp_ReloadShaderFile( const char *name ){
 	brush_t *b;
 	face_t *f;
@@ -829,9 +865,9 @@ void WINAPI QERApp_ReloadShaderFile( const char *name ){
 
 //  Sys_Printf("TODO: QERApp_ReloadShaderFile\n");
 
-	active_brushes = g_DataTable.m_pfnActiveBrushes();
-	selected_brushes = g_DataTable.m_pfnSelectedBrushes();
-	filtered_brushes = g_DataTable.m_pfnFilteredBrushes();
+	active_brushes = QERApp_ActiveBrushes();
+	selected_brushes = QERApp_SelectedBrushes();
+	filtered_brushes = QERApp_FilteredBrushes();
 
 #ifdef _DEBUG
 	// check the shader name is a reletive path
@@ -886,9 +922,9 @@ void WINAPI QERApp_ReloadShaderFile( const char *name ){
 		}
 	}
 	// call Texture_ShowInUse to clean and display only what's required
-	g_ShadersTable.m_pfnTexture_ShowInuse();
+	Texture_ShowInuse();
 	QERApp_SortActiveShaders();
-	g_FuncTable.m_pfnSysUpdateWindows( W_TEXTURE );
+	Sys_UpdateWindows( W_TEXTURE );
 }
 
 void CShaderArray::SetDisplayed( bool b ){

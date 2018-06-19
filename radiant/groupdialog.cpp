@@ -33,6 +33,7 @@
 #include <glib/gi18n.h>
 #include "stdafx.h"
 #include "groupdialog.h"
+#include "../plugins/vfspk3/vfs.h"
 
 GtkWidget*  EntWidgets[EntLast];
 int inspector_mode;                     // W_TEXTURE, W_ENTITY, or W_CONSOLE

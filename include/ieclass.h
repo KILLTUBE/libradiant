@@ -40,14 +40,6 @@ struct _EClassTable
 	PFN_ECLASS_GETEXTENSION m_pfnGetExtension;
 };
 
-#ifdef USE_ECLASSTABLE_DEFINE
-#ifndef __ECLASSTABLENAME
-#define __ECLASSTABLENAME g_EClassTable
-#endif
-#define EClass_ScanFile __ECLASSTABLENAME.m_pfnEClass_ScanFile
-#define EClass_GetExtension __ECLASSTABLENAME.m_pfnEClass_GetExtension
-#endif
-
 #define ECLASSMANAGER_MAJOR "eclassmanager"
 
 typedef void ( *PFN_ECLASS_INSERTALPHABETIZED )( eclass_t *e );
@@ -67,17 +59,5 @@ struct _EClassManagerTable
 	PFN_ECLASS_CREATE m_pfnEClass_Create;
 	PFN_ECLASS_FORNAME m_pfnEclass_ForName;
 };
-
-#ifdef USE_ECLASSMANAGER_DEFINE
-#ifndef __ECLASSMANAGERTABLENAME
-#define __ECLASSMANAGERTABLENAME g_EClassManagerTable
-#endif
-#define Eclass_InsertAlphabetized __ECLASSMANAGERTABLENAME.m_pfnEclass_InsertAlphabetized
-#define Get_Eclass_E __ECLASSMANAGERTABLENAME.m_pfnGet_Eclass_E
-#define Set_Eclass_Found __ECLASSMANAGERTABLENAME.m_pfnSet_Eclass_Found
-#define Get_Parsing_Single __ECLASSMANAGERTABLENAME.m_pfnGet_Parsing_Single
-#define EClass_Create __ECLASSMANAGERTABLENAME.m_pfnEClass_Create
-#define Eclass_ForName __ECLASSMANAGERTABLENAME.m_pfnEclass_ForName
-#endif
 
 #endif

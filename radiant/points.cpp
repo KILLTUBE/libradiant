@@ -20,6 +20,7 @@
  */
 
 #include "stdafx.h"
+#include "../plugins/vfspk3/vfs.h"
 
 #define MAX_POINTFILE   8192
 static vec3_t s_pointvecs[MAX_POINTFILE];

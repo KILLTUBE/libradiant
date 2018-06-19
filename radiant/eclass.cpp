@@ -25,7 +25,7 @@
 #include <dirent.h>
 #endif
 #include "assert.h"
-
+#include "../plugins/vfspk3/vfs.h"
 eclass_t    *eclass = NULL;
 eclass_t    *eclass_bad = NULL;
 const vec3_t smallbox[2] = {{-8,-8,-8},{8,8,8}};
@@ -334,6 +334,9 @@ eclass_t * EClass_Create( const char *name, float col1, float col2, float col3, 
 	return e;
 }
 
+const char* EClass_GetExtension();
+void Eclass_ScanFile( char *filename );
+
 void Eclass_Init(){
 	GSList *pFiles;
 
@@ -345,7 +348,7 @@ void Eclass_Init(){
 	while ( pTable )
 	{
 		// read in all scripts/*.<extension>
-		pFiles = vfsGetFileList( "scripts", pTable->m_pfnGetExtension() );
+		pFiles = vfsGetFileList( "scripts", EClass_GetExtension() );
 		if ( pFiles ) {
 			GSList *pFile = pFiles;
 			while ( pFile )
@@ -410,7 +413,7 @@ void Eclass_Init(){
 					Sys_FPrintf( SYS_ERR, "Failed to find the full path for \"%s\" in the VFS\n", relPath );
 				}
 				else{
-					pTable->m_pfnScanFile( fullpath );
+					Eclass_ScanFile( fullpath );
 				}
 				if ( g_pGameDescription->mEClassSingleLoad ) {
 					break;

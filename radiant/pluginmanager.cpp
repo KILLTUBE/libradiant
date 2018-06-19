@@ -49,6 +49,8 @@ extern "C" {
 
 #include <ccall/ccall.h>
 
+#include "../plugins/vfspk3/vfs.h"
+
 CRadiantImageManager g_ImageManager;
 CRadiantPluginManager g_PluginsManager;
 

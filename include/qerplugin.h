@@ -628,39 +628,4 @@ struct _QERFuncTable_1
 	PFN_GETMAPFILENAME m_pfnGetMapName;
 };
 
-// macros to access those faster in plugins
-#ifdef USE_QERTABLE_DEFINE
-#ifndef __QERTABLENAME
-#define __QERTABLENAME g_FuncTable
-#endif
-#define CSG_MakeHollow __QERTABLENAME.m_pfnCSG_MakeHollow
-#define CSG_MakeHollowMode __QERTABLENAME.m_pfnCSG_MakeHollowMode
-#define Sys_Beep __QERTABLENAME.m_pfnSysBeep
-#define Sys_Printf __QERTABLENAME.m_pfnSysPrintf
-#define Sys_FPrintf __QERTABLENAME.m_pfnSysFPrintf
-#define Sys_BeginWait __QERTABLENAME.m_pfnSysBeginWait
-#define Sys_EndWait __QERTABLENAME.m_pfnSysEndWait
-#define Sys_UpdateWindows __QERTABLENAME.m_pfnSysUpdateWindows
-#define Sys_SetTitle __QERTABLENAME.m_pfnSys_SetTitle
-#define Sys_Status __QERTABLENAME.m_pfnSys_Status
-#define Select_Deselect __QERTABLENAME.m_pfnDeselectAllBrushes
-#define Map_New __QERTABLENAME.m_pfnMapNew
-#define Map_Free __QERTABLENAME.m_pfnMapFree
-#define Map_IsBrushFiltered __QERTABLENAME.m_pfnMap_IsBrushFiltered
-#define Map_BuildBrushData __QERTABLENAME.m_pfnMapBuildBrushData
-#define Map_StartPosition __QERTABLENAME.m_pfnMapStartPosition
-#define Map_RegionOff __QERTABLENAME.m_pfnMapRegionOff
-#define QE_ConvertDOSToUnixName __QERTABLENAME.m_pfnQE_ConvertDOSToUnixName
-#define SetBuildWindingsNoTexBuild __QERTABLENAME.m_pfnSetBuildWindingsNoTexBuild
-//#define SaveAsDialog __QERTABLENAME.m_pfnSaveAsDialog
-#define Pointfile_Clear __QERTABLENAME.m_pfnPointFileClear
-#define SetScreenUpdate __QERTABLENAME.m_pfnSetScreenUpdate
-#define Region_SpawnPoint __QERTABLENAME.m_pfnRegionSpawnPoint
-#define QGetTickCount __QERTABLENAME.m_pfnGetTickCount
-#define GetModelCache __QERTABLENAME.m_pfnGetModelCache
-#define GetFileTypeRegistry __QERTABLENAME.m_pfnGetFileTypeRegistry
-#else
-IFileTypeRegistry* GetFileTypeRegistry();
-#endif
-
 #endif

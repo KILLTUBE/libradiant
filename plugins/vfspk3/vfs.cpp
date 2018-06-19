@@ -118,10 +118,10 @@ static void vfsInitPakFile( const char *filename ){
 	errno = 0;
 	uf = unzOpen( filename );
 	if ( uf == NULL ) {
-		g_FuncTable.m_pfnSysFPrintf( SYS_WRN, "  failed to init pak file %s. %s\n", filename, ( errno !=0 ? strerror( errno ): "" ) );
+		Sys_FPrintf( SYS_WRN, "  failed to init pak file %s. %s\n", filename, ( errno !=0 ? strerror( errno ): "" ) );
 		return;
 	}
-	g_FuncTable.m_pfnSysPrintf( "  pak file: %s\n", filename );
+	Sys_Printf( "  pak file: %s\n", filename );
 
 	g_unzFiles = g_slist_append( g_unzFiles, uf );
 
@@ -366,6 +366,7 @@ static int vfsPakSort( const void *a, const void *b ){
    This is simple to fix by cleaning up the hacks, but may be better left alone
    if the engine code does the same thing.
  */
+const char* QERApp_ReadProjectKey( const char* key );
 void vfsInitDirectory( const char *path ){
 	char filename[PATH_MAX];
 	GDir *dir;
@@ -377,7 +378,7 @@ void vfsInitDirectory( const char *path ){
 	}
 
 	// See if we are in "sp" or "mp" mapping mode
-	const char* gamemode = g_FuncTable.m_pfnReadProjectKey( "gamemode" );
+	const char* gamemode = QERApp_ReadProjectKey( "gamemode" );
 
 	if ( gamemode ) {
 		if ( strcmp( gamemode, "sp" ) == 0 ) {
@@ -403,7 +404,7 @@ void vfsInitDirectory( const char *path ){
 		dir = g_dir_open( path, 0, NULL );
 
 		if ( dir != NULL ) {
-			g_FuncTable.m_pfnSysPrintf( "vfs directory: %s\n", path );
+			Sys_Printf( "vfs directory: %s\n", path );
 
 			for (;; )
 			{
@@ -480,7 +481,7 @@ void vfsInitDirectory( const char *path ){
 			}
 		}
 		else{
-			g_FuncTable.m_pfnSysFPrintf( SYS_WRN, "vfs directory not found: %s\n", path );
+			Sys_FPrintf( SYS_WRN, "vfs directory not found: %s\n", path );
 		}
 	}
 }

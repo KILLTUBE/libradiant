@@ -202,33 +202,26 @@ struct _QERShadersTable
    make it homogeneous with other modules, should be straight calls
  */
 
-#ifdef USE_SHADERSTABLE_DEFINE
-  #ifndef __SHADERSTABLENAME
-	#define __SHADERSTABLENAME g_ShadersTable
-  #endif
-#define QERApp_Shader_ForName __SHADERSTABLENAME.m_pfnShader_ForName
-#define QERApp_Texture_ForName2 __SHADERSTABLENAME.m_pfnTexture_ForName
-#define QERApp_FreeShaders __SHADERSTABLENAME.m_pfnFreeShaders
-#define QERApp_ReloadShaders __SHADERSTABLENAME.m_pfnReloadShaders
-#define QERApp_SortActiveShaders __SHADERSTABLENAME.m_pfnSortActiveShaders
-#define QERApp_ReloadShaderFile __SHADERSTABLENAME.m_pfnReloadShaderFile
-#define QERApp_LoadShaderFile __SHADERSTABLENAME.m_pfnLoadShaderFile
-#define QERApp_HasShader __SHADERSTABLENAME.m_pfnHasShader
-#define QERApp_Try_Shader_ForName __SHADERSTABLENAME.m_pfnTry_Shader_ForName
-#define QERApp_Try_Texture_ForName __SHADERSTABLENAME.m_pfnTry_Texture_ForName
-#define QERApp_ColorShader_ForName __SHADERSTABLENAME.m_pfnColorShader_ForName
-#define QERApp_Shader_ForName_NoLoad __SHADERSTABLENAME.m_pfnShader_ForName_NoLoad
-#define QERApp_LoadShadersFromDir __SHADERSTABLENAME.m_pfnLoadShadersFromDir
-#define QERApp_LoadShadersFromDir __SHADERSTABLENAME.m_pfnLoadShadersFromDir
-#define QERApp_CreateShader_ForTextureName __SHADERSTABLENAME.m_pfnCreateShader_ForTextureName
-#define QERApp_GetActiveShaderCount __SHADERSTABLENAME.m_pfnGetActiveShaderCount
-#define QERApp_ActiveShaders_SetDisplayed __SHADERSTABLENAME.m_pfnActiveShaders_SetDisplayed
-#define QERApp_ActiveShader_ForIndex __SHADERSTABLENAME.m_pfnActiveShader_ForIndex
-#define QERApp_ActiveShaders_SetInUse __SHADERSTABLENAME.m_pfnActiveShaders_SetInUse
-#define QERApp_ActiveShader_ForTextureName __SHADERSTABLENAME.m_pfnActiveShader_ForTextureName
-#define QERApp_ActiveShader_ForIndex __SHADERSTABLENAME.m_pfnActiveShader_ForIndex
-#define QERApp_CleanTextureName __SHADERSTABLENAME.m_pfnCleanTextureName
-#endif
+// Set the IsDisplayed flag on all active shaders
+
+void WINAPI QERApp_ActiveShaders_SetDisplayed( bool b );
+void WINAPI QERApp_ActiveShaders_SetInUse( bool b );
+IShader * WINAPI QERApp_Shader_ForName( const char *name );
+qtexture_t *WINAPI QERApp_Try_Texture_ForName( const char *name );
+qtexture_t *WINAPI QERApp_Texture_ForName2( const char *filename );
+IShader *WINAPI QERApp_ColorShader_ForName( const char *name );
+void WINAPI QERApp_LoadShaderFile( const char *filename );
+void WINAPI QERApp_SortActiveShaders();
+int WINAPI QERApp_GetActiveShaderCount();
+IShader *WINAPI QERApp_ActiveShader_ForIndex( int i );
+void WINAPI QERApp_FreeShaders();
+void WINAPI QERApp_ReloadShaders();
+int WINAPI QERApp_HasShader( const char *pName );
+int WINAPI QERApp_LoadShadersFromDir( const char *path );
+IShader *WINAPI QERApp_ActiveShader_ForTextureName( char *name );
+IShader *WINAPI QERApp_CreateShader_ForTextureName( const char *name );
+const char *WINAPI QERApp_CleanTextureName( const char *name, bool bAddTexture = false );
+
 
 #define APPSHADERS_MAJOR "appshaders"
 // FIXME: remove

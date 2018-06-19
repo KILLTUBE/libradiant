@@ -913,4 +913,8 @@ void Eclass_Init();
 eclass_t *Eclass_ForName( const char *name, qboolean has_brushes );
 eclass_t * EClass_Create( const char *name, float col1, float col2, float col3, const vec3_t *mins, const vec3_t *maxs, const char *comments );
 
+void WINAPI QE_ConvertDOSToUnixName( char *dst, const char *src );
+
+eclass_t** Get_EClass_E();
+
 #endif // _QE3_H_

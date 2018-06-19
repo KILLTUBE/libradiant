@@ -41,6 +41,8 @@
 #include "kung/easygtkwidget.h"
 #include "kung/jsconsole.h"
 
+#include "../plugins/vfspk3/vfs.h"
+
 // use this to verbose what happens with the keyboard
 #ifdef _DEBUG
 //  #define DBG_KBD

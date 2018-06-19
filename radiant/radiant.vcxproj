@@ -168,6 +168,10 @@
     <ClCompile Include="..\plugins\entity\light.cpp" />
     <ClCompile Include="..\plugins\entity\miscmodel.cpp" />
     <ClCompile Include="..\plugins\entity\plugin.cpp" />
+    <ClCompile Include="..\plugins\shaders\shaders.cpp" />
+    <ClCompile Include="..\plugins\vfspk3\unzip.cpp" />
+    <ClCompile Include="..\plugins\vfspk3\vfs.cpp" />
+    <ClCompile Include="..\plugins\vfspk3\vfspk3.cpp" />
     <ClCompile Include="bp_dlg.cpp" />
     <ClCompile Include="brush.cpp" />
     <ClCompile Include="brush_primit.cpp" />
@@ -280,6 +284,10 @@
     <ClInclude Include="..\plugins\entity\entity_entitymodel.h" />
     <ClInclude Include="..\plugins\entity\light.h" />
     <ClInclude Include="..\plugins\entity\plugin.h" />
+    <ClInclude Include="..\plugins\shaders\shaders.h" />
+    <ClInclude Include="..\plugins\vfspk3\unzip-vfspk3.h" />
+    <ClInclude Include="..\plugins\vfspk3\vfs.h" />
+    <ClInclude Include="..\plugins\vfspk3\vfspk3.h" />
     <ClInclude Include="brush.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="camwindow.h" />
