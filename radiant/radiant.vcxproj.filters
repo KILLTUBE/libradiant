@@ -42,6 +42,9 @@
     <Filter Include="src\image">
       <UniqueIdentifier>{44036f0f-8b18-494f-b2a4-8cc11c9caf9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\map">
+      <UniqueIdentifier>{e194c094-44d1-4a1d-a9c6-6285b7c057b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bp_dlg.cpp">
@@ -120,9 +123,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="missing.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="parse.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="patchdialog.cpp">
@@ -334,6 +334,18 @@
     </ClCompile>
     <ClCompile Include="..\plugins\image\lbmlib.cpp">
       <Filter>src\image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\map\write.cpp">
+      <Filter>src\map</Filter>
+    </ClCompile>
+    <ClCompile Include="parse_asd.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\map\parse_map.cpp">
+      <Filter>src\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\map\plugin_map.cpp">
+      <Filter>src\map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -598,6 +610,9 @@
     </ClInclude>
     <ClInclude Include="..\plugins\image\lbmlib.h">
       <Filter>src\image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\map\plugin_map.h">
+      <Filter>src\map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

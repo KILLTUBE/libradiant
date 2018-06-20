@@ -512,11 +512,25 @@ void Map_ImportEntities( CPtrArray *ents, bool bAddSelected = false ){
 	g_qeglobals.bNeedConvert = false;
 }
 
+
+void Map_ReadQ3( IDataStream *in, CPtrArray *map );
+
 void Map_Import( IDataStream *in, const char *type, bool bAddSelected ){
 	CPtrArray ents;
 
 	//g_pParentWnd->GetSynapseClient().ImportMap( in, &ents, type );
-	Sys_Printf("todo: map.cpp void Map_Import( IDataStream *in, const char *type, bool bAddSelected )\n");
+
+	if ( strcmp( type,"map" ) == 0 ) {
+		Map_ReadQ3( in, &ents );
+	}
+	//else if ( strcmp( type,"xmap" ) == 0 ) {
+	//	g_MapTable2.m_pfnMap_Read( in, ents );
+	//}
+	else{
+		Sys_Printf( "WARNING: no module found for map interface type '%s'\n", type );
+	}
+
+	//Sys_Printf("todo: map.cpp void Map_Import( IDataStream *in, const char *type, bool bAddSelected )\n");
 	Map_ImportEntities( &ents, bAddSelected );
 }
 
@@ -725,6 +739,7 @@ void Map_ExportEntities( CPtrArray* ents, bool bRegionOnly = false, bool bSelect
 		ents->Add( region_startpoint );
 	}
 }
+void Map_WriteQ3( CPtrArray *map, IDataStream *out );
 
 void Map_Export( IDataStream *out, const char *type, bool bRegionOnly, bool bSelectedOnly ){
 	entity_t  *e;
@@ -743,6 +758,15 @@ void Map_Export( IDataStream *out, const char *type, bool bRegionOnly, bool bSel
 	Map_ExportEntities( &ents, bRegionOnly, bSelectedOnly );
 	Sys_Printf("todo map.cpp void Map_Export( IDataStream *out, const char *type, bool bRegionOnly, bool bSelectedOnly )");
 	//g_pParentWnd->GetSynapseClient().ExportMap( &ents, out, type );
+	if ( strcmp( type,"map" ) == 0 ) {
+		Map_WriteQ3( &ents, out );
+	}
+	//else if ( strcmp( type,"xmap" ) == 0 ) {
+	//	g_MapTable2.m_pfnMap_Write( ents, out );
+	//}
+	else{
+		Sys_FPrintf( SYS_WRN, "WARNING: no module found for map interface type '%s'\n", type );
+	}
 
 	// cleanup the filters
 	CleanFilter( world_entity );

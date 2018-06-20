@@ -141,7 +141,6 @@ void UnGetToken( void ){
 	tokenready = qtrue;
 }
 
-
 qboolean EndOfScript( qboolean crossline ){
 	if ( !crossline ) {
 		Error( "Line %i is incomplete\n",scriptline );

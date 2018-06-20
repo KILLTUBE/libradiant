@@ -27,8 +27,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "camera", "contrib\camera\ca
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imagepng", "plugins\imagepng\imagepng.vcxproj", "{43C01E60-21CC-49F5-8A11-F460BC866A31}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "map", "plugins\map\map.vcxproj", "{1B0E70B0-ED20-4021-9BBE-5168CB8DAE90}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mapxml", "plugins\mapxml\mapxml.vcxproj", "{DDBF170A-42DF-4836-9006-816422E08493}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "model", "plugins\model\model.vcxproj", "{83C877DA-17B2-4863-B085-06AE9A8D68F3}"
@@ -180,13 +178,6 @@ Global
 		{43C01E60-21CC-49F5-8A11-F460BC866A31}.Release|Win32.Build.0 = Release|Win32
 		{43C01E60-21CC-49F5-8A11-F460BC866A31}.Release|x64.ActiveCfg = Release|x64
 		{43C01E60-21CC-49F5-8A11-F460BC866A31}.Release|x64.Build.0 = Release|x64
-		{1B0E70B0-ED20-4021-9BBE-5168CB8DAE90}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1B0E70B0-ED20-4021-9BBE-5168CB8DAE90}.Debug|Win32.Build.0 = Debug|Win32
-		{1B0E70B0-ED20-4021-9BBE-5168CB8DAE90}.Debug|x64.ActiveCfg = Debug|x64
-		{1B0E70B0-ED20-4021-9BBE-5168CB8DAE90}.Release|Win32.ActiveCfg = Release|Win32
-		{1B0E70B0-ED20-4021-9BBE-5168CB8DAE90}.Release|Win32.Build.0 = Release|Win32
-		{1B0E70B0-ED20-4021-9BBE-5168CB8DAE90}.Release|x64.ActiveCfg = Release|x64
-		{1B0E70B0-ED20-4021-9BBE-5168CB8DAE90}.Release|x64.Build.0 = Release|x64
 		{DDBF170A-42DF-4836-9006-816422E08493}.Debug|Win32.ActiveCfg = Debug|Win32
 		{DDBF170A-42DF-4836-9006-816422E08493}.Debug|Win32.Build.0 = Debug|Win32
 		{DDBF170A-42DF-4836-9006-816422E08493}.Debug|x64.ActiveCfg = Debug|x64

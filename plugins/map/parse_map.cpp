@@ -27,7 +27,7 @@
 // parses quake3 map format into internal objects
 //
 
-#include "plugin.h"
+#include "plugin_map.h"
 
 // cmdlib
 extern void ExtractFileName( const char *path, char *dest );
@@ -39,6 +39,8 @@ int abortcode; // see imap.h for values.
 
 GSList *g_WadList; // halflife specific.
 GSList *g_TextureNameCache; // halflife specific.
+
+qboolean GetToken( qboolean crossline );
 
 // NOTE TTimo: yuck..
 void FreeGSList( GSList *l ){
@@ -56,6 +58,8 @@ void trim( char *str ){
 	while ( str[--len] == ' ' )
 		str[len] = 0;
 }
+
+void WINAPI QE_ConvertDOSToUnixName( char *dst, const char *src );
 
 void BuildWadList( char *wadstr ){
 	char wads[2048]; // change to CString usage ?
@@ -145,6 +149,8 @@ char *AddToCache( const char *cleantexturename, const char *actualname ){
 	return cachestr;
 }
 
+int vfsGetFileCount( const char *filename, int flag );
+
 char *SearchWadsForTextureName( const char *cleantexturename ){
 	char *str;
 	char *wadname;
@@ -190,6 +196,11 @@ char *SearchWadsForTextureName( const char *cleantexturename ){
 }
 // End of half-life specific stuff
 
+qboolean GetToken( qboolean crossline );
+
+char* QERApp_Token();
+#define Token QERApp_Token
+
 void Patch_Parse( patchMesh_t *pPatch ){
 	int i, j;
 	char *str;
@@ -213,14 +224,14 @@ void Patch_Parse( patchMesh_t *pPatch ){
 	GetToken( false );
 	pPatch->width = atoi( token );
 	if ( pPatch->width > MAX_PATCH_WIDTH ) {
-		Syn_Printf( "ERROR: patch has too many planes, patch width > MAX_PATCH_WIDTH (%i > %i)\n", pPatch->width, MAX_PATCH_WIDTH );
+		Sys_Printf( "ERROR: patch has too many planes, patch width > MAX_PATCH_WIDTH (%i > %i)\n", pPatch->width, MAX_PATCH_WIDTH );
 		pPatch->width = MAX_PATCH_WIDTH;
 		abortcode = MAP_ABORTED;
 	}
 	GetToken( false );
 	pPatch->height = atoi( token );
 	if ( pPatch->height > MAX_PATCH_HEIGHT ) {
-		Syn_Printf( "ERROR: patch has too many plane points, patch height > MAX_PATCH_HEIGHT (%i > %i)\n", pPatch->height, MAX_PATCH_HEIGHT );
+		Sys_Printf( "ERROR: patch has too many plane points, patch height > MAX_PATCH_HEIGHT (%i > %i)\n", pPatch->height, MAX_PATCH_HEIGHT );
 		pPatch->height = MAX_PATCH_HEIGHT;
 		abortcode = MAP_ABORTED;
 	}
@@ -260,6 +271,16 @@ void Patch_Parse( patchMesh_t *pPatch ){
 
 	GetToken( true ); //}
 }
+
+char* vfsGetFullPath( const char *in, int index, int flag );
+//void UnGetToken(void);
+//void UnGetToken_whyLinkingFails(void);
+
+
+void UngetToken( void );
+#define UnGetToken UngetToken
+
+qboolean TokenAvailable( void );
 
 void Face_Parse( face_t *face, bool bAlternateTexdef = false ){
 	int i, j;
@@ -348,7 +369,7 @@ void Face_Parse( face_t *face, bool bAlternateTexdef = false ){
 		else
 		{
 			// using the cache below means that this message is only ever printed out once!
-			Sys_FPrintf( SYS_WRN, "WARNING: could not find \"%s\" in any listed wad files, searching all wad files instead!\n",token );
+			Sys_Printf( "WARNING: could not find \"%s\" in any listed wad files, searching all wad files instead!\n",token );
 		}
 		// end of half-life specific bit.
 
@@ -400,7 +421,7 @@ void Face_Parse( face_t *face, bool bAlternateTexdef = false ){
 			}
 			else
 			{
-				Sys_FPrintf( SYS_WRN, "WARNING: could not find \"%s\" in the vfs search path\n",token );
+				Sys_Printf( "WARNING: could not find \"%s\" in the vfs search path\n",token );
 				str = new char[strlen( token ) + 10];
 				strcpy( str, "textures/" );
 				strcpy( str + 9, token );
@@ -492,6 +513,9 @@ void Face_Parse( face_t *face, bool bAlternateTexdef = false ){
 	}
 }
 
+patchMesh_t* Patch_Alloc();
+face_t *Face_Alloc( void );
+
 bool Primitive_Parse( brush_t *pBrush ){
 	char *token = Token();
 
@@ -508,7 +532,7 @@ bool Primitive_Parse( brush_t *pBrush ){
 		// and the user gets told.
 		if ( g_MapVersion != MAPVERSION_Q3 ) {
 			// FIXME: Hydra - I wanted to write out a line number here, but I can't because there's no API to access the core's "scriptline" variable.
-			Syn_Printf( "ERROR: patchDef2's are not supported in Quake%d format .map files!\n",g_MapVersion );
+			Sys_Printf( "ERROR: patchDef2's are not supported in Quake%d format .map files!\n",g_MapVersion );
 			abortcode = MAP_WRONGVERSION;
 			return false;
 		}
@@ -552,6 +576,9 @@ bool Primitive_Parse( brush_t *pBrush ){
 	return true;
 }
 
+brush_t *Brush_Alloc();
+void Brush_Free( brush_t *b, bool bRemoveNode );
+
 void Entity_Parse( entity_t *pEntity ){
 	brush_t *pBrush;
 //  CPtrArray *brushes = NULL;
@@ -593,6 +620,8 @@ void Entity_Parse( entity_t *pEntity ){
 		}
 	}
 }
+
+void StartTokenParsing( char *data );
 
 void Map_Read( IDataStream *in, CPtrArray *map ){
 	entity_t *pEntity;

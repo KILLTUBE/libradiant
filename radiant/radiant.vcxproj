@@ -172,6 +172,9 @@
     <ClCompile Include="..\plugins\image\image.cpp" />
     <ClCompile Include="..\plugins\image\jpeg.cpp" />
     <ClCompile Include="..\plugins\image\lbmlib.cpp" />
+    <ClCompile Include="..\plugins\map\parse_map.cpp" />
+    <ClCompile Include="..\plugins\map\plugin_map.cpp" />
+    <ClCompile Include="..\plugins\map\write.cpp" />
     <ClCompile Include="..\plugins\shaders\shaders.cpp" />
     <ClCompile Include="..\plugins\surface\surfacedialog_idtech3.cpp" />
     <ClCompile Include="..\plugins\vfspk3\unzip.cpp" />
@@ -231,7 +234,7 @@
     <ClCompile Include="mainframe.cpp" />
     <ClCompile Include="map.cpp" />
     <ClCompile Include="missing.cpp" />
-    <ClCompile Include="parse.cpp" />
+    <ClCompile Include="parse_asd.cpp" />
     <ClCompile Include="patchdialog.cpp" />
     <ClCompile Include="pluginentities.cpp" />
     <ClCompile Include="pluginmanager.cpp" />
@@ -288,6 +291,7 @@
     <ClInclude Include="..\plugins\image\bmp.h" />
     <ClInclude Include="..\plugins\image\image.h" />
     <ClInclude Include="..\plugins\image\lbmlib.h" />
+    <ClInclude Include="..\plugins\map\plugin_map.h" />
     <ClInclude Include="..\plugins\shaders\shaders.h" />
     <ClInclude Include="..\plugins\surface\surfacedialog_idtech3.h" />
     <ClInclude Include="..\plugins\vfspk3\unzip-vfspk3.h" />

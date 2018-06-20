@@ -26,7 +26,7 @@
 static int g_count_entities;
 static int g_count_brushes;
 
-#include "plugin.h"
+#include "plugin_map.h"
 extern int g_MapVersion;
 
 void Float_Write( float data, IDataStream *out ){
@@ -45,7 +45,7 @@ void Patch_Write( patchMesh_t *pPatch, IDataStream *out ){
 	// write shader name and matrix dimensions
 	str = pPatch->pShader->getName();
 	if ( strchr( str, ' ' ) ) {
-		Sys_FPrintf( SYS_WRN, "WARNING: Patch_Write: shader names with spaces are not allowed, ignoring '%s'\n", str );
+		Sys_Printf( "WARNING: Patch_Write: shader names with spaces are not allowed, ignoring '%s'\n", str );
 		str = SHADER_NOT_FOUND;
 	}
 	if ( !strncmp( str, "textures/", 9 ) ) {
@@ -105,7 +105,7 @@ void Face_Write( face_t *face, IDataStream *out, bool bAlternateTexdef = false )
 	// write shader name
 	str = face->texdef.GetName();
 	if ( strchr( str, ' ' ) ) {
-		Sys_FPrintf( SYS_WRN, "WARNING: Face_Write: shader names with spaces are not allowed, ignoring '%s'\n", str );
+		Sys_Printf("WARNING: Face_Write: shader names with spaces are not allowed, ignoring '%s'\n", str);
 		str = SHADER_NOT_FOUND;
 	}
 	if ( !strncmp( str, "textures/", 9 ) ) {
@@ -158,7 +158,7 @@ void Face_Write( face_t *face, IDataStream *out, bool bAlternateTexdef = false )
 
 void Primitive_Write( brush_t *pBrush, IDataStream *out ){
 	if ( ( g_MapVersion == MAPVERSION_Q2 ) && ( pBrush->patchBrush ) ) {
-		Sys_FPrintf( SYS_WRN, "WARNING: Primitive_Write: Patches are not supported in Quake2, ignoring Brush %d\n", g_count_brushes++ );
+		Sys_Printf("WARNING: Primitive_Write: Patches are not supported in Quake2, ignoring Brush %d\n", g_count_brushes++ );
 	}
 	else
 	{

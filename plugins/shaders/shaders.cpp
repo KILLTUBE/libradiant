@@ -56,6 +56,8 @@ brush_t* WINAPI QERApp_FilteredBrushes();
 extern "C" void Sys_FPrintf( int level, const char *text, ... );
 void WINAPI QE_ConvertDOSToUnixName( char *dst, const char *src );
 
+char* QERApp_Token();
+qboolean GetToken( qboolean crossline );
 
 //++timo TODO: use stl::map !! (I tried having a look to CMap but it obviously sucks)
 CShaderArray g_Shaders;
@@ -470,8 +472,6 @@ int WINAPI QERApp_LoadShadersFromDir( const char *path ){
 	return count;
 }
 
-char* QERApp_Token();
-qboolean GetToken( qboolean crossline );
 
 bool CShader::Parse(){
 	char *token = QERApp_Token();

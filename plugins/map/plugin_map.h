@@ -25,34 +25,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "synapse.h"
 
-#define USE_QERTABLE_DEFINE
 #include "qerplugin.h"
-#define USE_VFSTABLE_DEFINE
-#define USE_SCRIPLIBTABLE_DEFINE
 #include "iscriplib.h"
 #include "imap.h"
 #include "ishaders.h"
-#define USE_ENTITYTABLE_DEFINE
 #include "ientity.h"
-#define USE_BRUSHTABLE_DEFINE
 #include "ibrush.h"
-#define USE_PATCHTABLE_DEFINE
 #include "ipatch.h"
-#define USE_VFSTABLE_DEFINE
 #include "ifilesystem.h"
 
-extern _QERFuncTable_1 g_FuncTable;
-extern _QERScripLibTable g_ScripLibTable;
-extern _QERShadersTable g_ShadersTable;
-extern _QEREntityTable __ENTITYTABLENAME;
-extern _QERBrushTable g_BrushTable;
-extern _QERPatchTable g_PatchTable;
-extern _QERFileSystemTable g_FileSystemTable;
 
+#if 0
 #define Error g_FuncTable.m_pfnError
 #define QERApp_Shader_ForName g_ShadersTable.m_pfnShader_ForName
+#endif
+
+
+extern "C" void Sys_Printf( const char *text, ... );
+
 
 // a bunch of globals to the module
 extern void *g_pRadiantWnd;
@@ -72,21 +63,5 @@ void Map_ReadHL( IDataStream *in, CPtrArray *map );
 void Map_WriteHL( CPtrArray *map, IDataStream *out );
 void Map_ReadQ2( IDataStream *in, CPtrArray *map );
 void Map_WriteQ2( CPtrArray *map, IDataStream *out );
-
-extern CSynapseServer* g_pSynapseServer;
-
-class CSynapseClientMap : public CSynapseClient
-{
-bool mbMapHL;
-public:
-// CSynapseClient API
-bool RequestAPI( APIDescriptor_t *pAPI );
-const char* GetInfo();
-const char* GetName();   ///< required for runtime configuration
-bool OnActivate();
-
-CSynapseClientMap() { mbMapHL = false; }
-virtual ~CSynapseClientMap() { }
-};
 
 #endif // _PLUGIN_H_

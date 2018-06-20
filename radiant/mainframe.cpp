@@ -1417,13 +1417,13 @@ extern MemStream g_Clipboard;
 
 void Clipboard_CopyMap(){
 	g_Clipboard.SetLength( 0 );
-	Map_Export( &g_Clipboard, "xmap", false, true );
+	Map_Export( &g_Clipboard, "map", false, true ); // kung: this was "xmap", i dont know yet if xml is/was any better... kicked libxml2 out
 }
 
 void Clipboard_PasteMap(){
 	if ( g_Clipboard.GetLength() > 0 ) {
 		g_Clipboard.Seek( 0, SEEK_SET );
-		Map_Import( &g_Clipboard, "xmap", true );
+		Map_Import( &g_Clipboard, "map", true ); // kung: this was "xmap", i dont know yet if xml is/was any better... kicked libxml2 out
 	}
 }
 
