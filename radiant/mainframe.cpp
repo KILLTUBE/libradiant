@@ -1398,21 +1398,6 @@ inline void CHECK_MINIMIZE( GtkWidget* w ){
 	gtk_widget_hide( w );
 }
 
-//static GtkWidget* create_floating( MainFrame* mainframe ) { return NULL; }
-
-void console_populate_popup( GtkTextView* textview, GtkMenu* menu, gpointer user_data ){
-	menu_separator( GTK_WIDGET( menu ) );
-
-	GtkWidget* item = gtk_menu_item_new_with_label( _( "Clear" ) );
-	g_signal_connect( G_OBJECT( item ), "activate", G_CALLBACK( Sys_ClearPrintf ), NULL );
-	gtk_widget_show( item );
-	gtk_menu_shell_append( GTK_MENU_SHELL( menu ), item );
-}
-
-void console_construct( GtkWidget* textview ){
-	g_signal_connect( G_OBJECT( textview ), "populate-popup", G_CALLBACK( console_populate_popup ), NULL );
-}
-
 extern MemStream g_Clipboard;
 
 void Clipboard_CopyMap(){
@@ -1564,10 +1549,6 @@ void MainFrame::Create(){
 	LoadCommandMap();
 	//ShowMenuItemKeyBindings( window );
 
-	if ( g_qeglobals_gui.d_edit != NULL ) {
-		console_construct( g_qeglobals_gui.d_edit );
-	}
-
 	//  bool load_last = FALSE;
 
 	SetGridStatus();
@@ -1627,14 +1608,7 @@ MainFrame::MainFrame(){
 	Create();
 }
 
-MainFrame::~MainFrame(){
-	while ( g_BSPFrontendCommands )
-	{
-		free( g_BSPFrontendCommands->data );
-		g_BSPFrontendCommands = g_slist_remove( g_BSPFrontendCommands, g_BSPFrontendCommands->data );
-	}
-}
-
+MainFrame::~MainFrame() {}
 void MainFrame::ReleaseContexts() {}
 void MainFrame::CreateContexts() {}
 static void Sys_Iconify( GtkWidget *w ) {}
@@ -1832,14 +1806,6 @@ void MainFrame::OnDestroy(){
 		Sys_Printf( "MRU_Save... " );
 		MRU_Save();
 		Sys_Printf( "OK\n" );
-
-		gpointer w;
-
-		w = g_object_get_data( G_OBJECT( g_pGroupDlg->m_pWidget ), "split1" );
-		g_PrefsDlg.mWindowInfo.nEntitySplit1 = gtk_paned_get_position( GTK_PANED( w ) );
-		w = g_object_get_data( G_OBJECT( g_pGroupDlg->m_pWidget ), "split2" );
-		g_PrefsDlg.mWindowInfo.nEntitySplit2 = gtk_paned_get_position( GTK_PANED( w ) );
-
 		g_PrefsDlg.SavePrefs();
 		Sys_Printf( "Done prefs\n" );
 	}
@@ -2203,6 +2169,7 @@ void MainFrame::SetStatusText( int nPane, const char* pText ){
 
 
 void MainFrame::SetButtonMenuStates(){
+#if 0
 	GtkWidget *item;
 	g_bIgnoreCommands++;
 
@@ -2255,6 +2222,7 @@ void MainFrame::SetButtonMenuStates(){
 #undef toggle_tool_button_set_active
 
 	g_bIgnoreCommands--;
+#endif
 }
 
 void MainFrame::UpdateWindows( int nBits ){
@@ -3746,24 +3714,16 @@ void MainFrame::OnSelectionSelectinside(){
 }
 
 void MainFrame::OnViewClipper(){
-	GtkWidget *w = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "ttb_view_clipper" ) );
-	g_bIgnoreCommands++;
-
 	if ( ActiveXY() ) {
 		if ( ActiveXY()->ClipMode() ) {
 			ActiveXY()->SetClipMode( false );
-			gtk_toggle_tool_button_set_active( GTK_TOGGLE_TOOL_BUTTON( w ), FALSE );
-		}
-		else
-		{
+		} else {
 			if ( ActiveXY()->RotateMode() ) {
 				OnSelectMouserotate();
 			}
 			ActiveXY()->SetClipMode( true );
-			gtk_toggle_tool_button_set_active( GTK_TOGGLE_TOOL_BUTTON( w ), TRUE );
 		}
 	}
-	g_bIgnoreCommands--;
 }
 
 void MainFrame::OnClipSelected(){
@@ -5178,23 +5138,7 @@ void MainFrame::OnSelectFuncGroup(){
 	}
 }
 
-void MainFrame::OnCameraForward( bool keydown ){
-	//if ( g_PrefsDlg.m_bCamDiscrete && ( m_pCamWnd && !m_pCamWnd->m_bFreeMove ) ) {
-	//	if ( keydown ) {
-	//		VectorMA( m_pCamWnd->Camera()->origin, SPEED_MOVE, m_pCamWnd->Camera()->forward, m_pCamWnd->Camera()->origin );
-	//		int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-	//		Sys_UpdateWindows( nUpdate );
-	//	}
-	//}
-	//else {
-	//	if ( keydown ) {
-	//		m_pCamWnd->Camera()->movementflags |= MOVE_FORWARD;
-	//	}
-	//	else{
-	//		m_pCamWnd->Camera()->movementflags &= ~MOVE_FORWARD;
-	//	}
-	//}
-}
+void MainFrame::OnCameraForward( bool keydown ) {}
 
 CCALL camera_t *getCam() {
 	if (mainframe_intance == NULL)
@@ -5257,143 +5201,15 @@ CCALL int pos_top_mouse() {
 	return pos.y;
 }
 
-void MainFrame::OnCameraBack( bool keydown ){
-	//if ( g_PrefsDlg.m_bCamDiscrete && ( m_pCamWnd && !m_pCamWnd->m_bFreeMove ) ) {
-	//	if ( keydown ) {
-	//		VectorMA( m_pCamWnd->Camera()->origin, -SPEED_MOVE, m_pCamWnd->Camera()->forward, m_pCamWnd->Camera()->origin );
-	//		int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-	//		Sys_UpdateWindows( nUpdate );
-	//	}
-	//}
-	//else {
-	//	if ( keydown ) {
-	//		m_pCamWnd->Camera()->movementflags |= MOVE_BACK;
-	//	}
-	//	else{
-	//		m_pCamWnd->Camera()->movementflags &= ~MOVE_BACK;
-	//	}
-	//}
-}
-
-void MainFrame::OnCameraLeft( bool keydown ){
-	//if ( m_pCamWnd ) {
-	//	if ( m_pCamWnd->m_bFreeMove ) {
-	//		OnCameraStrafeleft( keydown );
-	//		return;
-	//	}
-	//}
-	//
-	//if ( g_PrefsDlg.m_bCamDiscrete ) {
-	//	if ( keydown ) {
-	//		m_pCamWnd->Camera()->angles[1] += SPEED_TURN;
-	//		int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-	//		Sys_UpdateWindows( nUpdate );
-	//	}
-	//}
-	//else {
-	//	if ( keydown ) {
-	//		m_pCamWnd->Camera()->movementflags |= MOVE_ROTLEFT;
-	//	}
-	//	else{
-	//		m_pCamWnd->Camera()->movementflags &= ~MOVE_ROTLEFT;
-	//	}
-	//}
-}
-
-void MainFrame::OnCameraRight( bool keydown ){
-	//if ( m_pCamWnd ) {
-	//	if ( m_pCamWnd->m_bFreeMove ) {
-	//		OnCameraStraferight( keydown );
-	//		return;
-	//	}
-	//}
-	//
-	//if ( g_PrefsDlg.m_bCamDiscrete ) {
-	//	if ( keydown ) {
-	//		m_pCamWnd->Camera()->angles[1] -= SPEED_TURN;
-	//		int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-	//		Sys_UpdateWindows( nUpdate );
-	//	}
-	//}
-	//else {
-	//	if ( keydown ) {
-	//		m_pCamWnd->Camera()->movementflags |= MOVE_ROTRIGHT;
-	//	}
-	//	else{
-	//		m_pCamWnd->Camera()->movementflags &= ~MOVE_ROTRIGHT;
-	//	}
-	//}
-}
-
-void MainFrame::OnCameraUp(){
-	//m_pCamWnd->Camera()->origin[2] += SPEED_MOVE;
-	//int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY | W_Z ) : ( W_CAMERA );
-	//Sys_UpdateWindows( nUpdate );
-}
-
-void MainFrame::OnCameraDown(){
-	//m_pCamWnd->Camera()->origin[2] -= SPEED_MOVE;
-	//int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY | W_Z ) : ( W_CAMERA );
-	//Sys_UpdateWindows( nUpdate );
-}
-
-void MainFrame::OnCameraAngleup(){
-	//m_pCamWnd->Camera()->angles[0] += SPEED_TURN;
-	//if ( m_pCamWnd->Camera()->angles[0] > 85 ) {
-	//	m_pCamWnd->Camera()->angles[0] = 85;
-	//}
-	//Sys_UpdateWindows( W_CAMERA | W_XY_OVERLAY );
-}
-
-void MainFrame::OnCameraAngledown(){
-	//m_pCamWnd->Camera()->angles[0] -= SPEED_TURN;
-	//if ( m_pCamWnd->Camera()->angles[0] < -85 ) {
-	//	m_pCamWnd->Camera()->angles[0] = -85;
-	//}
-	//Sys_UpdateWindows( W_CAMERA | W_XY_OVERLAY );
-}
-
-void MainFrame::OnCameraStrafeleft( bool keydown ){
-	//// FIXME: as soon as gtk supports proper keyup/down support, remove this bit
-	//if ( m_pCamWnd ) {
-	//	if ( !m_pCamWnd->m_bFreeMove ) {
-	//		if ( keydown ) {
-	//			VectorMA( m_pCamWnd->Camera()->origin, -SPEED_MOVE, m_pCamWnd->Camera()->right, m_pCamWnd->Camera()->origin );
-	//			int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-	//			Sys_UpdateWindows( nUpdate );
-	//		}
-	//		return;
-	//	}
-	//}
-	//
-	//if ( keydown ) {
-	//	m_pCamWnd->Camera()->movementflags |= MOVE_STRAFELEFT;
-	//}
-	//else{
-	//	m_pCamWnd->Camera()->movementflags &= ~MOVE_STRAFELEFT;
-	//}
-}
-
-void MainFrame::OnCameraStraferight( bool keydown ){
-	//// FIXME: as soon as gtk supports proper keyup/down support, remove this bit
-	//if ( m_pCamWnd ) {
-	//	if ( !m_pCamWnd->m_bFreeMove ) {
-	//		if ( keydown ) {
-	//			VectorMA( m_pCamWnd->Camera()->origin, SPEED_MOVE, m_pCamWnd->Camera()->right, m_pCamWnd->Camera()->origin );
-	//			int nUpdate = ( g_PrefsDlg.m_bCamXYUpdate ) ? ( W_CAMERA | W_XY ) : ( W_CAMERA );
-	//			Sys_UpdateWindows( nUpdate );
-	//		}
-	//		return;
-	//	}
-	//}
-	//
-	//if ( keydown ) {
-	//	m_pCamWnd->Camera()->movementflags |= MOVE_STRAFERIGHT;
-	//}
-	//else{
-	//	m_pCamWnd->Camera()->movementflags &= ~MOVE_STRAFERIGHT;
-	//}
-}
+void MainFrame::OnCameraBack( bool keydown ) {}
+void MainFrame::OnCameraLeft( bool keydown ) {}
+void MainFrame::OnCameraRight( bool keydown ) {}
+void MainFrame::OnCameraUp() {}
+void MainFrame::OnCameraDown() {}
+void MainFrame::OnCameraAngleup() {}
+void MainFrame::OnCameraAngledown() {}
+void MainFrame::OnCameraStrafeleft( bool keydown ) {}
+void MainFrame::OnCameraStraferight( bool keydown ) {}
 
 void MainFrame::OnGridToggle(){
 	g_qeglobals.d_showgrid = !g_qeglobals.d_showgrid;
@@ -5445,101 +5261,47 @@ void MainFrame::OnSelectionTextureShiftdown(){
 	Select_ShiftTexture( 0, (int)-g_qeglobals.d_savedinfo.m_SIIncrement.shift[1] );
 }
 
-void MainFrame::OnGridPrev(){
-	GtkWidget *item;
+void MainFrame::OnGridPrev() {
 	if ( g_qeglobals.d_gridsize == 1 ) {
 		g_qeglobals.d_gridsize = 0.5;
 		g_qeglobals.d_bSmallGrid = true;
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_05" ) );
-	}
-	else if ( g_qeglobals.d_gridsize == 0.5 ) {
+	} else if ( g_qeglobals.d_gridsize == 0.5 ) {
 		g_qeglobals.d_gridsize = 0.25;
 		g_qeglobals.d_bSmallGrid = true;
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_025" ) );
-	}
-	else if ( g_qeglobals.d_gridsize > 1 ) {
+	} else if ( g_qeglobals.d_gridsize > 1 ) {
 		g_qeglobals.d_gridsize = (int)g_qeglobals.d_gridsize >> 1;
 		g_qeglobals.d_bSmallGrid = false;
-
-		switch ( (int)g_qeglobals.d_gridsize )
-		{
-		case  1: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_1" ) ); break;
-		case  2: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_2" ) ); break;
-		case  4: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_4" ) ); break;
-		case  8: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_8" ) ); break;
-		case  16: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_16" ) ); break;
-		case  32: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_32" ) ); break;
-		case  64: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_64" ) ); break;
-		case 128: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_128" ) ); break;
-		case 256: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_256" ) ); break;
-		default: return;
-		}
-
-	}
-	else{
+	} else{
 		return;
 	}
-
 	// SnapTToGrid option: need to check everywhere the grid size is changed
 	// this is a bit clumsy, have to do in OnGrid OnGridPrev and OnGridNext
 	if ( g_PrefsDlg.m_bSnapTToGrid ) {
 		DoSnapTToGrid();
 	}
-
 	SetGridStatus();
-	g_bIgnoreCommands++;
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), TRUE );
-	g_bIgnoreCommands--;
-
 	Sys_UpdateWindows( W_XY | W_Z );
 }
 
-void MainFrame::OnGridNext(){
-	GtkWidget *item;
+void MainFrame::OnGridNext() {
 	if ( g_qeglobals.d_gridsize == 0.25 ) {
 		g_qeglobals.d_gridsize = 0.5;
 		g_qeglobals.d_bSmallGrid = true;
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_05" ) );
-	}
-	else if ( g_qeglobals.d_gridsize == 0.5 ) {
+	} else if ( g_qeglobals.d_gridsize == 0.5 ) {
 		g_qeglobals.d_gridsize = 1;
 		g_qeglobals.d_bSmallGrid = false;
-		item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_1" ) );
-	}
-	else if ( g_qeglobals.d_gridsize < 256 ) {
+	} else if ( g_qeglobals.d_gridsize < 256 ) {
 		g_qeglobals.d_gridsize = (int)g_qeglobals.d_gridsize << 1;
 		g_qeglobals.d_bSmallGrid = false;
-
-		switch ( (int)g_qeglobals.d_gridsize )
-		{
-		case  1: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_1" ) ); break;
-		case  2: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_2" ) ); break;
-		case  4: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_4" ) ); break;
-		case  8: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_8" ) ); break;
-		case  16: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_16" ) ); break;
-		case  32: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_32" ) ); break;
-		case  64: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_64" ) ); break;
-		case 128: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_128" ) ); break;
-		case 256: item = GTK_WIDGET( g_object_get_data( G_OBJECT( m_pWidget ), "menu_grid_256" ) ); break;
-		default:  item = NULL;
-		}
-
-	}
-	else{
+	} else{
 		return;
 	}
-
 	// SnapTToGrid option: need to check everywhere the grid size is changed
 	// this is a bit clumsy, have to do in OnGrid OnGridPrev and OnGridNext
 	if ( g_PrefsDlg.m_bSnapTToGrid ) {
 		DoSnapTToGrid();
 	}
-
 	SetGridStatus();
-	g_bIgnoreCommands++;
-	gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM( item ), TRUE );
-	g_bIgnoreCommands--;
-
 	Sys_UpdateWindows( W_XY | W_Z );
 }
 
