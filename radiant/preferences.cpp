@@ -536,7 +536,7 @@ CGameDescription::CGameDescription( const Str &GameFile ){
 
 	
 	// on win32, game tools path can now be specified relative to the exe's cwd
-	prop = (char*)"C:/G/gtkradiant/GtkRadiant-1.6.4-20131213/GtkRadiant-1.6.4-20131213/installs/Q3Pack/game";
+	prop = (char*)"C:\\Users\\kung\\Desktop\\GtkRadiant-1.6.6-20180422\\installs\\Q3Pack\\game";
 	{
 		char full[PATH_MAX];
 #ifdef _WIN32
@@ -832,7 +832,12 @@ void CGameDialog::Reset(){
 	remove( strGlobalPref.GetBuffer() );
 }
 
+CGameDescription cGameDescription;
+
 void CGameDialog::Init(){
+
+	m_pCurrentGameDescription = &cGameDescription;
+
 	InitGlobalPrefPath();
 	ScanForGames();
 	//if ( mGames.empty() ) {
@@ -844,26 +849,18 @@ void CGameDialog::Init(){
 	//}
 	LoadPrefs();
 	m_bAutoLoadGame = true;
-	if ( m_bAutoLoadGame ) {
-		// search by .game name
-		list<CGameDescription *>::iterator iGame;
-		for ( iGame = mGames.begin(); iGame != mGames.end(); iGame++ )
-		{
-			if ( ( *iGame )->mGameFile == m_sGameFile ) {
-				m_pCurrentGameDescription = ( *iGame );
-				break;
-			}
-		}
-	}
+
 	if ( !m_bAutoLoadGame || !m_pCurrentGameDescription ) {
 		DoGameDialog();
 		// use m_nComboSelect to identify the game to run as and set the globals
 		m_pCurrentGameDescription = GameDescriptionForComboItem();
 		if ( !m_pCurrentGameDescription ) {
-			Error( "Lookup of game description object failed, can't continue\n" );
+			//Error( "Lookup of game description object failed, can't continue\n" );
 		}
 	}
-	g_pGameDescription = m_pCurrentGameDescription;
+	g_pGameDescription = &cGameDescription; // point to our global lol...
+
+	//g_pGameDescription = m_pCurrentGameDescription;
 
 	g_strGameToolsPath = g_pGameDescription->mGameToolsPath;
 	g_strExecutablesPath = g_pGameDescription->mExecutablesPath;

@@ -45,6 +45,15 @@
     <Filter Include="src\map">
       <UniqueIdentifier>{e194c094-44d1-4a1d-a9c6-6285b7c057b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\mathlib">
+      <UniqueIdentifier>{eee411e9-7e1b-4fee-92cc-c60a99f04458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\l_net">
+      <UniqueIdentifier>{01a7adec-dfb8-45a6-8f3f-b4cc4673e5bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cmdlib">
+      <UniqueIdentifier>{41fdcd7d-a566-4acb-93e1-6e74e80ed094}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bp_dlg.cpp">
@@ -347,6 +356,27 @@
     <ClCompile Include="..\plugins\map\plugin_map.cpp">
       <Filter>src\map</Filter>
     </ClCompile>
+    <ClCompile Include="..\libs\mathlib\bbox.c">
+      <Filter>src\mathlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libs\mathlib\m4x4.c">
+      <Filter>src\mathlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libs\mathlib\mathlib.c">
+      <Filter>src\mathlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libs\mathlib\ray.c">
+      <Filter>src\mathlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libs\l_net\l_net.c">
+      <Filter>src\l_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libs\l_net\l_net_wins.c">
+      <Filter>src\l_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libs\cmdlib\cmdlib.cpp">
+      <Filter>src\cmdlib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="radiant.ico">
@@ -613,6 +643,12 @@
     </ClInclude>
     <ClInclude Include="..\plugins\map\plugin_map.h">
       <Filter>src\map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libs\l_net\l_net.h">
+      <Filter>src\l_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libs\l_net\l_net_wins.h">
+      <Filter>src\l_net</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

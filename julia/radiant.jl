@@ -1,6 +1,6 @@
 const libradiant = "C:\\msys64\\mingw64\\bin\\libradiant.dll";
 
-juliasources = "C:/GtkRadiant/julia/"
+juliasources = "C:/DATA/GtkRadiant/julia/"
 
 include(juliasources * "console.jl")
 

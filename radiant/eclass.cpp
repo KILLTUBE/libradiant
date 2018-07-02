@@ -424,7 +424,7 @@ void Eclass_Init(){
 			pFiles = NULL;
 		}
 		else{
-			Sys_FPrintf( SYS_ERR, "Didn't find any scripts/*.%s files to load EClass information\n", pTable->m_pfnGetExtension() );
+			//Sys_FPrintf( SYS_ERR, "Didn't find any scripts/*.%s files to load EClass information\n", pTable->m_pfnGetExtension() );
 		}
 
 		// we deal with two formats max, if the other table exists, loop again
