@@ -837,18 +837,20 @@ qtexture_t *WINAPI QERApp_Texture_ForName2( const char *filename ){
 }
 
 void CShader::CreateColor( const char *name ){
+
 	// parse
-	sscanf( name, "(%g %g %g)", m_vColor, m_vColor + 1, m_vColor + 2 );
-	m_strTextureName = name;
-	setName( "color" );
-	// create the qtexture_t
-	qtexture_t *q1 = QERApp_Texture_ForName2( SHADER_NOT_FOUND );
-	// copy this one
-	qtexture_t *q2 = new qtexture_t;
-	memcpy( q2, q1, sizeof( qtexture_t ) );
-	strcpy( q2->name, m_strTextureName.GetBuffer() );
-	VectorCopy( m_vColor, q2->color );
-	m_pTexture = q2;
+	//sscanf( name, "(%g %g %g)", m_vColor, m_vColor + 1, m_vColor + 2 );
+	//m_strTextureName = name;
+	//setName( "color" );
+	//// create the qtexture_t
+	//qtexture_t *q1 = QERApp_Texture_ForName2( SHADER_NOT_FOUND );
+	//// copy this one
+	//qtexture_t *q2 = new qtexture_t;
+	//memcpy( q2, q1, sizeof( qtexture_t ) );
+	////strcpy( q2->name, m_strTextureName.GetBuffer() );
+	////strcpy( q2->name, "idk" );
+	//VectorCopy( m_vColor, q2->color );
+	//m_pTexture = q2;
 }
 
 IShader *WINAPI QERApp_ColorShader_ForName( const char *name ){

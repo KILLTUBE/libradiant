@@ -8,7 +8,8 @@ function load_shader_dir(foldername)
 	try
 		# todo: get rid of hardcoded path here and just use vfs?
 		# like addPath(vfs, "c:/OpenSciTech/build/Debug/base/textures")
-		path_tex = "c:/OpenSciTech/build/Debug/base/textures"
+		#path_tex = "c:/OpenSciTech/build/Debug/base/textures"
+		path_tex = "C:/xampp/htdocs/libwebgame_assets/libwebgame/textures"
 
 		path_concrete = path_tex * "/" * foldername
 		filelist = readdir(path_concrete)
@@ -21,6 +22,7 @@ function load_shader_dir(foldername)
 				#log(console, shaderpath)
 				
 				
+				log(console, shaderpath, texturepath)
 				load_shader(shaderpath, texturepath)
 		end
 
